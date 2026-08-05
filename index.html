@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projet XYZ — Espace collaborateurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  /* ═══════════════════════════════════════════════════
+     DESIGN TOKENS — issus de la charte graphique fournie
+  ═══════════════════════════════════════════════════ */
+  :root {
+    /* Couleurs brutes */
+    --ink:        #1E1D1E;
+    --sand:       #C2AF7E;
+    --navy:       #002B36;
+    --bordeaux:   #6E0B13;
+    --olive:      #65634F;
+    --teal:       #087870;
+    --mustard:    #BF9100;
+    --khaki:      #CFCEB5;
+
+    /* Couleurs douces */
+    --peach:      #F9EFE7;
+    --grey-soft:  #DDDDDD;
+    --blue-soft:  #D9DFE1;
+    --pink-soft:  #E9DADC;
+    --beige-soft: #E8E8E5;
+    --mint-soft:  #DAEBEA;
+    --cream-soft: #F5EFD9;
+    --offwhite:   #F8F8F4;
+
+    --white: #FFFFFF;
+
+    --ink-70: rgba(30,29,30,0.70);
+    --ink-50: rgba(30,29,30,0.50);
+    --ink-35: rgba(30,29,30,0.35);
+    --ink-12: rgba(30,29,30,0.12);
+    --ink-08: rgba(30,29,30,0.08);
+
+    --max: 1180px;
+    --nav-h: 60px;
+
+    --ease: cubic-bezier(.16,1,.3,1);
+    --ease-soft: cubic-bezier(.4,0,.2,1);
+  }
+
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    font-family:'Roboto', -apple-system, sans-serif;
+    background:var(--white);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  button { font-family:inherit; cursor:pointer; border:none; background:none; }
+  a { color:inherit; text-decoration:none; }
+  input, textarea { font-family:inherit; }
+
+  .mono {
+    font-family:'Roboto Mono', monospace;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+  }
+
+  /* Focus visible — plancher qualité */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline:2px solid var(--ink);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  /* Réduction de mouvement — plancher qualité */
+  @media (prefers-reduced-motion: reduce) {
+    *,*::before,*::after {
+      animation-duration:0.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important;
+      scroll-behavior:auto !important;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     REVEAL — apparition en fondu-translation
+  ═══════════════════════════════════════════════════ */
+  .reveal {
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity .9s var(--ease), transform .9s var(--ease);
+    transition-delay:calc(var(--i,0) * 100ms);
+  }
+  .reveal.is-visible { opacity:1; transform:translateY(0); }
+
+  /* ═══════════════════════════════════════════════════
+     NAVIGATION
+  ═══════════════════════════════════════════════════ */
+  .nav {
+    position:sticky; top:0; z-index:200;
+    height:var(--nav-h);
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--ink-08);
+  }
+  .nav-inner {
+    max-width:var(--max); margin:0 auto; height:100%;
+    padding:0 40px;
+    display:flex; align-items:center; gap:40px;
+    position:relative;
+  }
+  .nav-brand { display:flex; align-items:center; gap:11px; flex-shrink:0; }
+  .nav-mark {
+    width:15px; height:15px;
+    border:1.3px solid var(--ink);
+    transform:rotate(45deg);
+    flex-shrink:0;
+  }
+  .nav-mark::after {
+    content:'';
+    position:absolute;
+  }
+  .nav-brand-text { display:flex; flex-direction:column; line-height:1.15; }
+  .nav-brand-name { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
+  .nav-brand-sub  { font-size:0.62rem; font-weight:400; letter-spacing:0.05em; color:var(--ink-50); }
+
+  .nav-tabs { display:flex; align-items:stretch; gap:4px; height:100%; overflow-x:auto; scrollbar-width:none; }
+  .nav-tabs::-webkit-scrollbar { display:none; }
+  .nav-tab {
+    font-size:0.76rem; font-weight:500; letter-spacing:0.02em;
+    color:var(--ink-50);
+    padding:0 16px;
+    display:flex; align-items:center;
+    white-space:nowrap;
+    transition:color .3s var(--ease-soft);
+  }
+  .nav-tab:hover { color:var(--ink); }
+  .nav-tab.active { color:var(--ink); }
+
+  .nav-indicator {
+    position:absolute;
+    bottom:0; height:2px;
+    background:var(--ink);
+    border-radius:2px 2px 0 0;
+    transition:left .45s var(--ease), width .45s var(--ease);
+  }
+
+  /* ═══════════════════════════════════════════════════
+     PAGES
+  ═══════════════════════════════════════════════════ */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* ═══════════════════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════════════════ */
+  .hero {
+    max-width:var(--max); margin:0 auto;
+    padding:110px 40px 88px;
+  }
+  .hero-inner { max-width:760px; }
+
+  .eyebrow {
+    display:flex; align-items:center; gap:12px;
+    font-size:0.68rem; font-weight:500;
+    color:var(--ink-50);
+    margin-bottom:26px;
+  }
+  .eyebrow::before {
+    content:''; display:block; width:26px; height:1px; background:var(--sand);
+  }
+
+  .hero-title {
+    font-family:'Italiana', serif;
+    font-weight:400;
+    font-size:clamp(2.8rem, 6vw, 4.6rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+    margin-bottom:28px;
+  }
+  .hero-title .accent { color:var(--sand); }
+
+  .hero-desc {
+    font-size:1.02rem;
+    font-weight:300;
+    line-height:1.75;
+    color:var(--ink-70);
+    max-width:560px;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     SEARCH PANEL
+  ═══════════════════════════════════════════════════ */
+  .search-panel {
+    max-width:var(--max); margin:0 auto;
+    padding:0 40px 0;
+  }
+  .search-card {
+    max-width:760px;
+    background:var(--white);
+    border:1px solid var(--ink-12);
+    border-radius:28px;
+    padding:10px 10px 28px;
+    box-shadow:0 30px 70px -30px rgba(30,29,30,0.14);
+    transition:box-shadow .4s var(--ease-soft), border-color .4s var(--ease-soft);
+  }
+  .search-card:focus-within {
+    border-color:var(--ink-35);
+    box-shadow:0 34px 80px -28px rgba(30,29,30,0.20);
+  }
+
+  .search-row { display:flex; align-items:center; gap:6px; padding:6px; }
+
+  .search-input {
+    flex:1;
+    height:60px;
+    padding:0 20px;
+    border:none;
+    background:none;
+    font-size:1.05rem;
+    font-weight:300;
+    color:var(--ink);
+    outline:none;
+  }
+  .search-input::placeholder { color:var(--ink-35); }
+
+  .search-btn {
+    height:52px;
+    padding:0 30px;
+    background:var(--ink);
+    color:var(--white);
+    border-radius:26px;
+    font-size:0.76rem;
+    font-weight:500;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    transition:transform .3s var(--ease-soft), background .3s var(--ease-soft);
+    flex-shrink:0;
+  }
+  .search-btn:hover { transform:scale(1.035); background:#000; }
+  .search-btn:active { transform:scale(0.98); }
+  .search-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none; }
+
+  .suggestions {
+    display:flex; flex-wrap:wrap; gap:8px;
+    padding:20px 22px 6px;
+    border-top:1px solid var(--ink-08);
+    margin-top:8px;
+  }
+  .suggestion {
+    height:34px; padding:0 15px;
+    border:1px solid var(--ink-12);
+    border-radius:999px;
+    font-size:0.78rem; font-weight:400;
+    color:var(--ink-70);
+    background:var(--white);
+    transition:transform .25s var(--ease-soft), background .25s var(--ease-soft), color .25s var(--ease-soft), border-color .25s var(--ease-soft);
+  }
+  .suggestion:hover {
+    background:var(--ink); color:var(--white); border-color:var(--ink);
+    transform:scale(1.04) translateY(-1px);
+  }
+
+  /* ═══════════════════════════════════════════════════
+     RESULTS ZONE
+  ═══════════════════════════════════════════════════ */
+  .results-zone {
+    background:var(--offwhite);
+    margin-top:80px;
+  }
+  .results-inner {
+    max-width:760px; margin:0 auto;
+    padding:0 40px;
+    min-height:2px;
+  }
+
+  .state-box {
+    display:none;
+    opacity:0;
+    transform:translateY(18px) scale(0.99);
+    transition:opacity .5s var(--ease), transform .5s var(--ease);
+  }
+  .state-box.is-visible { opacity:1; transform:translateY(0) scale(1); }
+
+  .loading-box { padding:72px 0; }
+  .loading-row { display:flex; flex-direction:column; align-items:center; gap:18px; }
+  .loading-label { font-size:0.68rem; color:var(--ink-50); }
+  .loading-track { width:180px; height:2px; background:var(--ink-12); overflow:hidden; border-radius:2px; }
+  .loading-fill { height:100%; width:35%; background:var(--ink); animation:sweep 1.15s var(--ease-soft) infinite; }
+  @keyframes sweep {
+    0%   { transform:translateX(-120%); }
+    100% { transform:translateX(340%); }
+  }
+
+  .result-box { padding:64px 0 76px; }
+
+  .result-eyebrow {
+    font-size:0.65rem; font-weight:500; color:var(--ink-50);
+    margin-bottom:18px;
+  }
+  .result-question {
+    font-size:0.85rem; color:var(--ink-50);
+    margin-bottom:16px;
+  }
+  .result-question span { color:var(--ink); font-style:italic; }
+
+  .status-pill {
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:0.62rem; font-weight:700;
+    padding:6px 13px 6px 11px;
+    border-radius:999px;
+    margin-bottom:30px;
+  }
+  .status-pill::before {
+    content:''; width:5px; height:5px; border-radius:50%; background:currentColor; flex-shrink:0;
+  }
+  .status-confirmed { background:var(--mint-soft); color:var(--teal); }
+  .status-pending   { background:var(--cream-soft); color:var(--mustard); }
+
+  .result-answer {
+    font-family:'Roboto', sans-serif;
+    font-weight:300;
+    font-size:1.22rem;
+    line-height:1.8;
+    letter-spacing:-0.005em;
+    color:var(--ink);
+    white-space:pre-line;
+    margin-bottom:36px;
+  }
+
+  .result-note {
+    font-size:0.88rem;
+    color:var(--ink-70);
+    line-height:1.7;
+    padding-left:18px;
+    border-left:2px solid var(--sand);
+  }
+
+  /* stagger interne du résultat */
+  .r-item { opacity:0; }
+  .result-anim.play .r-item {
+    animation:riseIn .7s var(--ease) forwards;
+  }
+  .result-anim.play .r-1 { animation-delay:.02s; }
+  .result-anim.play .r-2 { animation-delay:.10s; }
+  .result-anim.play .r-3 { animation-delay:.18s; }
+  .result-anim.play .r-4 { animation-delay:.30s; }
+  .result-anim.play .r-5 { animation-delay:.44s; }
+  @keyframes riseIn {
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  .notfound-box { padding:72px 0; text-align:center; }
+  .notfound-box .result-eyebrow { text-align:center; }
+  .notfound-box p {
+    font-size:0.95rem; color:var(--ink-70); line-height:1.75;
+    max-width:440px; margin:0 auto;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     CONTACT
+  ═══════════════════════════════════════════════════ */
+  .contact-section {
+    max-width:var(--max); margin:0 auto;
+    padding:96px 40px 120px;
+  }
+  .contact-grid {
+    display:grid; grid-template-columns:300px 1fr; gap:72px;
+    padding-top:56px; border-top:1px solid var(--ink-08);
+  }
+  .contact-title {
+    font-family:'Italiana', serif;
+    font-size:1.7rem; font-weight:400;
+    line-height:1.25;
+    margin-bottom:14px;
+  }
+  .contact-intro p { font-size:0.9rem; color:var(--ink-70); line-height:1.75; }
+
+  .form-grid { display:flex; flex-direction:column; gap:0; max-width:480px; }
+  .form-input {
+    width:100%;
+    padding:16px 2px;
+    border:none;
+    border-bottom:1px solid var(--ink-12);
+    background:none;
+    font-size:0.92rem;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .3s var(--ease-soft);
+  }
+  .form-input::placeholder { color:var(--ink-35); }
+  .form-input:focus { border-color:var(--ink); }
+  textarea.form-input { min-height:88px; resize:vertical; padding-top:16px; line-height:1.6; }
+
+  .btn-submit {
+    margin-top:26px;
+    height:52px;
+    padding:0 30px;
+    background:var(--ink);
+    color:var(--white);
+    border-radius:26px;
+    font-size:0.76rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+    align-self:flex-start;
+    transition:transform .3s var(--ease-soft), background .3s var(--ease-soft);
+  }
+  .btn-submit:hover { transform:scale(1.035); background:#000; }
+
+  .form-note { font-size:0.75rem; color:var(--ink-35); margin-top:14px; }
+
+  /* ═══════════════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════════════ */
+  .footer {
+    border-top:1px solid var(--ink-08);
+    padding:26px 40px;
+    text-align:center;
+  }
+  .footer p { font-size:0.62rem; color:var(--ink-35); }
+
+  /* ═══════════════════════════════════════════════════
+     PAGE HERO (variante compacte — pages secondaires)
+  ═══════════════════════════════════════════════════ */
+  .hero--compact { padding:96px 40px 64px; }
+  .hero--compact .hero-title { font-size:clamp(2.2rem,4.4vw,3.4rem); margin-bottom:22px; }
+  .hero--compact .hero-inner { max-width:680px; }
+
+  .tag-pill {
+    display:inline-flex; align-items:center;
+    font-size:0.62rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    padding:5px 11px; border-radius:999px;
+    background:var(--offwhite); color:var(--ink-70);
+  }
+
+  .status-neutral { background:var(--ink-08); color:var(--ink-50); }
+
+  .section-body { max-width:var(--max); margin:0 auto; padding:0 40px 120px; }
+
+  /* ═══════════════════════════════════════════════════
+     ACTUALITÉS — TIMELINE
+  ═══════════════════════════════════════════════════ */
+  .timeline-block {
+    display:grid; grid-template-columns:220px 1fr; gap:0 64px;
+    padding-bottom:96px; margin-bottom:96px;
+    border-bottom:1px solid var(--ink-08);
+    align-items:start;
+  }
+  .timeline-side { position:sticky; top:calc(var(--nav-h) + 40px); }
+  .timeline-label { font-size:0.65rem; color:var(--ink-50); margin-bottom:16px; }
+  .timeline-step {
+    font-family:'Italiana', serif;
+    font-size:1.5rem; line-height:1.25;
+    margin-bottom:24px;
+  }
+  .progress-track { height:2px; background:var(--ink-08); border-radius:2px; overflow:hidden; margin-bottom:10px; }
+  .progress-fill { height:100%; background:var(--sand); border-radius:2px; transition:width 1.1s var(--ease); }
+  .progress-pct { font-size:0.68rem; color:var(--sand); font-weight:500; }
+
+  .milestones { display:flex; flex-direction:column; }
+  .milestone {
+    display:grid; grid-template-columns:18px 1fr; gap:0 22px;
+    min-height:52px;
+  }
+  .milestone-spine { display:flex; flex-direction:column; align-items:center; }
+  .milestone-dot {
+    width:7px; height:7px; border-radius:50%;
+    border:1.4px solid var(--ink-12); background:var(--white);
+    margin-top:6px; flex-shrink:0; position:relative; z-index:1;
+    transition:background .4s var(--ease-soft), border-color .4s var(--ease-soft);
+  }
+  .milestone.done .milestone-dot { background:var(--ink); border-color:var(--ink); }
+  .milestone.current .milestone-dot {
+    background:var(--white); border-color:var(--sand); border-width:2px;
+    box-shadow:0 0 0 5px var(--peach);
+  }
+  .milestone-line { flex:1; width:1px; background:var(--ink-12); margin:4px 0; }
+  .milestone.done .milestone-line { background:var(--ink-35); }
+  .milestone:last-child .milestone-line { display:none; }
+
+  .milestone-content { padding-bottom:32px; }
+  .milestone-date { font-size:0.66rem; color:var(--ink-35); margin-bottom:4px; }
+  .milestone-label {
+    font-size:0.92rem; font-weight:600; color:var(--ink);
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .milestone.future .milestone-label { color:var(--ink-50); font-weight:400; }
+  .milestone-desc { font-size:0.85rem; color:var(--ink-50); line-height:1.65; max-width:520px; }
+
+  /* Articles */
+  .articles-header { font-size:0.65rem; color:var(--ink-50); padding-bottom:22px; border-bottom:1px solid var(--ink-08); }
+  .article { border-bottom:1px solid var(--ink-08); }
+  .article-header-btn {
+    width:100%; text-align:left;
+    display:grid; grid-template-columns:1fr 30px; gap:20px; align-items:start;
+    padding:32px 0; background:none; border:none; cursor:pointer;
+  }
+  .article-meta-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:12px; }
+  .article-date { font-size:0.68rem; color:var(--ink-35); }
+  .article-title {
+    font-size:1.2rem; font-weight:500; letter-spacing:-0.015em; line-height:1.3;
+    color:var(--ink); margin-bottom:10px; transition:color .25s var(--ease-soft);
+  }
+  .article:hover .article-title { color:var(--olive); }
+  .article-chapeau { font-size:0.88rem; color:var(--ink-50); line-height:1.65; max-width:640px; }
+
+  .article-chevron {
+    width:28px; height:28px; border-radius:50%;
+    border:1px solid var(--ink-12);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink-50); flex-shrink:0; margin-top:2px;
+    transition:border-color .25s var(--ease-soft), transform .35s var(--ease);
+  }
+  .article.open .article-chevron { transform:rotate(180deg); border-color:var(--ink); color:var(--ink); }
+  .article-chevron svg { width:11px; height:11px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+  .article-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s var(--ease); }
+  .article.open .article-body { grid-template-rows:1fr; }
+  .article-body > div { overflow:hidden; }
+  .article-body-inner {
+    padding:0 52px 40px 0;
+    font-size:0.9rem; color:var(--ink-70); line-height:1.85; white-space:pre-line;
+  }
+  .article-body-inner strong {
+    display:block; margin-top:26px; margin-bottom:8px;
+    color:var(--ink); font-size:0.92rem; font-weight:700; letter-spacing:-0.01em;
+  }
+  .article-body-inner strong:first-child { margin-top:0; }
+
+  /* ═══════════════════════════════════════════════════
+     PLANS & 3D
+  ═══════════════════════════════════════════════════ */
+  .plans-toolbar { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:44px; }
+  .filter-pill {
+    height:34px; padding:0 15px;
+    border:1px solid var(--ink-12); border-radius:999px;
+    font-size:0.76rem; font-weight:400; color:var(--ink-70); background:var(--white);
+    transition:transform .25s var(--ease-soft), background .25s var(--ease-soft), color .25s var(--ease-soft), border-color .25s var(--ease-soft);
+  }
+  .filter-pill:hover { transform:scale(1.04); border-color:var(--ink-35); }
+  .filter-pill.active { background:var(--ink); color:var(--white); border-color:var(--ink); }
+
+  .plans-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:2px; background:var(--ink-08); }
+  .plan-card { background:var(--white); }
+  .plan-visual {
+    all:unset; box-sizing:border-box; cursor:zoom-in;
+    display:block; width:100%; aspect-ratio:16/10; position:relative; overflow:hidden;
+    background:var(--offwhite);
+  }
+  .plan-visual img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s var(--ease); }
+  .plan-visual:hover img { transform:scale(1.035); }
+  .plan-placeholder { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; color:var(--ink-35); }
+  .plan-placeholder svg { width:34px; height:34px; stroke:currentColor; fill:none; stroke-width:1.1; }
+  .plan-placeholder-label { font-size:0.64rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-35); }
+  .plan-type-badge {
+    position:absolute; top:14px; left:14px;
+    background:rgba(255,255,255,0.92); border-radius:999px; padding:4px 11px;
+    font-size:0.6rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink);
+  }
+  .plan-info { padding:24px 26px 28px; }
+  .plan-tags { margin-bottom:12px; }
+  .plan-title { font-size:0.94rem; font-weight:600; letter-spacing:-0.01em; line-height:1.35; margin-bottom:11px; }
+  .plan-comment {
+    font-size:0.85rem; color:var(--ink-50); line-height:1.7;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .plan-card.expanded .plan-comment { -webkit-line-clamp:unset; }
+  .plan-more { margin-top:11px; font-size:0.76rem; font-weight:600; color:var(--olive); }
+  .plan-more:hover { color:var(--ink); }
+
+  .plan-upload-note {
+    margin-top:32px; padding:20px 24px;
+    background:var(--peach); border-radius:12px;
+    font-size:0.83rem; color:var(--olive); line-height:1.65;
+  }
+  .plan-upload-note code { font-family:'Roboto Mono',monospace; background:rgba(255,255,255,0.6); padding:1px 6px; border-radius:4px; }
+
+  /* Lightbox */
+  .lightbox {
+    display:none; position:fixed; inset:0; z-index:999;
+    background:rgba(30,29,30,0.97); flex-direction:column;
+  }
+  .lightbox.open { display:flex; animation:lbFade .2s ease; }
+  @keyframes lbFade { from{opacity:0;} to{opacity:1;} }
+  .lightbox-toolbar {
+    flex-shrink:0; height:56px; padding:0 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .lightbox-title { font-size:0.82rem; color:rgba(255,255,255,0.65); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lightbox-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .lb-btn {
+    width:32px; height:32px; border-radius:8px;
+    background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.75);
+    border:1px solid rgba(255,255,255,0.1);
+    display:flex; align-items:center; justify-content:center; font-size:0.9rem;
+    transition:background .2s var(--ease-soft);
+  }
+  .lb-btn:hover { background:rgba(255,255,255,0.16); }
+  .lb-zoom-label { font-size:0.7rem; color:rgba(255,255,255,0.35); min-width:38px; text-align:center; }
+  .lightbox-stage { flex:1; overflow:hidden; position:relative; cursor:grab; user-select:none; }
+  .lightbox-stage.dragging { cursor:grabbing; }
+  .lightbox-media-wrap { position:absolute; top:0; left:0; transform-origin:0 0; }
+  .lightbox-img { display:block; max-width:none; pointer-events:none; }
+  .lightbox-placeholder-lb {
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    color:rgba(255,255,255,0.2); width:560px; height:380px;
+    background:rgba(255,255,255,0.03); border-radius:16px;
+  }
+  .lb-ph-label { font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; }
+  .lightbox-caption { flex-shrink:0; padding:14px 24px; font-size:0.8rem; color:rgba(255,255,255,0.4); line-height:1.6; max-height:70px; overflow-y:auto; }
+  .lightbox-hint { font-size:0.66rem; color:rgba(255,255,255,0.2); margin-top:3px; }
+
+  /* ═══════════════════════════════════════════════════
+     PEOPLE / TEAM GRIDS (Ambassadeurs & Équipe)
+  ═══════════════════════════════════════════════════ */
+  .intro-block { padding:32px 0 44px; border-bottom:1px solid var(--ink-08); margin-bottom:48px; max-width:720px; }
+  .intro-block p { font-size:0.92rem; color:var(--ink-70); line-height:1.85; }
+  .intro-block strong { color:var(--ink); font-weight:600; }
+
+  .people-label { font-size:0.65rem; color:var(--ink-50); margin-bottom:22px; }
+
+  .people-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1px; background:var(--ink-08); margin-bottom:40px; }
+  .person-card {
+    background:var(--white); padding:30px 18px 26px;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    transition:background .25s var(--ease-soft);
+  }
+  .person-card:hover { background:var(--offwhite); }
+  .person-avatar {
+    width:52px; height:52px; border-radius:50%;
+    background:var(--offwhite); border:1px solid var(--ink-12);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem; font-weight:700; color:var(--ink-70);
+    margin-bottom:16px;
+  }
+  .person-name { font-size:0.85rem; font-weight:600; margin-bottom:4px; }
+  .person-role { font-size:0.74rem; color:var(--ink-50); line-height:1.4; margin-bottom:12px; }
+
+  .info-block { border:1px solid var(--ink-08); border-radius:14px; padding:26px 28px; max-width:720px; }
+  .info-block-title { font-size:0.9rem; font-weight:600; margin-bottom:6px; }
+  .info-block p { font-size:0.85rem; color:var(--ink-50); line-height:1.65; }
+
+  .section-separator {
+    display:flex; align-items:center; gap:16px;
+    font-size:0.65rem; color:var(--ink-50);
+    padding:44px 0 20px;
+  }
+  .section-separator:first-child { padding-top:0; }
+  .section-separator::after { content:''; flex:1; height:1px; background:var(--ink-08); }
+
+  .team-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1px; background:var(--ink-08); margin-bottom:12px; }
+  .team-card { background:var(--white); padding:22px 22px; display:flex; gap:16px; align-items:flex-start; transition:background .25s var(--ease-soft); }
+  .team-card:hover { background:var(--offwhite); }
+  .team-avatar {
+    width:40px; height:40px; border-radius:10px; flex-shrink:0;
+    background:var(--offwhite); border:1px solid var(--ink-12);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.76rem; font-weight:700; color:var(--ink-70);
+  }
+  .team-avatar.parella { background:var(--mint-soft); border-color:rgba(8,120,112,0.25); color:var(--teal); }
+  .team-info { flex:1; min-width:0; }
+  .team-name { font-size:0.87rem; font-weight:600; margin-bottom:3px; }
+  .team-title { font-size:0.78rem; color:var(--ink-50); line-height:1.4; margin-bottom:8px; }
+  .team-badge { font-size:0.6rem; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; padding:3px 9px; border-radius:999px; }
+  .team-badge.xyz { background:var(--offwhite); color:var(--ink-70); }
+  .team-badge.parella { background:var(--mint-soft); color:var(--teal); }
+
+  .parella-intro {
+    display:flex; gap:18px; align-items:flex-start;
+    padding:22px 24px; margin-bottom:14px;
+    border:1px solid var(--ink-08); border-radius:14px;
+  }
+  .parella-icon {
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
+    background:var(--mint-soft); display:flex; align-items:center; justify-content:center; color:var(--teal);
+  }
+  .parella-icon svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.4; }
+  .parella-text { font-size:0.87rem; color:var(--ink-70); line-height:1.7; }
+  .parella-text strong { color:var(--ink); font-weight:700; }
+
+  /* ═══════════════════════════════════════════════════
+     ADMINISTRATION — lien discret + modal mot de passe
+  ═══════════════════════════════════════════════════ */
+  .admin-link {
+    font-size:0.62rem; color:var(--ink-35);
+    letter-spacing:0.08em; text-transform:uppercase;
+    margin-top:8px;
+    transition:color .2s var(--ease-soft);
+  }
+  .admin-link:hover { color:var(--ink-70); }
+
+  .admin-modal {
+    display:none; position:fixed; inset:0; z-index:900;
+    background:rgba(30,29,30,0.55);
+    align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .admin-modal.open { display:flex; animation:lbFade .18s ease; }
+  .admin-modal-card {
+    width:100%; max-width:360px;
+    background:var(--white); border-radius:20px;
+    padding:36px 32px 32px;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.35);
+  }
+  .admin-modal-title { font-family:'Italiana', serif; font-size:1.5rem; margin-bottom:8px; }
+  .admin-modal-sub { font-size:0.82rem; color:var(--ink-50); line-height:1.6; margin-bottom:22px; }
+  .admin-modal-error {
+    display:none; font-size:0.78rem; color:var(--bordeaux);
+    margin-top:10px;
+  }
+  .admin-modal-actions { display:flex; gap:10px; margin-top:22px; }
+  .admin-modal-actions .search-btn { flex:1; height:46px; }
+  .admin-modal-cancel {
+    flex:1; height:46px; border-radius:23px;
+    border:1px solid var(--ink-12); color:var(--ink-70);
+    font-size:0.76rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+    transition:border-color .2s var(--ease-soft), color .2s var(--ease-soft);
+  }
+  .admin-modal-cancel:hover { border-color:var(--ink-35); color:var(--ink); }
+
+  /* Dashboard */
+  .admin-topbar {
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:16px;
+    margin-bottom:8px;
+  }
+  .admin-back { font-size:0.76rem; color:var(--ink-50); }
+  .admin-back:hover { color:var(--ink); }
+  .admin-reset {
+    font-size:0.7rem; color:var(--ink-35); letter-spacing:0.05em;
+  }
+  .admin-reset:hover { color:var(--bordeaux); }
+  .admin-export-btn {
+    height:34px; padding:0 18px;
+    background:var(--ink); color:var(--white);
+    border-radius:999px;
+    font-size:0.7rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase;
+    transition:transform .25s var(--ease-soft), background .25s var(--ease-soft);
+    flex-shrink:0;
+  }
+  .admin-export-btn:hover { transform:scale(1.04); background:#000; }
+  .admin-scope-note {
+    font-size:0.82rem; color:var(--ink-50); line-height:1.65;
+    max-width:640px; margin-bottom:56px;
+    padding:16px 20px; background:var(--offwhite); border-radius:12px;
+  }
+
+  .kpi-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px; background:var(--ink-08); margin-bottom:64px; }
+  .kpi-card { background:var(--white); padding:26px 24px; }
+  .kpi-card-value { font-family:'Italiana', serif; font-size:2.3rem; color:var(--ink); line-height:1; margin-bottom:10px; }
+  .kpi-card-label { font-size:0.65rem; color:var(--ink-50); }
+
+  .kpi-section { margin-bottom:60px; }
+  .kpi-section-title { font-size:0.95rem; font-weight:600; margin-bottom:4px; }
+  .kpi-section-sub { font-size:0.8rem; color:var(--ink-50); margin-bottom:24px; }
+
+  .kpi-bar-row { display:flex; align-items:center; gap:16px; padding:9px 0; }
+  .kpi-bar-label { width:100%; max-width:280px; font-size:0.85rem; color:var(--ink-70); flex-shrink:0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .kpi-bar-track { flex:1; height:7px; background:var(--ink-08); border-radius:4px; overflow:hidden; min-width:60px; }
+  .kpi-bar-fill { height:100%; background:var(--sand); border-radius:4px; transition:width .6s var(--ease); }
+  .kpi-bar-fill.gap { background:var(--bordeaux); }
+  .kpi-bar-value { width:34px; text-align:right; font-family:'Roboto Mono',monospace; font-size:0.78rem; color:var(--ink-50); flex-shrink:0; }
+
+  .kpi-empty { font-size:0.85rem; color:var(--ink-35); padding:18px 0; }
+
+  .kpi-list { display:flex; flex-direction:column; }
+  .kpi-list-item {
+    padding:14px 0; border-bottom:1px solid var(--ink-08);
+    display:flex; flex-direction:column; gap:4px;
+  }
+  .kpi-list-item:last-child { border-bottom:none; }
+  .kpi-list-q { font-size:0.88rem; color:var(--ink); font-style:italic; }
+  .kpi-list-meta { font-size:0.72rem; color:var(--ink-35); }
+
+  .kpi-contact-item { padding:16px 0; border-bottom:1px solid var(--ink-08); }
+  .kpi-contact-item:last-child { border-bottom:none; }
+  .kpi-contact-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:4px; }
+  .kpi-contact-name { font-size:0.85rem; font-weight:600; }
+  .kpi-contact-date { font-size:0.7rem; color:var(--ink-35); }
+  .kpi-contact-email { font-size:0.78rem; color:var(--ink-50); margin-bottom:6px; }
+  .kpi-contact-msg { font-size:0.83rem; color:var(--ink-70); line-height:1.6; }
+
+  .toast {
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:var(--white);
+    padding:14px 22px; border-radius:999px;
+    font-size:0.82rem;
+    opacity:0; pointer-events:none;
+    transition:opacity .35s var(--ease-soft), transform .35s var(--ease-soft);
+    z-index:1000;
+  }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ═══════════════════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════════════════ */
+  @media (max-width:860px) {
+    .nav-inner { padding:0 24px; gap:20px; }
+    .nav-brand-sub { display:none; }
+    .hero { padding:88px 24px 64px; }
+    .search-panel, .results-inner, .contact-section, .section-body { padding-left:24px; padding-right:24px; }
+    .contact-grid { grid-template-columns:1fr; gap:32px; }
+    .timeline-block { grid-template-columns:1fr; gap:28px; }
+    .timeline-side { position:static; }
+  }
+  @media (max-width:560px) {
+    .nav-tab { padding:0 11px; font-size:0.7rem; }
+    .search-row { flex-direction:column; align-items:stretch; }
+    .search-input { height:54px; }
+    .search-btn { height:48px; }
+    .result-answer { font-size:1.08rem; line-height:1.75; }
+    .plans-grid, .people-grid, .team-grid { grid-template-columns:1fr; }
+    .article-body-inner { padding-right:0; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
+<nav class="nav">
+  <div class="nav-inner" id="navInner">
+    <div class="nav-brand">
+      <div class="nav-mark"></div>
+      <div class="nav-brand-text">
+        <span class="nav-brand-name">Projet XYZ</span>
+        <span class="nav-brand-sub">Espace collaborateurs</span>
+      </div>
+    </div>
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-page="faq">FAQ</button>
+      <button class="nav-tab" data-page="actu">Actualités</button>
+      <button class="nav-tab" data-page="plans">Plans &amp; 3D</button>
+      <button class="nav-tab" data-page="ambassadeurs">Ambassadeurs</button>
+      <button class="nav-tab" data-page="equipe">Équipe projet</button>
+    </div>
+    <div class="nav-indicator" id="navIndicator"></div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ PAGE : FAQ ═══════════════════ -->
+<div class="page active" id="page-faq">
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Base de connaissance</p>
+      <h1 class="hero-title reveal" style="--i:1" data-reveal>Une réponse,<br><span class="accent">chaque fois.</span></h1>
+      <p class="hero-desc reveal" style="--i:2" data-reveal>Posez votre question librement. Les réponses officielles s'affichent instantanément. Pour tout ce qui reste flou, faites-le remonter à l'équipe projet via le formulaire ci-dessous — c'est comme ça que cette base s'enrichit.</p>
+    </div>
+  </section>
+
+  <div class="search-panel">
+    <div class="search-card reveal" style="--i:3" data-reveal>
+      <div class="search-row">
+        <input type="text" class="search-input" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
+        <button type="button" id="askBtn" class="search-btn">Rechercher</button>
+      </div>
+      <div class="suggestions">
+        <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
+        <button type="button" class="suggestion" data-question="Où est-ce qu'on va manger ?">Restauration</button>
+        <button type="button" class="suggestion" data-question="Y aura-t-il des visites du site ?">Visites du site</button>
+        <button type="button" class="suggestion" data-question="Est-ce que le télétravail va changer ?">Télétravail</button>
+        <button type="button" class="suggestion" data-question="Comment venir à vélo ?">Mobilités douces</button>
+        <button type="button" class="suggestion" data-question="J'ai peur du changement, c'est normal ?">Appréhension</button>
+        <button type="button" class="suggestion" data-question="Qui pilote le projet ?">Pilotage</button>
+        <button type="button" class="suggestion" data-question="Que faire de mes archives ?">Archivage</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="results-zone">
+    <div class="results-inner">
+
+      <div class="state-box loading-box" id="loadingBox">
+        <div class="loading-row">
+          <div class="loading-track"><div class="loading-fill"></div></div>
+          <span class="loading-label mono">Recherche en cours</span>
+        </div>
+      </div>
+
+      <div class="state-box result-box" id="resultBox">
+        <div class="result-anim" id="resultAnim">
+          <div class="result-eyebrow mono r-item r-1">Réponse</div>
+          <div class="result-question r-item r-1">Question : <span id="resultQuestion"></span></div>
+          <div id="resultStatus" class="status-pill r-item r-2"></div>
+          <div id="resultAnswer" class="result-answer r-item r-3"></div>
+          <div id="resultNote" class="result-note r-item r-4"></div>
+        </div>
+      </div>
+
+      <div class="state-box notfound-box" id="notFoundBox">
+        <div class="result-eyebrow mono">Réponse indisponible</div>
+        <p>Nous n'avons pas encore de réponse précise à cette question. Elle pourra être intégrée dans une prochaine mise à jour de la FAQ — n'hésitez pas à nous la transmettre via le formulaire ci-dessous.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-grid reveal" data-reveal>
+      <div class="contact-intro">
+        <div class="contact-title">Vous n'avez pas trouvé votre réponse ?</div>
+        <p>Transmettez votre question à l'équipe projet. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
+      </div>
+      <div>
+        <form class="form-grid" id="contactForm" action="" method="POST">
+          <input type="text" name="name" class="form-input" placeholder="Nom et prénom">
+          <input type="email" name="email" class="form-input" placeholder="Adresse email">
+          <textarea name="message" class="form-input" placeholder="Décrivez votre question ou le point qui reste flou."></textarea>
+          <button type="submit" class="btn-submit">Envoyer la demande</button>
+        </form>
+        <p class="form-note">Le formulaire n'est pas encore branché à une boîte mail. Votre demande est enregistrée et visible par l'équipe projet en attendant.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <p class="mono">Projet XYZ · Espace collaborateurs — Document interne, réservé aux équipes</p>
+    <button type="button" class="admin-link" id="adminLinkBtn">Administration</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════ PAGES STUB (à décliner ensuite) ═══════════════════ -->
+<div class="page" id="page-actu">
+
+  <section class="hero hero--compact">
+    <div class="hero-inner">
+      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Actualités</p>
+      <h1 class="hero-title reveal" style="--i:1" data-reveal>Le fil<br><span class="accent">du projet.</span></h1>
+      <p class="hero-desc reveal" style="--i:2" data-reveal>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
+    </div>
+  </section>
+
+  <div class="section-body">
+
+    <div class="timeline-block">
+      <div class="timeline-side reveal" data-reveal>
+        <div class="timeline-label mono">Avancement</div>
+        <div class="timeline-step">Étape 3<br>sur 6</div>
+        <div class="progress-track"><div class="progress-fill" style="width:42%"></div></div>
+        <div class="progress-pct mono">42%</div>
+      </div>
+
+      <div class="milestones">
+        <div class="milestone done reveal" style="--i:0" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Oct. 2025</div>
+            <div class="milestone-label">Lancement du projet <span class="status-pill status-confirmed">Terminé</span></div>
+            <div class="milestone-desc">Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel.</div>
+          </div>
+        </div>
+
+        <div class="milestone done reveal" style="--i:1" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Déc. 2025 – Fév. 2026</div>
+            <div class="milestone-label">Cadrage &amp; choix du site <span class="status-pill status-confirmed">Terminé</span></div>
+            <div class="milestone-desc">Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux.</div>
+          </div>
+        </div>
+
+        <div class="milestone current reveal" style="--i:2" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Mars – Juin 2026</div>
+            <div class="milestone-label">Conception &amp; co-construction <span class="status-pill status-pending">En cours</span></div>
+            <div class="milestone-desc">Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:3" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Juil. – Sept. 2026</div>
+            <div class="milestone-label">Préparation opérationnelle <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:4" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Sem. du 14 oct. 2026</div>
+            <div class="milestone-label">Déménagement <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:5" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Nov. 2026+</div>
+            <div class="milestone-label">Installation &amp; ajustements <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="articles-block">
+      <div class="articles-header mono reveal" data-reveal>Publications — 4 articles</div>
+
+      <div class="article reveal" style="--i:0" data-reveal data-article="1">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-1">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Calendrier</span>
+              <span class="article-date mono">2 avril 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Le projet entre dans sa phase active — ce qui change concrètement dans les prochaines semaines</div>
+            <div class="article-chapeau">Après plusieurs mois de cadrage et de travail en coulisses, le projet de déménagement entre dans une nouvelle phase. Voici ce qui se passe concrètement d'ici fin avril — et ce qui reste encore à confirmer.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-1"><div><div class="article-body-inner">Vous avez été nombreux à nous poser la même question ces dernières semaines : "Quand est-ce que ça va vraiment commencer ?" La réponse, c'est maintenant.
+
+Après plusieurs mois de cadrage, de travail technique et de consultations préalables — y compris avec les instances représentatives du personnel — le projet de déménagement entre dans sa phase opérationnelle. Les premières actions visibles pour les collaborateurs démarrent en avril, et le rythme va s'accélérer jusqu'à la semaine du 14 octobre, date prévue pour la bascule.
+
+<strong>Les ateliers de personnalisation démarrent mi-avril.</strong>
+
+C'est probablement la nouveauté la plus importante de cette phase. Entre mi-avril et fin mai, chaque entité participera à un atelier dédié animé par l'équipe projet et un cabinet spécialisé en design des espaces de travail. Ces ateliers durent environ deux heures et réunissent une quinzaine de collaborateurs représentatifs de l'équipe.
+
+L'objectif n'est pas de vous présenter un plan définitif et de recueillir vos applaudissements. L'objectif est de co-construire avec vous la micro-organisation de votre espace : implantation des postes, règles de vie, usage des zones partagées, signalétique. Les résultats de ces ateliers alimenteront directement les derniers arbitrages d'aménagement. Ça compte vraiment.
+
+Votre manager vous communiquera la date de votre atelier dans les prochains jours. La participation est fortement encouragée — pas obligatoire, mais fortement encouragée. Ceux qui n'ont pas pu y assister pourront faire remonter leurs retours via le formulaire de la FAQ.
+
+<strong>Le réseau d'ambassadeurs est officiellement lancé.</strong>
+
+Une vingtaine de collaborateurs volontaires, issus de différentes équipes et niveaux hiérarchiques, ont accepté de jouer le rôle de relais de proximité pour ce projet. Ils ont reçu une formation courte sur le projet, ses enjeux et ses grandes décisions, et ils disposent d'un canal de remontée direct vers l'équipe projet.
+
+Leur rôle n'est pas de défendre le projet à tout prix — ce ne sont pas des communicants. Leur rôle est d'être disponibles pour leurs collègues, de faire circuler l'information dans les deux sens, et de signaler les points de friction que les canaux officiels ne captent pas toujours.
+
+La liste complète des ambassadeurs sera diffusée avant la fin du mois d'avril. En attendant, renseignez-vous auprès de votre manager ou de votre RH.
+
+<strong>Les premières visites du site sont ouvertes.</strong>
+
+Un calendrier de visites découverte est en cours de finalisation pour les mois d'avril et mai. Ces visites sont organisées en petits groupes (une dizaine de personnes), guidées par un membre de l'équipe projet et par le responsable du site. Elles durent environ une heure et demie.
+
+Pendant la visite, vous verrez l'état actuel du chantier d'aménagement, vous découvrirez les différentes zones, et vous pourrez poser toutes vos questions à des interlocuteurs qui connaissent le projet dans le détail. Pour ceux qui ne peuvent pas se déplacer, une visite virtuelle commentée sera disponible sur ce site dans les prochaines semaines.
+
+<strong>Ce qui reste à confirmer — soyons honnêtes.</strong>
+
+— Les dates précises de bascule par équipe : le phasage est en cours de finalisation. Communication prévue avant fin mai.
+— Les modalités de restauration : plusieurs options à l'étude. Arbitrage attendu fin avril.
+— Le dispositif de stationnement : en cours de négociation avec le gestionnaire du site. Réponse attendue début mai.
+— Les règles d'occupation des espaces (flex office vs postes attribués) : sera en partie déterminé par les ateliers d'avril. Cadre général communiqué fin mai.
+
+Ce site est mis à jour à chaque étape franchie.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:1" data-reveal data-article="2">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-2">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Écoute</span>
+              <span class="article-date mono">18 mars 2026 · 5 min</span>
+            </div>
+            <div class="article-title">Ce que nous avons entendu — retour détaillé sur les premières remontées terrain</div>
+            <div class="article-chapeau">Depuis le lancement du projet, plusieurs centaines de questions et de préoccupations ont été collectées. Voici ce que nous en avons retenu — et ce que ça change concrètement.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-2"><div><div class="article-body-inner">Depuis le lancement du projet, plusieurs centaines de questions, de remarques et de préoccupations ont été collectées — via ce site, via les managers, via les sessions d'écoute organisées en équipe, et via les échanges informels que les ambassadeurs ont remontés. Nous avons lu chacune d'entre elles. Cet article en est le compte-rendu fidèle.
+
+Nous avons fait le choix de ne pas édulcorer. Ce qui suit reflète ce que vous nous avez dit — y compris les choses inconfortables.
+
+<strong>1. Le trajet : la préoccupation numéro un.</strong>
+
+C'est, de très loin, le sujet qui revient le plus. Une part significative des collaborateurs voit son temps de trajet augmenter avec le nouveau site — parfois de manière modérée, parfois de façon vraiment substantielle. Certains nous ont écrit pour dire que ce changement remet en question leur organisation familiale entière.
+
+Ce que nous faisons avec ça : une cartographie précise des situations a été réalisée. Les collaborateurs dont le trajet augmente de plus de 30 minutes aller simple feront l'objet d'un accompagnement individualisé. Cela peut prendre plusieurs formes : prise en charge partielle d'un abonnement plus étendu, aménagement temporaire du nombre de jours sur site, ou entretien RH pour explorer les options. Ce dispositif sera formalisé et communiqué avant fin avril.
+
+<strong>2. Le bureau personnel : une question d'identité autant que de confort.</strong>
+
+"Je veux savoir où je vais m'asseoir le matin." Cette phrase est revenue dans un très grand nombre de retours. La perspective du flex office génère une anxiété qui va au-delà du confort immédiat — c'est une question de repères, de territoire, parfois d'efficacité pure.
+
+Le flex office intégral — où personne n'a de place fixe — n'est pas le modèle retenu par défaut. Le modèle d'occupation des espaces sera discuté dans les ateliers d'avril, et différentes équipes pourront avoir des règles différentes selon leur nature de travail.
+
+<strong>3. Le bruit et la concentration : une crainte légitime.</strong>
+
+Beaucoup d'entre vous ont exprimé la crainte d'un open space bruyant, peu propice à la concentration. Le nouveau site a été pensé avec ça en tête : zones de focus silence strict, cabines phoniques insonorisées sans réservation, salles de réunion en nombre suffisant. Des ajustements seront nécessaires après l'installation, et c'est pour ça qu'un dispositif de retours post-installation est prévu.
+
+<strong>4. La restauration : le silence qui agace.</strong>
+
+Plusieurs retours ont été directs : "On nous parle de tout sauf de ce qu'on va manger." C'est compréhensible. La raison pour laquelle nous n'avons pas encore communiqué sur ce point n'est pas un oubli — les négociations avec les prestataires potentiels sont encore en cours. L'arbitrage est attendu pour fin avril, et une communication dédiée suivra dans la semaine.
+
+<strong>5. L'incertitude : ce qui use le plus.</strong>
+
+Au-delà de chaque sujet pris individuellement, beaucoup ont exprimé la fatigue de ne pas savoir. Cette incertitude prolongée use — et c'est une réaction tout à fait normale face à un changement qui touche au quotidien.
+
+Nous ne pouvons pas tout résoudre immédiatement. Mais nous pouvons nous engager sur une chose : vous dire la vérité sur ce qu'on sait et sur ce qu'on ne sait pas encore. Ce site est l'outil de cet engagement.
+
+Merci à tous ceux qui ont pris le temps d'écrire et de remonter des retours.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:2" data-reveal data-article="3">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-3">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Espaces</span>
+              <span class="article-date mono">5 mars 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Première plongée dans le futur site — plans, ambiances et ce qu'il faut en retenir</div>
+            <div class="article-chapeau">Pour la première fois, nous partageons des documents visuels sur le futur site. Plans, vues 3D, zones commentées : voici comment les lire et comment vous en servir avant les ateliers.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-3"><div><div class="article-body-inner">Pour la première fois depuis le lancement du projet, nous partageons des documents visuels sur le futur site. Nous avons volontairement attendu d'avoir des éléments suffisamment avancés pour que les visuels soient représentatifs de la réalité finale. Ce moment est arrivé.
+
+Vous trouverez dans l'onglet Plans &amp; 3D de ce site une première série de documents : plans de macro-zoning, vues 3D des espaces principaux, et plan de détail d'une zone type. Voici un guide de lecture pour en tirer le meilleur parti.
+
+<strong>Comment lire un plan de macro-zoning.</strong>
+
+Le macro-zoning, c'est la carte grande maille du site. Il montre quelles grandes familles d'usages occupent quels espaces, sans aller jusqu'au niveau du poste individuel. Sur nos plans, vous verrez des zones colorées : espaces de travail ouverts, zones de concentration, salles de réunion, espaces de convivialité, services.
+
+Ce que le macro-zoning ne dit pas : il ne dit pas où vous allez vous asseoir. Ça, c'est le micro-zoning — et c'est précisément ce qui sera co-construit dans les ateliers d'avril. Le macro-zoning est le cadre ; le micro-zoning est le contenu.
+
+<strong>Comment lire les vues 3D.</strong>
+
+Les vues 3D sont des rendus réalisés par le cabinet d'architecture à partir des plans définitifs. Elles représentent fidèlement les volumes, les matériaux, les couleurs et la luminosité des espaces. Ce n'est pas du photomontage enjolivé — les rendus ont été calibrés pour être proches de la réalité perçue.
+
+Regardez particulièrement la vue de l'espace de convivialité central et la vue depuis l'entrée principale. Ces deux espaces donnent une bonne idée de l'intention générale du projet : des lieux généreux, lumineux, pensés pour le bien-être autant que pour l'efficacité.
+
+<strong>Ce que vous pouvez faire avec ces documents dès maintenant.</strong>
+
+Si votre atelier de personnalisation est dans les prochaines semaines, nous vous encourageons à consulter ces plans avant d'y aller. Arriver avec des questions précises permet des échanges beaucoup plus riches qu'une découverte à froid le jour de l'atelier.
+
+Si vous avez des remarques sur ce que vous voyez dans ces documents, le formulaire de la page FAQ est là pour ça. Les questions remontées avant les ateliers alimenteront directement les points de discussion.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:3" data-reveal data-article="4">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-4">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Vision</span>
+              <span class="article-date mono">12 février 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Pourquoi on déménage — et ce qu'on a voulu faire de ce projet</div>
+            <div class="article-chapeau">Avant de parler de cartons et de badges, il nous semblait important de partager le pourquoi. Ce déménagement n'est pas qu'une contrainte logistique — c'est un choix, avec une intention derrière.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-4"><div><div class="article-body-inner">Avant de parler de cartons, de badges et de plans d'étage, il nous semblait important de partager quelque chose de plus fondamental : le pourquoi. Pas le pourquoi administratif et contractuel — même si celui-là existe — mais l'intention derrière ce projet.
+
+<strong>La contrainte de départ.</strong>
+
+Soyons directs : ce déménagement n'est pas né d'une envie spontanée de changer d'air. Le bail de notre site actuel arrive à échéance, et les conditions de renouvellement n'étaient pas satisfaisantes. C'est une réalité contractuelle qui a déclenché le projet.
+
+Mais une contrainte peut être traversée de deux façons : en faisant au minimum, ou en essayant d'en faire quelque chose. Nous avons choisi la deuxième option.
+
+<strong>Pourquoi ce site, et pas un autre.</strong>
+
+Le nouveau site a été sélectionné au terme d'une analyse multicritères menée sur plusieurs mois. Les critères n'étaient pas uniquement immobiliers. L'accessibilité en transports en commun était un critère majeur. La qualité des espaces — volumes, lumière naturelle, possibilité d'aménager des zones diversifiées — était déterminante. La capacité du bâtiment à accueillir nos modes de travail hybrides actuels a aussi pesé dans la balance.
+
+Plusieurs sites ont été visités et écartés. Celui que nous avons retenu est, selon nous, le meilleur compromis possible entre ces différentes exigences. Il n'est pas parfait — aucun site ne l'est — mais il offre une base solide pour construire quelque chose de bien.
+
+<strong>L'intention derrière le projet.</strong>
+
+Au-delà du déménagement lui-même, nous avons voulu faire de ce projet une occasion de repenser notre façon de travailler ensemble. Pas de façon révolutionnaire ou imposée — mais en posant quelques questions simples : de quoi avons-nous besoin pour travailler bien ? Qu'est-ce qui use les gens et qu'on pourrait éviter dans le nouveau lieu ?
+
+Ces questions ont alimenté les choix d'aménagement. Les espaces de concentration ne sont pas là pour cocher une case — ils sont là parce que le bruit est l'une des plaintes les plus fréquentes dans nos espaces actuels. Les espaces de convivialité ne sont pas un luxe — ils sont là parce que le lien social entre collègues est une composante réelle du bien-être au travail.
+
+<strong>L'engagement qui en découle.</strong>
+
+Nous serons honnêtes : tous les arbitrages ne sont pas encore rendus. Nous aurions pu attendre d'avoir toutes les réponses avant de communiquer. Nous avons choisi de ne pas le faire.
+
+L'engagement que nous prenons, c'est celui de la transparence progressive : vous informer au fur et à mesure que les décisions sont prises, pas quand tout est parfait. Ce site est l'outil de cet engagement. Si une information que nous avons donnée doit être corrigée, nous le dirons clairement, avec les raisons.</div></div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="page" id="page-plans">
+
+  <section class="hero hero--compact">
+    <div class="hero-inner">
+      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Documents visuels</p>
+      <h1 class="hero-title reveal" style="--i:1" data-reveal>Découvrez<br><span class="accent">le futur site.</span></h1>
+      <p class="hero-desc reveal" style="--i:2" data-reveal>Plans de macro et micro-zoning, vues 3D des espaces, ambiances : tous les documents visuels du projet sont ici, commentés pour vous aider à vous projeter avant les ateliers.</p>
+    </div>
+  </section>
+
+  <div class="section-body">
+
+    <div class="plans-toolbar reveal" data-reveal>
+      <button class="filter-pill active" data-filter="all">Tous</button>
+      <button class="filter-pill" data-filter="Plan">Plans</button>
+      <button class="filter-pill" data-filter="3D">Vues 3D</button>
+      <button class="filter-pill" data-filter="Macro-zoning">Macro-zoning</button>
+      <button class="filter-pill" data-filter="Micro-zoning">Micro-zoning</button>
+      <button class="filter-pill" data-filter="Ambiance">Ambiances</button>
+      <button class="filter-pill" data-filter="Concentration">Concentration</button>
+    </div>
+
+    <div class="plans-grid" id="plansGrid">
+
+      <div class="plan-card reveal" style="--i:0" data-reveal data-tags="Plan Macro-zoning">
+        <button class="plan-visual" aria-label="Agrandir : Plan macro-zoning, vue générale niveau R+1">
+          <img src="Plan.jpg" alt="Plan macro-zoning R+1">
+          <span class="plan-type-badge">Plan</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Macro-zoning</span></div>
+          <div class="plan-title">Plan macro-zoning — vue générale niveau R+1</div>
+          <p class="plan-comment">Ce plan présente la répartition grande maille des usages sur le niveau R+1, principal plateau de travail du site. Les zones colorées correspondent aux grandes familles d'usages : bleu clair pour les espaces de travail ouverts, bleu foncé pour les zones de concentration, vert pour les espaces collaboratifs, ocre pour les salles de réunion formelle, orange pour les cabines phoniques en accès libre. Le niveau est organisé autour d'une colonne vertébrale centrale qui sépare les espaces de concentration (côté nord) des espaces collaboratifs (côté sud, plus lumineux). On remarque la densité des cabines phoniques : neuf cabines réparties sur l'ensemble du plateau, soit une cabine pour environ vingt postes — un ratio volontairement généreux. L'implantation précise des équipes sur ce plateau n'est pas encore arrêtée et sera co-construite dans les ateliers d'avril.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+      <div class="plan-card reveal" style="--i:1" data-reveal data-tags="3D Ambiance">
+        <button class="plan-visual" aria-label="Agrandir : Vue 3D, espace de convivialité central">
+          <img src="Vue3D.jpg" alt="Vue 3D convivialité">
+          <span class="plan-type-badge">3D</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Ambiance</span></div>
+          <div class="plan-title">Vue 3D — espace de convivialité central</div>
+          <p class="plan-comment">Cet espace de 180 m² est conçu pour être le cœur battant du site. Lumineux, ouvert, il accueillera les pauses, les déjeuners informels et les échanges spontanés entre équipes. Le mobilier est volontairement mixte : tables hautes pour les échanges debout, assises basses pour les moments détendus, coins semi-privatifs délimités par des cloisons végétalisées. L'îlot central accueille les équipements de restauration légère. Les matériaux — bois clair, béton poncé, végétation intérieure, textile acoustique — créent une ambiance chaleureuse tout en maintenant le temps de réverbération sous 0,6 seconde.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+      <div class="plan-card reveal" style="--i:2" data-reveal data-tags="Plan Micro-zoning">
+        <button class="plan-visual" aria-label="Agrandir : Plan micro-zoning, équipe Finance (exemple)">
+          <span class="plan-placeholder">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="10" x2="10" y2="21"/></svg>
+            <span class="plan-placeholder-label">Plan · Finance (exemple)</span>
+          </span>
+          <span class="plan-type-badge">Plan</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Micro-zoning</span></div>
+          <div class="plan-title">Plan micro-zoning — équipe Finance &amp; Contrôle de gestion (exemple)</div>
+          <p class="plan-comment">Ce plan de détail est présenté à titre d'exemple pour illustrer le niveau de précision des plans de micro-zoning par équipe. Il ne reflète pas l'implantation définitive — celle-ci sera construite dans l'atelier dédié, prévu mi-avril. On distingue 24 postes organisés en îlots de 4, séparés par des cloisons basses (H.140 cm), deux cabines phoniques à moins de 15 mètres de tout poste, une salle de réunion attenante de 6 personnes, et un espace de rangement avec casiers individuels nominatifs. L'orientation des îlots, la position des cloisons et l'attribution des casiers peuvent être ajustés dans l'atelier.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+      <div class="plan-card reveal" style="--i:0" data-reveal data-tags="3D Concentration">
+        <button class="plan-visual" aria-label="Agrandir : Vue 3D, cabine phonique et zone de focus">
+          <span class="plan-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2" y="13" width="4" height="7" rx="1.2"/><rect x="18" y="13" width="4" height="7" rx="1.2"/></svg>
+            <span class="plan-placeholder-label">Vue 3D · Zone de focus</span>
+          </span>
+          <span class="plan-type-badge">3D</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Concentration</span></div>
+          <div class="plan-title">Vue 3D — cabine phonique et zone de focus</div>
+          <p class="plan-comment">Cette vue présente les deux dispositifs les plus attendus : les cabines phoniques individuelles et la zone de focus collective. Chaque cabine fait environ 2 m², équipée d'un siège ergonomique, d'un écran externe (USB-C), d'une ventilation silencieuse et d'un éclairage variable. Isolation acoustique : Rw 38 dB. Accès libre sans réservation, voyant vert/rouge visible depuis l'extérieur. La zone de focus adjacente est régie par des règles strictes : silence complet, pas de téléphone, pas de conversations. Délimitée par un changement de revêtement de sol et une signalétique discrète.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+      <div class="plan-card reveal" style="--i:1" data-reveal data-tags="Plan Macro-zoning">
+        <button class="plan-visual" aria-label="Agrandir : Plan macro-zoning, rez-de-chaussée complet">
+          <span class="plan-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><line x1="4" y1="21" x2="20" y2="21"/><line x1="10" y1="21" x2="10" y2="14" /><line x1="14" y1="21" x2="14" y2="14"/></svg>
+            <span class="plan-placeholder-label">Plan · Rez-de-chaussée</span>
+          </span>
+          <span class="plan-type-badge">Plan</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Macro-zoning</span></div>
+          <div class="plan-title">Plan macro-zoning — rez-de-chaussée complet</div>
+          <p class="plan-comment">Le rez-de-chaussée concentre les fonctions d'accueil et de services. On y trouve : l'accueil principal avec contrôle d'accès par badge, un espace restauration de 400 m² (120 couverts + terrasse extérieure 60 places), trois salles de réunion grandes capacités (20, 30 et 40 personnes) accessibles sans badge, le point colis (accès 24h/24), la salle de sport et les vestiaires (sous-sol), et le local vélos sécurisé (accès direct depuis la rue). Les modalités de fonctionnement de l'espace restauration — self, formule plateau, commande digitale — ne sont pas encore arrêtées.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+      <div class="plan-card reveal" style="--i:2" data-reveal data-tags="3D Ambiance">
+        <button class="plan-visual" aria-label="Agrandir : Vue 3D, hall d'entrée depuis l'accueil">
+          <span class="plan-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/></svg>
+            <span class="plan-placeholder-label">Vue 3D · Hall d'entrée</span>
+          </span>
+          <span class="plan-type-badge">3D</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags"><span class="tag-pill">Ambiance</span></div>
+          <div class="plan-title">Vue 3D — hall d'entrée depuis l'accueil</div>
+          <p class="plan-comment">Le hall est traversé par une lumière naturelle zénithale provenant d'une verrière d'environ 80 m² située au-dessus de la double hauteur centrale (6,5 m). Les matériaux — pierre claire au sol, béton ciré sur les parties structurelles, panneau bois sur les cloisons légères — créent une ambiance à la fois minérale et chaleureuse. L'escalier principal, généreusement dimensionné (2,4 m de largeur), est visible depuis l'entrée pour encourager son usage. Lors des premières semaines, une équipe d'accueil renforcée sera présente en déambulation pour orienter les collaborateurs et faciliter la prise en main du site.</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="plan-upload-note reveal" data-reveal>
+      <strong>Pour ajouter un visuel :</strong> déposez votre image (PNG, JPG ou PDF) dans le dossier <code>images/</code> de votre repo GitHub, puis référencez-la dans le code en remplaçant le bloc <code>.plan-placeholder</code> par une balise <code>&lt;img src="images/mon-fichier.png"&gt;</code> dans la carte correspondante.
+    </div>
+
+  </div>
+</div>
+<div class="page" id="page-ambassadeurs">
+
+  <section class="hero hero--compact">
+    <div class="hero-inner">
+      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Réseau de proximité</p>
+      <h1 class="hero-title reveal" style="--i:1" data-reveal>Vos<br><span class="accent">ambassadeurs.</span></h1>
+      <p class="hero-desc reveal" style="--i:2" data-reveal>Ce sont vos collègues. Ils ont accepté volontairement de jouer un rôle de relais entre les équipes et l'équipe projet. Interpellez-les sans hésiter.</p>
+    </div>
+  </section>
+
+  <div class="section-body">
+
+    <div class="intro-block reveal" data-reveal>
+      <p><strong>Quel est leur rôle exactement ?</strong><br><br>
+      Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.<br><br>
+      Concrètement, ils font trois choses : ils <strong>relaient les informations</strong> du projet au plus près de leurs collègues, ils <strong>remontent les questions et préoccupations</strong> du terrain vers l'équipe projet via un canal dédié, et ils <strong>participent à la co-construction</strong> des usages et des règles de vie sur le nouveau site.<br><br>
+      Si vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.</p>
+    </div>
+
+    <div class="people-label mono reveal" data-reveal>20 ambassadeurs — toutes directions</div>
+    <div class="people-grid">
+
+      <div class="person-card reveal" style="--i:0" data-reveal>
+        <div class="person-avatar">SL</div>
+        <div class="person-name">Sophie Lecomte</div>
+        <div class="person-role">Responsable comptabilité clients</div>
+        <span class="tag-pill">Finance</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:1" data-reveal>
+        <div class="person-avatar">TM</div>
+        <div class="person-name">Thomas Meunier</div>
+        <div class="person-role">Chargé de développement RH</div>
+        <span class="tag-pill">Ressources humaines</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:2" data-reveal>
+        <div class="person-avatar">AL</div>
+        <div class="person-name">Amina Laaroussi</div>
+        <div class="person-role">Chef de projet digital</div>
+        <span class="tag-pill">Marketing</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:3" data-reveal>
+        <div class="person-avatar">PD</div>
+        <div class="person-name">Pierre Dumont</div>
+        <div class="person-role">Ingénieur infrastructure</div>
+        <span class="tag-pill">DSI</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:0" data-reveal>
+        <div class="person-avatar">CR</div>
+        <div class="person-name">Claire Renard</div>
+        <div class="person-role">Juriste droit des affaires</div>
+        <span class="tag-pill">Juridique</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:1" data-reveal>
+        <div class="person-avatar">JB</div>
+        <div class="person-name">Julien Berger</div>
+        <div class="person-role">Responsable supply chain</div>
+        <span class="tag-pill">Opérations</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:2" data-reveal>
+        <div class="person-avatar">NF</div>
+        <div class="person-name">Nathalie Ferrand</div>
+        <div class="person-role">Assistante de direction</div>
+        <span class="tag-pill">Direction générale</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:3" data-reveal>
+        <div class="person-avatar">KD</div>
+        <div class="person-name">Karim Djebbar</div>
+        <div class="person-role">Analyste financier senior</div>
+        <span class="tag-pill">Contrôle de gestion</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:0" data-reveal>
+        <div class="person-avatar">MB</div>
+        <div class="person-name">Marie Blanchard</div>
+        <div class="person-role">Responsable formation</div>
+        <span class="tag-pill">Ressources humaines</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:1" data-reveal>
+        <div class="person-avatar">RP</div>
+        <div class="person-name">Romain Petit</div>
+        <div class="person-role">Développeur back-end</div>
+        <span class="tag-pill">DSI</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:2" data-reveal>
+        <div class="person-avatar">LV</div>
+        <div class="person-name">Laura Vasseur</div>
+        <div class="person-role">Chargée de communication interne</div>
+        <span class="tag-pill">Communication</span>
+      </div>
+
+      <div class="person-card reveal" style="--i:3" data-reveal>
+        <div class="person-avatar">FB</div>
+        <div class="person-name">François Bouchard</div>
+        <div class="person-role">Responsable maintenance</div>
+        <span class="tag-pill">Services généraux</span>
+      </div>
+
+    </div>
+
+    <div class="info-block reveal" data-reveal>
+      <div class="info-block-title">Vous souhaitez devenir ambassadeur ?</div>
+      <p>Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.</p>
+    </div>
+
+  </div>
+</div>
+<div class="page" id="page-equipe">
+
+  <section class="hero hero--compact">
+    <div class="hero-inner">
+      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Organisation</p>
+      <h1 class="hero-title reveal" style="--i:1" data-reveal>L'équipe<br><span class="accent">projet.</span></h1>
+      <p class="hero-desc reveal" style="--i:2" data-reveal>Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail.</p>
+    </div>
+  </section>
+
+  <div class="section-body">
+
+    <div class="section-separator mono reveal" data-reveal>Équipe XYZ — Pilotage interne</div>
+
+    <div class="team-grid">
+      <div class="team-card reveal" style="--i:0" data-reveal>
+        <div class="team-avatar">SC</div>
+        <div class="team-info">
+          <div class="team-name">Stéphanie Collet</div>
+          <div class="team-title">Directrice des Ressources Humaines — Cheffe de projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:1" data-reveal>
+        <div class="team-avatar">BM</div>
+        <div class="team-info">
+          <div class="team-name">Bruno Marchand</div>
+          <div class="team-title">Directeur Immobilier &amp; Services Généraux</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:2" data-reveal>
+        <div class="team-avatar">EG</div>
+        <div class="team-info">
+          <div class="team-name">Élodie Garnier</div>
+          <div class="team-title">RRH — Accompagnement au changement &amp; communication projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:0" data-reveal>
+        <div class="team-avatar">OT</div>
+        <div class="team-info">
+          <div class="team-name">Olivier Thibaut</div>
+          <div class="team-title">Responsable logistique &amp; coordination déménagement</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:1" data-reveal>
+        <div class="team-avatar">CV</div>
+        <div class="team-info">
+          <div class="team-name">Céline Vidal</div>
+          <div class="team-title">DSI — Référente IT du projet</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:2" data-reveal>
+        <div class="team-avatar">LP</div>
+        <div class="team-info">
+          <div class="team-name">Laurent Peyre</div>
+          <div class="team-title">Responsable travaux &amp; coordination technique site</div>
+          <span class="team-badge xyz">XYZ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-separator mono reveal" data-reveal style="margin-top:16px;">Cabinet Parella — Conseil &amp; accompagnement</div>
+
+    <div class="parella-intro reveal" data-reveal>
+      <div class="parella-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/></svg>
+      </div>
+      <div class="parella-text">
+        <strong>Parella</strong> est le cabinet de conseil en immobilier de travail qui accompagne XYZ dans la conception des espaces, l'animation des ateliers de co-construction et la conduite du changement. Son équipe travaille en binôme avec l'équipe projet interne depuis le début du cadrage.
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card reveal" style="--i:0" data-reveal>
+        <div class="team-avatar parella">MH</div>
+        <div class="team-info">
+          <div class="team-name">Mathieu Hernandez</div>
+          <div class="team-title">Associé — Directeur de mission</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:1" data-reveal>
+        <div class="team-avatar parella">IR</div>
+        <div class="team-info">
+          <div class="team-name">Isabelle Rousseau</div>
+          <div class="team-title">Manager — Conduite du changement &amp; communication</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:2" data-reveal>
+        <div class="team-avatar parella">AK</div>
+        <div class="team-info">
+          <div class="team-name">Antoine Keller</div>
+          <div class="team-title">Consultant senior — Design des espaces de travail</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:0" data-reveal>
+        <div class="team-avatar parella">SN</div>
+        <div class="team-info">
+          <div class="team-name">Sara Nguyen</div>
+          <div class="team-title">Consultante — Animation ateliers &amp; diagnostic usage</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+
+      <div class="team-card reveal" style="--i:1" data-reveal>
+        <div class="team-avatar parella">GF</div>
+        <div class="team-info">
+          <div class="team-name">Guillaume Faure</div>
+          <div class="team-title">Consultant — Programmation immobilière &amp; zoning</div>
+          <span class="team-badge parella">Parella</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-block reveal" data-reveal style="margin-top:16px;">
+      <div class="info-block-title">Une question pour l'équipe projet ?</div>
+      <p>Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-toolbar">
+    <div class="lightbox-title" id="lightboxTitle"></div>
+    <div class="lightbox-controls">
+      <button class="lb-btn" id="lbZoomOut" title="Dézoomer">−</button>
+      <span class="lb-zoom-label" id="lbZoomLabel">100%</span>
+      <button class="lb-btn" id="lbZoomIn" title="Zoomer">+</button>
+      <button class="lb-btn" id="lbReset" title="Réinitialiser" style="font-size:0.7rem;">⟳</button>
+      <button class="lb-btn" id="lightboxClose" title="Fermer" style="margin-left:4px;">✕</button>
+    </div>
+  </div>
+  <div class="lightbox-stage" id="lightboxStage">
+    <div class="lightbox-media-wrap" id="lightboxWrap">
+      <div id="lightboxMedia"></div>
+    </div>
+  </div>
+  <div class="lightbox-caption">
+    <div id="lightboxCaption"></div>
+    <div class="lightbox-hint">Molette pour zoomer · Clic + glisser pour naviguer · Échap pour fermer</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ MODAL ADMINISTRATION ═══════════════════ -->
+<div class="admin-modal" id="adminModal">
+  <div class="admin-modal-card">
+    <div class="admin-modal-title">Administration</div>
+    <div class="admin-modal-sub">Accès réservé à l'équipe projet et au consultant. Saisissez le mot de passe pour continuer.</div>
+    <input type="password" class="form-input" id="adminPasswordInput" placeholder="Mot de passe">
+    <div class="admin-modal-error" id="adminModalError">Mot de passe incorrect.</div>
+    <div class="admin-modal-actions">
+      <button type="button" class="admin-modal-cancel" id="adminModalCancel">Annuler</button>
+      <button type="button" class="search-btn" id="adminModalSubmit">Entrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PAGE : ADMINISTRATION ═══════════════════ -->
+<div class="page" id="page-admin">
+  <div class="section-body" style="padding-top:56px;">
+
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow" style="margin-bottom:14px;">Projet XYZ — Administration</p>
+        <h1 class="hero-title" style="font-size:clamp(1.9rem,3.6vw,2.6rem); margin-bottom:0;">Tableau de bord</h1>
+      </div>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <button type="button" class="admin-export-btn" id="adminExportBtn">Exporter en Excel</button>
+        <button type="button" class="admin-reset" id="adminResetBtn">Réinitialiser les données</button>
+        <button type="button" class="admin-back" id="adminBackBtn">← Retour au site</button>
+      </div>
+    </div>
+
+    <p class="admin-scope-note">Ces données reflètent les interactions réelles effectuées dans <strong>ce navigateur</strong> depuis la dernière réinitialisation — elles ne sont pas encore centralisées entre appareils ou collaborateurs. Pour un déploiement en production avec des données agrégées sur l'ensemble des équipes, un stockage côté serveur sera nécessaire.</p>
+
+    <div class="kpi-cards" id="kpiCards"></div>
+
+    <div class="kpi-section">
+      <div class="kpi-section-title">Questions les plus posées</div>
+      <div class="kpi-section-sub">Ce qui revient le plus souvent dans la barre de recherche de la FAQ.</div>
+      <div class="kpi-bar-list" id="kpiTopQuestions"></div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-section-title">Questions sans réponse trouvée</div>
+      <div class="kpi-section-sub">Les trous à combler dans la base de connaissance — à prioriser pour la prochaine mise à jour.</div>
+      <div class="kpi-list" id="kpiGaps"></div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-section-title">Consultations par onglet</div>
+      <div class="kpi-section-sub">Répartition des visites entre les différentes sections du site.</div>
+      <div class="kpi-bar-list" id="kpiTabs"></div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-section-title">Articles les plus consultés</div>
+      <div class="kpi-section-sub">Taux d'ouverture des publications de la page Actualités.</div>
+      <div class="kpi-bar-list" id="kpiArticles"></div>
+    </div>
+
+    <div class="kpi-section">
+      <div class="kpi-section-title">Demandes de contact</div>
+      <div class="kpi-section-sub">Le formulaire n'étant pas encore relié à une boîte mail, les demandes sont capturées ici en attendant.</div>
+      <div class="kpi-list" id="kpiContacts"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+
+  // ═══════════════════════════════════════════════════
+  // NAVIGATION + INDICATEUR GLISSANT
+  // ═══════════════════════════════════════════════════
+  const navTabsEl   = document.getElementById('navTabs');
+  const navInnerEl  = document.getElementById('navInner');
+  const navIndicator = document.getElementById('navIndicator');
+
+  // ═══════════════════════════════════════════════════
+  // KPI — capture des interactions réelles (localStorage)
+  // Portée : ce navigateur uniquement. Pas de backend derrière
+  // ce POC ; en production, ces événements devraient être envoyés
+  // à un service côté serveur pour être agrégés entre collaborateurs.
+  // ═══════════════════════════════════════════════════
+  const KPI_KEY = 'xyz_kpi_v1';
+
+  function loadKpi() {
+    try {
+      const raw = localStorage.getItem(KPI_KEY);
+      if (!raw) throw new Error('empty');
+      return JSON.parse(raw);
+    } catch (e) {
+      return {
+        faqAsked: [],           // { q, matched, entryId, ts }
+        tabViews: {},           // { faq: n, actu: n, ... }
+        articleOpens: {},       // { "1": n, "2": n, ... }
+        contactSubmissions: []  // { name, email, message, ts }
+      };
+    }
+  }
+
+  function saveKpi(kpi) {
+    try { localStorage.setItem(KPI_KEY, JSON.stringify(kpi)); }
+    catch (e) { console.warn('Stockage KPI indisponible :', e); }
+  }
+
+  function trackTabView(pageId) {
+    const kpi = loadKpi();
+    kpi.tabViews[pageId] = (kpi.tabViews[pageId] || 0) + 1;
+    saveKpi(kpi);
+  }
+
+  function trackFaqQuestion(question, matched, entryId) {
+    const kpi = loadKpi();
+    kpi.faqAsked.push({ q: question, matched: !!matched, entryId: entryId || null, ts: Date.now() });
+    saveKpi(kpi);
+  }
+
+  function trackArticleOpen(articleId) {
+    const kpi = loadKpi();
+    kpi.articleOpens[articleId] = (kpi.articleOpens[articleId] || 0) + 1;
+    saveKpi(kpi);
+  }
+
+  function trackContactSubmission(name, email, message) {
+    const kpi = loadKpi();
+    kpi.contactSubmissions.push({ name, email, message, ts: Date.now() });
+    saveKpi(kpi);
+  }
+
+  function resetKpi() {
+    localStorage.removeItem(KPI_KEY);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // TOAST — confirmation discrète
+  // ═══════════════════════════════════════════════════
+  let toastTimer = null;
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  function positionIndicator(tab) {
+    const navRect = navInnerEl.getBoundingClientRect();
+    const tabRect = tab.getBoundingClientRect();
+    navIndicator.style.left  = (tabRect.left - navRect.left) + 'px';
+    navIndicator.style.width = tabRect.width + 'px';
+  }
+
+  document.querySelectorAll(".nav-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      tab.classList.add("active");
+      const page = document.getElementById("page-" + tab.dataset.page);
+      page.classList.add("active");
+      positionIndicator(tab);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      requestAnimationFrame(() => requestAnimationFrame(() => revealVisibleNow(page)));
+      trackTabView(tab.dataset.page);
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    const active = document.querySelector('.nav-tab.active');
+    if (active) positionIndicator(active);
+  });
+
+  // Les polices Google Fonts se chargent après le premier rendu : une fois
+  // chargées, la largeur du texte des onglets change légèrement, donc on
+  // repositionne la barre pour qu'elle reste alignée.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      const active = document.querySelector('.nav-tab.active');
+      if (active) positionIndicator(active);
+    });
+  }
+
+  // Filet de sécurité : recalcule si la taille d'un onglet change pour
+  // toute autre raison (zoom, contenu dynamique, etc.).
+  if (window.ResizeObserver) {
+    const navResizeObserver = new ResizeObserver(() => {
+      const active = document.querySelector('.nav-tab.active');
+      if (active) positionIndicator(active);
+    });
+    document.querySelectorAll('.nav-tab').forEach(t => navResizeObserver.observe(t));
+  }
+
+  // ═══════════════════════════════════════════════════
+  // REVEAL AU CHARGEMENT + AU SCROLL
+  // ═══════════════════════════════════════════════════
+  function initReveal() {
+    const items = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.classList.toggle('is-visible', entry.isIntersecting);
+      });
+    }, { threshold: 0.15 });
+    items.forEach(el => io.observe(el));
+  }
+
+  // Révèle immédiatement ce qui est déjà au-dessus de la ligne de flottaison
+  // au moment où un onglet devient actif (l'IntersectionObserver seul ne
+  // suffit pas car les pages inactives sont en display:none).
+  function revealVisibleNow(container) {
+    container.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add('is-visible');
+      }
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    initReveal();
+    const activeTab = document.querySelector('.nav-tab.active');
+    if (activeTab) positionIndicator(activeTab);
+    trackTabView('faq'); // onglet actif par défaut au chargement
+  });
+
+  // ═══════════════════════════════════════════════════
+  // ARTICLES — accordéon (page Actualités)
+  // ═══════════════════════════════════════════════════
+  document.querySelectorAll(".article-header-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const article = btn.closest(".article");
+      const isOpen = article.classList.toggle("open");
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      if (isOpen) trackArticleOpen(article.dataset.article);
+    });
+  });
+
+  // ═══════════════════════════════════════════════════
+  // FILTRES PLANS (page Plans & 3D)
+  // ═══════════════════════════════════════════════════
+  document.querySelectorAll(".filter-pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filter-pill").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const filter = btn.dataset.filter;
+      document.querySelectorAll(".plan-card").forEach(card => {
+        card.style.display = (filter === "all" || card.dataset.tags.includes(filter)) ? "" : "none";
+      });
+    });
+  });
+
+  // ═══════════════════════════════════════════════════
+  // LIRE LA SUITE (plans)
+  // ═══════════════════════════════════════════════════
+  document.querySelectorAll(".plan-more").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      const card = btn.closest(".plan-card");
+      card.classList.toggle("expanded");
+      btn.textContent = card.classList.contains("expanded") ? "Réduire ↑" : "Lire la suite ↓";
+    });
+  });
+
+  // ═══════════════════════════════════════════════════
+  // LIGHTBOX — PAN + ZOOM (page Plans & 3D)
+  // ═══════════════════════════════════════════════════
+  const lightbox      = document.getElementById("lightbox");
+  const lightboxStage = document.getElementById("lightboxStage");
+  const lightboxWrap  = document.getElementById("lightboxWrap");
+  const lightboxMedia = document.getElementById("lightboxMedia");
+  const lightboxTitleEl = document.getElementById("lightboxTitle");
+  const lightboxCap   = document.getElementById("lightboxCaption");
+  const lightboxClose = document.getElementById("lightboxClose");
+  const lbZoomIn      = document.getElementById("lbZoomIn");
+  const lbZoomOut     = document.getElementById("lbZoomOut");
+  const lbReset       = document.getElementById("lbReset");
+  const lbZoomLabel   = document.getElementById("lbZoomLabel");
+
+  let scale=1, tx=0, ty=0, dragging=false, startX=0, startY=0, startTx=0, startTy=0;
+  const MIN_SCALE=0.3, MAX_SCALE=8;
+
+  function applyTransform() {
+    lightboxWrap.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+    lbZoomLabel.textContent = Math.round(scale*100)+"%";
+  }
+
+  function resetView() {
+    const stage=lightboxStage.getBoundingClientRect();
+    const media=lightboxMedia.firstElementChild;
+    if (!media) return;
+    const mw=media.naturalWidth||media.offsetWidth||800;
+    const mh=media.naturalHeight||media.offsetHeight||500;
+    const sw=stage.width||window.innerWidth;
+    const sh=stage.height||window.innerHeight*0.7;
+    scale=Math.min(sw/mw,sh/mh,1);
+    tx=(sw-mw*scale)/2; ty=(sh-mh*scale)/2;
+    lightboxWrap.style.transformOrigin="0 0";
+    applyTransform();
+  }
+
+  function zoomBy(factor,cx,cy) {
+    const stage=lightboxStage.getBoundingClientRect();
+    const px=(cx!==undefined?cx-stage.left:stage.width/2);
+    const py=(cy!==undefined?cy-stage.top:stage.height/2);
+    const ns=Math.min(MAX_SCALE,Math.max(MIN_SCALE,scale*factor));
+    tx=px-(px-tx)*(ns/scale); ty=py-(py-ty)*(ns/scale);
+    scale=ns; applyTransform();
+  }
+
+  lightboxStage.addEventListener("wheel",e=>{e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15,e.clientX,e.clientY);},{passive:false});
+  lbZoomIn.addEventListener("click",()=>zoomBy(1.4));
+  lbZoomOut.addEventListener("click",()=>zoomBy(1/1.4));
+  lbReset.addEventListener("click",resetView);
+
+  lightboxStage.addEventListener("mousedown",e=>{
+    if(e.button!==0)return;
+    dragging=true; startX=e.clientX; startY=e.clientY; startTx=tx; startTy=ty;
+    lightboxStage.classList.add("dragging");
+  });
+  window.addEventListener("mousemove",e=>{if(!dragging)return;tx=startTx+(e.clientX-startX);ty=startTy+(e.clientY-startY);applyTransform();});
+  window.addEventListener("mouseup",()=>{dragging=false;lightboxStage.classList.remove("dragging");});
+
+  let lastDist=0,lastTX=0,lastTY=0;
+  lightboxStage.addEventListener("touchstart",e=>{
+    if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}
+    else if(e.touches.length===1){lastTX=e.touches[0].clientX;lastTY=e.touches[0].clientY;}
+  },{passive:true});
+  lightboxStage.addEventListener("touchmove",e=>{
+    e.preventDefault();
+    if(e.touches.length===2){
+      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      const cx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+      const cy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+      if(lastDist>0)zoomBy(dist/lastDist,cx,cy); lastDist=dist;
+    } else if(e.touches.length===1){
+      tx+=e.touches[0].clientX-lastTX; ty+=e.touches[0].clientY-lastTY;
+      lastTX=e.touches[0].clientX; lastTY=e.touches[0].clientY; applyTransform();
+    }
+  },{passive:false});
+  lightboxStage.addEventListener("touchend",()=>{lastDist=0;});
+  lightboxStage.addEventListener("dblclick",resetView);
+
+  function openLightbox(card) {
+    const img   = card.querySelector(".plan-visual img");
+    const ph    = card.querySelector(".plan-placeholder");
+    const title = card.querySelector(".plan-title").textContent;
+    const text  = card.querySelector(".plan-comment").textContent;
+    lightboxTitleEl.textContent = title;
+    lightboxCap.textContent   = text;
+    scale=1; tx=0; ty=0; lightboxWrap.style.transform="";
+
+    if (img) {
+      const i=new Image(); i.className="lightbox-img"; i.src=img.src; i.alt=title;
+      lightboxMedia.innerHTML=""; lightboxMedia.appendChild(i);
+      lightbox.classList.add("open"); document.body.style.overflow="hidden";
+      const dr=()=>requestAnimationFrame(()=>requestAnimationFrame(resetView));
+      i.complete?dr():(i.onload=dr);
+    } else if (ph) {
+      const label=ph.querySelector(".plan-placeholder-label").textContent;
+      lightboxMedia.innerHTML=`<div class="lightbox-placeholder-lb"><div class="lb-ph-label">${label}</div></div>`;
+      lightbox.classList.add("open"); document.body.style.overflow="hidden";
+      requestAnimationFrame(()=>requestAnimationFrame(resetView));
+    }
+  }
+
+  function closeLightbox() { lightbox.classList.remove("open"); document.body.style.overflow=""; }
+
+  document.querySelectorAll(".plan-visual").forEach(v=>{v.addEventListener("click",()=>openLightbox(v.closest(".plan-card")));});
+  lightboxClose.addEventListener("click",closeLightbox);
+  lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
+  document.addEventListener("keydown",e=>{
+    if(!lightbox.classList.contains("open"))return;
+    if(e.key==="Escape")closeLightbox();
+    if(e.key==="+"||e.key==="=")zoomBy(1.3);
+    if(e.key==="-")zoomBy(1/1.3);
+    if(e.key==="0")resetView();
+  });
+
+  // ═══════════════════════════════════════════════════
+  // FAQ — CONFIG IA (optionnelle, reprise telle quelle)
+  // ═══════════════════════════════════════════════════
+  const ENABLE_GEMINI  = false;
+  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
+
+  const PROJECT_CONTEXT = `
+Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
+Tu réponds aux questions des collaborateurs en t'appuyant UNIQUEMENT sur les informations ci-dessous.
+Ton ton est empathique, clair, et humain. Tu reconnais les émotions quand elles sont présentes dans la question.
+Si une information n'est pas disponible dans la base ci-dessous, tu réponds honnêtement que ce point n'est pas encore arrêté, et tu invites à utiliser le formulaire de contact en bas de page.
+Tu ne dois jamais inventer de dates, de décisions ou d'engagements qui ne figurent pas dans la base.
+Tu réponds toujours en français, en 3 à 6 phrases maximum, de façon directe et utile.
+
+--- BASE DE CONNAISSANCES ---
+CALENDRIER
+- Le déménagement est prévu la semaine du 14 octobre.
+- Le phasage par équipe est en cours de finalisation. Toutes les équipes ne basculeront pas au même moment.
+- Les grandes étapes : information/cadrage, préparation logistique, tri/archivage, déménagement physique, installation, accompagnement post-arrivée.
+- Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
+`;
+
+  // ═══════════════════════════════════════════════════
+  // BASE FAQ — reprise à l'identique du POC existant
+  // ═══════════════════════════════════════════════════
+  const faqData = [
+{ id:"date-demenagement", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
+      note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.",
+      keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
+    { id:"phasage", title:"Phasage par équipe", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
+      note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
+      keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
+    { id:"etapes", title:"Grandes étapes", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le déménagement se prépare en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée",
+      note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
+      keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
+    { id:"jour-j", title:"Que faire le jour J", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.",
+      note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.",
+      keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
+    { id:"affaires-personnelles", title:"Affaires personnelles", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.",
+      note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
+      keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
+    { id:"trajet", title:"Temps de trajet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
+      note:"Le trajet, ça compte. Ce n'est pas un détail.",
+      keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
+    { id:"teletravail", title:"Télétravail", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.",
+      note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
+      keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
+    { id:"horaires", title:"Flexibilité des horaires", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.",
+      note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.",
+      keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
+    { id:"flex-office", title:"Postes attribués ou flex office", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.",
+      note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
+      keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
+    { id:"concentration", title:"Espaces de concentration", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.",
+      note:"Travailler dans un espace trop bruyant n'est pas une fatalité.",
+      keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
+    { id:"salles-reunion", title:"Salles de réunion", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.",
+      note:"Les modalités pratiques de réservation seront précisées avant la mise en service.",
+      keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
+    { id:"convivialite", title:"Espaces de convivialité", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.",
+      note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
+      keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
+    { id:"casier", title:"Casiers et rangements", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.",
+      note:"Une information complémentaire sera communiquée au moment opportun.",
+      keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
+    { id:"restauration", title:"Offre de restauration", status:"waiting", statusLabel:"En attente de décision",
+      answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.",
+      note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
+      keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
+    { id:"transport-remboursement", title:"Remboursement des transports", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.",
+      note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.",
+      keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
+    { id:"parking", title:"Parking voiture", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.",
+      note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
+      keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
+    { id:"velo", title:"Parking vélo et mobilités douces", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
+      note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.",
+      keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
+    { id:"visites", title:"Visites du site", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.",
+      note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.",
+      keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
+    { id:"badge", title:"Badge et accès", status:"waiting", statusLabel:"En attente de décision",
+      answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
+      note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
+      keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
+    { id:"it", title:"Informatique et équipements", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
+      note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
+      keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
+    {
+      id: "apprehension",
+      category: "accompagnement", priority: 9,
+      title: "Appréhension face au changement",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Ce que vous ressentez est normal ; la transition est conçue pour être accompagnée.",
+      answer: "Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.",
+      note: "Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH.",
+      related: ["ambassadeurs", "ateliers", "pilotage"],
+      keywords: ["peur","angoisse","stress","anxieux","anxiete","inquiet","apprehension","perturbe","bouleverse","destabilise","mal a l aise"],
+      phrases: ["j ai peur du changement","c est normal d etre stresse","je suis inquiet pour le demenagement","je vis mal ce projet","je suis anxieux par rapport au changement"],
+      intentSignals: ["peur","angoisse","stress","inquiet","anxieux"],
+      negativeSignals: ["parking","restauration","badge"],
+      emotionSignals: ["peur","angoisse","stress","inquiet","anxieux","mal"]
+    },
+    { id:"ambassadeurs", title:"Ambassadeurs du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
+      note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
+      keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
+    { id:"ateliers", title:"Ateliers de personnalisation", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
+      note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.",
+      keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
+    { id:"regles-vie", title:"Règles de vie", status:"partial", statusLabel:"Réponse partielle",
+      answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.",
+      note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.",
+      keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
+    { id:"pilotage", title:"Pilotage du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.",
+      note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
+      keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
+    { id:"archivage", title:"Archivage et documents", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
+      note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
+      keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
+    { id:"pmr", title:"Accessibilité (PMR)", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.",
+      note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.",
+      keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
+    { id:"rumeurs", title:"Rumeurs et informations", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
+      note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
+      keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
+    { id:"communication", title:"Communications à venir", status:"confirmed", statusLabel:"Réponse confirmée",
+      answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.",
+      note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.",
+      keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] },
+    {
+      id: "parking-attribution",
+      category: "mobilite", priority: 8,
+      title: "Attribution des places de parking",
+      status: "partial", statusLabel: "Réponse partielle",
+      shortAnswer: "Le parking dispose de 180 places, attribuées selon un système de priorité défini avec les RH.",
+      answer: "Le nouveau site dispose d'un parking souterrain de 180 places.\n\nL'attribution se fait selon un système de priorité co-défini avec les RH : collaborateurs sans alternative de transport en commun raisonnable, personnes à mobilité réduite, managers de direction. Un système de réservation à la semaine est prévu pour les places non attribuées à titre permanent, accessible via l'intranet.\n\nLes modalités précises et la procédure de demande seront communiquées avant le déménagement.",
+      note: "Si votre situation rend le transport en commun difficile, signalez-le à votre RH avant la date limite de demande.",
+      related: ["parking", "trajet", "velo"],
+      keywords: ["place parking","attribution parking","parking attribue","badge parking","reservation parking","nombre places","places voiture","parking souterrain"],
+      phrases: ["comment obtenir une place de parking","y a t il assez de places de parking pour tout le monde","comment sont attribuees les places de parking","puis je avoir une place de parking fixe","comment reserver une place de parking"],
+      intentSignals: ["attribution","place","parking","reserver","priorite"],
+      negativeSignals: ["restauration","badge","teletravail","it"],
+      emotionSignals: ["inquiet","pratique"]
+    },
+    {
+      id: "bulles-definition",
+      category: "espaces", priority: 8,
+      title: "C'est quoi une bulle ? Combien y en a-t-il ?",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Une bulle est un espace individuel fermé et insonorisé pour travailler seul au calme. Le site en compte 18.",
+      answer: "Une bulle, c'est un espace individuel fermé, insonorisé, conçu pour travailler seul au calme — passer un appel, se concentrer sur un dossier complexe, tenir une visioconférence sans déranger ses collègues.\n\nLe site dispose de 18 bulles réparties sur deux niveaux : 10 au R+1 et 8 au R+2. Chaque bulle est équipée d'un siège ergonomique, d'un écran externe (connexion USB-C), d'une ventilation silencieuse et d'un éclairage à intensité variable. Isolation acoustique : Rw 38 dB.\n\nAccès libre, sans réservation. Un voyant vert/rouge signale la disponibilité depuis le couloir. Durée recommandée : 2 heures maximum par session pour permettre une rotation.",
+      note: "Les bulles ne sont pas des bureaux permanents. Elles sont là pour les moments où vous avez besoin d'un calme absolu.",
+      related: ["concentration", "salles-reunion"],
+      keywords: ["bulle","bulles","bulle phonique","cabine","cabine phonique","espace individuel","espace ferme","insonorise","combien de bulles","bulle de travail"],
+      phrases: ["c est quoi une bulle","qu est ce qu une bulle phonique","combien y a t il de bulles","comment fonctionne une bulle","peut on reserver une bulle","les bulles sont elles insonorisees"],
+      intentSignals: ["bulle","cabine","insonorise","individuel","phonique"],
+      negativeSignals: ["parking","restauration","badge","teletravail"],
+      emotionSignals: ["calme","concentration","stress","bruit"]
+    },
+    {
+      id: "adresse-site",
+      category: "decouverte", priority: 9,
+      title: "Adresse du nouveau site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le nouveau site est situé au 12 avenue du Général Leclerc, 92130 Issy-les-Moulineaux.",
+      answer: "Le nouveau site est situé au :\n\n12 avenue du Général Leclerc\n92130 Issy-les-Moulineaux\n\nAccès transports en commun :\n— Métro ligne 12, station Mairie d'Issy (4 min à pied)\n— Tram T2, station Issy-Val de Seine (6 min à pied)\n— RER C, gare d'Issy (8 min à pied)\n— Bus 39, 126, 189 — arrêt Leclerc-Préfecture\n\nAccès voiture : rocade A86 sortie Issy-les-Moulineaux, parking souterrain accessible depuis le 10 avenue du Général Leclerc.\n\nUn livret d'accueil complet vous sera remis quelques jours avant l'emménagement.",
+      note: "Pensez à mettre à jour votre adresse professionnelle auprès de vos contacts, partenaires et abonnements dès que la date est confirmée.",
+      related: ["trajet", "parking", "velo"],
+      keywords: ["adresse","adresse site","ou est","nouveau site","localisation","issy","issy les moulineaux","leclerc","situe","comment y aller","acces","plan acces"],
+      phrases: ["quelle est l adresse du nouveau site","ou se trouve le nouveau site","c est ou le nouveau bureau","quel est le quartier","comment trouver le nouveau site","l adresse du futur site"],
+      intentSignals: ["adresse","localisation","ou","site","quartier"],
+      negativeSignals: ["restauration","it","badge","teletravail"],
+      emotionSignals: []
+    },
+    {
+      id: "securite-site",
+      category: "acces", priority: 7,
+      title: "Sécurité et incidents sur le site",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "Le site dispose d'un dispositif de sécurité complet ; tout incident se signale à l'accueil ou au numéro d'urgence du site.",
+      answer: "Le nouveau site dispose d'un dispositif de sécurité adapté : contrôle d'accès par badge sur toutes les entrées, présence d'un accueil sécurisé aux heures ouvrées, système de vidéosurveillance dans les zones communes, extincteurs et issues de secours conformes aux normes.\n\nEn cas d'incident (intrusion, malaise, départ de feu, comportement suspect), contactez immédiatement l'accueil ou le numéro de sécurité du site affiché à l'entrée. Les consignes d'évacuation seront communiquées dans le livret d'accueil et lors d'un exercice prévu dans les premières semaines.",
+      note: "Un exercice d'évacuation sera organisé dans les semaines suivant l'installation. La participation est obligatoire.",
+      related: ["badge"],
+      keywords: ["securite","incident","intrusion","incendie","evacuation","urgence","badge perdu","acces non autorise","alarme"],
+      phrases: ["que faire en cas d incendie","comment signaler un incident de securite","j ai perdu mon badge","y a t il un exercice d evacuation","comment fonctionne la securite du site"],
+      intentSignals: ["securite","incident","urgence","evacuation","alarme"],
+      negativeSignals: ["restauration","teletravail","it"],
+      emotionSignals: ["securite","peur","urgence"]
+    },
+    {
+      id: "badge-perdu",
+      category: "acces", priority: 7,
+      title: "Badge perdu ou oublié",
+      status: "confirmed", statusLabel: "Réponse confirmée",
+      shortAnswer: "En cas de badge perdu ou oublié, l'accueil peut délivrer un badge temporaire ; le remplacement définitif se fait via les services généraux.",
+      answer: "Si vous perdez votre badge ou si vous l'oubliez, présentez-vous à l'accueil principal. L'équipe d'accueil peut vous délivrer un badge temporaire pour la journée après vérification de votre identité.\n\nPour un remplacement définitif en cas de perte, contactez les services généraux. La procédure et le délai de remplacement seront précisés dans le livret d'accueil. En cas de vol, signalez-le également pour désactiver le badge perdu.",
+      note: "Ne prêtez jamais votre badge à un tiers — chaque badge est nominatif et traçable.",
+      related: ["badge", "securite-site"],
+      keywords: ["badge perdu","badge oublie","badge vole","remplacement badge","acces sans badge","badge temporaire"],
+      phrases: ["j ai perdu mon badge","j ai oublie mon badge","comment entrer si je n ai pas mon badge","que faire si on m a vole mon badge","comment remplacer un badge perdu"],
+      intentSignals: ["badge","perdu","oublie","vole","remplacement","temporaire"],
+      negativeSignals: ["restauration","teletravail","it","parking"],
+      emotionSignals: ["stress","urgence"]
+    },
+  ];
+
+  // ═══════════════════════════════════════════════════
+  // MOTEUR DE MATCHING — repris à l'identique du POC
+  // ═══════════════════════════════════════════════════
+  const stopWords = new Set([
+    "ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous",
+    "ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux",
+    "en","dans","sur","pour","avec","et","mon","ma","mes","notre","nos","votre",
+    "vos","y","aura","t","sera","seront","sont","avoir","etre","quels","quelle",
+    "quelles","comment","quel","quoi","qui","si"
+  ]);
+
+  const synonymMap = {
+    cantine:"restauration", manger:"restauration", repas:"restauration",
+    dejeuner:"restauration", restaurant:"restauration", lunch:"restauration", tr:"restauration",
+    demenager:"demenagement", transfert:"demenagement", bascule:"demenagement",
+    visite:"visites", visiter:"visites", decouverte:"visites",
+    acces:"acces", entrer:"acces", entree:"acces",
+    wifi:"informatique", reseau:"informatique", teams:"informatique",
+    outlook:"informatique", it:"informatique", ordinateur:"informatique",
+    telephone:"informatique", materiel:"informatique", outils:"informatique",
+    parking:"stationnement", voiture:"stationnement", garage:"stationnement",
+    velo:"mobilite", bicyclette:"mobilite", cycliste:"mobilite",
+    trottinette:"mobilite", douche:"mobilite", vestiaire:"mobilite",
+    navigo:"transport", metro:"transport", rer:"transport", bus:"transport",
+    train:"transport", abonnement:"transport", navette:"transport", covoiturage:"transport",
+    remote:"teletravail", maison:"teletravail", presentiel:"teletravail", hybride:"teletravail",
+    horaire:"horaires", flexible:"horaires", souplesse:"horaires",
+    bureau:"poste", place:"poste", desk:"poste",
+    attitree:"attribue", attribuee:"attribue",
+    salle:"reunion", salles:"reunion", booking:"reservation",
+    casier:"rangement", casiers:"rangement", locker:"rangement",
+    placard:"rangement", stockage:"rangement",
+    bruit:"concentration", silence:"concentration", cabine:"concentration",
+    bulle:"concentration", focus:"concentration", phonique:"concentration",
+    ambassadeur:"ambassadeurs", relais:"ambassadeurs",
+    referent:"ambassadeurs", volontaire:"ambassadeurs",
+    atelier:"ateliers", workshop:"ateliers",
+    charte:"regles", comportement:"regles", normes:"regles",
+    rumeur:"rumeurs", fake:"rumeurs", intox:"rumeurs",
+    archives:"archivage", documents:"archivage", papiers:"archivage",
+    dossiers:"archivage", scanner:"archivage", destruction:"archivage",
+    pmr:"accessibilite", fauteuil:"accessibilite",
+    handicap:"accessibilite", ascenseur:"accessibilite"
+  };
+
+  function normalize(text = "") {
+    return text.toLowerCase().normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function tokenize(text = "") {
+    return normalize(text).split(" ")
+      .filter(w => w && !stopWords.has(w))
+      .map(w => synonymMap[w] || w);
+  }
+
+  function scoreEntry(question, entry) {
+    const normQ  = normalize(question);
+    const tokens = tokenize(question);
+    let score = 0;
+
+    (entry.keywords || []).forEach(kw => {
+      tokenize(kw).forEach(t => { if (tokens.includes(t)) score += 3; });
+      const nk = normalize(kw);
+      if (nk.length > 3 && normQ.includes(nk)) score += 5;
+    });
+
+    (entry.phrases || []).forEach(phrase => {
+      const np = normalize(phrase);
+      if (np && normQ.includes(np)) score += 10;
+    });
+
+    (entry.intentSignals || []).forEach(sig => {
+      const ns = normalize(sig);
+      if (tokens.includes(ns) || normQ.includes(ns)) score += 4;
+    });
+
+    (entry.emotionSignals || []).forEach(sig => {
+      const ns = normalize(sig);
+      if (tokens.includes(ns) || normQ.includes(ns)) score += 2;
+    });
+
+    (entry.negativeSignals || []).forEach(sig => {
+      const ns = normalize(sig);
+      if (tokens.includes(ns) || normQ.includes(ns)) score -= 3;
+    });
+
+    score += (entry.priority || 0);
+    return score;
+  }
+
+  function matchFaq(question) {
+    const scored = faqData
+      .map(entry => ({ entry, score: scoreEntry(question, entry) }))
+      .sort((a, b) => b.score - a.score);
+
+    const best   = scored[0];
+    const second = scored[1];
+
+    if (!best || best.score < 12) return null;
+
+    const strongCandidates = scored.filter(s => s.score >= 28);
+    const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
+    if (distinctCategories.size >= 3) return null;
+
+    if (second && second.score >= 18) {
+      const gap = best.score - second.score;
+      if (gap < 5 && best.entry.category !== second.entry.category) {
+        if ((second.entry.priority || 0) > (best.entry.priority || 0)) return second.entry;
+        if ((best.entry.priority || 0) === (second.entry.priority || 0)) return null;
+      }
+    }
+
+    if (second && Math.abs(best.score - second.score) <= 3) {
+      if ((second.entry.priority || 0) > (best.entry.priority || 0)) {
+        return second.entry;
+      }
+    }
+
+    return best.entry;
+  }
+
+  // ═══════════════════════════════════════════════════
+  // GEMINI (optionnel, dormant — reprise telle quelle)
+  // ═══════════════════════════════════════════════════
+  async function askGemini(question) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const body = {
+      contents:[{parts:[{text: PROJECT_CONTEXT+"\n\n--- QUESTION DU COLLABORATEUR ---\n"+question}]}],
+      generationConfig:{temperature:0.3,maxOutputTokens:400}
+    };
+    const res = await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if (!res.ok) throw new Error("Erreur Gemini : "+res.status);
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+  }
+
+  // ═══════════════════════════════════════════════════
+  // INTERFACE FAQ — logique d'affichage + motion
+  // ═══════════════════════════════════════════════════
+  const questionInput = document.getElementById("questionInput");
+  const askBtn        = document.getElementById("askBtn");
+  const resultBox     = document.getElementById("resultBox");
+  const notFoundBox   = document.getElementById("notFoundBox");
+  const loadingBox    = document.getElementById("loadingBox");
+  const resultAnim    = document.getElementById("resultAnim");
+  const resultQ       = document.getElementById("resultQuestion");
+  const resultStatus  = document.getElementById("resultStatus");
+  const resultAnswer  = document.getElementById("resultAnswer");
+  const resultNote    = document.getElementById("resultNote");
+
+  function setBoxVisible(el, visible) {
+    if (visible) {
+      el.style.display = "block";
+      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-visible")));
+    } else {
+      el.classList.remove("is-visible");
+      setTimeout(() => { if (!el.classList.contains("is-visible")) el.style.display = "none"; }, 420);
+    }
+  }
+
+  function hideAll() {
+    setBoxVisible(resultBox, false);
+    setBoxVisible(notFoundBox, false);
+    setBoxVisible(loadingBox, false);
+  }
+
+  function showLoading(on) {
+    hideAll();
+    if (on) setBoxVisible(loadingBox, true);
+    askBtn.disabled = on;
+  }
+
+  function playResultAnim() {
+    resultAnim.classList.remove("play");
+    void resultAnim.offsetWidth; // reflow — permet de rejouer l'animation
+    resultAnim.classList.add("play");
+  }
+
+  function showResult(question, entry) {
+    hideAll();
+    resultQ.textContent = question;
+    resultStatus.className   = "status-pill r-item r-2 " + (entry.status === "confirmed" ? "status-confirmed" : "status-pending");
+    resultStatus.textContent = entry.statusLabel;
+    resultAnswer.textContent = entry.answer;
+    resultNote.textContent   = entry.note || "";
+    resultNote.style.display = entry.note ? "block" : "none";
+    setTimeout(() => {
+      setBoxVisible(resultBox, true);
+      playResultAnim();
+    }, 90);
+  }
+
+  function showAiResult(question, answerText) {
+    hideAll();
+    resultQ.textContent = question;
+    resultStatus.className   = "status-pill r-item r-2 status-pending";
+    resultStatus.textContent = "Réponse générée par IA";
+    resultAnswer.textContent = answerText;
+    resultNote.textContent   = "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous.";
+    resultNote.style.display = "block";
+    setTimeout(() => {
+      setBoxVisible(resultBox, true);
+      playResultAnim();
+    }, 90);
+  }
+
+  function showNotFound() {
+    hideAll();
+    setTimeout(() => setBoxVisible(notFoundBox, true), 90);
+  }
+
+  async function handleQuestion(question) {
+    if (!question.trim()) return;
+    const match = matchFaq(question);
+    if (match) {
+      trackFaqQuestion(question, true, match.id);
+      showResult(question, match);
+      return;
+    }
+    trackFaqQuestion(question, false, null);
+    if (ENABLE_GEMINI) {
+      showLoading(true);
+      try {
+        const ai = await askGemini(question);
+        showLoading(false);
+        ai ? showAiResult(question, ai) : showNotFound();
+      } catch(e) { showLoading(false); showNotFound(); console.error(e); }
+      return;
+    }
+    showNotFound();
+  }
+
+  askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
+  questionInput.addEventListener("keydown", e => { if (e.key==="Enter") { e.preventDefault(); askBtn.click(); } });
+
+  document.querySelectorAll(".suggestion").forEach(btn => {
+    btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
+  });
+
+  // ═══════════════════════════════════════════════════
+  // FORMULAIRE DE CONTACT — capture locale en attendant
+  // un vrai branchement (boîte mail / CRM)
+  // ═══════════════════════════════════════════════════
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name    = contactForm.querySelector('[name="name"]').value.trim();
+      const email   = contactForm.querySelector('[name="email"]').value.trim();
+      const message = contactForm.querySelector('[name="message"]').value.trim();
+      if (!name || !email || !message) {
+        showToast('Merci de remplir tous les champs avant d\'envoyer.');
+        return;
+      }
+      trackContactSubmission(name, email, message);
+      contactForm.reset();
+      showToast('Votre demande a bien été enregistrée.');
+    });
+  }
+
+  // ═══════════════════════════════════════════════════
+  // ADMINISTRATION — mot de passe + tableau de bord KPI
+  // Protection légère côté client : suffisante pour un POC ou
+  // une démo interne, pas pour de vraies données sensibles.
+  // ═══════════════════════════════════════════════════
+  const ADMIN_PASSWORD = "parella2026"; // ⚠️ à changer avant tout partage avec un client
+
+  const adminLinkBtn       = document.getElementById('adminLinkBtn');
+  const adminModal         = document.getElementById('adminModal');
+  const adminPasswordInput = document.getElementById('adminPasswordInput');
+  const adminModalError    = document.getElementById('adminModalError');
+  const adminModalSubmit   = document.getElementById('adminModalSubmit');
+  const adminModalCancel   = document.getElementById('adminModalCancel');
+  const adminBackBtn       = document.getElementById('adminBackBtn');
+  const adminResetBtn      = document.getElementById('adminResetBtn');
+
+  function openAdminPage() {
+    document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById('page-admin').classList.add('active');
+    navIndicator.style.width = '0px';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderAdminDashboard();
+  }
+
+  function openAdminModal() {
+    adminModalError.style.display = 'none';
+    adminPasswordInput.value = '';
+    adminModal.classList.add('open');
+    setTimeout(() => adminPasswordInput.focus(), 50);
+  }
+  function closeAdminModal() { adminModal.classList.remove('open'); }
+
+  adminLinkBtn.addEventListener('click', () => {
+    if (sessionStorage.getItem('xyz_admin_unlocked') === 'true') openAdminPage();
+    else openAdminModal();
+  });
+
+  function checkAdminPassword() {
+    if (adminPasswordInput.value === ADMIN_PASSWORD) {
+      sessionStorage.setItem('xyz_admin_unlocked', 'true');
+      closeAdminModal();
+      openAdminPage();
+    } else {
+      adminModalError.style.display = 'block';
+    }
+  }
+  adminModalSubmit.addEventListener('click', checkAdminPassword);
+  adminPasswordInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); checkAdminPassword(); } });
+  adminModalCancel.addEventListener('click', closeAdminModal);
+  adminModal.addEventListener('click', e => { if (e.target === adminModal) closeAdminModal(); });
+
+  adminBackBtn.addEventListener('click', () => {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    const faqTab = document.querySelector('.nav-tab[data-page="faq"]');
+    document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+    faqTab.classList.add('active');
+    document.getElementById('page-faq').classList.add('active');
+    positionIndicator(faqTab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  adminResetBtn.addEventListener('click', () => {
+    if (confirm('Réinitialiser toutes les données KPI de ce navigateur ? Cette action est irréversible.')) {
+      resetKpi();
+      renderAdminDashboard();
+      showToast('Données réinitialisées.');
+    }
+  });
+
+  const adminExportBtn = document.getElementById('adminExportBtn');
+  adminExportBtn.addEventListener('click', exportKpiToExcel);
+
+  const TAB_LABELS = { faq: 'FAQ', actu: 'Actualités', plans: 'Plans & 3D', ambassadeurs: 'Ambassadeurs', equipe: 'Équipe projet' };
+  const ARTICLE_LABELS = {
+    "1": "Le projet entre dans sa phase active",
+    "2": "Ce que nous avons entendu",
+    "3": "Première plongée dans le futur site",
+    "4": "Pourquoi on déménage"
+  };
+
+  function fmtDate(ts) {
+    return new Date(ts).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+  }
+
+  function renderBarList(container, entries, opts) {
+    opts = opts || {};
+    if (!entries.length) {
+      container.innerHTML = `<div class="kpi-empty">${opts.emptyText || "Aucune donnée pour l'instant."}</div>`;
+      return;
+    }
+    const max = Math.max(...entries.map(e => e.value), 1);
+    container.innerHTML = entries.map(e => `
+      <div class="kpi-bar-row">
+        <div class="kpi-bar-label" title="${String(e.label).replace(/"/g,'&quot;')}">${e.label}</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill${opts.gap ? ' gap' : ''}" style="width:${(e.value/max*100)}%"></div></div>
+        <div class="kpi-bar-value">${e.value}</div>
+      </div>
+    `).join('');
+  }
+
+  function renderAdminDashboard() {
+    const kpi = loadKpi();
+
+    const totalAsked        = kpi.faqAsked.length;
+    const totalFound        = kpi.faqAsked.filter(a => a.matched).length;
+    const foundRate         = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
+    const totalArticleOpens = Object.values(kpi.articleOpens).reduce((a,b) => a+b, 0);
+    const totalTabViews     = Object.values(kpi.tabViews).reduce((a,b) => a+b, 0);
+    const totalContacts     = kpi.contactSubmissions.length;
+
+    document.getElementById('kpiCards').innerHTML = `
+      <div class="kpi-card"><div class="kpi-card-value">${totalAsked}</div><div class="kpi-card-label mono">Questions posées</div></div>
+      <div class="kpi-card"><div class="kpi-card-value">${foundRate}%</div><div class="kpi-card-label mono">Taux de réponse trouvée</div></div>
+      <div class="kpi-card"><div class="kpi-card-value">${totalTabViews}</div><div class="kpi-card-label mono">Consultations totales</div></div>
+      <div class="kpi-card"><div class="kpi-card-value">${totalArticleOpens}</div><div class="kpi-card-label mono">Ouvertures d'articles</div></div>
+      <div class="kpi-card"><div class="kpi-card-value">${totalContacts}</div><div class="kpi-card-label mono">Demandes de contact</div></div>
+    `;
+
+    // Top questions posées (regroupées par texte, insensible à la casse)
+    const qCounts = {};
+    kpi.faqAsked.forEach(a => {
+      const key = a.q.trim().toLowerCase();
+      if (!qCounts[key]) qCounts[key] = { label: a.q.trim(), value: 0 };
+      qCounts[key].value++;
+    });
+    const topQuestions = Object.values(qCounts).sort((a,b) => b.value - a.value).slice(0, 8);
+    renderBarList(document.getElementById('kpiTopQuestions'), topQuestions, {
+      emptyText: "Aucune question posée pour l'instant — teste la barre de recherche de la FAQ pour voir apparaître des données ici."
+    });
+
+    // Questions sans réponse trouvée
+    const gaps = kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).slice(0, 15);
+    const gapsContainer = document.getElementById('kpiGaps');
+    if (!gaps.length) {
+      gapsContainer.innerHTML = `<div class="kpi-empty">Aucun trou détecté pour l'instant — toutes les questions posées ont trouvé une réponse dans la base.</div>`;
+    } else {
+      gapsContainer.innerHTML = gaps.map(g => `
+        <div class="kpi-list-item">
+          <div class="kpi-list-q">« ${String(g.q).replace(/</g,'&lt;')} »</div>
+          <div class="kpi-list-meta">${fmtDate(g.ts)}</div>
+        </div>
+      `).join('');
+    }
+
+    // Consultations par onglet
+    const tabEntries = Object.keys(TAB_LABELS).map(id => ({ label: TAB_LABELS[id], value: kpi.tabViews[id] || 0 }));
+    const tabHasData = tabEntries.some(e => e.value > 0);
+    renderBarList(document.getElementById('kpiTabs'), tabHasData ? tabEntries : [], {
+      emptyText: "Aucune navigation enregistrée pour l'instant."
+    });
+
+    // Articles les plus consultés
+    const articleEntries = Object.keys(ARTICLE_LABELS).map(id => ({ label: ARTICLE_LABELS[id], value: kpi.articleOpens[id] || 0 }));
+    const articlesHaveData = articleEntries.some(e => e.value > 0);
+    renderBarList(document.getElementById('kpiArticles'), articlesHaveData ? articleEntries : [], {
+      emptyText: "Aucun article ouvert pour l'instant — va sur la page Actualités et déplie une publication."
+    });
+
+    // Demandes de contact
+    const contactsContainer = document.getElementById('kpiContacts');
+    if (!kpi.contactSubmissions.length) {
+      contactsContainer.innerHTML = `<div class="kpi-empty">Aucune demande envoyée pour l'instant.</div>`;
+    } else {
+      contactsContainer.innerHTML = kpi.contactSubmissions.slice().reverse().map(c => `
+        <div class="kpi-contact-item">
+          <div class="kpi-contact-head">
+            <span class="kpi-contact-name">${String(c.name||'Anonyme').replace(/</g,'&lt;')}</span>
+            <span class="kpi-contact-date">${fmtDate(c.ts)}</span>
+          </div>
+          <div class="kpi-contact-email">${String(c.email||'').replace(/</g,'&lt;')}</div>
+          <div class="kpi-contact-msg">${String(c.message||'').replace(/</g,'&lt;')}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function exportKpiToExcel() {
+    if (typeof XLSX === 'undefined') {
+      showToast("La librairie d'export n'a pas pu se charger — vérifie ta connexion.");
+      return;
+    }
+    const kpi = loadKpi();
+    const wb = XLSX.utils.book_new();
+
+    const totalAsked        = kpi.faqAsked.length;
+    const totalFound        = kpi.faqAsked.filter(a => a.matched).length;
+    const foundRate         = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
+    const totalArticleOpens = Object.values(kpi.articleOpens).reduce((a,b) => a+b, 0);
+    const totalTabViews     = Object.values(kpi.tabViews).reduce((a,b) => a+b, 0);
+    const totalContacts     = kpi.contactSubmissions.length;
+
+    // Feuille Synthèse
+    const summaryData = [
+      ['Projet XYZ — Export KPIs', ''],
+      ['Généré le', new Date().toLocaleString('fr-FR')],
+      ['', ''],
+      ['Indicateur', 'Valeur'],
+      ['Questions posées', totalAsked],
+      ['Taux de réponse trouvée', foundRate + ' %'],
+      ['Consultations totales (tous onglets)', totalTabViews],
+      ["Ouvertures d'articles", totalArticleOpens],
+      ['Demandes de contact', totalContacts],
+    ];
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+    wsSummary['!cols'] = [{ wch: 38 }, { wch: 24 }];
+    XLSX.utils.book_append_sheet(wb, wsSummary, 'Synthèse');
+
+    // Feuille Questions posées
+    const qRows = [['Question', 'Réponse trouvée', 'Sujet correspondant', 'Date']];
+    kpi.faqAsked.slice().sort((a,b) => b.ts - a.ts).forEach(a => {
+      qRows.push([a.q, a.matched ? 'Oui' : 'Non', a.entryId || '', new Date(a.ts).toLocaleString('fr-FR')]);
+    });
+    const wsQ = XLSX.utils.aoa_to_sheet(qRows);
+    wsQ['!cols'] = [{ wch: 50 }, { wch: 16 }, { wch: 24 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, wsQ, 'Questions posées');
+
+    // Feuille Trous FAQ (questions sans réponse)
+    const gapRows = [['Question sans réponse trouvée', 'Date']];
+    kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).forEach(a => {
+      gapRows.push([a.q, new Date(a.ts).toLocaleString('fr-FR')]);
+    });
+    const wsGaps = XLSX.utils.aoa_to_sheet(gapRows);
+    wsGaps['!cols'] = [{ wch: 55 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, wsGaps, 'Trous FAQ');
+
+    // Feuille Consultations par onglet
+    const tabRows = [['Onglet', 'Consultations']];
+    Object.keys(TAB_LABELS).forEach(id => tabRows.push([TAB_LABELS[id], kpi.tabViews[id] || 0]));
+    const wsTabs = XLSX.utils.aoa_to_sheet(tabRows);
+    wsTabs['!cols'] = [{ wch: 24 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, wsTabs, 'Consultations onglets');
+
+    // Feuille Articles
+    const artRows = [['Article', 'Ouvertures']];
+    Object.keys(ARTICLE_LABELS).forEach(id => artRows.push([ARTICLE_LABELS[id], kpi.articleOpens[id] || 0]));
+    const wsArt = XLSX.utils.aoa_to_sheet(artRows);
+    wsArt['!cols'] = [{ wch: 50 }, { wch: 14 }];
+    XLSX.utils.book_append_sheet(wb, wsArt, 'Articles');
+
+    // Feuille Demandes de contact
+    const contactRows = [['Nom', 'Email', 'Message', 'Date']];
+    kpi.contactSubmissions.slice().reverse().forEach(c => {
+      contactRows.push([c.name, c.email, c.message, new Date(c.ts).toLocaleString('fr-FR')]);
+    });
+    const wsContacts = XLSX.utils.aoa_to_sheet(contactRows);
+    wsContacts['!cols'] = [{ wch: 24 }, { wch: 28 }, { wch: 60 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, wsContacts, 'Demandes de contact');
+
+    const filename = `Projet-XYZ-KPIs-${new Date().toISOString().slice(0,10)}.xlsx`;
+    XLSX.writeFile(wb, filename);
+    showToast('Export Excel généré.');
+  }
+
+</script>
+</body>
+</html>
