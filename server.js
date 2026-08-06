@@ -45,7 +45,8 @@ const defaultState = {
 const defaultContent = {
   branding: {
     projectName: 'Projet XYZ',
-    logoUrl: '' // vide = losange géométrique par défaut
+    logoUrl: '', // vide = losange géométrique par défaut
+    theme: 'default' // thème visuel public : 'default' ou 'rainbow-glass'
   },
   publicContent: {
     faq: {
@@ -408,9 +409,11 @@ function ensureDataStore() {
 }
 
 function normalizeBranding(raw) {
+  const theme = raw?.theme === 'rainbow-glass' ? 'rainbow-glass' : 'default';
   return {
     projectName: typeof raw?.projectName === 'string' && raw.projectName.trim() ? raw.projectName : defaultContent.branding.projectName,
-    logoUrl: typeof raw?.logoUrl === 'string' ? raw.logoUrl : ''
+    logoUrl: typeof raw?.logoUrl === 'string' ? raw.logoUrl : '',
+    theme
   };
 }
 
