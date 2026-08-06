@@ -198,28 +198,16 @@
     requestMotionUpdate();
   });
 
-  if (window.MutationObserver) {
-    const observer = new MutationObserver(mutations => {
-      let shouldRefresh = false;
+  document.addEventListener("storm-rg-dom-updated", event => {
+    const root = event.detail?.root;
+    refreshTargets(root instanceof Element ? root : document);
+    requestMotionUpdate();
+  });
 
-      for (const mutation of mutations) {
-        if (mutation.type === "childList" && mutation.addedNodes.length) {
-          shouldRefresh = true;
-          break;
-        }
-      }
-
-      if (shouldRefresh) {
-        refreshTargets();
-        requestMotionUpdate();
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
+  document.addEventListener("storm-rg-home-ready", () => {
+    refreshTargets(document.getElementById("page-faq") || document);
+    requestMotionUpdate();
+  });
 
   refreshTargets();
   requestMotionUpdate();
@@ -227,6 +215,12 @@
 
 /* =====================================================
    STORM RAINBOW GLASS — COMPOSITION V2
+   VERSION OPTIMISÉE V4
+
+   - aucune seconde requête vers /api/content ;
+   - aucune reconstruction au retour de focus ;
+   - aucun MutationObserver global ;
+   - chaque page est enrichie seulement quand cela est utile.
 ===================================================== */
 
 (() => {
@@ -245,9 +239,9 @@
     article: `<svg viewBox="0 0 24 24"><ellipse cx="10.4" cy="12" rx="6.2" ry="8"></ellipse><ellipse cx="14.2" cy="12" rx="5.4" ry="7"></ellipse><path d="M8.5 8.5h5.5M8.5 12h6.5M8.5 15.5h4"></path></svg>`
   };
 
-  let cachedContent = null;
-  let refreshPromise = null;
-  let mutationFrame = null;
+  let cachedContent = window.__stormPublicContent || null;
+  let scheduledFrame = 0;
+  let lastHomeSignature = "";
 
   function isActive() {
     return body.classList.contains("theme-rainbow-glass") &&
@@ -263,31 +257,68 @@
       .replace(/'/g, "&#039;");
   }
 
-  async function fetchContent() {
-    try {
-      const response = await fetch("/api/content", { cache: "no-store" });
-      if (!response.ok) throw new Error("Contenu indisponible");
-      cachedContent = await response.json();
-    } catch (error) {
-      console.warn("Rainbow Glass V2 : chargement du contenu impossible.", error);
-      cachedContent = cachedContent || {};
-    }
-    return cachedContent;
+  function text(selector, root = document) {
+    return root.querySelector(selector)?.textContent?.trim() || "";
   }
 
-  function refreshContent() {
-    if (!refreshPromise) {
-      refreshPromise = fetchContent().finally(() => {
-        refreshPromise = null;
-      });
-    }
-    return refreshPromise;
+  function snapshotFromDom() {
+    const planningStep = document.getElementById("planningStep");
+    const stepParts = planningStep
+      ? planningStep.innerHTML.split(/<br\s*\/?\s*>/i).map(part => part.replace(/<[^>]*>/g, "").trim())
+      : [];
+
+    const percentText = text("#planningPct").replace(/[^0-9]/g, "");
+    const percent = Number(percentText);
+
+    const articles = Array.from(document.querySelectorAll("#page-actu #articlesList .article"))
+      .map(article => ({
+        id: article.dataset.article || "",
+        tag: text(".tag-pill", article),
+        date: text(".article-date", article),
+        title: text(".article-title", article)
+      }))
+      .filter(article => article.id || article.title);
+
+    const ambassadors = Array.from(document.querySelectorAll("#page-ambassadeurs .person-card"))
+      .map(card => ({
+        initials: text(".person-avatar", card),
+        name: text(".person-name", card)
+      }))
+      .filter(person => person.initials || person.name);
+
+    return {
+      progress: {
+        stepLine1: stepParts[0] || "Étape 3",
+        stepLine2: stepParts[1] || "sur 6",
+        percent: Number.isFinite(percent) ? percent : 42
+      },
+      articles,
+      ambassadors
+    };
+  }
+
+  function getContentSnapshot() {
+    const dom = snapshotFromDom();
+    const source = cachedContent || {};
+
+    return {
+      ...source,
+      progress: dom.progress,
+      articles: dom.articles.length ? dom.articles : (Array.isArray(source.articles) ? source.articles : []),
+      ambassadors: dom.ambassadors.length ? dom.ambassadors : (Array.isArray(source.ambassadors) ? source.ambassadors : [])
+    };
   }
 
   function addGlass(element, phase = 0) {
     if (!element) return;
     element.setAttribute("data-rg-glass", "");
     element.style.setProperty("--rg-prism-phase", `${phase}%`);
+  }
+
+  function emitDomUpdated(root = document) {
+    document.dispatchEvent(new CustomEvent("storm-rg-dom-updated", {
+      detail: { root }
+    }));
   }
 
   function navigate(pageId) {
@@ -309,7 +340,7 @@
       const button = article.querySelector(".article-header-btn");
       if (button && !article.classList.contains("open")) button.click();
       article.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 140);
+    }, 120);
   }
 
   function getProgress(content) {
@@ -325,16 +356,9 @@
   }
 
   function getAmbassadors(content) {
-    const fromApi = Array.isArray(content?.ambassadors)
+    return Array.isArray(content?.ambassadors)
       ? content.ambassadors.filter(item => item && (item.initials || item.name))
       : [];
-    if (fromApi.length) return fromApi;
-
-    return Array.from(document.querySelectorAll("#page-ambassadeurs .person-card"))
-      .map(card => ({
-        initials: card.querySelector(".person-avatar")?.textContent?.trim() || "",
-        name: card.querySelector(".person-name")?.textContent?.trim() || ""
-      }));
   }
 
   function createRail(content) {
@@ -471,9 +495,20 @@
     composition.remove();
   }
 
-  function buildHome(content) {
+  function homeSignature(content) {
+    const progress = getProgress(content);
+    const articles = Array.isArray(content?.articles) ? content.articles.slice(0, 2) : [];
+    const ambassadors = getAmbassadors(content).slice(0, 4);
+    return JSON.stringify({ progress, articles, ambassadors });
+  }
+
+  function buildHome(content, force = false) {
     const page = document.getElementById("page-faq");
     if (!page) return;
+
+    const signature = homeSignature(content);
+    const existing = document.getElementById("rg2HomeComposition");
+    if (existing && !force && signature === lastHomeSignature) return;
 
     teardownHome();
 
@@ -501,6 +536,10 @@
     stream.appendChild(createExplore());
 
     composition.insertAdjacentElement("afterend", stream);
+    lastHomeSignature = signature;
+
+    emitDomUpdated(page);
+    document.dispatchEvent(new CustomEvent("storm-rg-home-ready"));
   }
 
   function addNavIcons() {
@@ -525,7 +564,10 @@
   }
 
   function enhanceArticles() {
-    const articles = Array.from(document.querySelectorAll("#page-actu #articlesList .article"));
+    const root = document.getElementById("articlesList");
+    if (!root) return;
+
+    const articles = Array.from(root.querySelectorAll(".article"));
     articles.forEach((article, index) => {
       article.classList.toggle("rg2-article-primary", index === 0);
       article.classList.toggle("rg2-article-secondary", index !== 0);
@@ -543,92 +585,101 @@
       }
       if (index !== 0) orbit?.remove();
     });
+
+    emitDomUpdated(root);
   }
 
   function enhancePlans() {
-    document.querySelectorAll("#page-plans .plan-card").forEach((card, index) => {
+    const root = document.querySelector("#page-plans .plans-grid");
+    if (!root) return;
+    root.querySelectorAll(".plan-card").forEach((card, index) => {
       addGlass(card, ((index * 9) % 30) - 15);
     });
+    emitDomUpdated(root);
   }
 
-  function enhanceProfiles() {
-    document.querySelectorAll("#page-ambassadeurs .person-card").forEach((card, index) => {
+  function enhanceProfiles(pageId, selector) {
+    const root = document.querySelector(`#page-${pageId} ${selector}`);
+    if (!root) return;
+    const cardSelector = pageId === "ambassadeurs" ? ".person-card" : ".team-card";
+    root.querySelectorAll(cardSelector).forEach((card, index) => {
       card.classList.toggle("rg2-profile-featured", index < 2);
       addGlass(card, ((index * 7) % 30) - 15);
     });
+    emitDomUpdated(root);
+  }
 
-    document.querySelectorAll("#page-equipe .team-card").forEach((card, index) => {
-      card.classList.toggle("rg2-profile-featured", index < 2);
-      addGlass(card, ((index * 7) % 30) - 15);
-    });
+  function enhancePage(pageId) {
+    if (!isActive()) return;
+    if (pageId === "actu") enhanceArticles();
+    if (pageId === "plans") enhancePlans();
+    if (pageId === "ambassadeurs") enhanceProfiles("ambassadeurs", ".people-grid");
+    if (pageId === "equipe") enhanceProfiles("equipe", ".team-grid");
   }
 
   function removeEnhancements() {
     teardownHome();
+    lastHomeSignature = "";
     document.querySelectorAll(".rg2-nav-icon,.rg2-article-orbit").forEach(item => item.remove());
     document.querySelectorAll(".rg2-article-primary,.rg2-article-secondary,.rg2-profile-featured").forEach(item => {
-      item.classList.remove("rg2-article-primary","rg2-article-secondary","rg2-profile-featured");
+      item.classList.remove("rg2-article-primary", "rg2-article-secondary", "rg2-profile-featured");
     });
   }
 
-  async function applyEnhancements(refresh = false) {
+  function applyEnhancements(forceHome = false) {
     if (!isActive()) {
       removeEnhancements();
       return;
     }
 
-    if (refresh || !cachedContent) await refreshContent();
-
+    const content = getContentSnapshot();
     addNavIcons();
-    buildHome(cachedContent || {});
-    enhanceArticles();
-    enhancePlans();
-    enhanceProfiles();
+    buildHome(content, forceHome);
+
+    const activePage = document.querySelector(".page.active")?.id?.replace(/^page-/, "");
+    if (activePage) enhancePage(activePage);
   }
 
-  function scheduleEnhancement() {
-    if (mutationFrame) return;
-    mutationFrame = requestAnimationFrame(() => {
-      mutationFrame = null;
-      if (!isActive()) return;
-      enhanceArticles();
-      enhancePlans();
-      enhanceProfiles();
+  function scheduleApply(forceHome = false) {
+    if (scheduledFrame) cancelAnimationFrame(scheduledFrame);
+    scheduledFrame = requestAnimationFrame(() => {
+      scheduledFrame = 0;
+      applyEnhancements(forceHome);
     });
   }
 
-  function init() {
-    applyEnhancements(true);
+  document.addEventListener("storm-public-content-ready", event => {
+    cachedContent = event.detail?.content || window.__stormPublicContent || cachedContent;
+    scheduleApply(true);
+  });
 
-    document.addEventListener("storm-theme-change", () => {
-      setTimeout(() => applyEnhancements(true), 0);
-    });
+  document.addEventListener("storm-theme-change", () => {
+    scheduleApply(false);
+  });
 
-    document.querySelectorAll(".nav-tab[data-page]").forEach(tab => {
-      tab.addEventListener("click", () => {
-        if (tab.dataset.page === "faq") {
-          setTimeout(() => applyEnhancements(true), 100);
+  document.querySelectorAll(".nav-tab[data-page]").forEach(tab => {
+    tab.addEventListener("click", () => {
+      const pageId = tab.dataset.page;
+      requestAnimationFrame(() => {
+        if (!isActive()) return;
+        if (pageId === "faq") {
+          buildHome(getContentSnapshot(), false);
+          document.dispatchEvent(new CustomEvent("storm-rg-home-ready"));
         } else {
-          setTimeout(scheduleEnhancement, 100);
+          enhancePage(pageId);
         }
       });
     });
+  });
 
-    if (window.MutationObserver) {
-      const observer = new MutationObserver(scheduleEnhancement);
-      [
-        document.getElementById("articlesList"),
-        document.querySelector("#page-plans .plans-grid"),
-        document.querySelector("#page-ambassadeurs .people-grid"),
-        document.querySelector("#page-equipe .team-grid")
-      ].filter(Boolean).forEach(target => {
-        observer.observe(target, { childList: true, subtree: true });
-      });
+  function init() {
+    cachedContent = window.__stormPublicContent || cachedContent;
+    if (cachedContent) {
+      scheduleApply(false);
+    } else {
+      /* Filet de sécurité : aucun fetch supplémentaire. */
+      window.setTimeout(() => scheduleApply(false), 350);
     }
-
-    window.addEventListener("focus", () => {
-      if (isActive()) applyEnhancements(true);
-    });
   }
 
   if (document.readyState === "loading") {
@@ -640,7 +691,7 @@
 
 /* =====================================================
    STORM RAINBOW GLASS — FAQ MOTION V3
-   Replace dynamiquement la réponse avant « À la une ».
+   VERSION OPTIMISÉE V4
 ===================================================== */
 
 (() => {
@@ -650,8 +701,8 @@
   if (!body) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let resultObserver = null;
-  let closeTimer = null;
+  let stateObservers = [];
+  let closeTimer = 0;
   let hasAutoScrolledForCurrentOpen = false;
 
   function isRainbowActive() {
@@ -722,11 +773,6 @@
       return;
     }
 
-    /*
-      Lorsqu'une nouvelle recherche remplace l'ancienne, le code principal
-      masque d'abord l'ancien état puis affiche le nouveau 90 ms plus tard.
-      Ce délai évite que le panneau se referme brièvement entre les deux.
-    */
     window.clearTimeout(closeTimer);
     closeTimer = window.setTimeout(() => {
       if (!visibleStateExists(results)) {
@@ -737,46 +783,33 @@
   }
 
   function observeResults() {
+    stateObservers.forEach(observer => observer.disconnect());
+    stateObservers = [];
+
     const results = getResultsZone();
     if (!results) return;
 
-    resultObserver?.disconnect();
-    resultObserver = new MutationObserver(syncResultState);
-    resultObserver.observe(results, {
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["class", "style"]
+    results.querySelectorAll(".state-box").forEach(box => {
+      const observer = new MutationObserver(syncResultState);
+      observer.observe(box, {
+        attributes: true,
+        attributeFilter: ["class", "style"]
+      });
+      stateObservers.push(observer);
     });
 
     syncResultState();
   }
 
   function refresh() {
-    window.setTimeout(() => {
+    requestAnimationFrame(() => {
       placeResultsBeforeFeatured();
       observeResults();
-    }, 0);
+    });
   }
 
+  document.addEventListener("storm-rg-home-ready", refresh);
   document.addEventListener("storm-theme-change", refresh);
-
-  document.querySelectorAll('.nav-tab[data-page="faq"]').forEach(tab => {
-    tab.addEventListener("click", () => window.setTimeout(refresh, 140));
-  });
-
-  /*
-    La V2 reconstruit la composition de l'accueil à certains moments.
-    On replace donc la zone de réponse après chaque reconstruction.
-  */
-  if (window.MutationObserver) {
-    const page = document.getElementById("page-faq");
-    if (page) {
-      const homeObserver = new MutationObserver(() => {
-        if (isRainbowActive()) placeResultsBeforeFeatured();
-      });
-      homeObserver.observe(page, { childList: true });
-    }
-  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", refresh, { once: true });

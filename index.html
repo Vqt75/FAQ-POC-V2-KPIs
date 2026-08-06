@@ -1985,6 +1985,10 @@
     applyBranding(content.branding);
     renderMilestonesFront(content.milestones, content.progress);
     renderArticlesFront(content.articles);
+    window.__stormPublicContent = content;
+    document.dispatchEvent(new CustomEvent('storm-public-content-ready', {
+      detail: { content }
+    }));
     trackVisit();
     trackTabView('faq'); // onglet actif par défaut au chargement
   });

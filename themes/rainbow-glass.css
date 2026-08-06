@@ -1734,3 +1734,51 @@ body.theme-rainbow-glass:not(.storm-admin-open) #page-faq .rg2-home-stream {
     transform: none;
   }
 }
+
+/* =====================================================
+   STORM RAINBOW GLASS — PERFORMANCE V4
+===================================================== */
+
+/* Un calque GPU permanent n'est pas nécessaire pour ce bloc. */
+body.theme-rainbow-glass:not(.storm-admin-open) #page-faq .rg2-home-stream {
+  will-change: auto;
+}
+
+/* Isolation des gros panneaux pour limiter la zone à repeindre. */
+body.theme-rainbow-glass:not(.storm-admin-open) :where(
+  .rg2-home-composition,
+  .rg2-home-stream,
+  .rg2-home-rail,
+  .rg2-stream-panel,
+  #page-faq > .results-zone.rg3-inline-results
+) {
+  contain: layout paint;
+}
+
+/* Les contenus hors écran sont préparés seulement lorsqu'ils approchent du viewport. */
+body.theme-rainbow-glass:not(.storm-admin-open) :where(
+  #page-faq .contact-section,
+  #page-actu .articles-block,
+  #page-plans .plans-grid,
+  #page-ambassadeurs .people-grid,
+  #page-equipe .team-grid
+) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+/* Réduction du coût des filtres sur petits écrans. */
+@media (max-width: 700px) {
+  body.theme-rainbow-glass:not(.storm-admin-open) :where(
+    .rg2-home-rail,
+    .rg2-stream-panel,
+    #page-faq > .results-zone.rg3-inline-results .state-box,
+    #page-actu .article,
+    #page-plans .plan-card,
+    #page-ambassadeurs .person-card,
+    #page-equipe .team-card
+  ) {
+    backdrop-filter: blur(13px) saturate(118%);
+    -webkit-backdrop-filter: blur(13px) saturate(118%);
+  }
+}
