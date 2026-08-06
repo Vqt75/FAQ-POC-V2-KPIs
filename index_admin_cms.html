@@ -125,12 +125,6 @@
     content:'';
     position:absolute;
   }
-  .nav-mark.has-logo {
-    border:none; transform:none;
-    width:28px; height:28px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .nav-mark.has-logo img { width:100%; height:100%; object-fit:contain; display:block; }
   .nav-brand-text { display:flex; flex-direction:column; line-height:1.15; }
   .nav-brand-name { font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; }
   .nav-brand-sub  { font-size:0.62rem; font-weight:400; letter-spacing:0.05em; color:var(--ink-50); }
@@ -574,9 +568,9 @@
   .plan-title { font-size:0.94rem; font-weight:600; letter-spacing:-0.01em; line-height:1.35; margin-bottom:11px; }
   .plan-comment {
     font-size:0.85rem; color:var(--ink-50); line-height:1.7;
-    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    display:-webkit-box; -webkit-line-clamp:3; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
   }
-  .plan-card.expanded .plan-comment { -webkit-line-clamp:unset; }
+  .plan-card.expanded .plan-comment { -webkit-line-clamp:unset; line-clamp:unset; }
   .plan-more { margin-top:11px; font-size:0.76rem; font-weight:600; color:var(--olive); }
   .plan-more:hover { color:var(--ink); }
 
@@ -735,63 +729,16 @@
   }
   .admin-modal-cancel:hover { border-color:var(--ink-35); color:var(--ink); }
 
-  /* Fenêtre de révision d'import Word */
-  .import-review-card { max-width:600px; max-height:82vh; display:flex; flex-direction:column; }
-  .import-review-list { overflow-y:auto; margin:18px 0; display:flex; flex-direction:column; gap:8px; flex:1; }
-  .import-review-row {
-    display:flex; gap:12px; align-items:flex-start;
-    padding:12px 14px; border:1px solid var(--ink-08); border-radius:12px;
-    cursor:pointer; transition:border-color .2s var(--ease-soft), opacity .2s var(--ease-soft);
+  /* Dashboard */
+  .admin-topbar {
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:16px;
+    margin-bottom:8px;
   }
-  .import-review-row:hover { border-color:var(--ink-35); }
-  .import-review-row.is-duplicate { opacity:0.55; }
-  .import-review-row input[type="checkbox"] { margin-top:3px; width:16px; height:16px; flex-shrink:0; accent-color:var(--ink); }
-  .import-review-row-title { font-size:0.85rem; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  .import-review-row-preview { font-size:0.78rem; color:var(--ink-50); margin-top:4px; line-height:1.55; }
-
-  /* Coquille Admin — sidebar + contenu */
-  .admin-shell {
-    max-width:1360px; margin:0 auto;
-    display:flex; align-items:flex-start;
-    padding:0 40px;
+  .admin-back { font-size:0.76rem; color:var(--ink-50); }
+  .admin-back:hover { color:var(--ink); }
+  .admin-reset {
+    font-size:0.7rem; color:var(--ink-35); letter-spacing:0.05em;
   }
-  .admin-sidebar {
-    width:232px; flex-shrink:0;
-    position:sticky; top:var(--nav-h);
-    height:calc(100vh - var(--nav-h));
-    padding:48px 20px 32px 0;
-    display:flex; flex-direction:column;
-    border-right:1px solid var(--ink-08);
-  }
-  .admin-sidebar-header { margin-bottom:36px; }
-  .admin-sidebar-title { font-family:'Italiana', serif; font-size:1.4rem; color:var(--ink); }
-  .admin-sidebar-nav { display:flex; flex-direction:column; gap:2px; flex:1; }
-  .admin-nav-item {
-    display:flex; align-items:center; gap:11px;
-    padding:11px 14px; border-radius:10px;
-    font-size:0.85rem; color:var(--ink-70); text-align:left;
-    transition:background .2s var(--ease-soft), color .2s var(--ease-soft);
-  }
-  .admin-nav-item svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
-  .admin-nav-item:hover { background:var(--offwhite); color:var(--ink); }
-  .admin-nav-item.active { background:var(--peach); color:var(--ink); font-weight:600; }
-  .admin-sidebar-footer {
-    display:flex; flex-direction:column; gap:10px;
-    padding-top:20px; margin-top:20px; border-top:1px solid var(--ink-08);
-  }
-  .admin-sidebar-back {
-    font-size:0.76rem; color:var(--ink-50); text-align:left;
-  }
-  .admin-sidebar-back:hover { color:var(--ink); }
-  .admin-sidebar-logout {
-    font-size:0.76rem; color:var(--bordeaux); text-align:left; opacity:0.85;
-  }
-  .admin-sidebar-logout:hover { opacity:1; }
-
-  .admin-main { flex:1; min-width:0; padding:48px 0 100px 40px; }
-  .admin-panel.hidden { display:none; }
-
-  .admin-reset { font-size:0.7rem; color:var(--ink-35); letter-spacing:0.05em; }
   .admin-reset:hover { color:var(--bordeaux); }
   .admin-export-btn {
     height:34px; padding:0 18px;
@@ -802,107 +749,64 @@
     flex-shrink:0;
   }
   .admin-export-btn:hover { transform:scale(1.04); background:#000; }
-  .logo-dropzone {
-    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-    border:1.5px dashed var(--ink-12); border-radius:12px;
-    padding:10px 12px;
-    transition:border-color .2s var(--ease-soft), background .2s var(--ease-soft);
-  }
-  .logo-dropzone.drag-over { border-color:var(--sand); background:var(--peach); }
-  .logo-dropzone-hint { font-size:0.72rem; color:var(--ink-35); }
-
   .admin-scope-note {
     font-size:0.82rem; color:var(--ink-50); line-height:1.65;
-    max-width:640px; margin-bottom:24px;
+    max-width:640px; margin-bottom:56px;
     padding:16px 20px; background:var(--offwhite); border-radius:12px;
   }
 
-  .admin-panel-toolbar {
-    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-    margin-bottom:36px; padding-bottom:20px; border-bottom:1px solid var(--ink-08);
+  .admin-tabs {
+    display:flex; flex-wrap:wrap; gap:10px; margin:0 0 26px;
   }
+  .admin-tab {
+    height:36px; padding:0 14px; border-radius:999px;
+    border:1px solid var(--ink-12); background:var(--white);
+    color:var(--ink-60); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em;
+  }
+  .admin-tab.active { background:var(--ink); color:var(--white); border-color:var(--ink); }
+  .admin-panel.hidden { display:none; }
 
-  /* Éditeurs CMS — panneau liste + détail */
-  .admin-editor-panel { }
-  .admin-structure-layout {
-    display:grid; grid-template-columns:300px minmax(0,1fr); gap:20px;
-    margin-top:24px;
+  .admin-filter-bar {
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:16px 0 20px;
   }
-  .admin-list-pane, .admin-detail-pane {
-    background:var(--offwhite); border:1px solid var(--ink-08); border-radius:16px; padding:18px;
-  }
-  .admin-editor-head { font-size:0.66rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-50); margin-bottom:14px; }
-  .admin-stack-list { display:flex; flex-direction:column; gap:8px; max-height:520px; overflow-y:auto; }
-  .admin-stack-item {
-    width:100%; text-align:left; border:1px solid var(--ink-12); background:var(--white); border-radius:12px;
-    padding:12px 14px; display:flex; flex-direction:column; gap:3px;
-    transition:border-color .2s var(--ease-soft);
-  }
-  .admin-stack-item:hover { border-color:var(--ink-35); }
-  .admin-stack-item.active { border-color:var(--ink); background:var(--peach); }
-  .admin-stack-item-title { font-size:0.82rem; font-weight:600; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .admin-stack-item-meta { font-size:0.66rem; color:var(--ink-50); text-transform:uppercase; letter-spacing:0.06em; }
-
-  .admin-detail-card { background:var(--white); border:1px solid var(--ink-08); border-radius:14px; padding:20px; display:flex; flex-direction:column; gap:4px; }
-  .admin-detail-head { font-size:0.66rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-50); }
-  .admin-detail-title { font-size:1.05rem; font-weight:600; margin-bottom:12px; }
-  .admin-editor-label { font-size:0.68rem; font-weight:600; letter-spacing:0.04em; color:var(--ink-50); margin-top:12px; margin-bottom:6px; display:block; }
-  .admin-editor-label:first-of-type { margin-top:0; }
-  .admin-editor-textarea { min-height:100px; resize:vertical; }
-  .admin-delete-btn {
-    align-self:flex-start; margin-top:18px;
-    border:1px solid var(--bordeaux); color:var(--bordeaux); background:none;
-    border-radius:999px; padding:8px 16px; font-size:0.7rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase;
-    transition:background .2s var(--ease-soft), color .2s var(--ease-soft);
-  }
-  .admin-delete-btn:hover { background:var(--bordeaux); color:var(--white); }
-
-  .admin-filter-bar { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 4px; align-items:center; }
-  .admin-search-input { min-width:260px; flex:1 1 260px; height:40px; }
   .admin-filter-chip {
-    height:32px; padding:0 13px; border:1px solid var(--ink-12); border-radius:999px;
-    font-size:0.7rem; color:var(--ink-70); background:var(--white); flex-shrink:0;
-    transition:background .2s var(--ease-soft), color .2s var(--ease-soft), border-color .2s var(--ease-soft);
+    border:1px solid var(--ink-12); border-radius:999px; padding:8px 12px; background:var(--white);
+    font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-60);
   }
-  .admin-filter-chip:hover { border-color:var(--ink-35); }
   .admin-filter-chip.active { background:var(--ink); color:var(--white); border-color:var(--ink); }
-
-  /* Cartes FAQ — éditeur */
-  .faq-card-list { display:flex; flex-direction:column; gap:10px; margin-top:20px; }
-  .faq-card { border:1px solid var(--ink-08); border-radius:14px; background:var(--white); overflow:hidden; }
-  .faq-card-header {
-    width:100%; display:flex; align-items:center; gap:12px;
-    padding:16px 18px; background:none; border:none; text-align:left;
-  }
-  .faq-card-header .status-pill { flex-shrink:0; }
-  .milestone-badge {
-    font-size:0.72rem; font-weight:700; color:var(--ink-45);
-    background:var(--ink-05); border:1px solid var(--ink-08);
-    border-radius:999px; padding:6px 10px; white-space:nowrap;
-  }
-  .faq-card-title { flex:1; font-size:0.88rem; font-weight:600; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .faq-card-chevron { flex-shrink:0; color:var(--ink-35); transition:transform .3s var(--ease); }
-  .faq-card-chevron svg { width:11px; height:11px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-  .faq-card.open .faq-card-chevron { transform:rotate(180deg); }
-  .faq-card-body { display:grid; grid-template-rows:0fr; transition:grid-template-rows .4s var(--ease); }
-  .faq-card.open .faq-card-body { grid-template-rows:1fr; }
-  .faq-card-body-inner { overflow:hidden; padding:0 18px 20px; border-top:1px solid var(--ink-08); margin-top:-1px; padding-top:16px; }
-  .faq-card.open .faq-card-body-inner { border-top-color:var(--ink-08); }
-
-  /* Zone brouillons — séparée visuellement de la liste publiée */
-  .faq-drafts-zone {
-    border:1.5px solid var(--sand); border-radius:16px;
-    background:var(--peach); padding:20px 20px 12px; margin-bottom:32px;
-  }
-  .faq-drafts-header {
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-    margin-bottom:16px;
-  }
-  .faq-drafts-title { font-size:0.85rem; font-weight:700; color:var(--ink); }
-  .faq-drafts-zone .faq-card { border-color:rgba(194,175,138,0.4); }
+  .admin-search-input { min-width:260px; flex:1 1 260px; }
 
   .kpi-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1px; background:var(--ink-08); margin-bottom:64px; }
   .kpi-card { background:var(--white); padding:26px 24px; }
+  .admin-editor-panel { background:var(--white); border:1px solid var(--ink-08); border-radius:18px; padding:24px; margin-bottom:32px; }
+  .admin-editor-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:18px; }
+  .admin-editor-card { display:flex; flex-direction:column; gap:10px; background:var(--offwhite); border:1px solid var(--ink-08); border-radius:14px; padding:16px; }
+  .admin-editor-head { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
+  .admin-editor-label { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-50); margin-top:2px; }
+  .admin-editor-textarea { min-height:102px; resize:vertical; }
+  .admin-delete-btn { align-self:flex-start; margin-top:6px; border:1px solid var(--bordeaux); color:var(--bordeaux); border-radius:999px; padding:8px 12px; font-size:0.72rem; text-transform:uppercase; }
+
+  .admin-structure-layout {
+    display:grid; grid-template-columns:320px minmax(0, 1fr); gap:18px;
+  }
+  .admin-list-pane, .admin-detail-pane {
+    background:var(--offwhite); border:1px solid var(--ink-08); border-radius:16px; padding:16px;
+  }
+  .admin-stack-list { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+  .admin-stack-item {
+    width:100%; text-align:left; border:1px solid var(--ink-12); background:var(--white); border-radius:12px;
+    padding:12px 14px; display:flex; flex-direction:column; gap:4px;
+  }
+  .admin-stack-item.active { border-color:var(--ink); background:#f7f7f4; }
+  .admin-stack-item-title { font-size:0.82rem; font-weight:600; }
+  .admin-stack-item-meta { font-size:0.7rem; color:var(--ink-50); text-transform:uppercase; letter-spacing:0.08em; }
+  .admin-public-detail.hidden, .admin-faq-detail.hidden { display:none; }
+  .admin-detail-card {
+    background:var(--white); border:1px solid var(--ink-08); border-radius:14px; padding:18px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .admin-detail-head { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-50); }
+  .admin-detail-title { font-size:1.1rem; font-weight:600; }
   .kpi-card-value { font-family:'Italiana', serif; font-size:2.3rem; color:var(--ink); line-height:1; margin-bottom:10px; }
   .kpi-card-label { font-size:0.65rem; color:var(--ink-50); }
 
@@ -948,6 +852,103 @@
   }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
+
+  /* ═══════════════════════════════════════════════════
+     MINI-CMS ADMIN — interface éditoriale simplifiée
+  ═══════════════════════════════════════════════════ */
+  .admin-cms-shell {
+    background:var(--white); border:1px solid var(--ink-08); border-radius:20px;
+    overflow:hidden; margin-bottom:34px;
+  }
+  .admin-cms-head {
+    display:flex; align-items:flex-start; justify-content:space-between; gap:24px;
+    padding:24px 26px; border-bottom:1px solid var(--ink-08); background:var(--offwhite);
+  }
+  .admin-cms-head h2 { font-size:1rem; font-weight:650; margin-bottom:5px; }
+  .admin-cms-head p { font-size:.82rem; color:var(--ink-50); line-height:1.55; max-width:640px; }
+  .admin-cms-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+  .admin-cms-status {
+    display:inline-flex; align-items:center; gap:7px; min-height:30px; padding:0 11px;
+    border-radius:999px; background:var(--mint-soft); color:var(--teal);
+    font-size:.68rem; font-weight:600; white-space:nowrap;
+  }
+  .admin-cms-status::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .admin-cms-status.dirty { background:var(--cream-soft); color:var(--mustard); }
+  .admin-cms-layout { display:grid; grid-template-columns:300px minmax(0,1fr); min-height:540px; }
+  .admin-cms-sidebar { padding:18px; border-right:1px solid var(--ink-08); background:#fbfbf8; }
+  .admin-cms-main { padding:26px; min-width:0; }
+  .admin-cms-sidebar-title {
+    font-size:.65rem; color:var(--ink-50); margin:0 4px 12px;
+    font-family:'Roboto Mono',monospace; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .admin-cms-list { display:flex; flex-direction:column; gap:8px; max-height:590px; overflow:auto; padding-right:3px; }
+  .admin-cms-list-btn {
+    width:100%; text-align:left; border:1px solid transparent; border-radius:12px;
+    padding:12px 13px; background:transparent; transition:.2s var(--ease-soft);
+  }
+  .admin-cms-list-btn:hover { background:var(--white); border-color:var(--ink-08); }
+  .admin-cms-list-btn.active { background:var(--white); border-color:var(--ink-35); box-shadow:0 8px 20px -18px rgba(0,0,0,.4); }
+  .admin-cms-list-title { display:block; font-size:.82rem; font-weight:600; line-height:1.35; color:var(--ink); }
+  .admin-cms-list-meta { display:flex; align-items:center; gap:7px; margin-top:6px; font-size:.68rem; color:var(--ink-50); }
+  .admin-cms-dot { width:6px; height:6px; border-radius:50%; background:var(--ink-35); }
+  .admin-cms-dot.confirmed { background:var(--teal); }
+  .admin-cms-dot.partial { background:var(--mustard); }
+  .admin-cms-dot.waiting { background:var(--bordeaux); }
+  .admin-cms-empty { padding:50px 20px; text-align:center; color:var(--ink-35); font-size:.86rem; }
+  .admin-cms-form { max-width:760px; }
+  .admin-cms-form-head { margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid var(--ink-08); }
+  .admin-cms-form-kicker { font-size:.65rem; color:var(--ink-50); margin-bottom:6px; }
+  .admin-cms-form-title { font-family:'Italiana',serif; font-size:1.55rem; line-height:1.25; }
+  .admin-field { margin-bottom:22px; }
+  .admin-field-row { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .admin-field label { display:block; font-size:.72rem; font-weight:600; color:var(--ink-70); margin-bottom:7px; }
+  .admin-field-help { display:block; margin-top:6px; color:var(--ink-35); font-size:.7rem; line-height:1.45; }
+  .admin-control {
+    width:100%; border:1px solid var(--ink-12); border-radius:11px; background:var(--white);
+    padding:11px 13px; color:var(--ink); font:inherit; font-size:.88rem; outline:none;
+    transition:border-color .2s var(--ease-soft), box-shadow .2s var(--ease-soft);
+  }
+  .admin-control:focus { border-color:var(--ink-50); box-shadow:0 0 0 3px var(--ink-08); }
+  textarea.admin-control { resize:vertical; min-height:110px; line-height:1.6; }
+  textarea.admin-control.answer { min-height:220px; }
+  .admin-cms-bottom-actions {
+    display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;
+    padding-top:20px; margin-top:26px; border-top:1px solid var(--ink-08);
+  }
+  .admin-secondary-btn, .admin-danger-btn {
+    min-height:42px; padding:0 17px; border-radius:999px; border:1px solid var(--ink-12);
+    font-size:.73rem; font-weight:550; letter-spacing:.04em; background:var(--white); color:var(--ink-70);
+  }
+  .admin-secondary-btn:hover { border-color:var(--ink-35); color:var(--ink); }
+  .admin-danger-btn { border-color:rgba(110,11,19,.28); color:var(--bordeaux); }
+  .admin-danger-btn:hover { background:var(--pink-soft); }
+  .admin-primary-btn {
+    min-height:42px; padding:0 19px; border-radius:999px; background:var(--ink); color:var(--white);
+    font-size:.73rem; font-weight:600; letter-spacing:.05em;
+  }
+  .admin-primary-btn:hover { background:#000; transform:translateY(-1px); }
+  .admin-primary-btn:disabled { opacity:.45; cursor:wait; transform:none; }
+  .admin-cms-search { margin-bottom:12px; }
+  .admin-cms-filters { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .admin-cms-filter {
+    padding:6px 9px; border-radius:999px; background:var(--white); border:1px solid var(--ink-08);
+    color:var(--ink-50); font-size:.65rem;
+  }
+  .admin-cms-filter.active { background:var(--ink); border-color:var(--ink); color:var(--white); }
+  .admin-page-description { font-size:.8rem; color:var(--ink-50); margin-top:4px; }
+
+  @media (max-width:860px) {
+    .admin-cms-head { flex-direction:column; }
+    .admin-cms-actions { justify-content:flex-start; }
+    .admin-cms-layout { grid-template-columns:1fr; }
+    .admin-cms-sidebar { border-right:0; border-bottom:1px solid var(--ink-08); }
+    .admin-cms-list { max-height:260px; }
+  }
+  @media (max-width:560px) {
+    .admin-cms-main, .admin-cms-head { padding:20px; }
+    .admin-field-row { grid-template-columns:1fr; gap:0; }
+  }
+
   /* ═══════════════════════════════════════════════════
      RESPONSIVE
   ═══════════════════════════════════════════════════ */
@@ -959,16 +960,6 @@
     .contact-grid { grid-template-columns:1fr; gap:32px; }
     .timeline-block { grid-template-columns:1fr; gap:28px; }
     .timeline-side { position:static; }
-    .admin-structure-layout { grid-template-columns:1fr; }
-    .admin-shell { flex-direction:column; padding:0 24px; }
-    .admin-sidebar {
-      width:100%; position:static; height:auto;
-      border-right:none; border-bottom:1px solid var(--ink-08);
-      padding:32px 0 20px;
-    }
-    .admin-sidebar-nav { flex-direction:row; flex-wrap:wrap; gap:6px; }
-    .admin-sidebar-footer { border-top:none; margin-top:16px; padding-top:0; flex-direction:row; gap:16px; }
-    .admin-main { padding:32px 0 80px; }
   }
   @media (max-width:560px) {
     .nav-tab { padding:0 11px; font-size:0.7rem; }
@@ -1112,17 +1103,238 @@
     <div class="timeline-block">
       <div class="timeline-side reveal" data-reveal>
         <div class="timeline-label mono">Avancement</div>
-        <div class="timeline-step" id="planningStep">Étape 3<br>sur 6</div>
-        <div class="progress-track"><div class="progress-fill" id="planningFill" style="width:0%"></div></div>
-        <div class="progress-pct mono" id="planningPct">0%</div>
+        <div class="timeline-step">Étape 3<br>sur 6</div>
+        <div class="progress-track"><div class="progress-fill" style="width:42%"></div></div>
+        <div class="progress-pct mono">42%</div>
       </div>
 
-      <div class="milestones" id="milestonesList"></div>
+      <div class="milestones">
+        <div class="milestone done reveal" style="--i:0" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Oct. 2025</div>
+            <div class="milestone-label">Lancement du projet <span class="status-pill status-confirmed">Terminé</span></div>
+            <div class="milestone-desc">Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel.</div>
+          </div>
+        </div>
+
+        <div class="milestone done reveal" style="--i:1" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Déc. 2025 – Fév. 2026</div>
+            <div class="milestone-label">Cadrage &amp; choix du site <span class="status-pill status-confirmed">Terminé</span></div>
+            <div class="milestone-desc">Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux.</div>
+          </div>
+        </div>
+
+        <div class="milestone current reveal" style="--i:2" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Mars – Juin 2026</div>
+            <div class="milestone-label">Conception &amp; co-construction <span class="status-pill status-pending">En cours</span></div>
+            <div class="milestone-desc">Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:3" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Juil. – Sept. 2026</div>
+            <div class="milestone-label">Préparation opérationnelle <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:4" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Sem. du 14 oct. 2026</div>
+            <div class="milestone-label">Déménagement <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place.</div>
+          </div>
+        </div>
+
+        <div class="milestone future reveal" style="--i:5" data-reveal>
+          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
+          <div class="milestone-content">
+            <div class="milestone-date mono">Nov. 2026+</div>
+            <div class="milestone-label">Installation &amp; ajustements <span class="status-pill status-neutral">À venir</span></div>
+            <div class="milestone-desc">Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture.</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="articles-block">
-      <div class="articles-header mono reveal" data-reveal id="articlesHeader">Publications</div>
-      <div id="articlesList"></div>
+      <div class="articles-header mono reveal" data-reveal>Publications — 4 articles</div>
+
+      <div class="article reveal" style="--i:0" data-reveal data-article="1">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-1">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Calendrier</span>
+              <span class="article-date mono">2 avril 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Le projet entre dans sa phase active — ce qui change concrètement dans les prochaines semaines</div>
+            <div class="article-chapeau">Après plusieurs mois de cadrage et de travail en coulisses, le projet de déménagement entre dans une nouvelle phase. Voici ce qui se passe concrètement d'ici fin avril — et ce qui reste encore à confirmer.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-1"><div><div class="article-body-inner">Vous avez été nombreux à nous poser la même question ces dernières semaines : "Quand est-ce que ça va vraiment commencer ?" La réponse, c'est maintenant.
+
+Après plusieurs mois de cadrage, de travail technique et de consultations préalables — y compris avec les instances représentatives du personnel — le projet de déménagement entre dans sa phase opérationnelle. Les premières actions visibles pour les collaborateurs démarrent en avril, et le rythme va s'accélérer jusqu'à la semaine du 14 octobre, date prévue pour la bascule.
+
+<strong>Les ateliers de personnalisation démarrent mi-avril.</strong>
+
+C'est probablement la nouveauté la plus importante de cette phase. Entre mi-avril et fin mai, chaque entité participera à un atelier dédié animé par l'équipe projet et un cabinet spécialisé en design des espaces de travail. Ces ateliers durent environ deux heures et réunissent une quinzaine de collaborateurs représentatifs de l'équipe.
+
+L'objectif n'est pas de vous présenter un plan définitif et de recueillir vos applaudissements. L'objectif est de co-construire avec vous la micro-organisation de votre espace : implantation des postes, règles de vie, usage des zones partagées, signalétique. Les résultats de ces ateliers alimenteront directement les derniers arbitrages d'aménagement. Ça compte vraiment.
+
+Votre manager vous communiquera la date de votre atelier dans les prochains jours. La participation est fortement encouragée — pas obligatoire, mais fortement encouragée. Ceux qui n'ont pas pu y assister pourront faire remonter leurs retours via le formulaire de la FAQ.
+
+<strong>Le réseau d'ambassadeurs est officiellement lancé.</strong>
+
+Une vingtaine de collaborateurs volontaires, issus de différentes équipes et niveaux hiérarchiques, ont accepté de jouer le rôle de relais de proximité pour ce projet. Ils ont reçu une formation courte sur le projet, ses enjeux et ses grandes décisions, et ils disposent d'un canal de remontée direct vers l'équipe projet.
+
+Leur rôle n'est pas de défendre le projet à tout prix — ce ne sont pas des communicants. Leur rôle est d'être disponibles pour leurs collègues, de faire circuler l'information dans les deux sens, et de signaler les points de friction que les canaux officiels ne captent pas toujours.
+
+La liste complète des ambassadeurs sera diffusée avant la fin du mois d'avril. En attendant, renseignez-vous auprès de votre manager ou de votre RH.
+
+<strong>Les premières visites du site sont ouvertes.</strong>
+
+Un calendrier de visites découverte est en cours de finalisation pour les mois d'avril et mai. Ces visites sont organisées en petits groupes (une dizaine de personnes), guidées par un membre de l'équipe projet et par le responsable du site. Elles durent environ une heure et demie.
+
+Pendant la visite, vous verrez l'état actuel du chantier d'aménagement, vous découvrirez les différentes zones, et vous pourrez poser toutes vos questions à des interlocuteurs qui connaissent le projet dans le détail. Pour ceux qui ne peuvent pas se déplacer, une visite virtuelle commentée sera disponible sur ce site dans les prochaines semaines.
+
+<strong>Ce qui reste à confirmer — soyons honnêtes.</strong>
+
+— Les dates précises de bascule par équipe : le phasage est en cours de finalisation. Communication prévue avant fin mai.
+— Les modalités de restauration : plusieurs options à l'étude. Arbitrage attendu fin avril.
+— Le dispositif de stationnement : en cours de négociation avec le gestionnaire du site. Réponse attendue début mai.
+— Les règles d'occupation des espaces (flex office vs postes attribués) : sera en partie déterminé par les ateliers d'avril. Cadre général communiqué fin mai.
+
+Ce site est mis à jour à chaque étape franchie.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:1" data-reveal data-article="2">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-2">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Écoute</span>
+              <span class="article-date mono">18 mars 2026 · 5 min</span>
+            </div>
+            <div class="article-title">Ce que nous avons entendu — retour détaillé sur les premières remontées terrain</div>
+            <div class="article-chapeau">Depuis le lancement du projet, plusieurs centaines de questions et de préoccupations ont été collectées. Voici ce que nous en avons retenu — et ce que ça change concrètement.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-2"><div><div class="article-body-inner">Depuis le lancement du projet, plusieurs centaines de questions, de remarques et de préoccupations ont été collectées — via ce site, via les managers, via les sessions d'écoute organisées en équipe, et via les échanges informels que les ambassadeurs ont remontés. Nous avons lu chacune d'entre elles. Cet article en est le compte-rendu fidèle.
+
+Nous avons fait le choix de ne pas édulcorer. Ce qui suit reflète ce que vous nous avez dit — y compris les choses inconfortables.
+
+<strong>1. Le trajet : la préoccupation numéro un.</strong>
+
+C'est, de très loin, le sujet qui revient le plus. Une part significative des collaborateurs voit son temps de trajet augmenter avec le nouveau site — parfois de manière modérée, parfois de façon vraiment substantielle. Certains nous ont écrit pour dire que ce changement remet en question leur organisation familiale entière.
+
+Ce que nous faisons avec ça : une cartographie précise des situations a été réalisée. Les collaborateurs dont le trajet augmente de plus de 30 minutes aller simple feront l'objet d'un accompagnement individualisé. Cela peut prendre plusieurs formes : prise en charge partielle d'un abonnement plus étendu, aménagement temporaire du nombre de jours sur site, ou entretien RH pour explorer les options. Ce dispositif sera formalisé et communiqué avant fin avril.
+
+<strong>2. Le bureau personnel : une question d'identité autant que de confort.</strong>
+
+"Je veux savoir où je vais m'asseoir le matin." Cette phrase est revenue dans un très grand nombre de retours. La perspective du flex office génère une anxiété qui va au-delà du confort immédiat — c'est une question de repères, de territoire, parfois d'efficacité pure.
+
+Le flex office intégral — où personne n'a de place fixe — n'est pas le modèle retenu par défaut. Le modèle d'occupation des espaces sera discuté dans les ateliers d'avril, et différentes équipes pourront avoir des règles différentes selon leur nature de travail.
+
+<strong>3. Le bruit et la concentration : une crainte légitime.</strong>
+
+Beaucoup d'entre vous ont exprimé la crainte d'un open space bruyant, peu propice à la concentration. Le nouveau site a été pensé avec ça en tête : zones de focus silence strict, cabines phoniques insonorisées sans réservation, salles de réunion en nombre suffisant. Des ajustements seront nécessaires après l'installation, et c'est pour ça qu'un dispositif de retours post-installation est prévu.
+
+<strong>4. La restauration : le silence qui agace.</strong>
+
+Plusieurs retours ont été directs : "On nous parle de tout sauf de ce qu'on va manger." C'est compréhensible. La raison pour laquelle nous n'avons pas encore communiqué sur ce point n'est pas un oubli — les négociations avec les prestataires potentiels sont encore en cours. L'arbitrage est attendu pour fin avril, et une communication dédiée suivra dans la semaine.
+
+<strong>5. L'incertitude : ce qui use le plus.</strong>
+
+Au-delà de chaque sujet pris individuellement, beaucoup ont exprimé la fatigue de ne pas savoir. Cette incertitude prolongée use — et c'est une réaction tout à fait normale face à un changement qui touche au quotidien.
+
+Nous ne pouvons pas tout résoudre immédiatement. Mais nous pouvons nous engager sur une chose : vous dire la vérité sur ce qu'on sait et sur ce qu'on ne sait pas encore. Ce site est l'outil de cet engagement.
+
+Merci à tous ceux qui ont pris le temps d'écrire et de remonter des retours.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:2" data-reveal data-article="3">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-3">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Espaces</span>
+              <span class="article-date mono">5 mars 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Première plongée dans le futur site — plans, ambiances et ce qu'il faut en retenir</div>
+            <div class="article-chapeau">Pour la première fois, nous partageons des documents visuels sur le futur site. Plans, vues 3D, zones commentées : voici comment les lire et comment vous en servir avant les ateliers.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-3"><div><div class="article-body-inner">Pour la première fois depuis le lancement du projet, nous partageons des documents visuels sur le futur site. Nous avons volontairement attendu d'avoir des éléments suffisamment avancés pour que les visuels soient représentatifs de la réalité finale. Ce moment est arrivé.
+
+Vous trouverez dans l'onglet Plans &amp; 3D de ce site une première série de documents : plans de macro-zoning, vues 3D des espaces principaux, et plan de détail d'une zone type. Voici un guide de lecture pour en tirer le meilleur parti.
+
+<strong>Comment lire un plan de macro-zoning.</strong>
+
+Le macro-zoning, c'est la carte grande maille du site. Il montre quelles grandes familles d'usages occupent quels espaces, sans aller jusqu'au niveau du poste individuel. Sur nos plans, vous verrez des zones colorées : espaces de travail ouverts, zones de concentration, salles de réunion, espaces de convivialité, services.
+
+Ce que le macro-zoning ne dit pas : il ne dit pas où vous allez vous asseoir. Ça, c'est le micro-zoning — et c'est précisément ce qui sera co-construit dans les ateliers d'avril. Le macro-zoning est le cadre ; le micro-zoning est le contenu.
+
+<strong>Comment lire les vues 3D.</strong>
+
+Les vues 3D sont des rendus réalisés par le cabinet d'architecture à partir des plans définitifs. Elles représentent fidèlement les volumes, les matériaux, les couleurs et la luminosité des espaces. Ce n'est pas du photomontage enjolivé — les rendus ont été calibrés pour être proches de la réalité perçue.
+
+Regardez particulièrement la vue de l'espace de convivialité central et la vue depuis l'entrée principale. Ces deux espaces donnent une bonne idée de l'intention générale du projet : des lieux généreux, lumineux, pensés pour le bien-être autant que pour l'efficacité.
+
+<strong>Ce que vous pouvez faire avec ces documents dès maintenant.</strong>
+
+Si votre atelier de personnalisation est dans les prochaines semaines, nous vous encourageons à consulter ces plans avant d'y aller. Arriver avec des questions précises permet des échanges beaucoup plus riches qu'une découverte à froid le jour de l'atelier.
+
+Si vous avez des remarques sur ce que vous voyez dans ces documents, le formulaire de la page FAQ est là pour ça. Les questions remontées avant les ateliers alimenteront directement les points de discussion.</div></div></div>
+      </div>
+
+      <div class="article reveal" style="--i:3" data-reveal data-article="4">
+        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-4">
+          <div>
+            <div class="article-meta-row">
+              <span class="tag-pill">Vision</span>
+              <span class="article-date mono">12 février 2026 · 4 min</span>
+            </div>
+            <div class="article-title">Pourquoi on déménage — et ce qu'on a voulu faire de ce projet</div>
+            <div class="article-chapeau">Avant de parler de cartons et de badges, il nous semblait important de partager le pourquoi. Ce déménagement n'est pas qu'une contrainte logistique — c'est un choix, avec une intention derrière.</div>
+          </div>
+          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+        </button>
+        <div class="article-body" id="article-body-4"><div><div class="article-body-inner">Avant de parler de cartons, de badges et de plans d'étage, il nous semblait important de partager quelque chose de plus fondamental : le pourquoi. Pas le pourquoi administratif et contractuel — même si celui-là existe — mais l'intention derrière ce projet.
+
+<strong>La contrainte de départ.</strong>
+
+Soyons directs : ce déménagement n'est pas né d'une envie spontanée de changer d'air. Le bail de notre site actuel arrive à échéance, et les conditions de renouvellement n'étaient pas satisfaisantes. C'est une réalité contractuelle qui a déclenché le projet.
+
+Mais une contrainte peut être traversée de deux façons : en faisant au minimum, ou en essayant d'en faire quelque chose. Nous avons choisi la deuxième option.
+
+<strong>Pourquoi ce site, et pas un autre.</strong>
+
+Le nouveau site a été sélectionné au terme d'une analyse multicritères menée sur plusieurs mois. Les critères n'étaient pas uniquement immobiliers. L'accessibilité en transports en commun était un critère majeur. La qualité des espaces — volumes, lumière naturelle, possibilité d'aménager des zones diversifiées — était déterminante. La capacité du bâtiment à accueillir nos modes de travail hybrides actuels a aussi pesé dans la balance.
+
+Plusieurs sites ont été visités et écartés. Celui que nous avons retenu est, selon nous, le meilleur compromis possible entre ces différentes exigences. Il n'est pas parfait — aucun site ne l'est — mais il offre une base solide pour construire quelque chose de bien.
+
+<strong>L'intention derrière le projet.</strong>
+
+Au-delà du déménagement lui-même, nous avons voulu faire de ce projet une occasion de repenser notre façon de travailler ensemble. Pas de façon révolutionnaire ou imposée — mais en posant quelques questions simples : de quoi avons-nous besoin pour travailler bien ? Qu'est-ce qui use les gens et qu'on pourrait éviter dans le nouveau lieu ?
+
+Ces questions ont alimenté les choix d'aménagement. Les espaces de concentration ne sont pas là pour cocher une case — ils sont là parce que le bruit est l'une des plaintes les plus fréquentes dans nos espaces actuels. Les espaces de convivialité ne sont pas un luxe — ils sont là parce que le lien social entre collègues est une composante réelle du bien-être au travail.
+
+<strong>L'engagement qui en découle.</strong>
+
+Nous serons honnêtes : tous les arbitrages ne sont pas encore rendus. Nous aurions pu attendre d'avoir toutes les réponses avant de communiquer. Nous avons choisi de ne pas le faire.
+
+L'engagement que nous prenons, c'est celui de la transparence progressive : vous informer au fur et à mesure que les décisions sont prises, pas quand tout est parfait. Ce site est l'outil de cet engagement. Si une information que nous avons donnée doit être corrigée, nous le dirons clairement, avec les raisons.</div></div></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1537,110 +1749,70 @@
   </div>
 </div>
 
-<div class="admin-modal" id="importReviewModal">
-  <div class="admin-modal-card import-review-card">
-    <div class="admin-modal-title">Questions importées</div>
-    <div class="admin-modal-sub" id="importReviewSub"></div>
-    <div class="import-review-list" id="importReviewList"></div>
-    <div class="admin-modal-actions">
-      <button type="button" class="admin-modal-cancel" id="importReviewCancel">Annuler l'import</button>
-      <button type="button" class="search-btn" id="importReviewConfirm">Envoyer en brouillon</button>
-    </div>
-  </div>
-</div>
-
 <!-- ═══════════════════ PAGE : ADMINISTRATION ═══════════════════ -->
 <div class="page" id="page-admin">
-  <div class="admin-shell">
+  <div class="section-body" style="padding-top:56px;">
 
-    <aside class="admin-sidebar">
-      <div class="admin-sidebar-header">
-        <p class="eyebrow" style="margin-bottom:12px;">Projet XYZ</p>
-        <div class="admin-sidebar-title">Administration</div>
+    <div class="admin-topbar">
+      <div>
+        <p class="eyebrow" style="margin-bottom:14px;">Projet XYZ — Administration</p>
+        <h1 class="hero-title" style="font-size:clamp(1.9rem,3.6vw,2.6rem); margin-bottom:0;">Tableau de bord</h1>
+      </div>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <button type="button" class="admin-export-btn" id="adminExportBtn">Exporter en Excel</button>
+        <button type="button" class="admin-reset" id="adminResetBtn">Réinitialiser les données</button>
+        <button type="button" class="admin-back" id="adminBackBtn">← Retour au site</button>
+      </div>
+    </div>
+
+    <p class="admin-scope-note">Ces données reflètent les interactions réelles effectuées dans <strong>ce navigateur</strong> depuis la dernière réinitialisation — elles ne sont pas encore centralisées entre appareils ou collaborateurs. Pour un déploiement en production avec des données agrégées sur l'ensemble des équipes, un stockage côté serveur sera nécessaire.</p>
+
+    <div class="admin-tabs" id="adminTabs">
+      <button type="button" class="admin-tab active" data-admin-panel="dashboard">Dashboard</button>
+      <button type="button" class="admin-tab" data-admin-panel="content">Contenu public</button>
+      <button type="button" class="admin-tab" data-admin-panel="faq">FAQ</button>
+    </div>
+
+    <div class="admin-panel" id="adminPanelDashboard">
+      <div class="kpi-cards" id="kpiCards"></div>
+
+      <div class="kpi-section">
+        <div class="kpi-section-title">Questions les plus posées</div>
+        <div class="kpi-section-sub">Ce qui revient le plus souvent dans la barre de recherche de la FAQ.</div>
+        <div class="kpi-bar-list" id="kpiTopQuestions"></div>
       </div>
 
-      <nav class="admin-sidebar-nav" id="adminSidebarNav">
-        <button type="button" class="admin-nav-item active" data-admin-panel="dashboard">
-          <svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="4" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="20" y1="20" x2="20" y2="14"/></svg>
-          Dashboard
-        </button>
-        <button type="button" class="admin-nav-item" data-admin-panel="content">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-          Contenu public
-        </button>
-        <button type="button" class="admin-nav-item" data-admin-panel="planning">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Planning &amp; Actus
-        </button>
-        <button type="button" class="admin-nav-item" data-admin-panel="faq">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          FAQ
-        </button>
-      </nav>
-
-      <div class="admin-sidebar-footer">
-        <button type="button" class="admin-sidebar-back" id="adminBackBtn">← Retour au site</button>
-        <button type="button" class="admin-sidebar-logout" id="adminLogoutBtn">Déconnexion</button>
-      </div>
-    </aside>
-
-    <div class="admin-main">
-
-      <div class="admin-panel" id="adminPanelDashboard">
-
-        <p class="admin-scope-note">Ces données sont désormais centralisées côté serveur et reflètent l'ensemble des collaborateurs qui utilisent le site, pas seulement ce navigateur. Elles sont stockées dans des fichiers locaux au serveur — pour un vrai déploiement en production à grande échelle, une base de données serait recommandée.</p>
-
-        <div class="admin-panel-toolbar">
-          <button type="button" class="admin-export-btn" id="adminExportBtn">Exporter en Excel</button>
-          <button type="button" class="admin-reset" id="adminResetBtn" style="margin-left:auto;">Réinitialiser les données</button>
-        </div>
-
-        <div class="kpi-cards" id="kpiCards"></div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Questions les plus posées</div>
-          <div class="kpi-section-sub">Ce qui revient le plus souvent dans la barre de recherche de la FAQ.</div>
-          <div class="kpi-bar-list" id="kpiTopQuestions"></div>
-        </div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Questions sans réponse trouvée</div>
-          <div class="kpi-section-sub">Les trous à combler dans la base de connaissance — à prioriser pour la prochaine mise à jour.</div>
-          <div class="kpi-list" id="kpiGaps"></div>
-        </div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Consultations par onglet</div>
-          <div class="kpi-section-sub">Répartition des visites entre les différentes sections du site.</div>
-          <div class="kpi-bar-list" id="kpiTabs"></div>
-        </div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Articles les plus consultés</div>
-          <div class="kpi-section-sub">Taux d'ouverture des publications de la page Actualités.</div>
-          <div class="kpi-bar-list" id="kpiArticles"></div>
-        </div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Demandes de contact</div>
-          <div class="kpi-section-sub">Le formulaire n'étant pas encore relié à une boîte mail, les demandes sont capturées ici en attendant.</div>
-          <div class="kpi-list" id="kpiContacts"></div>
-        </div>
-
+      <div class="kpi-section">
+        <div class="kpi-section-title">Questions sans réponse trouvée</div>
+        <div class="kpi-section-sub">Les trous à combler dans la base de connaissance — à prioriser pour la prochaine mise à jour.</div>
+        <div class="kpi-list" id="kpiGaps"></div>
       </div>
 
-      <div class="admin-panel hidden" id="adminPanelContent">
-        <div id="adminContentEditor"></div>
+      <div class="kpi-section">
+        <div class="kpi-section-title">Consultations par onglet</div>
+        <div class="kpi-section-sub">Répartition des visites entre les différentes sections du site.</div>
+        <div class="kpi-bar-list" id="kpiTabs"></div>
       </div>
 
-      <div class="admin-panel hidden" id="adminPanelPlanning">
-        <div id="adminPlanningEditor"></div>
+      <div class="kpi-section">
+        <div class="kpi-section-title">Articles les plus consultés</div>
+        <div class="kpi-section-sub">Taux d'ouverture des publications de la page Actualités.</div>
+        <div class="kpi-bar-list" id="kpiArticles"></div>
       </div>
 
-      <div class="admin-panel hidden" id="adminPanelFaq">
-        <div id="adminFaqEditor"></div>
+      <div class="kpi-section">
+        <div class="kpi-section-title">Demandes de contact</div>
+        <div class="kpi-section-sub">Le formulaire n'étant pas encore relié à une boîte mail, les demandes sont capturées ici en attendant.</div>
+        <div class="kpi-list" id="kpiContacts"></div>
       </div>
+    </div>
 
+    <div class="admin-panel hidden" id="adminPanelContent">
+      <div id="adminContentEditor"></div>
+    </div>
+
+    <div class="admin-panel hidden" id="adminPanelFaq">
+      <div id="adminFaqEditor"></div>
     </div>
 
   </div>
@@ -1651,7 +1823,6 @@
 
 <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script>
 
   // ═══════════════════════════════════════════════════
@@ -1660,11 +1831,8 @@
   const navTabsEl   = document.getElementById('navTabs');
   const navInnerEl  = document.getElementById('navInner');
   const navIndicator = document.getElementById('navIndicator');
-
-  // ═══════════════════════════════════════════════════
-  // SESSION — identifiant anonyme pour compter les visites uniques
-  // ═══════════════════════════════════════════════════
   const CLIENT_SESSION_KEY = 'xyz_client_session_id';
+
   function getClientSessionId() {
     let sessionId = localStorage.getItem(CLIENT_SESSION_KEY);
     if (!sessionId) {
@@ -1675,20 +1843,16 @@
   }
 
   // ═══════════════════════════════════════════════════
-  // JETON ADMIN — envoyé sur les appels qui modifient des données
+  // KPI — capture des interactions côté serveur
+  // Le stockage est maintenant partagé par l'API locale du POC.
   // ═══════════════════════════════════════════════════
-  const ADMIN_TOKEN_KEY = 'xyz_admin_token';
-  function getAdminToken() { return sessionStorage.getItem(ADMIN_TOKEN_KEY) || ''; }
-  function setAdminToken(token) { sessionStorage.setItem(ADMIN_TOKEN_KEY, token); }
-  function clearAdminToken() { sessionStorage.removeItem(ADMIN_TOKEN_KEY); }
-
-  // ═══════════════════════════════════════════════════
-  // KPI — capture des interactions, agrégée côté serveur
-  // (fichiers JSON gérés par server.js). Le suivi (track) est
-  // ouvert à tous les visiteurs ; la lecture/réinitialisation
-  // passe par le jeton admin.
-  // ═══════════════════════════════════════════════════
-  const KPI_DEFAULT_STATE = { faqAsked: [], tabViews: {}, articleOpens: {}, contactSubmissions: [], visitSessions: [] };
+  const KPI_DEFAULT_STATE = {
+    faqAsked: [],
+    tabViews: {},
+    articleOpens: {},
+    contactSubmissions: [],
+    visitSessions: []
+  };
 
   async function loadKpi() {
     try {
@@ -1704,164 +1868,80 @@
       };
     } catch (e) {
       console.warn('Impossible de charger les KPI côté serveur :', e);
-      return JSON.parse(JSON.stringify(KPI_DEFAULT_STATE));
+      return structuredClone(KPI_DEFAULT_STATE);
     }
   }
 
-  async function apiKpiTrack(payload) {
-    try {
-      await fetch('/api/kpi/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-    } catch (e) { console.warn('Enregistrement KPI impossible :', e); }
-  }
-
-  async function trackVisit()                              { await apiKpiTrack({ type: 'visit', sessionId: getClientSessionId() }); }
-  async function trackTabView(pageId)                       { await apiKpiTrack({ type: 'tab', pageId }); }
-  async function trackFaqQuestion(question, matched, entryId) { await apiKpiTrack({ type: 'faq', question, matched, entryId, ts: Date.now() }); }
-  async function trackArticleOpen(articleId)                { await apiKpiTrack({ type: 'article', articleId }); }
-  async function trackContactSubmission(name, email, message) { await apiKpiTrack({ type: 'contact', name, email, message, ts: Date.now() }); }
-
-  async function resetKpi() {
-    const res = await fetch('/api/kpi/reset', { method: 'POST', headers: { 'x-admin-token': getAdminToken() } });
-    return res.ok;
-  }
-
-  // ═══════════════════════════════════════════════════
-  // CONTENU PUBLIC + FAQ + PLANNING/ACTUS — chargé/sauvegardé
-  // côté serveur
-  // ═══════════════════════════════════════════════════
   async function loadContent() {
     try {
       const res = await fetch('/api/content');
       if (!res.ok) throw new Error('API contenu indisponible');
       const data = await res.json();
       return {
-        branding: data.branding && typeof data.branding === 'object' ? data.branding : { projectName: 'Projet XYZ', logoUrl: '' },
         publicContent: data.publicContent && typeof data.publicContent === 'object' ? data.publicContent : {},
-        faqEntries: Array.isArray(data.faqEntries) ? data.faqEntries : [],
-        faqDrafts: Array.isArray(data.faqDrafts) ? data.faqDrafts : [],
-        progress: data.progress && typeof data.progress === 'object' ? data.progress : { stepLine1: '', stepLine2: '', percent: 0 },
-        milestones: Array.isArray(data.milestones) ? data.milestones : [],
-        articles: Array.isArray(data.articles) ? data.articles : []
+        faqEntries: Array.isArray(data.faqEntries) ? data.faqEntries : []
       };
     } catch (e) {
       console.warn('Impossible de charger le contenu serveur :', e);
-      return { branding: { projectName: 'Projet XYZ', logoUrl: '' }, publicContent: {}, faqEntries: [], faqDrafts: [], progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [] };
+      return { publicContent: {}, faqEntries: [] };
     }
   }
 
-  // Construit le payload complet envoyé à /api/content — regroupé ici pour
-  // qu'aucun appel de sauvegarde (contenu public, FAQ ou planning) n'oublie
-  // un des blocs de contenu et n'écrase les autres par erreur.
-  function buildSavePayload(content) {
-    return {
-      branding: content.branding,
-      publicContent: content.publicContent,
-      faqEntries: faqData,
-      faqDrafts: content.faqDrafts,
-      progress: content.progress,
-      milestones: content.milestones,
-      articles: content.articles
-    };
-  }
-
-  // Renvoie { ok, unauthorized } — unauthorized permet d'inviter à se reconnecter
   async function saveContent(contentState) {
     try {
       const res = await fetch('/api/content', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contentState)
       });
-      if (res.status === 401) return { ok: false, unauthorized: true };
-      if (!res.ok) return { ok: false };
-      const data = await res.json();
-      return { ok: true, content: data.content };
+      if (!res.ok) throw new Error('Sauvegarde du contenu impossible');
+      return await res.json();
     } catch (e) {
       console.warn('Sauvegarde impossible :', e);
-      return { ok: false };
+      return null;
     }
   }
 
-  // Envoie un fichier (image ou PDF) au serveur, encodé en base64 — pas
-  // besoin de gérer du multipart côté serveur. Retourne { ok, url } ou
-  // { ok:false, unauthorized } / { ok:false, error }.
-  function uploadFile(file) {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const dataBase64 = String(reader.result).split(',')[1] || '';
-          const res = await fetch('/api/admin/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
-            body: JSON.stringify({ filename: file.name, mimeType: file.type, dataBase64 })
-          });
-          if (res.status === 401) { resolve({ ok: false, unauthorized: true }); return; }
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) { resolve({ ok: false, error: data.error }); return; }
-          resolve({ ok: true, url: data.url });
-        } catch (e) {
-          console.warn('Upload impossible :', e);
-          resolve({ ok: false });
-        }
-      };
-      reader.onerror = () => resolve({ ok: false });
-      reader.readAsDataURL(file);
-    });
+  async function apiKpiTrack(payload) {
+    try {
+      const res = await fetch('/api/kpi/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('Erreur enregistrement KPI');
+      return await res.json();
+    } catch (e) {
+      console.warn('Enregistrement KPI impossible :', e);
+    }
   }
 
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  async function trackTabView(pageId) {
+    await apiKpiTrack({ type: 'tab', pageId });
   }
 
-  // Reconstruit le HTML du titre (ligne + mot en accent) à partir de champs
-  // texte simples — jamais de HTML stocké ni saisi par l'éditeur.
-  function applyPublicContent(publicContent) {
-    const scopes = {
-      faq:          { root: '#page-faq' },
-      actu:         { root: '#page-actu' },
-      plans:        { root: '#page-plans' },
-      ambassadeurs: { root: '#page-ambassadeurs' },
-      equipe:       { root: '#page-equipe' }
-    };
-    Object.entries(scopes).forEach(([scope, { root }]) => {
-      const payload = publicContent?.[scope];
-      if (!payload) return;
-      const page = document.querySelector(root);
-      if (!page) return;
-      const eyebrowEl = page.querySelector('.hero .eyebrow');
-      const titleEl   = page.querySelector('.hero .hero-title');
-      const descEl    = page.querySelector('.hero .hero-desc');
-      if (eyebrowEl && typeof payload.eyebrow === 'string') eyebrowEl.textContent = payload.eyebrow;
-      if (descEl && typeof payload.desc === 'string') descEl.textContent = payload.desc;
-      if (titleEl && (typeof payload.titleLine1 === 'string' || typeof payload.titleAccent === 'string')) {
-        titleEl.innerHTML = `${escapeHtml(payload.titleLine1 || '')}<br><span class="accent">${escapeHtml(payload.titleAccent || '')}</span>`;
-      }
-    });
+  async function trackVisit() {
+    await apiKpiTrack({ type: 'visit', sessionId: getClientSessionId() });
   }
 
-  // Applique le nom de projet et le logo personnalisés (identité visuelle
-  // par client) — remplace le losange par défaut si un logo est fourni.
-  function applyBranding(branding) {
-    if (!branding) return;
-    const nameEl = document.querySelector('.nav-brand-name');
-    if (nameEl && branding.projectName) nameEl.textContent = branding.projectName;
-    if (branding.projectName) document.title = `${branding.projectName} — Espace collaborateurs`;
+  async function trackFaqQuestion(question, matched, entryId) {
+    await apiKpiTrack({ type: 'faq', question, matched, entryId, ts: Date.now() });
+  }
 
-    const markEl = document.querySelector('.nav-mark');
-    if (markEl) {
-      if (branding.logoUrl) {
-        markEl.classList.add('has-logo');
-        markEl.innerHTML = `<img src="${escapeHtml(branding.logoUrl)}" alt="Logo">`;
-      } else {
-        markEl.classList.remove('has-logo');
-        markEl.innerHTML = '';
-      }
+  async function trackArticleOpen(articleId) {
+    await apiKpiTrack({ type: 'article', articleId });
+  }
+
+  async function trackContactSubmission(name, email, message) {
+    await apiKpiTrack({ type: 'contact', name, email, message, ts: Date.now() });
+  }
+
+  async function resetKpi() {
+    try {
+      const res = await fetch('/api/kpi/reset', { method: 'POST' });
+      if (!res.ok) throw new Error('Reset KPI impossible');
+    } catch (e) {
+      console.warn('Reset KPI impossible :', e);
     }
   }
 
@@ -1927,22 +2007,14 @@
   // ═══════════════════════════════════════════════════
   // REVEAL AU CHARGEMENT + AU SCROLL
   // ═══════════════════════════════════════════════════
-  let revealObserver = null;
   function initReveal() {
-    revealObserver = new IntersectionObserver((entries) => {
+    const items = document.querySelectorAll('[data-reveal]');
+    const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         entry.target.classList.toggle('is-visible', entry.isIntersecting);
       });
     }, { threshold: 0.15 });
-    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-  }
-
-  // À appeler après avoir injecté du contenu dynamique (jalons, articles...)
-  // pour que ces nouveaux éléments profitent du même effet de reveal au
-  // scroll que le contenu statique.
-  function observeNewReveals(container) {
-    if (!revealObserver || !container) return;
-    container.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+    items.forEach(el => io.observe(el));
   }
 
   // Révèle immédiatement ce qui est déjà au-dessus de la ligne de flottaison
@@ -1957,6 +2029,119 @@
     });
   }
 
+  function sanitizePlainText(value) {
+    return String(value ?? '')
+      .replace(/<[^>]+>/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  const PUBLIC_CONTENT_SCHEMA = [
+    {
+      id: 'faq', label: 'Page FAQ', description: 'Introduction, message sans résultat et bloc de contact.',
+      fields: [
+        { key:'eyebrow', label:'Sur-titre', selector:'#page-faq .eyebrow', type:'text' },
+        { key:'title', label:'Titre principal', selector:'#page-faq .hero-title', type:'heroTitle', help:'Utilisez un retour à la ligne pour séparer les deux parties du titre.' },
+        { key:'desc', label:'Texte d’introduction', selector:'#page-faq .hero-desc', type:'textarea' },
+        { key:'notFound', label:'Message quand aucune réponse n’est trouvée', selector:'#page-faq .notfound-box p', type:'textarea' },
+        { key:'contactTitle', label:'Titre du bloc de contact', selector:'#page-faq .contact-title', type:'text' },
+        { key:'contactIntro', label:'Texte du bloc de contact', selector:'#page-faq .contact-intro p', type:'textarea' },
+        { key:'formNote', label:'Note sous le formulaire', selector:'#page-faq .form-note', type:'textarea' }
+      ]
+    },
+    {
+      id: 'actu', label: 'Actualités', description: 'En-tête de la page et libellé des publications.',
+      fields: [
+        { key:'eyebrow', label:'Sur-titre', selector:'#page-actu .eyebrow', type:'text' },
+        { key:'title', label:'Titre principal', selector:'#page-actu .hero-title', type:'heroTitle' },
+        { key:'desc', label:'Texte d’introduction', selector:'#page-actu .hero-desc', type:'textarea' },
+        { key:'articlesHeader', label:'Libellé au-dessus des articles', selector:'#page-actu .articles-header', type:'text' }
+      ]
+    },
+    {
+      id: 'plans', label: 'Plans & 3D', description: 'En-tête de la galerie de documents visuels.',
+      fields: [
+        { key:'eyebrow', label:'Sur-titre', selector:'#page-plans .eyebrow', type:'text' },
+        { key:'title', label:'Titre principal', selector:'#page-plans .hero-title', type:'heroTitle' },
+        { key:'desc', label:'Texte d’introduction', selector:'#page-plans .hero-desc', type:'textarea' }
+      ]
+    },
+    {
+      id: 'ambassadeurs', label: 'Ambassadeurs', description: 'En-tête, compteur et appel à volontaires.',
+      fields: [
+        { key:'eyebrow', label:'Sur-titre', selector:'#page-ambassadeurs .eyebrow', type:'text' },
+        { key:'title', label:'Titre principal', selector:'#page-ambassadeurs .hero-title', type:'heroTitle' },
+        { key:'desc', label:'Texte d’introduction', selector:'#page-ambassadeurs .hero-desc', type:'textarea' },
+        { key:'peopleLabel', label:'Libellé au-dessus des ambassadeurs', selector:'#page-ambassadeurs .people-label', type:'text' },
+        { key:'ctaTitle', label:'Titre de l’appel à volontaires', selector:'#page-ambassadeurs .info-block-title', type:'text' },
+        { key:'ctaText', label:'Texte de l’appel à volontaires', selector:'#page-ambassadeurs .info-block p', type:'textarea' }
+      ]
+    },
+    {
+      id: 'equipe', label: 'Équipe projet', description: 'En-tête et bloc de contact de l’équipe projet.',
+      fields: [
+        { key:'eyebrow', label:'Sur-titre', selector:'#page-equipe .eyebrow', type:'text' },
+        { key:'title', label:'Titre principal', selector:'#page-equipe .hero-title', type:'heroTitle' },
+        { key:'desc', label:'Texte d’introduction', selector:'#page-equipe .hero-desc', type:'textarea' },
+        { key:'ctaTitle', label:'Titre du bloc de contact', selector:'#page-equipe .info-block-title', type:'text' },
+        { key:'ctaText', label:'Texte du bloc de contact', selector:'#page-equipe .info-block p', type:'textarea' }
+      ]
+    }
+  ];
+
+  function sanitizeMultilineText(value) {
+    return String(value ?? '')
+      .replace(/<[^>]+>/g, '')
+      .split(/\r?\n/)
+      .map(line => line.replace(/\s+/g, ' ').trim())
+      .filter((line, index, all) => line || (index > 0 && index < all.length - 1))
+      .join('\n')
+      .trim();
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeAttr(value) { return escapeHtml(value); }
+
+  function readPublicField(field) {
+    const element = document.querySelector(field.selector);
+    if (!element) return '';
+    if (field.type === 'heroTitle') {
+      const clone = element.cloneNode(true);
+      clone.querySelectorAll('br').forEach(br => br.replaceWith('\n'));
+      return clone.textContent.replace(/\n+/g, '\n').trim();
+    }
+    return element.textContent.replace(/\s+/g, ' ').trim();
+  }
+
+  function renderHeroTitle(element, value) {
+    const lines = sanitizeMultilineText(value).split('\n').filter(Boolean);
+    if (!lines.length) return;
+    const first = escapeHtml(lines[0]);
+    const rest = lines.slice(1).join(' ');
+    element.innerHTML = rest ? `${first}<br><span class="accent">${escapeHtml(rest)}</span>` : first;
+  }
+
+  function applyPublicContent(publicContent) {
+    PUBLIC_CONTENT_SCHEMA.forEach(page => {
+      const payload = publicContent?.[page.id] || {};
+      page.fields.forEach(field => {
+        const element = document.querySelector(field.selector);
+        const value = payload[field.key];
+        if (!element || typeof value !== 'string' || !value.trim()) return;
+        if (field.type === 'heroTitle') renderHeroTitle(element, value);
+        else element.textContent = field.type === 'textarea' ? sanitizeMultilineText(value) : sanitizePlainText(value);
+      });
+    });
+  }
+
   window.addEventListener('DOMContentLoaded', async () => {
     initReveal();
     const activeTab = document.querySelector('.nav-tab.active');
@@ -1964,113 +2149,21 @@
     const content = await loadContent();
     if (content.faqEntries.length) faqData = content.faqEntries;
     applyPublicContent(content.publicContent);
-    applyBranding(content.branding);
-    renderMilestonesFront(content.milestones, content.progress);
-    renderArticlesFront(content.articles);
-    trackVisit();
-    trackTabView('faq'); // onglet actif par défaut au chargement
+    await trackVisit();
+    await trackTabView('faq'); // onglet actif par défaut au chargement
   });
 
   // ═══════════════════════════════════════════════════
-  // PLANNING & ACTUALITÉS — rendu public (page Actualités)
-  // Le contenu (jalons, avancement, articles) vient du CMS ; cette
-  // section ne fait que l'afficher et brancher les interactions.
+  // ARTICLES — accordéon (page Actualités)
   // ═══════════════════════════════════════════════════
-  const MILESTONE_STATUS_MAP = {
-    done:    { cls: 'status-confirmed', label: 'Terminé' },
-    current: { cls: 'status-pending',   label: 'En cours' },
-    future:  { cls: 'status-neutral',   label: 'À venir' }
-  };
-
-  function computeProgressFromMilestones(milestones) {
-    const items = milestones || [];
-    const total = items.length;
-    if (!total) return { stepLine1: 'Étape 0', stepLine2: 'sur 0', percent: 0 };
-
-    const doneCount = items.filter(m => m.status === 'done').length;
-    const currentIndex = items.findIndex(m => m.status === 'current');
-    const stepNumber = currentIndex >= 0 ? currentIndex + 1 : Math.min(doneCount + 1, total);
-    const percent = Math.round(((doneCount + (currentIndex >= 0 ? 0.5 : 0)) / total) * 100);
-
-    return {
-      stepLine1: `Étape ${stepNumber}`,
-      stepLine2: `sur ${total}`,
-      percent: Math.max(0, Math.min(100, percent))
-    };
-  }
-
-  function renderMilestonesFront(milestones, progress) {
-    const stepEl = document.getElementById('planningStep');
-    const fillEl = document.getElementById('planningFill');
-    const pctEl  = document.getElementById('planningPct');
-    const percent = Math.max(0, Math.min(100, Number(progress?.percent) || 0));
-    if (stepEl) stepEl.innerHTML = `${escapeHtml(progress?.stepLine1 || '')}<br>${escapeHtml(progress?.stepLine2 || '')}`;
-    if (fillEl) fillEl.style.width = percent + '%';
-    if (pctEl) pctEl.textContent = percent + '%';
-
-    const list = document.getElementById('milestonesList');
-    if (!list) return;
-    const items = milestones || [];
-    list.innerHTML = items.map((m, i) => {
-      const pill = MILESTONE_STATUS_MAP[m.status] || MILESTONE_STATUS_MAP.future;
-      return `
-        <div class="milestone ${escapeHtml(m.status || 'future')} reveal" style="--i:${i}" data-reveal>
-          <div class="milestone-spine"><span class="milestone-dot"></span><span class="milestone-line"></span></div>
-          <div class="milestone-content">
-            <div class="milestone-date mono">${escapeHtml(m.date || '')}</div>
-            <div class="milestone-label">${escapeHtml(m.label || '')} <span class="status-pill ${pill.cls}">${pill.label}</span></div>
-            <div class="milestone-step mono">Étape ${i + 1} sur ${items.length}</div>
-            <div class="milestone-desc">${escapeHtml(m.desc || '')}</div>
-          </div>
-        </div>`;
-    }).join('');
-    observeNewReveals(list);
-  }
-
-  // Convention d'écriture pour les articles : une ligne commençant par
-  // "## " devient un sous-titre en gras — pas de HTML à saisir côté admin.
-  function articleBodyToHtml(text) {
-    const escaped = escapeHtml(text || '');
-    return escaped.split('\n').map(line => {
-      const trimmed = line.trim();
-      if (trimmed.startsWith('## ')) return `<strong>${trimmed.slice(3)}</strong>`;
-      return line;
-    }).join('\n');
-  }
-
-  function renderArticlesFront(articles) {
-    const headerEl = document.getElementById('articlesHeader');
-    const listEl = document.getElementById('articlesList');
-    if (!listEl) return;
-    const items = articles || [];
-    if (headerEl) headerEl.textContent = `Publications — ${items.length} article${items.length > 1 ? 's' : ''}`;
-    listEl.innerHTML = items.map((a, i) => `
-      <div class="article reveal" style="--i:${i}" data-reveal data-article="${escapeHtml(a.id)}">
-        <button class="article-header-btn" aria-expanded="false" aria-controls="article-body-${escapeHtml(a.id)}">
-          <div>
-            <div class="article-meta-row">
-              <span class="tag-pill">${escapeHtml(a.tag || '')}</span>
-              <span class="article-date mono">${escapeHtml(a.date || '')}</span>
-            </div>
-            <div class="article-title">${escapeHtml(a.title || '')}</div>
-            <div class="article-chapeau">${escapeHtml(a.chapeau || '')}</div>
-          </div>
-          <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-        </button>
-        <div class="article-body" id="article-body-${escapeHtml(a.id)}"><div><div class="article-body-inner">${articleBodyToHtml(a.body)}</div></div></div>
-      </div>`
-    ).join('');
-
-    listEl.querySelectorAll('.article-header-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const article = btn.closest('.article');
-        const isOpen = article.classList.toggle('open');
-        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        if (isOpen) trackArticleOpen(article.dataset.article);
-      });
+  document.querySelectorAll(".article-header-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const article = btn.closest(".article");
+      const isOpen = article.classList.toggle("open");
+      btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      if (isOpen) trackArticleOpen(article.dataset.article);
     });
-    observeNewReveals(listEl);
-  }
+  });
 
   // ═══════════════════════════════════════════════════
   // FILTRES PLANS (page Plans & 3D)
@@ -2239,83 +2332,83 @@ CALENDRIER
   // BASE FAQ — reprise à l'identique du POC existant
   // ═══════════════════════════════════════════════════
   let faqData = [
-{ id:"date-demenagement", category:"calendrier", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
+{ id:"date-demenagement", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
       note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.",
       keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
-    { id:"phasage", category:"calendrier", title:"Phasage par équipe", status:"partial", statusLabel:"Réponse partielle",
+    { id:"phasage", title:"Phasage par équipe", status:"partial", statusLabel:"Réponse partielle",
       answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
       note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
       keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
-    { id:"etapes", category:"calendrier", title:"Grandes étapes", status:"partial", statusLabel:"Réponse partielle",
+    { id:"etapes", title:"Grandes étapes", status:"partial", statusLabel:"Réponse partielle",
       answer:"Le déménagement se prépare en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée",
       note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
       keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
-    { id:"jour-j", category:"calendrier", title:"Que faire le jour J", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"jour-j", title:"Que faire le jour J", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.",
       note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.",
       keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
-    { id:"affaires-personnelles", category:"logistique", title:"Affaires personnelles", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"affaires-personnelles", title:"Affaires personnelles", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.",
       note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
       keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
-    { id:"trajet", category:"mobilite", title:"Temps de trajet", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"trajet", title:"Temps de trajet", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
       note:"Le trajet, ça compte. Ce n'est pas un détail.",
       keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
-    { id:"teletravail", category:"rh", title:"Télétravail", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"teletravail", title:"Télétravail", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.",
       note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
       keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
-    { id:"horaires", category:"rh", title:"Flexibilité des horaires", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"horaires", title:"Flexibilité des horaires", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.",
       note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.",
       keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
-    { id:"flex-office", category:"espaces", title:"Postes attribués ou flex office", status:"partial", statusLabel:"Réponse partielle",
+    { id:"flex-office", title:"Postes attribués ou flex office", status:"partial", statusLabel:"Réponse partielle",
       answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.",
       note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
       keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
-    { id:"concentration", category:"espaces", title:"Espaces de concentration", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"concentration", title:"Espaces de concentration", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.",
       note:"Travailler dans un espace trop bruyant n'est pas une fatalité.",
       keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
-    { id:"salles-reunion", category:"espaces", title:"Salles de réunion", status:"partial", statusLabel:"Réponse partielle",
+    { id:"salles-reunion", title:"Salles de réunion", status:"partial", statusLabel:"Réponse partielle",
       answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.",
       note:"Les modalités pratiques de réservation seront précisées avant la mise en service.",
       keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
-    { id:"convivialite", category:"espaces", title:"Espaces de convivialité", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"convivialite", title:"Espaces de convivialité", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.",
       note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
       keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
-    { id:"casier", category:"espaces", title:"Casiers et rangements", status:"partial", statusLabel:"Réponse partielle",
+    { id:"casier", title:"Casiers et rangements", status:"partial", statusLabel:"Réponse partielle",
       answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.",
       note:"Une information complémentaire sera communiquée au moment opportun.",
       keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
-    { id:"restauration", category:"services", title:"Offre de restauration", status:"waiting", statusLabel:"En attente de décision",
+    { id:"restauration", title:"Offre de restauration", status:"waiting", statusLabel:"En attente de décision",
       answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.",
       note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
       keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
-    { id:"transport-remboursement", category:"mobilite", title:"Remboursement des transports", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"transport-remboursement", title:"Remboursement des transports", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.",
       note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.",
       keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
-    { id:"parking", category:"mobilite", title:"Parking voiture", status:"partial", statusLabel:"Réponse partielle",
+    { id:"parking", title:"Parking voiture", status:"partial", statusLabel:"Réponse partielle",
       answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.",
       note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
       keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
-    { id:"velo", category:"mobilite", title:"Parking vélo et mobilités douces", status:"partial", statusLabel:"Réponse partielle",
+    { id:"velo", title:"Parking vélo et mobilités douces", status:"partial", statusLabel:"Réponse partielle",
       answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
       note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.",
       keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
-    { id:"visites", category:"decouverte", title:"Visites du site", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"visites", title:"Visites du site", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.",
       note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.",
       keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
-    { id:"badge", category:"acces", title:"Badge et accès", status:"waiting", statusLabel:"En attente de décision",
+    { id:"badge", title:"Badge et accès", status:"waiting", statusLabel:"En attente de décision",
       answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
       note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
       keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
-    { id:"it", category:"it", title:"Informatique et équipements", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"it", title:"Informatique et équipements", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
       note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
       keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
@@ -2334,35 +2427,35 @@ CALENDRIER
       negativeSignals: ["parking","restauration","badge"],
       emotionSignals: ["peur","angoisse","stress","inquiet","anxieux","mal"]
     },
-    { id:"ambassadeurs", category:"accompagnement", title:"Ambassadeurs du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"ambassadeurs", title:"Ambassadeurs du projet", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
       note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
       keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
-    { id:"ateliers", category:"accompagnement", title:"Ateliers de personnalisation", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"ateliers", title:"Ateliers de personnalisation", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
       note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.",
       keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
-    { id:"regles-vie", category:"espaces", title:"Règles de vie", status:"partial", statusLabel:"Réponse partielle",
+    { id:"regles-vie", title:"Règles de vie", status:"partial", statusLabel:"Réponse partielle",
       answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.",
       note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.",
       keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
-    { id:"pilotage", category:"communication", title:"Pilotage du projet", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"pilotage", title:"Pilotage du projet", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.",
       note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
       keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
-    { id:"archivage", category:"logistique", title:"Archivage et documents", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"archivage", title:"Archivage et documents", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
       note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
       keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
-    { id:"pmr", category:"acces", title:"Accessibilité (PMR)", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"pmr", title:"Accessibilité (PMR)", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.",
       note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.",
       keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
-    { id:"rumeurs", category:"communication", title:"Rumeurs et informations", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"rumeurs", title:"Rumeurs et informations", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
       note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
       keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
-    { id:"communication", category:"communication", title:"Communications à venir", status:"confirmed", statusLabel:"Réponse confirmée",
+    { id:"communication", title:"Communications à venir", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.",
       note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.",
       keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] },
@@ -2443,11 +2536,6 @@ CALENDRIER
     },
   ];
 
-  // Copie figée de la base FAQ intégrée — sert de filet de sécurité pour
-  // "Restaurer les questions par défaut" dans l'Admin si le contenu
-  // sauvegardé côté serveur a été corrompu ou tronqué par erreur.
-  const FAQ_BUILTIN_BACKUP = JSON.parse(JSON.stringify(faqData));
-
   // ═══════════════════════════════════════════════════
   // MOTEUR DE MATCHING — repris à l'identique du POC
   // ═══════════════════════════════════════════════════
@@ -2510,32 +2598,42 @@ CALENDRIER
   function scoreEntry(question, entry) {
     const normQ  = normalize(question);
     const tokens = tokenize(question);
+    const tokenSet = new Set(tokens);
     let score = 0;
 
+    const title = normalize(entry.title || '');
+    if (title && (normQ.includes(title) || title.includes(normQ))) score += 14;
+
     (entry.keywords || []).forEach(kw => {
-      tokenize(kw).forEach(t => { if (tokens.includes(t)) score += 3; });
-      const nk = normalize(kw);
-      if (nk.length > 3 && normQ.includes(nk)) score += 5;
+      const normalizedKw = normalize(kw);
+      const kwTokens = tokenize(kw);
+      const kwHits = kwTokens.filter(t => tokenSet.has(t)).length;
+      if (kwHits > 0) score += kwHits * 3;
+      if (normalizedKw.length > 3 && normQ.includes(normalizedKw)) score += 5;
     });
 
     (entry.phrases || []).forEach(phrase => {
       const np = normalize(phrase);
-      if (np && normQ.includes(np)) score += 10;
+      if (np && normQ.includes(np)) score += 12;
+    });
+
+    (entry.related || []).forEach(relatedId => {
+      if (normQ.includes(normalize(relatedId))) score += 2;
     });
 
     (entry.intentSignals || []).forEach(sig => {
       const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score += 4;
+      if (tokenSet.has(ns) || normQ.includes(ns)) score += 4;
     });
 
     (entry.emotionSignals || []).forEach(sig => {
       const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score += 2;
+      if (tokenSet.has(ns) || normQ.includes(ns)) score += 2;
     });
 
     (entry.negativeSignals || []).forEach(sig => {
       const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score -= 3;
+      if (tokenSet.has(ns) || normQ.includes(ns)) score -= 3;
     });
 
     score += (entry.priority || 0);
@@ -2543,8 +2641,19 @@ CALENDRIER
   }
 
   function matchFaq(question) {
+    const safeQuestion = String(question || '').trim();
+    if (!safeQuestion) return null;
+
+    const exactMatch = faqData.find(entry => {
+      const normQuestion = normalize(safeQuestion);
+      const normalizedTitle = normalize(entry.title || '');
+      const normalizedAnswer = normalize(entry.answer || '');
+      return normQuestion === normalizedTitle || normQuestion.includes(normalizedTitle) || normalizedAnswer.includes(normQuestion);
+    });
+    if (exactMatch) return exactMatch;
+
     const scored = faqData
-      .map(entry => ({ entry, score: scoreEntry(question, entry) }))
+      .map(entry => ({ entry, score: scoreEntry(safeQuestion, entry) }))
       .sort((a, b) => b.score - a.score);
 
     const best   = scored[0];
@@ -2713,8 +2822,9 @@ CALENDRIER
   }
 
   // ═══════════════════════════════════════════════════
-  // ADMINISTRATION — mot de passe vérifié côté serveur,
-  // jeton d'accès pour les actions qui modifient des données.
+  // ADMINISTRATION — mot de passe + tableau de bord KPI
+  // Protection légère côté client : suffisante pour un POC ou
+  // une démo interne, pas pour de vraies données sensibles.
   // ═══════════════════════════════════════════════════
   const adminLinkBtn       = document.getElementById('adminLinkBtn');
   const adminModal         = document.getElementById('adminModal');
@@ -2723,20 +2833,7 @@ CALENDRIER
   const adminModalSubmit   = document.getElementById('adminModalSubmit');
   const adminModalCancel   = document.getElementById('adminModalCancel');
   const adminBackBtn       = document.getElementById('adminBackBtn');
-  const adminLogoutBtn     = document.getElementById('adminLogoutBtn');
   const adminResetBtn      = document.getElementById('adminResetBtn');
-
-  let currentAdminContent = { publicContent: {}, faqEntries: [] };
-
-  async function refreshAdminPage() {
-    const [kpi, content] = await Promise.all([loadKpi(), loadContent()]);
-    currentAdminContent = content;
-    if (content.faqEntries.length) faqData = content.faqEntries;
-    renderKpiDashboard(kpi, content);
-    renderContentEditor(content);
-    renderPlanningEditor(content);
-    renderFaqEditor(content);
-  }
 
   function openAdminPage() {
     document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
@@ -2744,7 +2841,8 @@ CALENDRIER
     document.getElementById('page-admin').classList.add('active');
     navIndicator.style.width = '0px';
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    refreshAdminPage();
+    renderAdminTabs();
+    renderAdminDashboard();
   }
 
   function openAdminModal() {
@@ -2756,8 +2854,7 @@ CALENDRIER
   function closeAdminModal() { adminModal.classList.remove('open'); }
 
   adminLinkBtn.addEventListener('click', () => {
-    if (getAdminToken()) openAdminPage();
-    else openAdminModal();
+    openAdminModal();
   });
 
   async function checkAdminPassword() {
@@ -2768,14 +2865,14 @@ CALENDRIER
         body: JSON.stringify({ password: adminPasswordInput.value })
       });
       const data = await res.json();
-      if (res.ok && data.ok && data.token) {
-        setAdminToken(data.token);
+
+      if (res.ok && data.ok) {
         closeAdminModal();
         openAdminPage();
       } else {
         adminModalError.style.display = 'block';
       }
-    } catch (e) {
+    } catch (error) {
       adminModalError.style.display = 'block';
     }
   }
@@ -2784,9 +2881,7 @@ CALENDRIER
   adminModalCancel.addEventListener('click', closeAdminModal);
   adminModal.addEventListener('click', e => { if (e.target === adminModal) closeAdminModal(); });
 
-  // Navigation partagée vers la page FAQ — utilisée par "Retour au site"
-  // et par "Déconnexion" (qui l'utilise après avoir effacé le jeton admin).
-  function goToFaqPage() {
+  adminBackBtn.addEventListener('click', () => {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     const faqTab = document.querySelector('.nav-tab[data-page="faq"]');
     document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
@@ -2794,46 +2889,26 @@ CALENDRIER
     document.getElementById('page-faq').classList.add('active');
     positionIndicator(faqTab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  adminBackBtn.addEventListener('click', goToFaqPage);
-
-  adminLogoutBtn.addEventListener('click', () => {
-    clearAdminToken();
-    goToFaqPage();
-    showToast('Déconnecté(e) de l\'administration.');
   });
 
-  adminResetBtn.addEventListener('click', async () => {
-    if (!confirm('Réinitialiser toutes les données KPI (pour tous les collaborateurs) ? Cette action est irréversible.')) return;
-    const ok = await resetKpi();
-    if (!ok) {
-      showToast('Session admin expirée — reconnecte-toi.');
-      clearAdminToken();
-      openAdminModal();
-      return;
+  adminResetBtn.addEventListener('click', () => {
+    if (confirm('Réinitialiser toutes les données KPI de ce navigateur ? Cette action est irréversible.')) {
+      resetKpi();
+      renderAdminDashboard();
+      showToast('Données réinitialisées.');
     }
-    refreshAdminPage();
-    showToast('Données réinitialisées.');
   });
 
   const adminExportBtn = document.getElementById('adminExportBtn');
   adminExportBtn.addEventListener('click', exportKpiToExcel);
 
-  // Navigation Dashboard / Contenu public / Planning & Actus / FAQ dans la
-  // sidebar — un seul écouteur délégué, posé une fois (pas à chaque
-  // ouverture de l'admin).
-  document.getElementById('adminSidebarNav')?.addEventListener('click', e => {
-    const item = e.target.closest('.admin-nav-item');
-    if (!item) return;
-    const panel = item.dataset.adminPanel;
-    document.querySelectorAll('.admin-nav-item').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
-    item.classList.add('active');
-    document.getElementById('adminPanel' + panel.charAt(0).toUpperCase() + panel.slice(1))?.classList.remove('hidden');
-  });
-
   const TAB_LABELS = { faq: 'FAQ', actu: 'Actualités', plans: 'Plans & 3D', ambassadeurs: 'Ambassadeurs', equipe: 'Équipe projet' };
+  const ARTICLE_LABELS = {
+    "1": "Le projet entre dans sa phase active",
+    "2": "Ce que nous avons entendu",
+    "3": "Première plongée dans le futur site",
+    "4": "Pourquoi on déménage"
+  };
 
   function fmtDate(ts) {
     return new Date(ts).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
@@ -2855,7 +2930,58 @@ CALENDRIER
     `).join('');
   }
 
-  function renderKpiDashboard(kpi, content) {
+  function renderAdminTabs() {
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const panel = tab.dataset.adminPanel;
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
+        tab.classList.add('active');
+        document.getElementById(`adminPanel${panel.charAt(0).toUpperCase() + panel.slice(1)}`)?.classList.remove('hidden');
+      });
+    });
+  }
+
+
+  const FAQ_STATUS_META = {
+    confirmed: { label:'Réponse confirmée', short:'Publiée' },
+    partial:   { label:'Réponse partielle', short:'Partielle' },
+    waiting:   { label:'En attente de décision', short:'En attente' }
+  };
+
+  function faqStatusLabel(status) {
+    return FAQ_STATUS_META[status]?.label || FAQ_STATUS_META.waiting.label;
+  }
+
+  function splitCommaList(value) {
+    return String(value || '').split(',').map(v => v.trim()).filter(Boolean);
+  }
+
+  function splitLineList(value) {
+    return String(value || '').split(/\r?\n/).map(v => v.trim()).filter(Boolean);
+  }
+
+  function makeFaqEntry() {
+    return {
+      id: `faq-${Date.now()}-${Math.random().toString(36).slice(2,6)}`,
+      category: 'general', priority: 5,
+      title: 'Nouvelle question',
+      status: 'waiting', statusLabel: FAQ_STATUS_META.waiting.label,
+      shortAnswer: '', answer: '', note: '',
+      related: [], keywords: [], phrases: [], intentSignals: [], negativeSignals: [], emotionSignals: []
+    };
+  }
+
+  function cloneJson(value) {
+    return JSON.parse(JSON.stringify(value ?? null));
+  }
+
+  async function renderAdminDashboard() {
+    const [kpi, content] = await Promise.all([loadKpi(), loadContent()]);
+    if (content.faqEntries.length) {
+      faqData = content.faqEntries;
+    }
+
     const totalAsked        = kpi.faqAsked.length;
     const totalFound        = kpi.faqAsked.filter(a => a.matched).length;
     const foundRate         = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
@@ -2906,16 +3032,8 @@ CALENDRIER
       emptyText: "Aucune navigation enregistrée pour l'instant."
     });
 
-    // Articles les plus consultés — les libellés viennent du contenu actuel
-    // (Planning & Actus) ; un article supprimé depuis reste visible avec
-    // son identifiant, pour ne jamais perdre discrètement des données KPI.
-    const articleLabels = {};
-    (content?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
-    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
-    const articleEntries = [...articleIds].map(id => ({
-      label: articleLabels[id] || `Article supprimé (${id})`,
-      value: kpi.articleOpens[id] || 0
-    }));
+    // Articles les plus consultés
+    const articleEntries = Object.keys(ARTICLE_LABELS).map(id => ({ label: ARTICLE_LABELS[id], value: kpi.articleOpens[id] || 0 }));
     const articlesHaveData = articleEntries.some(e => e.value > 0);
     renderBarList(document.getElementById('kpiArticles'), articlesHaveData ? articleEntries : [], {
       emptyText: "Aucun article ouvert pour l'instant — va sur la page Actualités et déplie une publication."
@@ -2937,921 +3055,315 @@ CALENDRIER
         </div>
       `).join('');
     }
-  }
 
-  // Après une sauvegarde refusée (jeton expiré), invite à se reconnecter.
-  function handleSaveResult(result, successMessage) {
-    if (result.ok) { showToast(successMessage); return true; }
-    if (result.unauthorized) {
-      showToast('Session admin expirée — reconnecte-toi.');
-      clearAdminToken();
-      openAdminModal();
-    } else {
-      showToast("Échec de l'enregistrement — réessaie.");
+    // ───────────────────────────────────────────────
+    // MINI-CMS : état de travail partagé entre les deux éditeurs
+    // ───────────────────────────────────────────────
+    const publicDraft = cloneJson(content.publicContent || {}) || {};
+    let faqDraft = cloneJson(faqData || []) || [];
+    let publicDirty = false;
+    let faqDirty = false;
+
+    // Complète les données serveur avec le texte actuellement visible :
+    // le HTML reste ainsi le contenu par défaut, sans double saisie obligatoire.
+    PUBLIC_CONTENT_SCHEMA.forEach(page => {
+      if (!publicDraft[page.id]) publicDraft[page.id] = {};
+      page.fields.forEach(field => {
+        if (typeof publicDraft[page.id][field.key] !== 'string' || !publicDraft[page.id][field.key].trim()) {
+          publicDraft[page.id][field.key] = readPublicField(field);
+        }
+      });
+    });
+
+    async function persistCms() {
+      // L'API actuelle enregistre l'objet de contenu complet en une fois.
+      // Un clic sur Enregistrer sauvegarde donc proprement les deux brouillons
+      // (textes publics et FAQ), même si un seul onglet est affiché.
+      const saved = await saveContent({ publicContent: publicDraft, faqEntries: faqDraft });
+      if (!saved?.ok) {
+        showToast('La sauvegarde a échoué. Vérifiez que le serveur Node.js est lancé.');
+        return false;
+      }
+      publicDirty = false;
+      faqDirty = false;
+      content.publicContent = cloneJson(publicDraft);
+      faqData = cloneJson(faqDraft);
+      applyPublicContent(publicDraft);
+      ['publicSaveState', 'faqSaveState'].forEach(id => {
+        const state = document.getElementById(id);
+        if (state) { state.classList.remove('dirty'); state.textContent = 'Tout est enregistré'; }
+      });
+      return true;
     }
-    return false;
-  }
 
-  const PUBLIC_SCOPE_LABELS = { faq: 'FAQ', actu: 'Actualités', plans: 'Plans & 3D', ambassadeurs: 'Ambassadeurs', equipe: 'Équipe projet' };
+    function renderPublicManager(activePageId = PUBLIC_CONTENT_SCHEMA[0].id) {
+      const container = document.getElementById('adminContentEditor');
+      if (!container) return;
+      const page = PUBLIC_CONTENT_SCHEMA.find(item => item.id === activePageId) || PUBLIC_CONTENT_SCHEMA[0];
+      const payload = publicDraft[page.id] || {};
 
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — Contenu public (pas de HTML, que des champs texte)
-  // ═══════════════════════════════════════════════════
-  function renderContentEditor(content) {
-    const container = document.getElementById('adminContentEditor');
-    if (!container) return;
-
-    const scopes = Object.keys(PUBLIC_SCOPE_LABELS);
-    let activeScope = scopes[0];
-
-    function fieldsHtml(scope) {
-      const p = content.publicContent?.[scope] || {};
-      return `
-        <label class="admin-editor-label">Eyebrow (petit texte au-dessus du titre)</label>
-        <input type="text" class="form-input" data-scope="${scope}" data-field="eyebrow" value="${escapeHtml(p.eyebrow || '')}">
-        <label class="admin-editor-label">Titre — première ligne</label>
-        <input type="text" class="form-input" data-scope="${scope}" data-field="titleLine1" value="${escapeHtml(p.titleLine1 || '')}">
-        <label class="admin-editor-label">Titre — mot mis en valeur (couleur sable)</label>
-        <input type="text" class="form-input" data-scope="${scope}" data-field="titleAccent" value="${escapeHtml(p.titleAccent || '')}">
-        <label class="admin-editor-label">Description</label>
-        <textarea class="form-input admin-editor-textarea" data-scope="${scope}" data-field="desc">${escapeHtml(p.desc || '')}</textarea>
-      `;
-    }
-
-    function render() {
-      const branding = content.branding || { projectName: 'Projet XYZ', logoUrl: '' };
       container.innerHTML = `
-        <div class="admin-editor-panel" style="margin-bottom:28px;">
-          <div class="kpi-section-title">Identité visuelle</div>
-          <div class="kpi-section-sub">Nom du projet et logo affichés dans la barre de navigation — à personnaliser pour chaque client.</div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; align-items:end;">
+        <div class="admin-cms-shell">
+          <div class="admin-cms-head">
             <div>
-              <label class="admin-editor-label">Nom du projet</label>
-              <input type="text" class="form-input" id="brandingNameInput" value="${escapeHtml(branding.projectName || 'Projet XYZ')}">
+              <h2>Contenus du site</h2>
+              <p>Modifiez les textes visibles par les collaborateurs. Les libellés techniques et le code restent cachés.</p>
             </div>
-            <div>
-              <label class="admin-editor-label">Logo (PNG ou JPEG)</label>
-              <div id="brandingLogoDropzone" class="logo-dropzone">
-                <div id="brandingLogoPreview" style="width:42px; height:42px; border:1px solid var(--ink-12); border-radius:10px; overflow:hidden; background:var(--offwhite); flex-shrink:0; display:flex; align-items:center; justify-content:center;">
-                  ${branding.logoUrl ? `<img src="${escapeHtml(branding.logoUrl)}" style="width:100%; height:100%; object-fit:contain;">` : ''}
-                </div>
-                <button type="button" class="admin-modal-cancel" id="brandingLogoUploadBtn" style="flex:none; padding:0 16px; height:36px;">Choisir un logo</button>
-                <span class="logo-dropzone-hint">ou glisse-dépose une image ici</span>
-                <button type="button" class="admin-reset" id="brandingLogoRemoveBtn" style="${branding.logoUrl ? '' : 'display:none;'} margin-left:auto;">Retirer</button>
-                <input type="file" id="brandingLogoInput" accept="image/png,image/jpeg" style="display:none;">
-              </div>
+            <div class="admin-cms-actions">
+              <span class="admin-cms-status ${publicDirty ? 'dirty' : ''}" id="publicSaveState">${publicDirty ? 'Modifications non enregistrées' : 'Tout est enregistré'}</span>
+              <button type="button" class="admin-primary-btn" id="savePublicCmsBtn">Enregistrer</button>
             </div>
           </div>
-        </div>
-
-        <div class="admin-editor-panel">
-          <div class="kpi-section-title">Édition du contenu public</div>
-          <div class="kpi-section-sub">Choisis une page à gauche, modifie ses textes à droite, puis enregistre. Aucun code à toucher.</div>
-          <div class="admin-structure-layout">
-            <div class="admin-list-pane">
-              <div class="admin-editor-head">Pages</div>
-              <div class="admin-stack-list">
-                ${scopes.map(scope => `
-                  <button type="button" class="admin-stack-item ${scope === activeScope ? 'active' : ''}" data-public-scope="${scope}">
-                    <span class="admin-stack-item-title">${PUBLIC_SCOPE_LABELS[scope]}</span>
-                    <span class="admin-stack-item-meta">Section hero</span>
-                  </button>
-                `).join('')}
+          <div class="admin-cms-layout">
+            <aside class="admin-cms-sidebar">
+              <div class="admin-cms-sidebar-title">Pages du site</div>
+              <div class="admin-cms-list">
+                ${PUBLIC_CONTENT_SCHEMA.map(item => `
+                  <button type="button" class="admin-cms-list-btn ${item.id === page.id ? 'active' : ''}" data-public-page="${item.id}">
+                    <span class="admin-cms-list-title">${escapeHtml(item.label)}</span>
+                    <span class="admin-page-description">${escapeHtml(item.description)}</span>
+                  </button>`).join('')}
               </div>
-            </div>
-            <div class="admin-detail-pane">
-              <div class="admin-detail-card">
-                <div class="admin-detail-head">Édition</div>
-                <div class="admin-detail-title" id="publicDetailTitle">${PUBLIC_SCOPE_LABELS[activeScope]}</div>
-                <div id="publicDetailFields">${fieldsHtml(activeScope)}</div>
+            </aside>
+            <main class="admin-cms-main">
+              <div class="admin-cms-form">
+                <div class="admin-cms-form-head">
+                  <div class="admin-cms-form-kicker mono">Édition de page</div>
+                  <div class="admin-cms-form-title">${escapeHtml(page.label)}</div>
+                </div>
+                ${page.fields.map(field => {
+                  const value = payload[field.key] ?? '';
+                  const isTextarea = field.type === 'textarea' || field.type === 'heroTitle';
+                  return `
+                    <div class="admin-field">
+                      <label for="public-${page.id}-${field.key}">${escapeHtml(field.label)}</label>
+                      ${isTextarea
+                        ? `<textarea class="admin-control" id="public-${page.id}-${field.key}" data-public-field="${field.key}" rows="${field.type === 'heroTitle' ? 2 : 4}">${escapeHtml(value)}</textarea>`
+                        : `<input class="admin-control" id="public-${page.id}-${field.key}" data-public-field="${field.key}" type="text" value="${escapeAttr(value)}">`}
+                      ${field.help ? `<span class="admin-field-help">${escapeHtml(field.help)}</span>` : ''}
+                    </div>`;
+                }).join('')}
               </div>
-              <div style="margin-top:16px;">
-                <button type="button" class="search-btn" id="savePublicContentBtn">Enregistrer le contenu public</button>
-              </div>
-            </div>
+            </main>
           </div>
         </div>`;
 
-      document.getElementById('brandingNameInput').addEventListener('input', e => {
-        content.branding = content.branding || {};
-        content.branding.projectName = e.target.value;
+      container.querySelectorAll('[data-public-page]').forEach(btn => {
+        btn.addEventListener('click', () => renderPublicManager(btn.dataset.publicPage));
       });
 
-      const logoInput = document.getElementById('brandingLogoInput');
-      const logoDropzone = document.getElementById('brandingLogoDropzone');
-      document.getElementById('brandingLogoUploadBtn').addEventListener('click', () => logoInput.click());
+      container.querySelectorAll('[data-public-field]').forEach(input => {
+        input.addEventListener('input', () => {
+          const field = page.fields.find(item => item.key === input.dataset.publicField);
+          publicDraft[page.id][input.dataset.publicField] = field?.type === 'textarea' || field?.type === 'heroTitle'
+            ? sanitizeMultilineText(input.value)
+            : sanitizePlainText(input.value);
+          publicDirty = true;
+          const state = document.getElementById('publicSaveState');
+          if (state) { state.classList.add('dirty'); state.textContent = 'Modifications non enregistrées'; }
+        });
+      });
 
-      // Logique d'envoi partagée entre le bouton "Choisir un logo" et le
-      // glisser-déposer, pour ne jamais désynchroniser les deux chemins.
-      async function handleLogoFile(file) {
-        if (!file) return;
-        if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-          showToast('Format non supporté — utilise un PNG ou un JPEG.');
+      document.getElementById('savePublicCmsBtn')?.addEventListener('click', async event => {
+        const button = event.currentTarget;
+        button.disabled = true; button.textContent = 'Enregistrement…';
+        const ok = await persistCms({ savePublic:true, saveFaq:false });
+        button.disabled = false; button.textContent = 'Enregistrer';
+        if (ok) {
+          showToast('Les textes publics ont été enregistrés.');
+          renderPublicManager(page.id);
+        }
+      });
+    }
+
+    function renderFaqManager(activeId, searchValue = '', activeFilter = 'all') {
+      const container = document.getElementById('adminFaqEditor');
+      if (!container) return;
+      if (!activeId || !faqDraft.some(entry => entry.id === activeId)) activeId = faqDraft[0]?.id || '';
+
+      const normalizedSearch = searchValue.trim().toLowerCase();
+      const visibleEntries = faqDraft.filter(entry => {
+        const haystack = `${entry.title || ''} ${entry.answer || ''} ${(entry.keywords || []).join(' ')}`.toLowerCase();
+        const matchesSearch = !normalizedSearch || haystack.includes(normalizedSearch);
+        const matchesFilter = activeFilter === 'all' || entry.status === activeFilter;
+        return matchesSearch && matchesFilter;
+      });
+      if (visibleEntries.length && !visibleEntries.some(entry => entry.id === activeId)) activeId = visibleEntries[0].id;
+      const activeEntry = faqDraft.find(entry => entry.id === activeId);
+
+      container.innerHTML = `
+        <div class="admin-cms-shell">
+          <div class="admin-cms-head">
+            <div>
+              <h2>Gestion de la FAQ</h2>
+              <p>Créez, modifiez et supprimez les réponses sans toucher au code. Les identifiants techniques sont générés automatiquement.</p>
+            </div>
+            <div class="admin-cms-actions">
+              <span class="admin-cms-status ${faqDirty ? 'dirty' : ''}" id="faqSaveState">${faqDirty ? 'Modifications non enregistrées' : 'Tout est enregistré'}</span>
+              <button type="button" class="admin-secondary-btn" id="addFaqCmsBtn">+ Nouvelle question</button>
+              <button type="button" class="admin-primary-btn" id="saveFaqCmsBtn">Enregistrer</button>
+            </div>
+          </div>
+          <div class="admin-cms-layout">
+            <aside class="admin-cms-sidebar">
+              <input class="admin-control admin-cms-search" type="search" id="faqCmsSearch" placeholder="Rechercher une question…" value="${escapeAttr(searchValue)}">
+              <div class="admin-cms-filters">
+                ${[
+                  ['all','Toutes'],['confirmed','Publiées'],['partial','Partielles'],['waiting','En attente']
+                ].map(([value,label]) => `<button type="button" class="admin-cms-filter ${activeFilter === value ? 'active' : ''}" data-faq-cms-filter="${value}">${label}</button>`).join('')}
+              </div>
+              <div class="admin-cms-sidebar-title">${visibleEntries.length} question${visibleEntries.length > 1 ? 's' : ''}</div>
+              <div class="admin-cms-list">
+                ${visibleEntries.length ? visibleEntries.map(entry => `
+                  <button type="button" class="admin-cms-list-btn ${entry.id === activeId ? 'active' : ''}" data-faq-cms-id="${escapeAttr(entry.id)}">
+                    <span class="admin-cms-list-title">${escapeHtml(entry.title || 'Question sans titre')}</span>
+                    <span class="admin-cms-list-meta"><span class="admin-cms-dot ${escapeAttr(entry.status || 'waiting')}"></span>${escapeHtml(FAQ_STATUS_META[entry.status]?.short || 'En attente')}</span>
+                  </button>`).join('') : `<div class="admin-cms-empty">Aucune question ne correspond à ce filtre.</div>`}
+              </div>
+            </aside>
+            <main class="admin-cms-main">
+              ${activeEntry ? `
+                <div class="admin-cms-form" data-active-faq-id="${escapeAttr(activeEntry.id)}">
+                  <div class="admin-cms-form-head">
+                    <div class="admin-cms-form-kicker mono">Question-réponse</div>
+                    <div class="admin-cms-form-title" id="faqEditorLiveTitle">${escapeHtml(activeEntry.title || 'Nouvelle question')}</div>
+                  </div>
+                  <div class="admin-field-row">
+                    <div class="admin-field">
+                      <label for="faqTitleInput">Question affichée</label>
+                      <input class="admin-control" id="faqTitleInput" data-faq-cms-field="title" type="text" value="${escapeAttr(activeEntry.title || '')}">
+                    </div>
+                    <div class="admin-field">
+                      <label for="faqStatusInput">Statut de la réponse</label>
+                      <select class="admin-control" id="faqStatusInput" data-faq-cms-field="status">
+                        ${Object.entries(FAQ_STATUS_META).map(([value,meta]) => `<option value="${value}" ${activeEntry.status === value ? 'selected' : ''}>${escapeHtml(meta.label)}</option>`).join('')}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="admin-field">
+                    <label for="faqShortAnswerInput">Réponse courte <span style="font-weight:400;color:var(--ink-35)">— facultatif</span></label>
+                    <textarea class="admin-control" id="faqShortAnswerInput" data-faq-cms-field="shortAnswer" rows="3">${escapeHtml(activeEntry.shortAnswer || '')}</textarea>
+                    <span class="admin-field-help">Une synthèse d’une ou deux phrases. Elle améliore la qualité de la recherche.</span>
+                  </div>
+                  <div class="admin-field">
+                    <label for="faqAnswerInput">Réponse complète</label>
+                    <textarea class="admin-control answer" id="faqAnswerInput" data-faq-cms-field="answer">${escapeHtml(activeEntry.answer || '')}</textarea>
+                  </div>
+                  <div class="admin-field">
+                    <label for="faqNoteInput">Complément ou point d’attention <span style="font-weight:400;color:var(--ink-35)">— facultatif</span></label>
+                    <textarea class="admin-control" id="faqNoteInput" data-faq-cms-field="note">${escapeHtml(activeEntry.note || '')}</textarea>
+                  </div>
+                  <div class="admin-field">
+                    <label for="faqKeywordsInput">Mots-clés associés</label>
+                    <input class="admin-control" id="faqKeywordsInput" data-faq-cms-field="keywords" type="text" value="${escapeAttr((activeEntry.keywords || []).join(', '))}" placeholder="restaurant, déjeuner, cantine">
+                    <span class="admin-field-help">Séparez les termes par des virgules.</span>
+                  </div>
+                  <div class="admin-field">
+                    <label for="faqPhrasesInput">Autres formulations reconnues <span style="font-weight:400;color:var(--ink-35)">— facultatif</span></label>
+                    <textarea class="admin-control" id="faqPhrasesInput" data-faq-cms-field="phrases" placeholder="Une formulation par ligne">${escapeHtml((activeEntry.phrases || []).join('\n'))}</textarea>
+                    <span class="admin-field-help">Exemple : « Où peut-on déjeuner ? » puis, sur une nouvelle ligne, « Y aura-t-il une cantine ? »</span>
+                  </div>
+                  <div class="admin-cms-bottom-actions">
+                    <button type="button" class="admin-danger-btn" id="deleteFaqCmsBtn">Supprimer cette question</button>
+                    <span class="admin-field-help">La suppression ne devient définitive qu’après enregistrement.</span>
+                  </div>
+                </div>` : `<div class="admin-cms-empty">Créez une première question pour commencer.</div>`}
+            </main>
+          </div>
+        </div>`;
+
+      document.querySelectorAll('[data-faq-cms-id]').forEach(btn => {
+        btn.addEventListener('click', () => renderFaqManager(btn.dataset.faqCmsId, searchValue, activeFilter));
+      });
+
+      document.querySelectorAll('[data-faq-cms-filter]').forEach(btn => {
+        btn.addEventListener('click', () => renderFaqManager(activeId, searchValue, btn.dataset.faqCmsFilter));
+      });
+
+      document.getElementById('faqCmsSearch')?.addEventListener('input', event => {
+        renderFaqManager(activeId, event.target.value, activeFilter);
+        requestAnimationFrame(() => {
+          const input = document.getElementById('faqCmsSearch');
+          if (input) { input.focus(); input.setSelectionRange(input.value.length, input.value.length); }
+        });
+      });
+
+      document.querySelectorAll('[data-faq-cms-field]').forEach(input => {
+        input.addEventListener('input', () => {
+          const entry = faqDraft.find(item => item.id === activeId);
+          if (!entry) return;
+          const field = input.dataset.faqCmsField;
+          if (field === 'keywords') entry.keywords = splitCommaList(input.value);
+          else if (field === 'phrases') entry.phrases = splitLineList(input.value);
+          else if (field === 'status') {
+            entry.status = input.value;
+            entry.statusLabel = faqStatusLabel(input.value);
+          } else entry[field] = field === 'answer' || field === 'note' || field === 'shortAnswer'
+            ? sanitizeMultilineText(input.value)
+            : sanitizePlainText(input.value);
+          faqDirty = true;
+          const state = document.getElementById('faqSaveState');
+          if (state) { state.classList.add('dirty'); state.textContent = 'Modifications non enregistrées'; }
+          if (field === 'title') {
+            const title = document.getElementById('faqEditorLiveTitle');
+            if (title) title.textContent = entry.title || 'Question sans titre';
+          }
+        });
+        input.addEventListener('change', () => {
+          if (input.dataset.faqCmsField === 'status') renderFaqManager(activeId, searchValue, activeFilter);
+        });
+      });
+
+      document.getElementById('addFaqCmsBtn')?.addEventListener('click', () => {
+        const entry = makeFaqEntry();
+        faqDraft.unshift(entry);
+        faqDirty = true;
+        renderFaqManager(entry.id, '', 'all');
+        requestAnimationFrame(() => document.getElementById('faqTitleInput')?.select());
+      });
+
+      document.getElementById('deleteFaqCmsBtn')?.addEventListener('click', () => {
+        const entry = faqDraft.find(item => item.id === activeId);
+        if (!entry) return;
+        if (!window.confirm(`Supprimer « ${entry.title || 'cette question'} » ?\n\nLa suppression sera appliquée lors du prochain enregistrement.`)) return;
+        faqDraft = faqDraft.filter(item => item.id !== activeId);
+        faqDirty = true;
+        renderFaqManager(faqDraft[0]?.id || '', searchValue, activeFilter);
+      });
+
+      document.getElementById('saveFaqCmsBtn')?.addEventListener('click', async event => {
+        const invalid = faqDraft.find(entry => !String(entry.title || '').trim());
+        if (invalid) {
+          showToast('Chaque entrée doit avoir une question.');
+          renderFaqManager(invalid.id, '', 'all');
           return;
         }
-        showToast('Envoi du logo en cours...');
-        const result = await uploadFile(file);
-        if (result.unauthorized) { showToast('Session admin expirée — reconnecte-toi.'); clearAdminToken(); openAdminModal(); return; }
-        if (!result.ok) { showToast(result.error || "Échec de l'envoi du logo."); return; }
-        content.branding = content.branding || {};
-        content.branding.logoUrl = result.url;
-        document.getElementById('brandingLogoPreview').innerHTML = `<img src="${escapeHtml(result.url)}" style="width:100%; height:100%; object-fit:contain;">`;
-        document.getElementById('brandingLogoRemoveBtn').style.display = '';
-        showToast('Logo envoyé — clique sur "Enregistrer" pour le publier.');
-      }
-
-      logoInput.addEventListener('change', () => {
-        const file = logoInput.files[0];
-        logoInput.value = ''; // permet de réenvoyer le même fichier plus tard
-        handleLogoFile(file);
-      });
-
-      ['dragenter', 'dragover'].forEach(evt => logoDropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        logoDropzone.classList.add('drag-over');
-      }));
-      ['dragleave', 'drop'].forEach(evt => logoDropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        logoDropzone.classList.remove('drag-over');
-      }));
-      logoDropzone.addEventListener('drop', e => {
-        const file = e.dataTransfer?.files?.[0];
-        if (file) handleLogoFile(file);
-      });
-
-      document.getElementById('brandingLogoRemoveBtn').addEventListener('click', () => {
-        content.branding = content.branding || {};
-        content.branding.logoUrl = '';
-        document.getElementById('brandingLogoPreview').innerHTML = '';
-        document.getElementById('brandingLogoRemoveBtn').style.display = 'none';
-      });
-
-      container.querySelectorAll('[data-public-scope]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          syncFieldsIntoContent();
-          activeScope = btn.dataset.publicScope;
-          container.querySelectorAll('[data-public-scope]').forEach(b => b.classList.toggle('active', b === btn));
-          document.getElementById('publicDetailTitle').textContent = PUBLIC_SCOPE_LABELS[activeScope];
-          document.getElementById('publicDetailFields').innerHTML = fieldsHtml(activeScope);
-        });
-      });
-
-      document.getElementById('savePublicContentBtn').addEventListener('click', async () => {
-        syncFieldsIntoContent();
-        const result = await saveContent(buildSavePayload(content));
-        if (handleSaveResult(result, 'Contenu public enregistré.')) {
-          applyPublicContent(content.publicContent);
-          applyBranding(content.branding);
+        faqDraft = faqDraft.map(entry => ({
+          ...entry,
+          status: FAQ_STATUS_META[entry.status] ? entry.status : 'waiting',
+          statusLabel: faqStatusLabel(entry.status),
+          category: entry.category || 'general',
+          priority: Number.isFinite(Number(entry.priority)) ? Number(entry.priority) : 5,
+          related: Array.isArray(entry.related) ? entry.related : [],
+          keywords: Array.isArray(entry.keywords) ? entry.keywords : [],
+          phrases: Array.isArray(entry.phrases) ? entry.phrases : [],
+          intentSignals: Array.isArray(entry.intentSignals) ? entry.intentSignals : [],
+          negativeSignals: Array.isArray(entry.negativeSignals) ? entry.negativeSignals : [],
+          emotionSignals: Array.isArray(entry.emotionSignals) ? entry.emotionSignals : []
+        }));
+        const button = event.currentTarget;
+        button.disabled = true; button.textContent = 'Enregistrement…';
+        const ok = await persistCms({ savePublic:false, saveFaq:true });
+        button.disabled = false; button.textContent = 'Enregistrer';
+        if (ok) {
+          showToast('La FAQ a été enregistrée.');
+          renderFaqManager(activeId, searchValue, activeFilter);
         }
       });
     }
 
-    // Récupère les valeurs actuellement affichées dans les champs et les
-    // range dans content.publicContent avant de changer de page ou d'enregistrer.
-    function syncFieldsIntoContent() {
-      document.querySelectorAll('#publicDetailFields [data-scope][data-field]').forEach(input => {
-        const scope = input.dataset.scope, field = input.dataset.field;
-        if (!content.publicContent[scope]) content.publicContent[scope] = {};
-        content.publicContent[scope][field] = input.value;
-      });
-    }
-
-    render();
-  }
-
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — Planning & Actualités
-  // (jalons de la timeline, avancement, articles publiés)
-  // ═══════════════════════════════════════════════════
-  function moveItem(array, index, direction) {
-    const target = index + direction;
-    if (target < 0 || target >= array.length) return;
-    const [item] = array.splice(index, 1);
-    array.splice(target, 0, item);
-  }
-
-  function renderPlanningEditor(content) {
-    const container = document.getElementById('adminPlanningEditor');
-    if (!container) return;
-
-    content.progress = content.progress || { stepLine1: '', stepLine2: '', percent: 0 };
-    content.milestones = content.milestones || [];
-    content.articles = content.articles || [];
-
-    const openMilestoneIds = new Set();
-    const openArticleIds = new Set();
-
-    // ── Jalons du planning ──────────────────────────────
-    function milestoneCardHtml(m, index, total) {
-      const isOpen = openMilestoneIds.has(m.id);
-      const pill = MILESTONE_STATUS_MAP[m.status] || MILESTONE_STATUS_MAP.future;
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-milestone-card="${m.id}">
-          <button type="button" class="faq-card-header" data-milestone-toggle="${m.id}">
-            <span class="status-pill ${pill.cls}" style="margin-bottom:0;">${pill.label}</span>
-            <span class="milestone-badge">Étape ${index + 1} / ${total}</span>
-            <span class="faq-card-title">${escapeHtml(m.date || '')} — ${escapeHtml(m.label || '(sans titre)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              <label class="admin-editor-label">Période / date</label>
-              <input type="text" class="form-input" data-milestone-field="date" value="${escapeHtml(m.date || '')}">
-              <label class="admin-editor-label">Intitulé du jalon</label>
-              <input type="text" class="form-input" data-milestone-field="label" value="${escapeHtml(m.label || '')}">
-              <label class="admin-editor-label">Statut</label>
-              <select class="form-input" data-milestone-field="status">
-                <option value="done" ${m.status==='done'?'selected':''}>Terminé</option>
-                <option value="current" ${m.status==='current'?'selected':''}>En cours</option>
-                <option value="future" ${m.status==='future'?'selected':''}>À venir</option>
-              </select>
-              <label class="admin-editor-label">Description</label>
-              <textarea class="form-input admin-editor-textarea" data-milestone-field="desc">${escapeHtml(m.desc || '')}</textarea>
-              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="admin-modal-cancel" data-milestone-up="${m.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
-                <button type="button" class="admin-modal-cancel" data-milestone-down="${m.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
-                <button type="button" class="admin-delete-btn" data-milestone-delete="${m.id}" style="margin-top:0;">Supprimer ce jalon</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function bindMilestoneCard(m) {
-      const card = container.querySelector(`[data-milestone-card="${m.id}"]`);
-      if (!card) return;
-
-      card.querySelector('[data-milestone-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openMilestoneIds.add(m.id); else openMilestoneIds.delete(m.id);
-      });
-
-      card.querySelectorAll('[data-milestone-field]').forEach(field => {
-        const evt = field.tagName === 'SELECT' ? 'change' : 'input';
-        field.addEventListener(evt, () => {
-          const key = field.dataset.milestoneField;
-          m[key] = field.value;
-          if (key === 'status') {
-            const pill = MILESTONE_STATUS_MAP[m.status] || MILESTONE_STATUS_MAP.future;
-            const pillEl = card.querySelector('.status-pill');
-            if (pillEl) { pillEl.className = `status-pill ${pill.cls}`; pillEl.textContent = pill.label; }
-            refreshPlanningProgress();
-          }
-          if (key === 'date' || key === 'label') {
-            const t = card.querySelector('.faq-card-title');
-            if (t) t.textContent = `${m.date || ''} — ${m.label || '(sans titre)'}`;
-          }
-        });
-      });
-
-      card.querySelector('[data-milestone-up]')?.addEventListener('click', () => {
-        const idx = content.milestones.findIndex(x => x.id === m.id);
-        moveItem(content.milestones, idx, -1);
-        renderMilestonesList();
-        refreshPlanningProgress();
-      });
-      card.querySelector('[data-milestone-down]')?.addEventListener('click', () => {
-        const idx = content.milestones.findIndex(x => x.id === m.id);
-        moveItem(content.milestones, idx, 1);
-        renderMilestonesList();
-        refreshPlanningProgress();
-      });
-      card.querySelector('[data-milestone-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement ce jalon ?')) return;
-        content.milestones = content.milestones.filter(x => x.id !== m.id);
-        openMilestoneIds.delete(m.id);
-        renderMilestonesList();
-        refreshPlanningProgress();
-      });
-    }
-
-    function renderMilestonesList() {
-      const listEl = document.getElementById('planningMilestonesList');
-      if (!listEl) return;
-      listEl.innerHTML = content.milestones.length
-        ? content.milestones.map((m, i) => milestoneCardHtml(m, i, content.milestones.length)).join('')
-        : '<div class="kpi-empty">Aucun jalon pour l\'instant.</div>';
-      content.milestones.forEach(bindMilestoneCard);
-    }
-
-    // ── Articles ────────────────────────────────────────
-    function articleCardHtml(a, index, total) {
-      const isOpen = openArticleIds.has(a.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-article-card="${a.id}">
-          <button type="button" class="faq-card-header" data-article-toggle="${a.id}">
-            <span class="tag-pill">${escapeHtml(a.tag || '')}</span>
-            <span class="faq-card-title">${escapeHtml(a.title || '(sans titre)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              <label class="admin-editor-label">Titre de l'article</label>
-              <input type="text" class="form-input" data-article-field="title" value="${escapeHtml(a.title || '')}">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                <div>
-                  <label class="admin-editor-label">Étiquette (ex. Calendrier, Écoute...)</label>
-                  <input type="text" class="form-input" data-article-field="tag" value="${escapeHtml(a.tag || '')}">
-                </div>
-                <div>
-                  <label class="admin-editor-label">Date affichée (ex. "2 avril 2026 · 4 min")</label>
-                  <input type="text" class="form-input" data-article-field="date" value="${escapeHtml(a.date || '')}">
-                </div>
-              </div>
-              <label class="admin-editor-label">Chapeau (résumé affiché avant ouverture)</label>
-              <textarea class="form-input admin-editor-textarea" data-article-field="chapeau" style="min-height:70px;">${escapeHtml(a.chapeau || '')}</textarea>
-              <label class="admin-editor-label">Corps de l'article — pour un sous-titre en gras, commence la ligne par "## "</label>
-              <textarea class="form-input admin-editor-textarea" data-article-field="body" style="min-height:220px;">${escapeHtml(a.body || '')}</textarea>
-              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="admin-modal-cancel" data-article-up="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
-                <button type="button" class="admin-modal-cancel" data-article-down="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
-                <button type="button" class="admin-delete-btn" data-article-delete="${a.id}" style="margin-top:0;">Supprimer cet article</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function bindArticleCard(a) {
-      const card = container.querySelector(`[data-article-card="${a.id}"]`);
-      if (!card) return;
-
-      card.querySelector('[data-article-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openArticleIds.add(a.id); else openArticleIds.delete(a.id);
-      });
-
-      card.querySelectorAll('[data-article-field]').forEach(field => {
-        field.addEventListener('input', () => {
-          const key = field.dataset.articleField;
-          a[key] = field.value;
-          if (key === 'title') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans titre)'; }
-          if (key === 'tag') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
-        });
-      });
-
-      card.querySelector('[data-article-up]')?.addEventListener('click', () => {
-        const idx = content.articles.findIndex(x => x.id === a.id);
-        moveItem(content.articles, idx, -1);
-        renderArticlesAdminList();
-      });
-      card.querySelector('[data-article-down]')?.addEventListener('click', () => {
-        const idx = content.articles.findIndex(x => x.id === a.id);
-        moveItem(content.articles, idx, 1);
-        renderArticlesAdminList();
-      });
-      card.querySelector('[data-article-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement cet article ? Les statistiques de consultation associées resteront visibles dans le Dashboard.')) return;
-        content.articles = content.articles.filter(x => x.id !== a.id);
-        openArticleIds.delete(a.id);
-        renderArticlesAdminList();
-      });
-    }
-
-    function renderArticlesAdminList() {
-      const listEl = document.getElementById('planningArticlesList');
-      if (!listEl) return;
-      listEl.innerHTML = content.articles.length
-        ? content.articles.map((a, i) => articleCardHtml(a, i, content.articles.length)).join('')
-        : '<div class="kpi-empty">Aucun article pour l\'instant.</div>';
-      content.articles.forEach(bindArticleCard);
-    }
-
-    // ── Structure globale du panneau ────────────────────
-    container.innerHTML = `
-      <div class="admin-editor-panel" style="margin-bottom:28px;">
-        <div class="kpi-section-title">Avancement du planning</div>
-        <div class="kpi-section-sub">Affiché en haut de la page Actualités, à côté des jalons. L'avancement se calcule automatiquement selon la position des jalons.</div>
-        <div style="display:grid; grid-template-columns:1fr 150px; gap:14px; margin-top:16px; align-items:center;">
-          <div>
-            <div class="admin-editor-label">Progression</div>
-            <div style="display:flex; align-items:center; gap:10px;">
-              <div class="progress-track" style="flex:1; height:12px; border-radius:999px; background:var(--ink-08); overflow:hidden;">
-                <div class="progress-fill" id="adminPlanningProgressFill" style="width:0%"></div>
-              </div>
-              <span class="progress-pct mono" id="adminPlanningProgressPct">0%</span>
-            </div>
-          </div>
-          <div>
-            <div class="admin-editor-label">Étape actuelle</div>
-            <div id="adminPlanningProgressStep" class="mono" style="font-weight:600;">Étape 0 sur 0</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-editor-panel" style="margin-bottom:28px;">
-        <div class="kpi-section-title">Jalons du planning</div>
-        <div class="kpi-section-sub">Les jalons s'affichent dans l'ordre ci-dessous sur la page Actualités.</div>
-        <div class="faq-card-list" id="planningMilestonesList" style="margin-top:20px;"></div>
-        <button type="button" class="admin-modal-cancel" id="addMilestoneBtn" style="flex:none; padding:0 20px; margin-top:16px;">+ Ajouter un jalon</button>
-      </div>
-
-      <div class="admin-editor-panel">
-        <div class="kpi-section-title">Articles — page Actualités</div>
-        <div class="kpi-section-sub">Les articles s'affichent dans l'ordre ci-dessous. Pour un sous-titre en gras dans le corps du texte, commence la ligne par "## ".</div>
-        <div class="faq-card-list" id="planningArticlesList" style="margin-top:20px;"></div>
-        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-          <button type="button" class="admin-modal-cancel" id="addArticleBtn" style="flex:none; padding:0 20px;">+ Ajouter un article</button>
-          <button type="button" class="search-btn" id="savePlanningBtn">Enregistrer le planning &amp; les actualités</button>
-        </div>
-      </div>`;
-
-    function refreshPlanningProgress() {
-      content.progress = computeProgressFromMilestones(content.milestones);
-      const fill = document.getElementById('adminPlanningProgressFill');
-      const pct = document.getElementById('adminPlanningProgressPct');
-      const step = document.getElementById('adminPlanningProgressStep');
-      if (fill) fill.style.width = `${content.progress.percent}%`;
-      if (pct) pct.textContent = `${content.progress.percent}%`;
-      if (step) step.textContent = `${content.progress.stepLine1} ${content.progress.stepLine2}`;
-    }
-
-    refreshPlanningProgress();
-
-    document.getElementById('addMilestoneBtn').addEventListener('click', () => {
-      const id = `jalon-${Date.now()}`;
-      const newMilestone = { id, status: 'future', date: '', label: 'Nouveau jalon', desc: '' };
-      content.milestones = [...content.milestones, newMilestone];
-      openMilestoneIds.add(id);
-      renderMilestonesList();
-      refreshPlanningProgress();
-      document.querySelector(`[data-milestone-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-
-    document.getElementById('addArticleBtn').addEventListener('click', () => {
-      const id = `article-${Date.now()}`;
-      const newArticle = { id, tag: '', date: '', title: 'Nouvel article', chapeau: '', body: '' };
-      content.articles = [newArticle, ...content.articles];
-      openArticleIds.add(id);
-      renderArticlesAdminList();
-      document.querySelector(`[data-article-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.querySelector(`[data-article-card="${id}"] input[data-article-field="title"]`)?.focus();
-    });
-
-    document.getElementById('savePlanningBtn').addEventListener('click', async () => {
-      const result = await saveContent(buildSavePayload(content));
-      if (handleSaveResult(result, 'Planning & Actualités enregistrés.')) {
-        renderMilestonesFront(content.milestones, content.progress);
-        renderArticlesFront(content.articles);
-      }
-    });
-
-    renderMilestonesList();
-    renderArticlesAdminList();
-  }
-
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — FAQ (préserve les champs avancés non affichés)
-  // ═══════════════════════════════════════════════════
-  // ═══════════════════════════════════════════════════
-  // IMPORT WORD — un .docx converti en cartes FAQ à valider
-  // Convention attendue : question en gras ou en titre, suivie
-  // du texte de la réponse en paragraphe(s) normal(aux).
-  // ═══════════════════════════════════════════════════
-  async function parseDocxToFaqEntries(file) {
-    if (typeof mammoth === 'undefined') {
-      throw new Error("La librairie de lecture Word n'a pas pu se charger — vérifie ta connexion.");
-    }
-    const arrayBuffer = await file.arrayBuffer();
-    const result = await mammoth.convertToHtml({ arrayBuffer });
-    const doc = new DOMParser().parseFromString(result.value, 'text/html');
-    const nodes = [...doc.body.children];
-
-    function isQuestionNode(el) {
-      const text = el.textContent.trim();
-      if (!text) return false;
-      if (/^H[1-6]$/.test(el.tagName)) return true;
-      if (el.tagName === 'P') {
-        const strongText = [...el.querySelectorAll('strong,b')].map(n => n.textContent).join('').trim();
-        return strongText.length > 0 && strongText.length >= text.length * 0.9;
-      }
-      return false;
-    }
-
-    const blocks = [];
-    let current = null;
-    nodes.forEach(el => {
-      const text = el.textContent.trim();
-      if (!text) return;
-      if (isQuestionNode(el)) {
-        current = { title: text, answerParts: [] };
-        blocks.push(current);
-      } else if (current) {
-        current.answerParts.push(text);
-      }
-    });
-
-    // Repli si aucun gras/titre détecté : un paragraphe = une question,
-    // à compléter manuellement ensuite (mieux que de ne rien importer).
-    if (!blocks.length) {
-      nodes.forEach(el => {
-        const text = el.textContent.trim();
-        if (text) blocks.push({ title: text, answerParts: [] });
-      });
-    }
-
-    return blocks
-      .filter(b => b.title)
-      .map((b, i) => ({
-        id: `import-${Date.now()}-${i}`,
-        title: b.title,
-        status: 'waiting',
-        statusLabel: 'En attente de décision',
-        category: '',
-        answer: b.answerParts.join('\n\n'),
-        note: '',
-        keywords: []
-      }));
-  }
-
-  // Comparaison de titres insensible aux accents/majuscules, en réutilisant
-  // le même normalisateur que le moteur de recherche public.
-  function isDuplicateTitle(title) {
-    const norm = normalize(title || '');
-    return norm.length > 0 && faqData.some(e => normalize(e.title || '') === norm);
-  }
-
-  function openImportReviewModal(imported) {
-    const modal = document.getElementById('importReviewModal');
-    const list  = document.getElementById('importReviewList');
-    const sub   = document.getElementById('importReviewSub');
-
-    const flagged = imported.map(entry => ({ entry, duplicate: isDuplicateTitle(entry.title) }));
-    const dupCount = flagged.filter(f => f.duplicate).length;
-
-    sub.textContent = `${imported.length} question${imported.length>1?'s':''} détectée${imported.length>1?'s':''} dans le document`
-      + (dupCount ? ` — ${dupCount} semble${dupCount>1?'nt':''} déjà présente${dupCount>1?'s':''} dans la FAQ (décochée${dupCount>1?'s':''} par défaut).` : '. Décoche ce que tu ne veux pas ajouter.');
-
-    list.innerHTML = flagged.map((f, i) => {
-      const preview = (f.entry.answer || 'Aucune réponse détectée sous cette question — à compléter manuellement.').slice(0, 150);
-      return `
-        <label class="import-review-row ${f.duplicate ? 'is-duplicate' : ''}">
-          <input type="checkbox" ${f.duplicate ? '' : 'checked'} data-import-index="${i}">
-          <div>
-            <div class="import-review-row-title">
-              ${escapeHtml(f.entry.title)}
-              ${f.duplicate ? '<span class="tag-pill" style="background:var(--cream-soft); color:var(--mustard);">Déjà présente</span>' : ''}
-            </div>
-            <div class="import-review-row-preview">${escapeHtml(preview)}${(f.entry.answer||'').length > 150 ? '…' : ''}</div>
-          </div>
-        </label>`;
-    }).join('');
-
-    modal.classList.add('open');
-
-    // onclick (plutôt qu'addEventListener) pour ne jamais empiler des
-    // écouteurs si la fenêtre de révision est ouverte plusieurs fois.
-    document.getElementById('importReviewCancel').onclick = () => modal.classList.remove('open');
-
-    document.getElementById('importReviewConfirm').onclick = async () => {
-      const checked = [...list.querySelectorAll('input[type="checkbox"]:checked')]
-        .map(cb => flagged[Number(cb.dataset.importIndex)].entry);
-      modal.classList.remove('open');
-      if (!checked.length) { showToast('Aucune question sélectionnée — import annulé.'); return; }
-      currentAdminContent.faqDrafts = [...checked, ...(currentAdminContent.faqDrafts || [])];
-      await saveContent(buildSavePayload(currentAdminContent));
-      showToast(`${checked.length} question${checked.length>1?'s':''} envoyée${checked.length>1?'s':''} en brouillon — à valider avant publication.`);
-      renderFaqEditor(currentAdminContent);
-      document.getElementById('faqDraftsZone')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-  }
-
-  const CATEGORY_LABELS = {
-    calendrier: 'Calendrier', logistique: 'Logistique', mobilite: 'Mobilité', rh: 'RH',
-    espaces: 'Espaces', services: 'Services', acces: 'Accès & sécurité', it: 'Informatique',
-    accompagnement: 'Accompagnement', communication: 'Communication', decouverte: 'Découverte du site'
-  };
-  function categoryLabel(cat) { return CATEGORY_LABELS[cat] || (cat ? cat : 'Non classée'); }
-
-  function renderFaqEditor(content) {
-    const container = document.getElementById('adminFaqEditor');
-    if (!container) return;
-
-    let activeFilter = 'all';
-    let activeCategory = 'all';
-    let searchTerm = '';
-    const openCardIds = new Set();  // cartes publiées actuellement dépliées
-    const draftOpenIds = new Set(); // brouillons actuellement dépliés
-    content.faqDrafts = content.faqDrafts || [];
-
-    function statusLabelFor(status) {
-      return status === 'confirmed' ? 'Réponse confirmée' : status === 'partial' ? 'Réponse partielle' : 'En attente de décision';
-    }
-
-    function knownCategories() {
-      const cats = new Set(Object.keys(CATEGORY_LABELS));
-      faqData.forEach(e => { if (e.category) cats.add(e.category); });
-      return [...cats];
-    }
-
-    function matchesFilters(entry) {
-      const filterOk   = activeFilter === 'all' || entry.status === activeFilter;
-      const catOk      = activeCategory === 'all' || (entry.category || '') === activeCategory;
-      const text = `${entry.title || ''} ${entry.answer || ''} ${(entry.keywords||[]).join(' ')}`.toLowerCase();
-      const searchOk = !searchTerm || text.includes(searchTerm.toLowerCase());
-      return filterOk && catOk && searchOk;
-    }
-
-    // Bloc de champs partagé entre les cartes publiées et les brouillons.
-    function fieldsBlockHtml(entry) {
-      return `
-        <label class="admin-editor-label">Titre / question</label>
-        <input type="text" class="form-input" data-faq-field="title" value="${escapeHtml(entry.title || '')}">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <div>
-            <label class="admin-editor-label">Statut</label>
-            <select class="form-input" data-faq-field="status">
-              <option value="confirmed" ${entry.status==='confirmed'?'selected':''}>Confirmée</option>
-              <option value="partial" ${entry.status==='partial'?'selected':''}>Partielle</option>
-              <option value="waiting" ${entry.status==='waiting'?'selected':''}>En attente</option>
-            </select>
-          </div>
-          <div>
-            <label class="admin-editor-label">Thématique</label>
-            <input type="text" class="form-input" list="faqCategoryOptions" data-faq-field="category" value="${escapeHtml(entry.category || '')}" placeholder="ex. mobilite">
-          </div>
-        </div>
-        <label class="admin-editor-label">Réponse</label>
-        <textarea class="form-input admin-editor-textarea" data-faq-field="answer">${escapeHtml(entry.answer || '')}</textarea>
-        <label class="admin-editor-label">Note complémentaire</label>
-        <textarea class="form-input admin-editor-textarea" data-faq-field="note">${escapeHtml(entry.note || '')}</textarea>
-        <label class="admin-editor-label">Mots-clés (séparés par des virgules)</label>
-        <input type="text" class="form-input" data-faq-field="keywords" value="${escapeHtml((entry.keywords||[]).join(', '))}">
-      `;
-    }
-
-    function bindFields(card, entry) {
-      card.querySelectorAll('[data-faq-field]').forEach(field => {
-        const evt = field.tagName === 'SELECT' ? 'change' : 'input';
-        field.addEventListener(evt, () => {
-          const key = field.dataset.faqField;
-          if (key === 'keywords') {
-            entry.keywords = field.value.split(',').map(v => v.trim()).filter(Boolean);
-          } else if (key === 'status') {
-            entry.status = field.value;
-            entry.statusLabel = statusLabelFor(entry.status);
-            const pill = card.querySelector('.status-pill');
-            if (pill) { pill.className = `status-pill ${entry.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}`; pill.textContent = statusLabelFor(entry.status); }
-          } else if (key === 'category') {
-            entry.category = field.value.trim();
-            // Le tag thématique affiché dans l'en-tête n'existe que sur les
-            // cartes publiées ; sa mise à jour visuelle est gérée séparément
-            // dans bindCard() pour ce cas précis.
-          } else {
-            entry[key] = field.value;
-            if (key === 'title') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans titre)'; }
-          }
-        });
-      });
-    }
-
-    // ── Cartes publiées (faqData, utilisées par le moteur de recherche) ──
-    function cardHtml(entry) {
-      const isOpen = openCardIds.has(entry.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-faq-card="${entry.id}">
-          <button type="button" class="faq-card-header" data-faq-toggle="${entry.id}">
-            <span class="status-pill ${entry.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}" style="margin-bottom:0;">${escapeHtml(statusLabelFor(entry.status))}</span>
-            <span class="tag-pill">${escapeHtml(categoryLabel(entry.category))}</span>
-            <span class="faq-card-title">${escapeHtml(entry.title || '(sans titre)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              ${fieldsBlockHtml(entry)}
-              <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="search-btn" data-faq-save="${entry.id}" style="height:38px; padding:0 18px;">Enregistrer et publier</button>
-                <button type="button" class="admin-delete-btn" data-faq-delete="${entry.id}" style="margin-top:0;">Supprimer cette entrée</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function bindCard(entry) {
-      const card = container.querySelector(`[data-faq-card="${entry.id}"]`);
-      if (!card) return;
-
-      card.querySelector('[data-faq-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openCardIds.add(entry.id); else openCardIds.delete(entry.id);
-      });
-
-      bindFields(card, entry);
-      // Rafraîchit le tag thématique affiché dans l'en-tête (spécifique aux cartes publiées).
-      card.querySelector('[data-faq-field="category"]').addEventListener('input', e => {
-        card.querySelector('.tag-pill').textContent = categoryLabel(e.target.value.trim());
-      });
-
-      card.querySelector('[data-faq-save]').addEventListener('click', async () => {
-        const result = await saveContent(buildSavePayload(content));
-        handleSaveResult(result, `« ${entry.title || 'Cette question'} » publiée.`);
-      });
-
-      card.querySelector('[data-faq-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement cette entrée FAQ ?')) return;
-        faqData = faqData.filter(e => e.id !== entry.id);
-        openCardIds.delete(entry.id);
-        renderList();
-      });
-    }
-
-    function renderList() {
-      const visible = faqData.filter(matchesFilters);
-      const listEl = document.getElementById('faqCardList');
-      const countEl = document.getElementById('faqCardCount');
-      if (countEl) countEl.textContent = `${visible.length} question${visible.length > 1 ? 's' : ''}`;
-      if (!listEl) return;
-      listEl.innerHTML = visible.length
-        ? visible.map(cardHtml).join('')
-        : '<div class="kpi-empty">Aucun résultat pour ce filtre ou cette recherche.</div>';
-      visible.forEach(bindCard);
-    }
-
-    // ── Brouillons (content.faqDrafts, jamais utilisés par la recherche) ──
-    function draftCardHtml(entry) {
-      const isOpen = draftOpenIds.has(entry.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-draft-card="${entry.id}">
-          <button type="button" class="faq-card-header" data-draft-toggle="${entry.id}">
-            <span class="tag-pill" style="background:var(--white); border:1px solid var(--sand); color:var(--olive);">Brouillon</span>
-            <span class="status-pill ${entry.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}" style="margin-bottom:0;">${escapeHtml(statusLabelFor(entry.status))}</span>
-            <span class="faq-card-title">${escapeHtml(entry.title || '(sans titre)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              ${fieldsBlockHtml(entry)}
-              <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="search-btn" data-draft-publish="${entry.id}" style="height:38px; padding:0 18px;">Publier dans la FAQ</button>
-                <button type="button" class="admin-delete-btn" data-draft-delete="${entry.id}" style="margin-top:0;">Supprimer ce brouillon</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }
-
-    function bindDraftCard(entry) {
-      const zone = document.getElementById('faqDraftsZone');
-      const card = zone?.querySelector(`[data-draft-card="${entry.id}"]`);
-      if (!card) return;
-
-      card.querySelector('[data-draft-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) draftOpenIds.add(entry.id); else draftOpenIds.delete(entry.id);
-      });
-
-      bindFields(card, entry);
-
-      card.querySelector('[data-draft-publish]').addEventListener('click', () => publishDraft(entry.id));
-      card.querySelector('[data-draft-delete]').addEventListener('click', async () => {
-        if (!confirm('Supprimer définitivement ce brouillon ?')) return;
-        content.faqDrafts = content.faqDrafts.filter(e => e.id !== entry.id);
-        draftOpenIds.delete(entry.id);
-        await saveContent(buildSavePayload(content));
-        renderDrafts();
-      });
-    }
-
-    async function publishDraft(id) {
-      const idx = content.faqDrafts.findIndex(e => e.id === id);
-      if (idx === -1) return;
-      const [entry] = content.faqDrafts.splice(idx, 1);
-      faqData = [entry, ...faqData];
-      draftOpenIds.delete(id);
-      const result = await saveContent(buildSavePayload(content));
-      handleSaveResult(result, `« ${entry.title || 'Cette question'} » publiée dans la FAQ.`);
-      renderDrafts();
-      renderList();
-    }
-
-    async function publishAllDrafts() {
-      if (!content.faqDrafts.length) return;
-      if (!confirm(`Publier les ${content.faqDrafts.length} brouillon${content.faqDrafts.length>1?'s':''} dans la FAQ ?`)) return;
-      faqData = [...content.faqDrafts, ...faqData];
-      content.faqDrafts = [];
-      const result = await saveContent(buildSavePayload(content));
-      handleSaveResult(result, 'Tous les brouillons ont été publiés.');
-      renderDrafts();
-      renderList();
-    }
-
-    function renderDrafts() {
-      const zone = document.getElementById('faqDraftsZone');
-      if (!zone) return;
-      const drafts = content.faqDrafts || [];
-      if (!drafts.length) { zone.innerHTML = ''; return; }
-      zone.innerHTML = `
-        <div class="faq-drafts-zone">
-          <div class="faq-drafts-header">
-            <div class="faq-drafts-title">${drafts.length} brouillon${drafts.length>1?'s':''} à valider avant publication</div>
-            <button type="button" class="search-btn" id="publishAllDraftsBtn" style="height:32px; padding:0 16px;">Tout publier</button>
-          </div>
-          <div class="faq-card-list">${drafts.map(draftCardHtml).join('')}</div>
-        </div>`;
-      document.getElementById('publishAllDraftsBtn').addEventListener('click', publishAllDrafts);
-      drafts.forEach(bindDraftCard);
-    }
-
-    const categories = knownCategories();
-
-    container.innerHTML = `
-      <div class="admin-editor-panel">
-        <div class="kpi-section-title">Gestion de la FAQ</div>
-        <div class="kpi-section-sub">Les brouillons importés depuis un Word apparaissent séparément ci-dessous, à valider avant de rejoindre la vraie FAQ.</div>
-
-        <div id="faqDraftsZone"></div>
-
-        <datalist id="faqCategoryOptions">${categories.map(c => `<option value="${escapeHtml(c)}">`).join('')}</datalist>
-
-        <div class="admin-filter-bar">
-          <input type="text" class="form-input admin-search-input" id="faqAdminSearchInput" placeholder="Rechercher dans le titre, la réponse, les mots-clés...">
-          <select class="form-input" id="faqCategoryFilter" style="width:auto; height:32px; padding:0 10px; font-size:0.75rem;">
-            <option value="all">Toutes les thématiques</option>
-            ${categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(categoryLabel(c))}</option>`).join('')}
-          </select>
-          <span class="admin-editor-head" id="faqCardCount" style="margin:0 0 0 auto;"></span>
-        </div>
-        <div class="admin-filter-bar" style="margin-top:0;">
-          ${['all','confirmed','partial','waiting'].map(f => `<button type="button" class="admin-filter-chip ${f==='all'?'active':''}" data-faq-filter="${f}">${f==='all'?'Tous les statuts':statusLabelFor(f)}</button>`).join('')}
-        </div>
-
-        <div class="faq-card-list" id="faqCardList"></div>
-        <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-          <button type="button" class="admin-modal-cancel" id="addFaqEntryBtn" style="flex:none; padding:0 20px;">+ Ajouter une question</button>
-          <button type="button" class="admin-modal-cancel" id="importFaqWordBtn" style="flex:none; padding:0 20px; display:inline-flex; align-items:center; gap:8px;">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-            Importer un fichier Word
-          </button>
-          <input type="file" id="importFaqWordInput" accept=".docx" style="display:none;">
-          <button type="button" class="search-btn" id="saveFaqContentBtn">Enregistrer la FAQ</button>
-          <button type="button" class="admin-reset" id="restoreFaqDefaultsBtn" style="margin-left:auto;">Restaurer les questions par défaut</button>
-        </div>
-      </div>`;
-
-    document.querySelectorAll('[data-faq-filter]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeFilter = btn.dataset.faqFilter;
-        document.querySelectorAll('[data-faq-filter]').forEach(b => b.classList.toggle('active', b === btn));
-        renderList();
-      });
-    });
-
-    document.getElementById('faqCategoryFilter').addEventListener('change', e => {
-      activeCategory = e.target.value;
-      renderList();
-    });
-
-    document.getElementById('faqAdminSearchInput').addEventListener('input', e => {
-      searchTerm = e.target.value;
-      renderList();
-    });
-
-    document.getElementById('addFaqEntryBtn').addEventListener('click', () => {
-      const id = `entree-${Date.now()}`;
-      const newEntry = { id, title: 'Nouvelle question', status: 'waiting', statusLabel: statusLabelFor('waiting'), category: '', answer: '', note: '', keywords: [] };
-      faqData = [newEntry, ...faqData];
-      openCardIds.add(id);
-      renderList();
-      document.querySelector(`[data-faq-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.querySelector(`[data-faq-card="${id}"] input[data-faq-field="title"]`)?.focus();
-    });
-
-    const importFaqWordInput = document.getElementById('importFaqWordInput');
-    document.getElementById('importFaqWordBtn').addEventListener('click', () => importFaqWordInput.click());
-    importFaqWordInput.addEventListener('change', async () => {
-      const file = importFaqWordInput.files[0];
-      importFaqWordInput.value = ''; // permet de réimporter le même fichier plus tard
-      if (!file) return;
-      showToast('Lecture du fichier Word en cours...');
-      try {
-        const imported = await parseDocxToFaqEntries(file);
-        if (!imported.length) {
-          showToast("Aucune question détectée dans ce fichier — vérifie la mise en forme (gras ou titre pour chaque question).");
-          return;
-        }
-        openImportReviewModal(imported);
-      } catch (err) {
-        console.error(err);
-        showToast("Échec de la lecture du fichier — vérifie que c'est bien un .docx valide.");
-      }
-    });
-
-    document.getElementById('saveFaqContentBtn').addEventListener('click', async () => {
-      const result = await saveContent(buildSavePayload(content));
-      handleSaveResult(result, 'FAQ enregistrée.');
-    });
-
-    document.getElementById('restoreFaqDefaultsBtn').addEventListener('click', () => {
-      if (!confirm("Remplacer la liste actuelle par la base de questions par défaut ? Toutes les modifications non enregistrées seront perdues.")) return;
-      faqData = JSON.parse(JSON.stringify(FAQ_BUILTIN_BACKUP));
-      openCardIds.clear();
-      renderFaqEditor(content); // re-render complet (les thématiques disponibles peuvent changer)
-      showToast('Questions par défaut restaurées — pense à cliquer sur "Enregistrer" pour les publier.');
-    });
-
-    renderDrafts();
-    renderList();
+    renderPublicManager();
+    renderFaqManager(faqDraft[0]?.id || '');
   }
 
   async function exportKpiToExcel() {
@@ -3912,12 +3424,9 @@ CALENDRIER
     wsTabs['!cols'] = [{ wch: 24 }, { wch: 16 }];
     XLSX.utils.book_append_sheet(wb, wsTabs, 'Consultations onglets');
 
-    // Feuille Articles — libellés dynamiques (contenu actuel du Planning & Actus)
-    const articleLabels = {};
-    (currentAdminContent?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
-    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
+    // Feuille Articles
     const artRows = [['Article', 'Ouvertures']];
-    [...articleIds].forEach(id => artRows.push([articleLabels[id] || `Article supprimé (${id})`, kpi.articleOpens[id] || 0]));
+    Object.keys(ARTICLE_LABELS).forEach(id => artRows.push([ARTICLE_LABELS[id], kpi.articleOpens[id] || 0]));
     const wsArt = XLSX.utils.aoa_to_sheet(artRows);
     wsArt['!cols'] = [{ wch: 50 }, { wch: 14 }];
     XLSX.utils.book_append_sheet(wb, wsArt, 'Articles');

@@ -1,0 +1,9 @@
+{
+  "name": "faq-poc-v2-kpis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local demo with admin password protection and server-side KPI storage.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
