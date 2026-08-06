@@ -1,232 +1,24 @@
-/*
-  STORM — RAINBOW GLASS MOTION
-  Module visuel indépendant : aucun appel API, aucune donnée métier.
-*/
+from pathlib import Path
+import re
+import sys
 
-(() => {
-  "use strict";
+ROOT = Path(__file__).resolve().parent
+INDEX_FILE = ROOT / "index.html"
+CSS_FILE = ROOT / "themes" / "rainbow-glass.css"
+JS_FILE = ROOT / "themes" / "rainbow-glass.js"
 
-  const body = document.body;
-  if (!body) return;
+V4_MARKER = "STORM RAINBOW GLASS — PERFORMANCE V4"
+V2_START = "/* =====================================================\n   STORM RAINBOW GLASS — COMPOSITION V2\n===================================================== */"
+V3_START = "/* =====================================================\n   STORM RAINBOW GLASS — FAQ MOTION V3"
 
-  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const compactQuery = window.matchMedia("(max-width: 700px)");
-
-  const depthGroups = {
-    far: [
-      ".page:not(#page-admin) > .hero",
-      "#page-faq .contact-section"
-    ],
-    mid: [
-      "#page-faq .results-zone",
-      "#page-actu .timeline-block",
-      "#page-plans .plans-grid",
-      "#page-ambassadeurs .people-grid",
-      "#page-equipe .team-grid"
-    ],
-    near: [
-      "#page-faq .search-panel",
-      "#page-actu .articles-block",
-      "#page-plans .plans-toolbar"
-    ]
-  };
-
-  const glassSelectors = [
-    ".nav",
-    ".page:not(#page-admin) > .hero",
-    "#page-faq .search-card",
-    "#page-faq .state-box",
-    "#page-faq .contact-grid",
-    "#page-actu .timeline-side",
-    "#page-actu .article",
-    "#page-plans .plan-card",
-    "#page-plans .plan-upload-note",
-    "#page-ambassadeurs .person-card",
-    "#page-equipe .team-card",
-    ".page:not(#page-admin) .parella-intro",
-    ".page:not(#page-admin) .info-block"
-  ];
-
-  let glassIndex = 0;
-
-  function markDepthTargets(root = document) {
-    Object.entries(depthGroups).forEach(([depth, selectors]) => {
-      selectors.forEach(selector => {
-        root.querySelectorAll(selector).forEach(element => {
-          if (element.closest("#page-admin")) return;
-          if (element.classList.contains("reveal")) return;
-          element.dataset.rgDepth = depth;
-        });
-      });
-    });
-  }
-
-  function markGlassTargets(root = document) {
-    glassSelectors.forEach(selector => {
-      root.querySelectorAll(selector).forEach(element => {
-        if (element.closest("#page-admin")) return;
-        if (element.hasAttribute("data-rg-glass")) return;
-
-        element.setAttribute("data-rg-glass", "");
-        const phase = ((glassIndex * 13) % 34) - 17;
-        element.style.setProperty("--rg-prism-phase", phase + "%");
-        glassIndex += 1;
-      });
-    });
-  }
-
-  function refreshTargets(root = document) {
-    markDepthTargets(root);
-    markGlassTargets(root);
-  }
-
-  let targetScroll = window.scrollY;
-  let smoothScroll = targetScroll;
-  let previousTarget = targetScroll;
-  let velocity = 0;
-  let frameId = null;
-
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-
-  function themeIsActive() {
-    return body.classList.contains("theme-rainbow-glass") &&
-      !body.classList.contains("storm-admin-open");
-  }
-
-  function getActivePageProgress() {
-    const activePage = document.querySelector(".page.active:not(#page-admin)");
-    if (!activePage) return 0;
-
-    const rect = activePage.getBoundingClientRect();
-    const availableTravel = Math.max(rect.height - window.innerHeight, 1);
-    return clamp(-rect.top / availableTravel, 0, 1);
-  }
-
-  function resetMotion() {
-    body.style.setProperty("--rg-shift-far", "0px");
-    body.style.setProperty("--rg-shift-mid", "0px");
-    body.style.setProperty("--rg-shift-near", "0px");
-    body.style.setProperty("--rg-atmosphere-y", "0px");
-    body.style.setProperty("--rg-prism-opacity", "0.06");
-  }
-
-  function renderMotion() {
-    frameId = null;
-
-    if (!themeIsActive() || reduceMotionQuery.matches) {
-      resetMotion();
-      return;
-    }
-
-    const mobileFactor = compactQuery.matches ? 0.36 : 1;
-
-    smoothScroll += (targetScroll - smoothScroll) * 0.105;
-
-    const scrollImpulse = targetScroll - previousTarget;
-    velocity += (scrollImpulse - velocity) * 0.12;
-    velocity *= 0.88;
-    previousTarget = targetScroll;
-
-    const progress = getActivePageProgress();
-    const boundedVelocity = clamp(velocity, -34, 34);
-
-    const far = clamp(
-      ((progress - 0.5) * -18 + boundedVelocity * 0.13) * mobileFactor,
-      -11,
-      11
-    );
-
-    const mid = clamp(
-      ((progress - 0.5) * -11 + boundedVelocity * 0.085) * mobileFactor,
-      -7,
-      7
-    );
-
-    const near = clamp(
-      ((progress - 0.5) * -6 + boundedVelocity * 0.05) * mobileFactor,
-      -4,
-      4
-    );
-
-    const atmosphere = clamp(
-      ((progress - 0.5) * -24) * mobileFactor,
-      -14,
-      14
-    );
-
-    const prismX = clamp(
-      15 + progress * 70 + boundedVelocity * 0.42,
-      10,
-      90
-    );
-
-    const prismOpacity = clamp(
-      0.085 + Math.abs(boundedVelocity) * 0.0065,
-      0.085,
-      0.28
-    );
-
-    body.style.setProperty("--rg-shift-far", far.toFixed(2) + "px");
-    body.style.setProperty("--rg-shift-mid", mid.toFixed(2) + "px");
-    body.style.setProperty("--rg-shift-near", near.toFixed(2) + "px");
-    body.style.setProperty("--rg-atmosphere-y", atmosphere.toFixed(2) + "px");
-    body.style.setProperty("--rg-prism-x", prismX.toFixed(2) + "%");
-    body.style.setProperty("--rg-prism-opacity", prismOpacity.toFixed(3));
-
-    const unsettled =
-      Math.abs(targetScroll - smoothScroll) > 0.12 ||
-      Math.abs(velocity) > 0.12;
-
-    if (unsettled) {
-      frameId = window.requestAnimationFrame(renderMotion);
-    }
-  }
-
-  function requestMotionUpdate() {
-    targetScroll = window.scrollY;
-    if (!frameId) frameId = window.requestAnimationFrame(renderMotion);
-  }
-
-  window.addEventListener("scroll", requestMotionUpdate, { passive: true });
-  window.addEventListener("resize", requestMotionUpdate, { passive: true });
-
-  reduceMotionQuery.addEventListener?.("change", requestMotionUpdate);
-  compactQuery.addEventListener?.("change", requestMotionUpdate);
-
-  document.addEventListener("storm-theme-change", () => {
-    refreshTargets();
-    requestMotionUpdate();
-  });
-
-  if (window.MutationObserver) {
-    const observer = new MutationObserver(mutations => {
-      let shouldRefresh = false;
-
-      for (const mutation of mutations) {
-        if (mutation.type === "childList" && mutation.addedNodes.length) {
-          shouldRefresh = true;
-          break;
-        }
-      }
-
-      if (shouldRefresh) {
-        refreshTargets();
-        requestMotionUpdate();
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  refreshTargets();
-  requestMotionUpdate();
-})();
-
-/* =====================================================
+V2_JS_OPTIMIZED = r'''/* =====================================================
    STORM RAINBOW GLASS — COMPOSITION V2
+   VERSION OPTIMISÉE V4
+
+   - aucune seconde requête vers /api/content ;
+   - aucune reconstruction au retour de focus ;
+   - aucun MutationObserver global ;
+   - chaque page est enrichie seulement quand cela est utile.
 ===================================================== */
 
 (() => {
@@ -245,9 +37,9 @@
     article: `<svg viewBox="0 0 24 24"><ellipse cx="10.4" cy="12" rx="6.2" ry="8"></ellipse><ellipse cx="14.2" cy="12" rx="5.4" ry="7"></ellipse><path d="M8.5 8.5h5.5M8.5 12h6.5M8.5 15.5h4"></path></svg>`
   };
 
-  let cachedContent = null;
-  let refreshPromise = null;
-  let mutationFrame = null;
+  let cachedContent = window.__stormPublicContent || null;
+  let scheduledFrame = 0;
+  let lastHomeSignature = "";
 
   function isActive() {
     return body.classList.contains("theme-rainbow-glass") &&
@@ -263,31 +55,68 @@
       .replace(/'/g, "&#039;");
   }
 
-  async function fetchContent() {
-    try {
-      const response = await fetch("/api/content", { cache: "no-store" });
-      if (!response.ok) throw new Error("Contenu indisponible");
-      cachedContent = await response.json();
-    } catch (error) {
-      console.warn("Rainbow Glass V2 : chargement du contenu impossible.", error);
-      cachedContent = cachedContent || {};
-    }
-    return cachedContent;
+  function text(selector, root = document) {
+    return root.querySelector(selector)?.textContent?.trim() || "";
   }
 
-  function refreshContent() {
-    if (!refreshPromise) {
-      refreshPromise = fetchContent().finally(() => {
-        refreshPromise = null;
-      });
-    }
-    return refreshPromise;
+  function snapshotFromDom() {
+    const planningStep = document.getElementById("planningStep");
+    const stepParts = planningStep
+      ? planningStep.innerHTML.split(/<br\s*\/?\s*>/i).map(part => part.replace(/<[^>]*>/g, "").trim())
+      : [];
+
+    const percentText = text("#planningPct").replace(/[^0-9]/g, "");
+    const percent = Number(percentText);
+
+    const articles = Array.from(document.querySelectorAll("#page-actu #articlesList .article"))
+      .map(article => ({
+        id: article.dataset.article || "",
+        tag: text(".tag-pill", article),
+        date: text(".article-date", article),
+        title: text(".article-title", article)
+      }))
+      .filter(article => article.id || article.title);
+
+    const ambassadors = Array.from(document.querySelectorAll("#page-ambassadeurs .person-card"))
+      .map(card => ({
+        initials: text(".person-avatar", card),
+        name: text(".person-name", card)
+      }))
+      .filter(person => person.initials || person.name);
+
+    return {
+      progress: {
+        stepLine1: stepParts[0] || "Étape 3",
+        stepLine2: stepParts[1] || "sur 6",
+        percent: Number.isFinite(percent) ? percent : 42
+      },
+      articles,
+      ambassadors
+    };
+  }
+
+  function getContentSnapshot() {
+    const dom = snapshotFromDom();
+    const source = cachedContent || {};
+
+    return {
+      ...source,
+      progress: dom.progress,
+      articles: dom.articles.length ? dom.articles : (Array.isArray(source.articles) ? source.articles : []),
+      ambassadors: dom.ambassadors.length ? dom.ambassadors : (Array.isArray(source.ambassadors) ? source.ambassadors : [])
+    };
   }
 
   function addGlass(element, phase = 0) {
     if (!element) return;
     element.setAttribute("data-rg-glass", "");
     element.style.setProperty("--rg-prism-phase", `${phase}%`);
+  }
+
+  function emitDomUpdated(root = document) {
+    document.dispatchEvent(new CustomEvent("storm-rg-dom-updated", {
+      detail: { root }
+    }));
   }
 
   function navigate(pageId) {
@@ -309,7 +138,7 @@
       const button = article.querySelector(".article-header-btn");
       if (button && !article.classList.contains("open")) button.click();
       article.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 140);
+    }, 120);
   }
 
   function getProgress(content) {
@@ -325,16 +154,9 @@
   }
 
   function getAmbassadors(content) {
-    const fromApi = Array.isArray(content?.ambassadors)
+    return Array.isArray(content?.ambassadors)
       ? content.ambassadors.filter(item => item && (item.initials || item.name))
       : [];
-    if (fromApi.length) return fromApi;
-
-    return Array.from(document.querySelectorAll("#page-ambassadeurs .person-card"))
-      .map(card => ({
-        initials: card.querySelector(".person-avatar")?.textContent?.trim() || "",
-        name: card.querySelector(".person-name")?.textContent?.trim() || ""
-      }));
   }
 
   function createRail(content) {
@@ -471,9 +293,20 @@
     composition.remove();
   }
 
-  function buildHome(content) {
+  function homeSignature(content) {
+    const progress = getProgress(content);
+    const articles = Array.isArray(content?.articles) ? content.articles.slice(0, 2) : [];
+    const ambassadors = getAmbassadors(content).slice(0, 4);
+    return JSON.stringify({ progress, articles, ambassadors });
+  }
+
+  function buildHome(content, force = false) {
     const page = document.getElementById("page-faq");
     if (!page) return;
+
+    const signature = homeSignature(content);
+    const existing = document.getElementById("rg2HomeComposition");
+    if (existing && !force && signature === lastHomeSignature) return;
 
     teardownHome();
 
@@ -501,6 +334,10 @@
     stream.appendChild(createExplore());
 
     composition.insertAdjacentElement("afterend", stream);
+    lastHomeSignature = signature;
+
+    emitDomUpdated(page);
+    document.dispatchEvent(new CustomEvent("storm-rg-home-ready"));
   }
 
   function addNavIcons() {
@@ -525,7 +362,10 @@
   }
 
   function enhanceArticles() {
-    const articles = Array.from(document.querySelectorAll("#page-actu #articlesList .article"));
+    const root = document.getElementById("articlesList");
+    if (!root) return;
+
+    const articles = Array.from(root.querySelectorAll(".article"));
     articles.forEach((article, index) => {
       article.classList.toggle("rg2-article-primary", index === 0);
       article.classList.toggle("rg2-article-secondary", index !== 0);
@@ -543,92 +383,101 @@
       }
       if (index !== 0) orbit?.remove();
     });
+
+    emitDomUpdated(root);
   }
 
   function enhancePlans() {
-    document.querySelectorAll("#page-plans .plan-card").forEach((card, index) => {
+    const root = document.querySelector("#page-plans .plans-grid");
+    if (!root) return;
+    root.querySelectorAll(".plan-card").forEach((card, index) => {
       addGlass(card, ((index * 9) % 30) - 15);
     });
+    emitDomUpdated(root);
   }
 
-  function enhanceProfiles() {
-    document.querySelectorAll("#page-ambassadeurs .person-card").forEach((card, index) => {
+  function enhanceProfiles(pageId, selector) {
+    const root = document.querySelector(`#page-${pageId} ${selector}`);
+    if (!root) return;
+    const cardSelector = pageId === "ambassadeurs" ? ".person-card" : ".team-card";
+    root.querySelectorAll(cardSelector).forEach((card, index) => {
       card.classList.toggle("rg2-profile-featured", index < 2);
       addGlass(card, ((index * 7) % 30) - 15);
     });
+    emitDomUpdated(root);
+  }
 
-    document.querySelectorAll("#page-equipe .team-card").forEach((card, index) => {
-      card.classList.toggle("rg2-profile-featured", index < 2);
-      addGlass(card, ((index * 7) % 30) - 15);
-    });
+  function enhancePage(pageId) {
+    if (!isActive()) return;
+    if (pageId === "actu") enhanceArticles();
+    if (pageId === "plans") enhancePlans();
+    if (pageId === "ambassadeurs") enhanceProfiles("ambassadeurs", ".people-grid");
+    if (pageId === "equipe") enhanceProfiles("equipe", ".team-grid");
   }
 
   function removeEnhancements() {
     teardownHome();
+    lastHomeSignature = "";
     document.querySelectorAll(".rg2-nav-icon,.rg2-article-orbit").forEach(item => item.remove());
     document.querySelectorAll(".rg2-article-primary,.rg2-article-secondary,.rg2-profile-featured").forEach(item => {
-      item.classList.remove("rg2-article-primary","rg2-article-secondary","rg2-profile-featured");
+      item.classList.remove("rg2-article-primary", "rg2-article-secondary", "rg2-profile-featured");
     });
   }
 
-  async function applyEnhancements(refresh = false) {
+  function applyEnhancements(forceHome = false) {
     if (!isActive()) {
       removeEnhancements();
       return;
     }
 
-    if (refresh || !cachedContent) await refreshContent();
-
+    const content = getContentSnapshot();
     addNavIcons();
-    buildHome(cachedContent || {});
-    enhanceArticles();
-    enhancePlans();
-    enhanceProfiles();
+    buildHome(content, forceHome);
+
+    const activePage = document.querySelector(".page.active")?.id?.replace(/^page-/, "");
+    if (activePage) enhancePage(activePage);
   }
 
-  function scheduleEnhancement() {
-    if (mutationFrame) return;
-    mutationFrame = requestAnimationFrame(() => {
-      mutationFrame = null;
-      if (!isActive()) return;
-      enhanceArticles();
-      enhancePlans();
-      enhanceProfiles();
+  function scheduleApply(forceHome = false) {
+    if (scheduledFrame) cancelAnimationFrame(scheduledFrame);
+    scheduledFrame = requestAnimationFrame(() => {
+      scheduledFrame = 0;
+      applyEnhancements(forceHome);
     });
   }
 
-  function init() {
-    applyEnhancements(true);
+  document.addEventListener("storm-public-content-ready", event => {
+    cachedContent = event.detail?.content || window.__stormPublicContent || cachedContent;
+    scheduleApply(true);
+  });
 
-    document.addEventListener("storm-theme-change", () => {
-      setTimeout(() => applyEnhancements(true), 0);
-    });
+  document.addEventListener("storm-theme-change", () => {
+    scheduleApply(false);
+  });
 
-    document.querySelectorAll(".nav-tab[data-page]").forEach(tab => {
-      tab.addEventListener("click", () => {
-        if (tab.dataset.page === "faq") {
-          setTimeout(() => applyEnhancements(true), 100);
+  document.querySelectorAll(".nav-tab[data-page]").forEach(tab => {
+    tab.addEventListener("click", () => {
+      const pageId = tab.dataset.page;
+      requestAnimationFrame(() => {
+        if (!isActive()) return;
+        if (pageId === "faq") {
+          buildHome(getContentSnapshot(), false);
+          document.dispatchEvent(new CustomEvent("storm-rg-home-ready"));
         } else {
-          setTimeout(scheduleEnhancement, 100);
+          enhancePage(pageId);
         }
       });
     });
+  });
 
-    if (window.MutationObserver) {
-      const observer = new MutationObserver(scheduleEnhancement);
-      [
-        document.getElementById("articlesList"),
-        document.querySelector("#page-plans .plans-grid"),
-        document.querySelector("#page-ambassadeurs .people-grid"),
-        document.querySelector("#page-equipe .team-grid")
-      ].filter(Boolean).forEach(target => {
-        observer.observe(target, { childList: true, subtree: true });
-      });
+  function init() {
+    cachedContent = window.__stormPublicContent || cachedContent;
+    if (cachedContent) {
+      scheduleApply(false);
+    } else {
+      /* Filet de sécurité : aucun fetch supplémentaire. */
+      window.setTimeout(() => scheduleApply(false), 350);
     }
-
-    window.addEventListener("focus", () => {
-      if (isActive()) applyEnhancements(true);
-    });
   }
 
   if (document.readyState === "loading") {
@@ -636,11 +485,11 @@
   } else {
     init();
   }
-})();
+})();'''
 
-/* =====================================================
+V3_JS_OPTIMIZED = r'''/* =====================================================
    STORM RAINBOW GLASS — FAQ MOTION V3
-   Replace dynamiquement la réponse avant « À la une ».
+   VERSION OPTIMISÉE V4
 ===================================================== */
 
 (() => {
@@ -650,8 +499,8 @@
   if (!body) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let resultObserver = null;
-  let closeTimer = null;
+  let stateObservers = [];
+  let closeTimer = 0;
   let hasAutoScrolledForCurrentOpen = false;
 
   function isRainbowActive() {
@@ -722,11 +571,6 @@
       return;
     }
 
-    /*
-      Lorsqu'une nouvelle recherche remplace l'ancienne, le code principal
-      masque d'abord l'ancien état puis affiche le nouveau 90 ms plus tard.
-      Ce délai évite que le panneau se referme brièvement entre les deux.
-    */
     window.clearTimeout(closeTimer);
     closeTimer = window.setTimeout(() => {
       if (!visibleStateExists(results)) {
@@ -737,50 +581,234 @@
   }
 
   function observeResults() {
+    stateObservers.forEach(observer => observer.disconnect());
+    stateObservers = [];
+
     const results = getResultsZone();
     if (!results) return;
 
-    resultObserver?.disconnect();
-    resultObserver = new MutationObserver(syncResultState);
-    resultObserver.observe(results, {
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["class", "style"]
+    results.querySelectorAll(".state-box").forEach(box => {
+      const observer = new MutationObserver(syncResultState);
+      observer.observe(box, {
+        attributes: true,
+        attributeFilter: ["class", "style"]
+      });
+      stateObservers.push(observer);
     });
 
     syncResultState();
   }
 
   function refresh() {
-    window.setTimeout(() => {
+    requestAnimationFrame(() => {
       placeResultsBeforeFeatured();
       observeResults();
-    }, 0);
+    });
   }
 
+  document.addEventListener("storm-rg-home-ready", refresh);
   document.addEventListener("storm-theme-change", refresh);
-
-  document.querySelectorAll('.nav-tab[data-page="faq"]').forEach(tab => {
-    tab.addEventListener("click", () => window.setTimeout(refresh, 140));
-  });
-
-  /*
-    La V2 reconstruit la composition de l'accueil à certains moments.
-    On replace donc la zone de réponse après chaque reconstruction.
-  */
-  if (window.MutationObserver) {
-    const page = document.getElementById("page-faq");
-    if (page) {
-      const homeObserver = new MutationObserver(() => {
-        if (isRainbowActive()) placeResultsBeforeFeatured();
-      });
-      homeObserver.observe(page, { childList: true });
-    }
-  }
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", refresh, { once: true });
   } else {
     refresh();
   }
-})();
+})();'''
+
+V4_CSS = r'''
+/* =====================================================
+   STORM RAINBOW GLASS — PERFORMANCE V4
+===================================================== */
+
+/* Un calque GPU permanent n'est pas nécessaire pour ce bloc. */
+body.theme-rainbow-glass:not(.storm-admin-open) #page-faq .rg2-home-stream {
+  will-change: auto;
+}
+
+/* Isolation des gros panneaux pour limiter la zone à repeindre. */
+body.theme-rainbow-glass:not(.storm-admin-open) :where(
+  .rg2-home-composition,
+  .rg2-home-stream,
+  .rg2-home-rail,
+  .rg2-stream-panel,
+  #page-faq > .results-zone.rg3-inline-results
+) {
+  contain: layout paint;
+}
+
+/* Les contenus hors écran sont préparés seulement lorsqu'ils approchent du viewport. */
+body.theme-rainbow-glass:not(.storm-admin-open) :where(
+  #page-faq .contact-section,
+  #page-actu .articles-block,
+  #page-plans .plans-grid,
+  #page-ambassadeurs .people-grid,
+  #page-equipe .team-grid
+) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+
+/* Réduction du coût des filtres sur petits écrans. */
+@media (max-width: 700px) {
+  body.theme-rainbow-glass:not(.storm-admin-open) :where(
+    .rg2-home-rail,
+    .rg2-stream-panel,
+    #page-faq > .results-zone.rg3-inline-results .state-box,
+    #page-actu .article,
+    #page-plans .plan-card,
+    #page-ambassadeurs .person-card,
+    #page-equipe .team-card
+  ) {
+    backdrop-filter: blur(13px) saturate(118%);
+    -webkit-backdrop-filter: blur(13px) saturate(118%);
+  }
+}
+'''
+
+
+def fail(message: str) -> None:
+    print(f"ERREUR : {message}")
+    sys.exit(1)
+
+
+def patch_index(text: str) -> tuple[str, bool]:
+    if "storm-public-content-ready" in text and "window.__stormPublicContent = content" in text:
+        return text, False
+
+    pattern = re.compile(
+        r"(\s+renderMilestonesFront\(content\.milestones, content\.progress\);\s*\n"
+        r"\s+renderArticlesFront\(content\.articles\);)(\s*\n\s+trackVisit\(\);)",
+        re.MULTILINE,
+    )
+
+    replacement = (
+        r"\1\n"
+        r"    window.__stormPublicContent = content;\n"
+        r"    document.dispatchEvent(new CustomEvent('storm-public-content-ready', {\n"
+        r"      detail: { content }\n"
+        r"    }));\2"
+    )
+
+    patched, count = pattern.subn(replacement, text, count=1)
+    if count != 1:
+        fail(
+            "Je n'ai pas trouvé le bloc de chargement initial dans index.html. "
+            "Le fichier a peut-être changé depuis la dernière version."
+        )
+
+    return patched, True
+
+
+def replace_v2_and_v3(js: str) -> str:
+    v2_pos = js.find(V2_START)
+    if v2_pos < 0:
+        fail("Bloc JavaScript V2 introuvable dans themes/rainbow-glass.js.")
+
+    v3_pos = js.find(V3_START, v2_pos + len(V2_START))
+    if v3_pos < 0:
+        fail("Bloc JavaScript V3 introuvable dans themes/rainbow-glass.js.")
+
+    before_v2 = js[:v2_pos].rstrip()
+    v3_block = js[v3_pos:]
+
+    # Le bloc V3 est le dernier IIFE du fichier dans la version installée.
+    # On le remplace entièrement par la version optimisée.
+    optimized = (
+        before_v2
+        + "\n\n"
+        + V2_JS_OPTIMIZED.strip()
+        + "\n\n"
+        + V3_JS_OPTIMIZED.strip()
+        + "\n"
+    )
+    return optimized
+
+
+def optimize_motion_observer(js: str) -> str:
+    old = r'''  if (window.MutationObserver) {
+    const observer = new MutationObserver(mutations => {
+      let shouldRefresh = false;
+
+      for (const mutation of mutations) {
+        if (mutation.type === "childList" && mutation.addedNodes.length) {
+          shouldRefresh = true;
+          break;
+        }
+      }
+
+      if (shouldRefresh) {
+        refreshTargets();
+        requestMotionUpdate();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  refreshTargets();
+  requestMotionUpdate();'''
+
+    new = r'''  document.addEventListener("storm-rg-dom-updated", event => {
+    const root = event.detail?.root;
+    refreshTargets(root instanceof Element ? root : document);
+    requestMotionUpdate();
+  });
+
+  document.addEventListener("storm-rg-home-ready", () => {
+    refreshTargets(document.getElementById("page-faq") || document);
+    requestMotionUpdate();
+  });
+
+  refreshTargets();
+  requestMotionUpdate();'''
+
+    if old not in js:
+        fail("Le MutationObserver global du module de mouvement est introuvable.")
+    return js.replace(old, new, 1)
+
+
+def main() -> None:
+    for path in (INDEX_FILE, CSS_FILE, JS_FILE):
+        if not path.exists():
+            fail(f"Fichier introuvable : {path.relative_to(ROOT)}")
+
+    index_text = INDEX_FILE.read_text(encoding="utf-8")
+    css_text = CSS_FILE.read_text(encoding="utf-8")
+    js_text = JS_FILE.read_text(encoding="utf-8")
+
+    if V4_MARKER in css_text:
+        print("La correction Performance V4 est déjà installée.")
+        return
+
+    patched_index, index_changed = patch_index(index_text)
+    patched_js = replace_v2_and_v3(js_text)
+    patched_js = optimize_motion_observer(patched_js)
+    patched_css = css_text.rstrip() + "\n\n" + V4_CSS.strip() + "\n"
+
+    INDEX_FILE.write_text(patched_index, encoding="utf-8")
+    JS_FILE.write_text(patched_js, encoding="utf-8")
+    CSS_FILE.write_text(patched_css, encoding="utf-8")
+
+    print("Rainbow Glass Performance V4 installé avec succès.")
+    print("")
+    print("Optimisations appliquées :")
+    print("- suppression de la requête /api/content en double ;")
+    print("- suppression des reconstructions au retour de focus ;")
+    print("- suppression des MutationObserver globaux ;")
+    print("- enrichissement des pages uniquement au moment utile ;")
+    print("- conservation de À la une, des icônes et de la motion FAQ.")
+    print("")
+    print("Fichiers modifiés :")
+    print("- index.html" if index_changed else "- index.html : déjà prêt")
+    print("- themes/rainbow-glass.js")
+    print("- themes/rainbow-glass.css")
+    print("")
+    print("Redémarre le serveur puis recharge avec Ctrl+Shift+R.")
+
+
+if __name__ == "__main__":
+    main()
