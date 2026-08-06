@@ -497,6 +497,7 @@
     margin-bottom:6px;
   }
   .milestone.future .milestone-label { color:var(--ink-50); font-weight:400; }
+  .milestone-step { font-size:0.64rem; color:var(--ink-35); margin-bottom:6px; }
   .milestone-desc { font-size:0.85rem; color:var(--ink-50); line-height:1.65; max-width:520px; }
 
   /* Articles */
@@ -876,8 +877,8 @@
   }
   .faq-card-header .status-pill { flex-shrink:0; }
   .milestone-badge {
-    font-size:0.72rem; font-weight:700; color:var(--ink-45);
-    background:var(--ink-05); border:1px solid var(--ink-08);
+    font-size:0.72rem; font-weight:700; color:var(--ink-50);
+    background:var(--ink-08); border:1px solid var(--ink-12);
     border-radius:999px; padding:6px 10px; white-space:nowrap;
   }
   .faq-card-title { flex:1; font-size:0.88rem; font-weight:600; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1097,7 +1098,7 @@
 
 </div>
 
-<!-- ═══════════════════ PAGES STUB (à décliner ensuite) ═══════════════════ -->
+<!-- ═══════════════════ PAGE : ACTUALITÉS ═══════════════════ -->
 <div class="page" id="page-actu">
 
   <section class="hero hero--compact">
@@ -1127,6 +1128,8 @@
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════ PAGE : PLANS & 3D ═══════════════════ -->
 <div class="page" id="page-plans">
 
   <section class="hero hero--compact">
@@ -1138,117 +1141,12 @@
   </section>
 
   <div class="section-body">
-
-    <div class="plans-toolbar reveal" data-reveal>
-      <button class="filter-pill active" data-filter="all">Tous</button>
-      <button class="filter-pill" data-filter="Plan">Plans</button>
-      <button class="filter-pill" data-filter="3D">Vues 3D</button>
-      <button class="filter-pill" data-filter="Macro-zoning">Macro-zoning</button>
-      <button class="filter-pill" data-filter="Micro-zoning">Micro-zoning</button>
-      <button class="filter-pill" data-filter="Ambiance">Ambiances</button>
-      <button class="filter-pill" data-filter="Concentration">Concentration</button>
-    </div>
-
-    <div class="plans-grid" id="plansGrid">
-
-      <div class="plan-card reveal" style="--i:0" data-reveal data-tags="Plan Macro-zoning">
-        <button class="plan-visual" aria-label="Agrandir : Plan macro-zoning, vue générale niveau R+1">
-          <img src="Plan.jpg" alt="Plan macro-zoning R+1">
-          <span class="plan-type-badge">Plan</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Macro-zoning</span></div>
-          <div class="plan-title">Plan macro-zoning — vue générale niveau R+1</div>
-          <p class="plan-comment">Ce plan présente la répartition grande maille des usages sur le niveau R+1, principal plateau de travail du site. Les zones colorées correspondent aux grandes familles d'usages : bleu clair pour les espaces de travail ouverts, bleu foncé pour les zones de concentration, vert pour les espaces collaboratifs, ocre pour les salles de réunion formelle, orange pour les cabines phoniques en accès libre. Le niveau est organisé autour d'une colonne vertébrale centrale qui sépare les espaces de concentration (côté nord) des espaces collaboratifs (côté sud, plus lumineux). On remarque la densité des cabines phoniques : neuf cabines réparties sur l'ensemble du plateau, soit une cabine pour environ vingt postes — un ratio volontairement généreux. L'implantation précise des équipes sur ce plateau n'est pas encore arrêtée et sera co-construite dans les ateliers d'avril.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-      <div class="plan-card reveal" style="--i:1" data-reveal data-tags="3D Ambiance">
-        <button class="plan-visual" aria-label="Agrandir : Vue 3D, espace de convivialité central">
-          <img src="Vue3D.jpg" alt="Vue 3D convivialité">
-          <span class="plan-type-badge">3D</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Ambiance</span></div>
-          <div class="plan-title">Vue 3D — espace de convivialité central</div>
-          <p class="plan-comment">Cet espace de 180 m² est conçu pour être le cœur battant du site. Lumineux, ouvert, il accueillera les pauses, les déjeuners informels et les échanges spontanés entre équipes. Le mobilier est volontairement mixte : tables hautes pour les échanges debout, assises basses pour les moments détendus, coins semi-privatifs délimités par des cloisons végétalisées. L'îlot central accueille les équipements de restauration légère. Les matériaux — bois clair, béton poncé, végétation intérieure, textile acoustique — créent une ambiance chaleureuse tout en maintenant le temps de réverbération sous 0,6 seconde.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-      <div class="plan-card reveal" style="--i:2" data-reveal data-tags="Plan Micro-zoning">
-        <button class="plan-visual" aria-label="Agrandir : Plan micro-zoning, équipe Finance (exemple)">
-          <span class="plan-placeholder">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="10" x2="10" y2="21"/></svg>
-            <span class="plan-placeholder-label">Plan · Finance (exemple)</span>
-          </span>
-          <span class="plan-type-badge">Plan</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Micro-zoning</span></div>
-          <div class="plan-title">Plan micro-zoning — équipe Finance &amp; Contrôle de gestion (exemple)</div>
-          <p class="plan-comment">Ce plan de détail est présenté à titre d'exemple pour illustrer le niveau de précision des plans de micro-zoning par équipe. Il ne reflète pas l'implantation définitive — celle-ci sera construite dans l'atelier dédié, prévu mi-avril. On distingue 24 postes organisés en îlots de 4, séparés par des cloisons basses (H.140 cm), deux cabines phoniques à moins de 15 mètres de tout poste, une salle de réunion attenante de 6 personnes, et un espace de rangement avec casiers individuels nominatifs. L'orientation des îlots, la position des cloisons et l'attribution des casiers peuvent être ajustés dans l'atelier.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-      <div class="plan-card reveal" style="--i:0" data-reveal data-tags="3D Concentration">
-        <button class="plan-visual" aria-label="Agrandir : Vue 3D, cabine phonique et zone de focus">
-          <span class="plan-placeholder">
-            <svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2" y="13" width="4" height="7" rx="1.2"/><rect x="18" y="13" width="4" height="7" rx="1.2"/></svg>
-            <span class="plan-placeholder-label">Vue 3D · Zone de focus</span>
-          </span>
-          <span class="plan-type-badge">3D</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Concentration</span></div>
-          <div class="plan-title">Vue 3D — cabine phonique et zone de focus</div>
-          <p class="plan-comment">Cette vue présente les deux dispositifs les plus attendus : les cabines phoniques individuelles et la zone de focus collective. Chaque cabine fait environ 2 m², équipée d'un siège ergonomique, d'un écran externe (USB-C), d'une ventilation silencieuse et d'un éclairage variable. Isolation acoustique : Rw 38 dB. Accès libre sans réservation, voyant vert/rouge visible depuis l'extérieur. La zone de focus adjacente est régie par des règles strictes : silence complet, pas de téléphone, pas de conversations. Délimitée par un changement de revêtement de sol et une signalétique discrète.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-      <div class="plan-card reveal" style="--i:1" data-reveal data-tags="Plan Macro-zoning">
-        <button class="plan-visual" aria-label="Agrandir : Plan macro-zoning, rez-de-chaussée complet">
-          <span class="plan-placeholder">
-            <svg viewBox="0 0 24 24"><path d="M4 21V9l8-5 8 5v12"/><line x1="4" y1="21" x2="20" y2="21"/><line x1="10" y1="21" x2="10" y2="14" /><line x1="14" y1="21" x2="14" y2="14"/></svg>
-            <span class="plan-placeholder-label">Plan · Rez-de-chaussée</span>
-          </span>
-          <span class="plan-type-badge">Plan</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Macro-zoning</span></div>
-          <div class="plan-title">Plan macro-zoning — rez-de-chaussée complet</div>
-          <p class="plan-comment">Le rez-de-chaussée concentre les fonctions d'accueil et de services. On y trouve : l'accueil principal avec contrôle d'accès par badge, un espace restauration de 400 m² (120 couverts + terrasse extérieure 60 places), trois salles de réunion grandes capacités (20, 30 et 40 personnes) accessibles sans badge, le point colis (accès 24h/24), la salle de sport et les vestiaires (sous-sol), et le local vélos sécurisé (accès direct depuis la rue). Les modalités de fonctionnement de l'espace restauration — self, formule plateau, commande digitale — ne sont pas encore arrêtées.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-      <div class="plan-card reveal" style="--i:2" data-reveal data-tags="3D Ambiance">
-        <button class="plan-visual" aria-label="Agrandir : Vue 3D, hall d'entrée depuis l'accueil">
-          <span class="plan-placeholder">
-            <svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/></svg>
-            <span class="plan-placeholder-label">Vue 3D · Hall d'entrée</span>
-          </span>
-          <span class="plan-type-badge">3D</span>
-        </button>
-        <div class="plan-info">
-          <div class="plan-tags"><span class="tag-pill">Ambiance</span></div>
-          <div class="plan-title">Vue 3D — hall d'entrée depuis l'accueil</div>
-          <p class="plan-comment">Le hall est traversé par une lumière naturelle zénithale provenant d'une verrière d'environ 80 m² située au-dessus de la double hauteur centrale (6,5 m). Les matériaux — pierre claire au sol, béton ciré sur les parties structurelles, panneau bois sur les cloisons légères — créent une ambiance à la fois minérale et chaleureuse. L'escalier principal, généreusement dimensionné (2,4 m de largeur), est visible depuis l'entrée pour encourager son usage. Lors des premières semaines, une équipe d'accueil renforcée sera présente en déambulation pour orienter les collaborateurs et faciliter la prise en main du site.</p>
-          <button class="plan-more">Lire la suite ↓</button>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="plan-upload-note reveal" data-reveal>
-      <strong>Pour ajouter un visuel :</strong> déposez votre image (PNG, JPG ou PDF) dans le dossier <code>images/</code> de votre repo GitHub, puis référencez-la dans le code en remplaçant le bloc <code>.plan-placeholder</code> par une balise <code>&lt;img src="images/mon-fichier.png"&gt;</code> dans la carte correspondante.
-    </div>
-
+    <div class="plans-toolbar reveal" data-reveal id="plansFilterBar"></div>
+    <div class="plans-grid" id="plansGrid"></div>
   </div>
 </div>
+
+<!-- ═══════════════════ PAGE : AMBASSADEURS ═══════════════════ -->
 <div class="page" id="page-ambassadeurs">
 
   <section class="hero hero--compact">
@@ -1260,110 +1158,14 @@
   </section>
 
   <div class="section-body">
-
-    <div class="intro-block reveal" data-reveal>
-      <p><strong>Quel est leur rôle exactement ?</strong><br><br>
-      Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.<br><br>
-      Concrètement, ils font trois choses : ils <strong>relaient les informations</strong> du projet au plus près de leurs collègues, ils <strong>remontent les questions et préoccupations</strong> du terrain vers l'équipe projet via un canal dédié, et ils <strong>participent à la co-construction</strong> des usages et des règles de vie sur le nouveau site.<br><br>
-      Si vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.</p>
-    </div>
-
-    <div class="people-label mono reveal" data-reveal>20 ambassadeurs — toutes directions</div>
-    <div class="people-grid">
-
-      <div class="person-card reveal" style="--i:0" data-reveal>
-        <div class="person-avatar">SL</div>
-        <div class="person-name">Sophie Lecomte</div>
-        <div class="person-role">Responsable comptabilité clients</div>
-        <span class="tag-pill">Finance</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:1" data-reveal>
-        <div class="person-avatar">TM</div>
-        <div class="person-name">Thomas Meunier</div>
-        <div class="person-role">Chargé de développement RH</div>
-        <span class="tag-pill">Ressources humaines</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:2" data-reveal>
-        <div class="person-avatar">AL</div>
-        <div class="person-name">Amina Laaroussi</div>
-        <div class="person-role">Chef de projet digital</div>
-        <span class="tag-pill">Marketing</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:3" data-reveal>
-        <div class="person-avatar">PD</div>
-        <div class="person-name">Pierre Dumont</div>
-        <div class="person-role">Ingénieur infrastructure</div>
-        <span class="tag-pill">DSI</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:0" data-reveal>
-        <div class="person-avatar">CR</div>
-        <div class="person-name">Claire Renard</div>
-        <div class="person-role">Juriste droit des affaires</div>
-        <span class="tag-pill">Juridique</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:1" data-reveal>
-        <div class="person-avatar">JB</div>
-        <div class="person-name">Julien Berger</div>
-        <div class="person-role">Responsable supply chain</div>
-        <span class="tag-pill">Opérations</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:2" data-reveal>
-        <div class="person-avatar">NF</div>
-        <div class="person-name">Nathalie Ferrand</div>
-        <div class="person-role">Assistante de direction</div>
-        <span class="tag-pill">Direction générale</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:3" data-reveal>
-        <div class="person-avatar">KD</div>
-        <div class="person-name">Karim Djebbar</div>
-        <div class="person-role">Analyste financier senior</div>
-        <span class="tag-pill">Contrôle de gestion</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:0" data-reveal>
-        <div class="person-avatar">MB</div>
-        <div class="person-name">Marie Blanchard</div>
-        <div class="person-role">Responsable formation</div>
-        <span class="tag-pill">Ressources humaines</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:1" data-reveal>
-        <div class="person-avatar">RP</div>
-        <div class="person-name">Romain Petit</div>
-        <div class="person-role">Développeur back-end</div>
-        <span class="tag-pill">DSI</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:2" data-reveal>
-        <div class="person-avatar">LV</div>
-        <div class="person-name">Laura Vasseur</div>
-        <div class="person-role">Chargée de communication interne</div>
-        <span class="tag-pill">Communication</span>
-      </div>
-
-      <div class="person-card reveal" style="--i:3" data-reveal>
-        <div class="person-avatar">FB</div>
-        <div class="person-name">François Bouchard</div>
-        <div class="person-role">Responsable maintenance</div>
-        <span class="tag-pill">Services généraux</span>
-      </div>
-
-    </div>
-
-    <div class="info-block reveal" data-reveal>
-      <div class="info-block-title">Vous souhaitez devenir ambassadeur ?</div>
-      <p>Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.</p>
-    </div>
-
+    <div class="intro-block reveal" data-reveal id="ambassadorsIntroBlock"></div>
+    <div class="people-label mono reveal" data-reveal id="ambassadorsRosterLabel"></div>
+    <div class="people-grid" id="ambassadorsGrid"></div>
+    <div class="info-block reveal" data-reveal id="ambassadorsCtaBlock"></div>
   </div>
 </div>
+
+<!-- ═══════════════════ PAGE : ÉQUIPE PROJET ═══════════════════ -->
 <div class="page" id="page-equipe">
 
   <section class="hero hero--compact">
@@ -1375,128 +1177,14 @@
   </section>
 
   <div class="section-body">
-
     <div class="section-separator mono reveal" data-reveal>Équipe XYZ — Pilotage interne</div>
-
-    <div class="team-grid">
-      <div class="team-card reveal" style="--i:0" data-reveal>
-        <div class="team-avatar">SC</div>
-        <div class="team-info">
-          <div class="team-name">Stéphanie Collet</div>
-          <div class="team-title">Directrice des Ressources Humaines — Cheffe de projet</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:1" data-reveal>
-        <div class="team-avatar">BM</div>
-        <div class="team-info">
-          <div class="team-name">Bruno Marchand</div>
-          <div class="team-title">Directeur Immobilier &amp; Services Généraux</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:2" data-reveal>
-        <div class="team-avatar">EG</div>
-        <div class="team-info">
-          <div class="team-name">Élodie Garnier</div>
-          <div class="team-title">RRH — Accompagnement au changement &amp; communication projet</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:0" data-reveal>
-        <div class="team-avatar">OT</div>
-        <div class="team-info">
-          <div class="team-name">Olivier Thibaut</div>
-          <div class="team-title">Responsable logistique &amp; coordination déménagement</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:1" data-reveal>
-        <div class="team-avatar">CV</div>
-        <div class="team-info">
-          <div class="team-name">Céline Vidal</div>
-          <div class="team-title">DSI — Référente IT du projet</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:2" data-reveal>
-        <div class="team-avatar">LP</div>
-        <div class="team-info">
-          <div class="team-name">Laurent Peyre</div>
-          <div class="team-title">Responsable travaux &amp; coordination technique site</div>
-          <span class="team-badge xyz">XYZ</span>
-        </div>
-      </div>
-    </div>
+    <div class="team-grid" id="teamXyzGrid"></div>
 
     <div class="section-separator mono reveal" data-reveal style="margin-top:16px;">Cabinet Parella — Conseil &amp; accompagnement</div>
+    <div class="parella-intro reveal" data-reveal id="parellaIntroBlock"></div>
+    <div class="team-grid" id="teamParellaGrid"></div>
 
-    <div class="parella-intro reveal" data-reveal>
-      <div class="parella-icon">
-        <svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/></svg>
-      </div>
-      <div class="parella-text">
-        <strong>Parella</strong> est le cabinet de conseil en immobilier de travail qui accompagne XYZ dans la conception des espaces, l'animation des ateliers de co-construction et la conduite du changement. Son équipe travaille en binôme avec l'équipe projet interne depuis le début du cadrage.
-      </div>
-    </div>
-
-    <div class="team-grid">
-      <div class="team-card reveal" style="--i:0" data-reveal>
-        <div class="team-avatar parella">MH</div>
-        <div class="team-info">
-          <div class="team-name">Mathieu Hernandez</div>
-          <div class="team-title">Associé — Directeur de mission</div>
-          <span class="team-badge parella">Parella</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:1" data-reveal>
-        <div class="team-avatar parella">IR</div>
-        <div class="team-info">
-          <div class="team-name">Isabelle Rousseau</div>
-          <div class="team-title">Manager — Conduite du changement &amp; communication</div>
-          <span class="team-badge parella">Parella</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:2" data-reveal>
-        <div class="team-avatar parella">AK</div>
-        <div class="team-info">
-          <div class="team-name">Antoine Keller</div>
-          <div class="team-title">Consultant senior — Design des espaces de travail</div>
-          <span class="team-badge parella">Parella</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:0" data-reveal>
-        <div class="team-avatar parella">SN</div>
-        <div class="team-info">
-          <div class="team-name">Sara Nguyen</div>
-          <div class="team-title">Consultante — Animation ateliers &amp; diagnostic usage</div>
-          <span class="team-badge parella">Parella</span>
-        </div>
-      </div>
-
-      <div class="team-card reveal" style="--i:1" data-reveal>
-        <div class="team-avatar parella">GF</div>
-        <div class="team-info">
-          <div class="team-name">Guillaume Faure</div>
-          <div class="team-title">Consultant — Programmation immobilière &amp; zoning</div>
-          <span class="team-badge parella">Parella</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-block reveal" data-reveal style="margin-top:16px;">
-      <div class="info-block-title">Une question pour l'équipe projet ?</div>
-      <p>Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
-    </div>
-
+    <div class="info-block reveal" data-reveal style="margin-top:16px;" id="teamCtaBlock"></div>
   </div>
 </div>
 
@@ -1573,6 +1261,14 @@
           <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           Planning &amp; Actus
         </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="team">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Ambassadeurs &amp; Équipe
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="visuals">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5-4 4-3-3-5 5"/></svg>
+          Plans &amp; 3D
+        </button>
         <button type="button" class="admin-nav-item" data-admin-panel="faq">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           FAQ
@@ -1638,6 +1334,14 @@
         <div id="adminPlanningEditor"></div>
       </div>
 
+      <div class="admin-panel hidden" id="adminPanelTeam">
+        <div id="adminTeamEditor"></div>
+      </div>
+
+      <div class="admin-panel hidden" id="adminPanelVisuals">
+        <div id="adminVisualsEditor"></div>
+      </div>
+
       <div class="admin-panel hidden" id="adminPanelFaq">
         <div id="adminFaqEditor"></div>
       </div>
@@ -1662,9 +1366,6 @@
   const navInnerEl  = document.getElementById('navInner');
   const navIndicator = document.getElementById('navIndicator');
 
-  // ═══════════════════════════════════════════════════
-  // SESSION — identifiant anonyme pour compter les visites uniques
-  // ═══════════════════════════════════════════════════
   const CLIENT_SESSION_KEY = 'xyz_client_session_id';
   function getClientSessionId() {
     let sessionId = localStorage.getItem(CLIENT_SESSION_KEY);
@@ -1675,20 +1376,11 @@
     return sessionId;
   }
 
-  // ═══════════════════════════════════════════════════
-  // JETON ADMIN — envoyé sur les appels qui modifient des données
-  // ═══════════════════════════════════════════════════
   const ADMIN_TOKEN_KEY = 'xyz_admin_token';
   function getAdminToken() { return sessionStorage.getItem(ADMIN_TOKEN_KEY) || ''; }
   function setAdminToken(token) { sessionStorage.setItem(ADMIN_TOKEN_KEY, token); }
   function clearAdminToken() { sessionStorage.removeItem(ADMIN_TOKEN_KEY); }
 
-  // ═══════════════════════════════════════════════════
-  // KPI — capture des interactions, agrégée côté serveur
-  // (fichiers JSON gérés par server.js). Le suivi (track) est
-  // ouvert à tous les visiteurs ; la lecture/réinitialisation
-  // passe par le jeton admin.
-  // ═══════════════════════════════════════════════════
   const KPI_DEFAULT_STATE = { faqAsked: [], tabViews: {}, articleOpens: {}, contactSubmissions: [], visitSessions: [] };
 
   async function loadKpi() {
@@ -1731,8 +1423,7 @@
   }
 
   // ═══════════════════════════════════════════════════
-  // CONTENU PUBLIC + FAQ + PLANNING/ACTUS — chargé/sauvegardé
-  // côté serveur
+  // CONTENU PUBLIC + FAQ + PLANNING/ACTUS + AMBASSADEURS/ÉQUIPE/PLANS
   // ═══════════════════════════════════════════════════
   async function loadContent() {
     try {
@@ -1746,17 +1437,23 @@
         faqDrafts: Array.isArray(data.faqDrafts) ? data.faqDrafts : [],
         progress: data.progress && typeof data.progress === 'object' ? data.progress : { stepLine1: '', stepLine2: '', percent: 0 },
         milestones: Array.isArray(data.milestones) ? data.milestones : [],
-        articles: Array.isArray(data.articles) ? data.articles : []
+        articles: Array.isArray(data.articles) ? data.articles : [],
+        ambassadorsContent: data.ambassadorsContent && typeof data.ambassadorsContent === 'object' ? data.ambassadorsContent : {},
+        ambassadors: Array.isArray(data.ambassadors) ? data.ambassadors : [],
+        teamContent: data.teamContent && typeof data.teamContent === 'object' ? data.teamContent : {},
+        team: Array.isArray(data.team) ? data.team : [],
+        plans: Array.isArray(data.plans) ? data.plans : []
       };
     } catch (e) {
       console.warn('Impossible de charger le contenu serveur :', e);
-      return { branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, publicContent: {}, faqEntries: [], faqDrafts: [], progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [] };
+      return {
+        branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, publicContent: {}, faqEntries: [], faqDrafts: [],
+        progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [],
+        ambassadorsContent: {}, ambassadors: [], teamContent: {}, team: [], plans: []
+      };
     }
   }
 
-  // Construit le payload complet envoyé à /api/content — regroupé ici pour
-  // qu'aucun appel de sauvegarde (contenu public, FAQ ou planning) n'oublie
-  // un des blocs de contenu et n'écrase les autres par erreur.
   function buildSavePayload(content) {
     return {
       branding: content.branding,
@@ -1765,11 +1462,15 @@
       faqDrafts: content.faqDrafts,
       progress: content.progress,
       milestones: content.milestones,
-      articles: content.articles
+      articles: content.articles,
+      ambassadorsContent: content.ambassadorsContent,
+      ambassadors: content.ambassadors,
+      teamContent: content.teamContent,
+      team: content.team,
+      plans: content.plans
     };
   }
 
-  // Renvoie { ok, unauthorized } — unauthorized permet d'inviter à se reconnecter
   async function saveContent(contentState) {
     try {
       const res = await fetch('/api/content', {
@@ -1787,9 +1488,6 @@
     }
   }
 
-  // Envoie un fichier (image ou PDF) au serveur, encodé en base64 — pas
-  // besoin de gérer du multipart côté serveur. Retourne { ok, url } ou
-  // { ok:false, unauthorized } / { ok:false, error }.
   function uploadFile(file) {
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -1820,8 +1518,6 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // Reconstruit le HTML du titre (ligne + mot en accent) à partir de champs
-  // texte simples — jamais de HTML stocké ni saisi par l'éditeur.
   function applyPublicContent(publicContent) {
     const scopes = {
       faq:          { root: '#page-faq' },
@@ -1882,9 +1578,6 @@
     }
   }
 
-  // ═══════════════════════════════════════════════════
-  // TOAST — confirmation discrète
-  // ═══════════════════════════════════════════════════
   let toastTimer = null;
   function showToast(message) {
     const toast = document.getElementById('toast');
@@ -1922,9 +1615,6 @@
     if (active) positionIndicator(active);
   });
 
-  // Les polices Google Fonts se chargent après le premier rendu : une fois
-  // chargées, la largeur du texte des onglets change légèrement, donc on
-  // repositionne la barre pour qu'elle reste alignée.
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
       const active = document.querySelector('.nav-tab.active');
@@ -1932,8 +1622,6 @@
     });
   }
 
-  // Filet de sécurité : recalcule si la taille d'un onglet change pour
-  // toute autre raison (zoom, contenu dynamique, etc.).
   if (window.ResizeObserver) {
     const navResizeObserver = new ResizeObserver(() => {
       const active = document.querySelector('.nav-tab.active');
@@ -1942,9 +1630,6 @@
     document.querySelectorAll('.nav-tab').forEach(t => navResizeObserver.observe(t));
   }
 
-  // ═══════════════════════════════════════════════════
-  // REVEAL AU CHARGEMENT + AU SCROLL
-  // ═══════════════════════════════════════════════════
   let revealObserver = null;
   function initReveal() {
     revealObserver = new IntersectionObserver((entries) => {
@@ -1955,17 +1640,11 @@
     document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
   }
 
-  // À appeler après avoir injecté du contenu dynamique (jalons, articles...)
-  // pour que ces nouveaux éléments profitent du même effet de reveal au
-  // scroll que le contenu statique.
   function observeNewReveals(container) {
     if (!revealObserver || !container) return;
     container.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
   }
 
-  // Révèle immédiatement ce qui est déjà au-dessus de la ligne de flottaison
-  // au moment où un onglet devient actif (l'IntersectionObserver seul ne
-  // suffit pas car les pages inactives sont en display:none).
   function revealVisibleNow(container) {
     container.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => {
       const rect = el.getBoundingClientRect();
@@ -1985,19 +1664,17 @@
     applyBranding(content.branding);
     renderMilestonesFront(content.milestones, content.progress);
     renderArticlesFront(content.articles);
+    renderPlansFront(content.plans);
+    renderAmbassadorsFront(content);
+    renderTeamFront(content);
     window.__stormPublicContent = content;
     document.dispatchEvent(new CustomEvent('storm-public-content-ready', {
       detail: { content }
     }));
     trackVisit();
-    trackTabView('faq'); // onglet actif par défaut au chargement
+    trackTabView('faq');
   });
 
-  // ═══════════════════════════════════════════════════
-  // PLANNING & ACTUALITÉS — rendu public (page Actualités)
-  // Le contenu (jalons, avancement, articles) vient du CMS ; cette
-  // section ne fait que l'afficher et brancher les interactions.
-  // ═══════════════════════════════════════════════════
   const MILESTONE_STATUS_MAP = {
     done:    { cls: 'status-confirmed', label: 'Terminé' },
     current: { cls: 'status-pending',   label: 'En cours' },
@@ -2008,12 +1685,10 @@
     const items = milestones || [];
     const total = items.length;
     if (!total) return { stepLine1: 'Étape 0', stepLine2: 'sur 0', percent: 0 };
-
     const doneCount = items.filter(m => m.status === 'done').length;
     const currentIndex = items.findIndex(m => m.status === 'current');
     const stepNumber = currentIndex >= 0 ? currentIndex + 1 : Math.min(doneCount + 1, total);
     const percent = Math.round(((doneCount + (currentIndex >= 0 ? 0.5 : 0)) / total) * 100);
-
     return {
       stepLine1: `Étape ${stepNumber}`,
       stepLine2: `sur ${total}`,
@@ -2049,8 +1724,6 @@
     observeNewReveals(list);
   }
 
-  // Convention d'écriture pour les articles : une ligne commençant par
-  // "## " devient un sous-titre en gras — pas de HTML à saisir côté admin.
   function articleBodyToHtml(text) {
     const escaped = escapeHtml(text || '');
     return escaped.split('\n').map(line => {
@@ -2094,35 +1767,186 @@
     observeNewReveals(listEl);
   }
 
-  // ═══════════════════════════════════════════════════
-  // FILTRES PLANS (page Plans & 3D)
-  // ═══════════════════════════════════════════════════
-  document.querySelectorAll(".filter-pill").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filter-pill").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      const filter = btn.dataset.filter;
-      document.querySelectorAll(".plan-card").forEach(card => {
-        card.style.display = (filter === "all" || card.dataset.tags.includes(filter)) ? "" : "none";
+  function richTextToHtml(text) {
+    const escaped = escapeHtml(text || '');
+    return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  function initialsFromName(name) {
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return '?';
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  function isPdfUrl(url) { return /\.pdf($|\?)/i.test(url || ''); }
+
+  const PDF_ICON_SVG = '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+
+  function planCardHtml(plan, index) {
+    const url = plan.imageUrl || '';
+    const isPdf = isPdfUrl(url);
+    const tagsArr = String(plan.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+    const dataTags = [plan.type, ...tagsArr].filter(Boolean).join(' ');
+
+    let visualInner;
+    if (url && isPdf) {
+      visualInner = `<span class="plan-placeholder"><span class="pdf-chip">${PDF_ICON_SVG}<span>Document PDF</span></span><span class="plan-placeholder-label">Cliquer pour ouvrir</span></span>`;
+    } else if (url) {
+      visualInner = `<img src="${escapeHtml(url)}" alt="${escapeHtml(plan.title || '')}">`;
+    } else {
+      visualInner = `<span class="plan-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5-4 4-3-3-5 5"/></svg><span class="plan-placeholder-label">Visuel à venir</span></span>`;
+    }
+
+    return `
+      <div class="plan-card reveal" style="--i:${index}" data-reveal data-tags="${escapeHtml(dataTags)}" data-plan-id="${escapeHtml(plan.id)}" data-is-pdf="${isPdf ? '1' : ''}">
+        <button class="plan-visual" aria-label="${isPdf ? 'Ouvrir le document' : 'Agrandir'} : ${escapeHtml(plan.title || '')}">
+          ${visualInner}
+          <span class="plan-type-badge">${escapeHtml(plan.type || '')}</span>
+        </button>
+        <div class="plan-info">
+          <div class="plan-tags">${tagsArr.map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>
+          <div class="plan-title">${escapeHtml(plan.title || '')}</div>
+          <p class="plan-comment">${escapeHtml(plan.comment || '')}</p>
+          <button class="plan-more">Lire la suite ↓</button>
+        </div>
+      </div>`;
+  }
+
+  function renderPlansFront(plans) {
+    const items = plans || [];
+    const filterBar = document.getElementById('plansFilterBar');
+    const grid = document.getElementById('plansGrid');
+    if (!grid) return;
+
+    const tagSet = new Set();
+    items.forEach(p => {
+      if (p.type) tagSet.add(p.type);
+      String(p.tags || '').split(',').map(t => t.trim()).filter(Boolean).forEach(t => tagSet.add(t));
+    });
+    const allTags = [...tagSet].sort((a, b) => a.localeCompare(b, 'fr'));
+
+    if (filterBar) {
+      filterBar.innerHTML = [`<button class="filter-pill active" data-filter="all">Tous</button>`]
+        .concat(allTags.map(t => `<button class="filter-pill" data-filter="${escapeHtml(t)}">${escapeHtml(t)}</button>`))
+        .join('');
+
+      filterBar.querySelectorAll('.filter-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBar.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter;
+          grid.querySelectorAll('.plan-card').forEach(card => {
+            card.style.display = (filter === 'all' || (card.dataset.tags || '').includes(filter)) ? '' : 'none';
+          });
+        });
+      });
+    }
+
+    grid.innerHTML = items.map((p, i) => planCardHtml(p, i)).join('');
+
+    grid.querySelectorAll('.plan-more').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const card = btn.closest('.plan-card');
+        card.classList.toggle('expanded');
+        btn.textContent = card.classList.contains('expanded') ? 'Réduire ↑' : 'Lire la suite ↓';
       });
     });
-  });
 
-  // ═══════════════════════════════════════════════════
-  // LIRE LA SUITE (plans)
-  // ═══════════════════════════════════════════════════
-  document.querySelectorAll(".plan-more").forEach(btn => {
-    btn.addEventListener("click", e => {
-      e.stopPropagation();
-      const card = btn.closest(".plan-card");
-      card.classList.toggle("expanded");
-      btn.textContent = card.classList.contains("expanded") ? "Réduire ↑" : "Lire la suite ↓";
+    grid.querySelectorAll('.plan-visual').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.plan-card');
+        if (card.dataset.isPdf) {
+          const plan = items.find(p => p.id === card.dataset.planId);
+          if (plan?.imageUrl) window.open(plan.imageUrl, '_blank');
+          return;
+        }
+        openLightbox(card);
+      });
     });
-  });
 
-  // ═══════════════════════════════════════════════════
-  // LIGHTBOX — PAN + ZOOM (page Plans & 3D)
-  // ═══════════════════════════════════════════════════
+    observeNewReveals(grid);
+  }
+
+  function personCardHtml(person, index) {
+    const avatarInner = person.imageUrl
+      ? `<img src="${escapeHtml(person.imageUrl)}" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`
+      : escapeHtml(person.initials || initialsFromName(person.name));
+    return `
+      <div class="person-card reveal" style="--i:${index % 4}" data-reveal>
+        <div class="person-avatar">${avatarInner}</div>
+        <div class="person-name">${escapeHtml(person.name || '')}</div>
+        <div class="person-role">${escapeHtml(person.role || '')}</div>
+        <span class="tag-pill">${escapeHtml(person.tag || '')}</span>
+      </div>`;
+  }
+
+  function renderAmbassadorsFront(content) {
+    const intro = content.ambassadorsContent || {};
+    const list = content.ambassadors || [];
+
+    const introBlock = document.getElementById('ambassadorsIntroBlock');
+    if (introBlock) {
+      introBlock.innerHTML = `<p>${intro.introTitle ? `<strong>${escapeHtml(intro.introTitle)}</strong>\n\n` : ''}${richTextToHtml(intro.introBody || '')}</p>`;
+    }
+
+    const rosterLabel = document.getElementById('ambassadorsRosterLabel');
+    if (rosterLabel) rosterLabel.textContent = `${list.length} ambassadeur${list.length > 1 ? 's' : ''}${intro.rosterLabel ? ' — ' + intro.rosterLabel : ''}`;
+
+    const grid = document.getElementById('ambassadorsGrid');
+    if (grid) {
+      grid.innerHTML = list.map((p, i) => personCardHtml(p, i)).join('');
+      observeNewReveals(grid);
+    }
+
+    const ctaBlock = document.getElementById('ambassadorsCtaBlock');
+    if (ctaBlock) {
+      ctaBlock.innerHTML = `<div class="info-block-title">${escapeHtml(intro.ctaTitle || '')}</div><p>${richTextToHtml(intro.ctaBody || '')}</p>`;
+    }
+  }
+
+  function teamCardHtml(person, index) {
+    const isParella = person.badge === 'Parella';
+    const avatarInner = person.imageUrl
+      ? `<img src="${escapeHtml(person.imageUrl)}" alt="" style="width:100%; height:100%; object-fit:cover; border-radius:10px;">`
+      : escapeHtml(person.initials || initialsFromName(person.name));
+    return `
+      <div class="team-card reveal" style="--i:${index % 3}" data-reveal>
+        <div class="team-avatar${isParella ? ' parella' : ''}">${avatarInner}</div>
+        <div class="team-info">
+          <div class="team-name">${escapeHtml(person.name || '')}</div>
+          <div class="team-title">${escapeHtml(person.title || '')}</div>
+          <span class="team-badge${isParella ? ' parella' : ' xyz'}">${isParella ? 'Parella' : 'XYZ'}</span>
+        </div>
+      </div>`;
+  }
+
+  function renderTeamFront(content) {
+    const teamContent = content.teamContent || {};
+    const team = content.team || [];
+    const xyz = team.filter(t => t.badge !== 'Parella');
+    const parella = team.filter(t => t.badge === 'Parella');
+
+    const xyzGrid = document.getElementById('teamXyzGrid');
+    if (xyzGrid) { xyzGrid.innerHTML = xyz.map((p, i) => teamCardHtml(p, i)).join(''); observeNewReveals(xyzGrid); }
+
+    const parellaIntroBlock = document.getElementById('parellaIntroBlock');
+    if (parellaIntroBlock) {
+      parellaIntroBlock.innerHTML = `
+        <div class="parella-icon"><svg viewBox="0 0 24 24"><path d="M3 21V10l9-7 9 7v11"/><path d="M9 21v-6h6v6"/></svg></div>
+        <div class="parella-text">${richTextToHtml(teamContent.parellaIntro || '')}</div>`;
+    }
+
+    const parellaGrid = document.getElementById('teamParellaGrid');
+    if (parellaGrid) { parellaGrid.innerHTML = parella.map((p, i) => teamCardHtml(p, i)).join(''); observeNewReveals(parellaGrid); }
+
+    const ctaBlock = document.getElementById('teamCtaBlock');
+    if (ctaBlock) {
+      ctaBlock.innerHTML = `<div class="info-block-title">${escapeHtml(teamContent.ctaTitle || '')}</div><p>${richTextToHtml(teamContent.ctaBody || '')}</p>`;
+    }
+  }
+
   const lightbox      = document.getElementById("lightbox");
   const lightboxStage = document.getElementById("lightboxStage");
   const lightboxWrap  = document.getElementById("lightboxWrap");
@@ -2224,7 +2048,6 @@
 
   function closeLightbox() { lightbox.classList.remove("open"); document.body.style.overflow=""; }
 
-  document.querySelectorAll(".plan-visual").forEach(v=>{v.addEventListener("click",()=>openLightbox(v.closest(".plan-card")));});
   lightboxClose.addEventListener("click",closeLightbox);
   lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
   document.addEventListener("keydown",e=>{
@@ -2235,9 +2058,6 @@
     if(e.key==="0")resetView();
   });
 
-  // ═══════════════════════════════════════════════════
-  // FAQ — CONFIG IA (optionnelle, reprise telle quelle)
-  // ═══════════════════════════════════════════════════
   const ENABLE_GEMINI  = false;
   const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
 
@@ -2257,9 +2077,6 @@ CALENDRIER
 - Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
 `;
 
-  // ═══════════════════════════════════════════════════
-  // BASE FAQ — reprise à l'identique du POC existant
-  // ═══════════════════════════════════════════════════
   let faqData = [
 { id:"date-demenagement", category:"calendrier", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
       answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
@@ -2465,14 +2282,8 @@ CALENDRIER
     },
   ];
 
-  // Copie figée de la base FAQ intégrée — sert de filet de sécurité pour
-  // "Restaurer les questions par défaut" dans l'Admin si le contenu
-  // sauvegardé côté serveur a été corrompu ou tronqué par erreur.
   const FAQ_BUILTIN_BACKUP = JSON.parse(JSON.stringify(faqData));
 
-  // ═══════════════════════════════════════════════════
-  // MOTEUR DE MATCHING — repris à l'identique du POC
-  // ═══════════════════════════════════════════════════
   const stopWords = new Set([
     "ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous",
     "ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux",
@@ -2595,9 +2406,6 @@ CALENDRIER
     return best.entry;
   }
 
-  // ═══════════════════════════════════════════════════
-  // GEMINI (optionnel, dormant — reprise telle quelle)
-  // ═══════════════════════════════════════════════════
   async function askGemini(question) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
     const body = {
@@ -2610,9 +2418,6 @@ CALENDRIER
     return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
   }
 
-  // ═══════════════════════════════════════════════════
-  // INTERFACE FAQ — logique d'affichage + motion
-  // ═══════════════════════════════════════════════════
   const questionInput = document.getElementById("questionInput");
   const askBtn        = document.getElementById("askBtn");
   const resultBox     = document.getElementById("resultBox");
@@ -2648,7 +2453,7 @@ CALENDRIER
 
   function playResultAnim() {
     resultAnim.classList.remove("play");
-    void resultAnim.offsetWidth; // reflow — permet de rejouer l'animation
+    void resultAnim.offsetWidth;
     resultAnim.classList.add("play");
   }
 
@@ -2713,10 +2518,6 @@ CALENDRIER
     btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
   });
 
-  // ═══════════════════════════════════════════════════
-  // FORMULAIRE DE CONTACT — capture locale en attendant
-  // un vrai branchement (boîte mail / CRM)
-  // ═══════════════════════════════════════════════════
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
     contactForm.addEventListener('submit', e => {
@@ -2734,10 +2535,6 @@ CALENDRIER
     });
   }
 
-  // ═══════════════════════════════════════════════════
-  // ADMINISTRATION — mot de passe vérifié côté serveur,
-  // jeton d'accès pour les actions qui modifient des données.
-  // ═══════════════════════════════════════════════════
   const adminLinkBtn       = document.getElementById('adminLinkBtn');
   const adminModal         = document.getElementById('adminModal');
   const adminPasswordInput = document.getElementById('adminPasswordInput');
@@ -2757,6 +2554,8 @@ CALENDRIER
     renderKpiDashboard(kpi, content);
     renderContentEditor(content);
     renderPlanningEditor(content);
+    renderTeamEditor(content);
+    renderVisualsEditor(content);
     renderFaqEditor(content);
   }
 
@@ -2807,8 +2606,6 @@ CALENDRIER
   adminModalCancel.addEventListener('click', closeAdminModal);
   adminModal.addEventListener('click', e => { if (e.target === adminModal) closeAdminModal(); });
 
-  // Navigation partagée vers la page FAQ — utilisée par "Retour au site"
-  // et par "Déconnexion" (qui l'utilise après avoir effacé le jeton admin).
   function goToFaqPage() {
     document.body.classList.remove('storm-admin-open');
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -2844,9 +2641,6 @@ CALENDRIER
   const adminExportBtn = document.getElementById('adminExportBtn');
   adminExportBtn.addEventListener('click', exportKpiToExcel);
 
-  // Navigation Dashboard / Contenu public / Planning & Actus / FAQ dans la
-  // sidebar — un seul écouteur délégué, posé une fois (pas à chaque
-  // ouverture de l'admin).
   document.getElementById('adminSidebarNav')?.addEventListener('click', e => {
     const item = e.target.closest('.admin-nav-item');
     if (!item) return;
@@ -2897,7 +2691,6 @@ CALENDRIER
       <div class="kpi-card"><div class="kpi-card-value">${totalContacts}</div><div class="kpi-card-label mono">Demandes de contact</div></div>
     `;
 
-    // Top questions posées (regroupées par texte, insensible à la casse)
     const qCounts = {};
     kpi.faqAsked.forEach(a => {
       const key = a.q.trim().toLowerCase();
@@ -2909,7 +2702,6 @@ CALENDRIER
       emptyText: "Aucune question posée pour l'instant — teste la barre de recherche de la FAQ pour voir apparaître des données ici."
     });
 
-    // Questions sans réponse trouvée
     const gaps = kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).slice(0, 15);
     const gapsContainer = document.getElementById('kpiGaps');
     if (!gaps.length) {
@@ -2923,16 +2715,12 @@ CALENDRIER
       `).join('');
     }
 
-    // Consultations par onglet
     const tabEntries = Object.keys(TAB_LABELS).map(id => ({ label: TAB_LABELS[id], value: kpi.tabViews[id] || 0 }));
     const tabHasData = tabEntries.some(e => e.value > 0);
     renderBarList(document.getElementById('kpiTabs'), tabHasData ? tabEntries : [], {
       emptyText: "Aucune navigation enregistrée pour l'instant."
     });
 
-    // Articles les plus consultés — les libellés viennent du contenu actuel
-    // (Planning & Actus) ; un article supprimé depuis reste visible avec
-    // son identifiant, pour ne jamais perdre discrètement des données KPI.
     const articleLabels = {};
     (content?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
     const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
@@ -2945,7 +2733,6 @@ CALENDRIER
       emptyText: "Aucun article ouvert pour l'instant — va sur la page Actualités et déplie une publication."
     });
 
-    // Demandes de contact
     const contactsContainer = document.getElementById('kpiContacts');
     if (!kpi.contactSubmissions.length) {
       contactsContainer.innerHTML = `<div class="kpi-empty">Aucune demande envoyée pour l'instant.</div>`;
@@ -2963,7 +2750,6 @@ CALENDRIER
     }
   }
 
-  // Après une sauvegarde refusée (jeton expiré), invite à se reconnecter.
   function handleSaveResult(result, successMessage) {
     if (result.ok) { showToast(successMessage); return true; }
     if (result.unauthorized) {
@@ -2978,9 +2764,6 @@ CALENDRIER
 
   const PUBLIC_SCOPE_LABELS = { faq: 'FAQ', actu: 'Actualités', plans: 'Plans & 3D', ambassadeurs: 'Ambassadeurs', equipe: 'Équipe projet' };
 
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — Contenu public (pas de HTML, que des champs texte)
-  // ═══════════════════════════════════════════════════
   function renderContentEditor(content) {
     const container = document.getElementById('adminContentEditor');
     if (!container) return;
@@ -3094,8 +2877,6 @@ CALENDRIER
       const logoDropzone = document.getElementById('brandingLogoDropzone');
       document.getElementById('brandingLogoUploadBtn').addEventListener('click', () => logoInput.click());
 
-      // Logique d'envoi partagée entre le bouton "Choisir un logo" et le
-      // glisser-déposer, pour ne jamais désynchroniser les deux chemins.
       async function handleLogoFile(file) {
         if (!file) return;
         if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
@@ -3115,7 +2896,7 @@ CALENDRIER
 
       logoInput.addEventListener('change', () => {
         const file = logoInput.files[0];
-        logoInput.value = ''; // permet de réenvoyer le même fichier plus tard
+        logoInput.value = '';
         handleLogoFile(file);
       });
 
@@ -3159,8 +2940,6 @@ CALENDRIER
       });
     }
 
-    // Récupère les valeurs actuellement affichées dans les champs et les
-    // range dans content.publicContent avant de changer de page ou d'enregistrer.
     function syncFieldsIntoContent() {
       document.querySelectorAll('#publicDetailFields [data-scope][data-field]').forEach(input => {
         const scope = input.dataset.scope, field = input.dataset.field;
@@ -3172,15 +2951,66 @@ CALENDRIER
     render();
   }
 
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — Planning & Actualités
-  // (jalons de la timeline, avancement, articles publiés)
-  // ═══════════════════════════════════════════════════
   function moveItem(array, index, direction) {
     const target = index + direction;
     if (target < 0 || target >= array.length) return;
     const [item] = array.splice(index, 1);
     array.splice(target, 0, item);
+  }
+
+  function uploaderHtml(idPrefix, currentUrl, opts) {
+    opts = opts || {};
+    const shape = opts.shape || 'square';
+    const size = opts.size || 44;
+    const radius = shape === 'circle' ? '50%' : '10px';
+    const isPdf = isPdfUrl(currentUrl);
+    let previewInner = '';
+    if (currentUrl && isPdf) previewInner = PDF_ICON_SVG;
+    else if (currentUrl) previewInner = `<img src="${escapeHtml(currentUrl)}" style="width:100%; height:100%; object-fit:cover;">`;
+    return `
+      <div class="logo-dropzone" id="${idPrefix}Zone" style="padding:8px; gap:8px;">
+        <div id="${idPrefix}Preview" style="width:${size}px; height:${size}px; border-radius:${radius}; overflow:hidden; background:var(--offwhite); border:1px solid var(--ink-12); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--bordeaux);">${previewInner}</div>
+        <button type="button" class="admin-modal-cancel" data-dropzone-trigger style="flex:none; padding:0 12px; height:30px; font-size:0.66rem;">${escapeHtml(opts.label || 'Photo')}</button>
+        <span class="logo-dropzone-hint">glisser-déposer</span>
+        <button type="button" class="admin-reset" id="${idPrefix}Remove" style="margin-left:auto; ${currentUrl ? '' : 'display:none;'}">Retirer</button>
+        <input type="file" id="${idPrefix}Input" accept="${escapeHtml(opts.accept || 'image/png,image/jpeg')}" style="display:none;">
+      </div>`;
+  }
+
+  function bindUploader(idPrefix, entry, fieldKey, opts) {
+    opts = opts || {};
+    const zone = document.getElementById(idPrefix + 'Zone');
+    const input = document.getElementById(idPrefix + 'Input');
+    const preview = document.getElementById(idPrefix + 'Preview');
+    const removeBtn = document.getElementById(idPrefix + 'Remove');
+    if (!zone || !input || !preview) return;
+
+    function setPreview(url) {
+      const isPdf = isPdfUrl(url);
+      if (url && isPdf) preview.innerHTML = PDF_ICON_SVG;
+      else if (url) preview.innerHTML = `<img src="${escapeHtml(url)}" style="width:100%; height:100%; object-fit:cover;">`;
+      else preview.innerHTML = '';
+      if (removeBtn) removeBtn.style.display = url ? '' : 'none';
+    }
+
+    async function handleFile(file) {
+      if (!file) return;
+      showToast('Envoi en cours...');
+      const result = await uploadFile(file);
+      if (result.unauthorized) { showToast('Session admin expirée — reconnecte-toi.'); clearAdminToken(); openAdminModal(); return; }
+      if (!result.ok) { showToast(result.error || "Échec de l'envoi."); return; }
+      entry[fieldKey] = result.url;
+      setPreview(result.url);
+      opts.onChanged?.(result.url);
+      showToast('Fichier envoyé.');
+    }
+
+    zone.querySelector('[data-dropzone-trigger]')?.addEventListener('click', () => input.click());
+    input.addEventListener('change', () => { const f = input.files[0]; input.value = ''; handleFile(f); });
+    ['dragenter', 'dragover'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('drag-over'); }));
+    ['dragleave', 'drop'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('drag-over'); }));
+    zone.addEventListener('drop', e => { const f = e.dataTransfer?.files?.[0]; if (f) handleFile(f); });
+    removeBtn?.addEventListener('click', () => { entry[fieldKey] = ''; setPreview(''); opts.onChanged?.(''); });
   }
 
   function renderPlanningEditor(content) {
@@ -3194,7 +3024,6 @@ CALENDRIER
     const openMilestoneIds = new Set();
     const openArticleIds = new Set();
 
-    // ── Jalons du planning ──────────────────────────────
     function milestoneCardHtml(m, index, total) {
       const isOpen = openMilestoneIds.has(m.id);
       const pill = MILESTONE_STATUS_MAP[m.status] || MILESTONE_STATUS_MAP.future;
@@ -3233,12 +3062,10 @@ CALENDRIER
     function bindMilestoneCard(m) {
       const card = container.querySelector(`[data-milestone-card="${m.id}"]`);
       if (!card) return;
-
       card.querySelector('[data-milestone-toggle]').addEventListener('click', () => {
         const nowOpen = card.classList.toggle('open');
         if (nowOpen) openMilestoneIds.add(m.id); else openMilestoneIds.delete(m.id);
       });
-
       card.querySelectorAll('[data-milestone-field]').forEach(field => {
         const evt = field.tagName === 'SELECT' ? 'change' : 'input';
         field.addEventListener(evt, () => {
@@ -3256,7 +3083,6 @@ CALENDRIER
           }
         });
       });
-
       card.querySelector('[data-milestone-up]')?.addEventListener('click', () => {
         const idx = content.milestones.findIndex(x => x.id === m.id);
         moveItem(content.milestones, idx, -1);
@@ -3287,7 +3113,6 @@ CALENDRIER
       content.milestones.forEach(bindMilestoneCard);
     }
 
-    // ── Articles ────────────────────────────────────────
     function articleCardHtml(a, index, total) {
       const isOpen = openArticleIds.has(a.id);
       return `
@@ -3328,12 +3153,10 @@ CALENDRIER
     function bindArticleCard(a) {
       const card = container.querySelector(`[data-article-card="${a.id}"]`);
       if (!card) return;
-
       card.querySelector('[data-article-toggle]').addEventListener('click', () => {
         const nowOpen = card.classList.toggle('open');
         if (nowOpen) openArticleIds.add(a.id); else openArticleIds.delete(a.id);
       });
-
       card.querySelectorAll('[data-article-field]').forEach(field => {
         field.addEventListener('input', () => {
           const key = field.dataset.articleField;
@@ -3342,7 +3165,6 @@ CALENDRIER
           if (key === 'tag') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
         });
       });
-
       card.querySelector('[data-article-up]')?.addEventListener('click', () => {
         const idx = content.articles.findIndex(x => x.id === a.id);
         moveItem(content.articles, idx, -1);
@@ -3370,7 +3192,6 @@ CALENDRIER
       content.articles.forEach(bindArticleCard);
     }
 
-    // ── Structure globale du panneau ────────────────────
     container.innerHTML = `
       <div class="admin-editor-panel" style="margin-bottom:28px;">
         <div class="kpi-section-title">Avancement du planning</div>
@@ -3453,14 +3274,387 @@ CALENDRIER
     renderArticlesAdminList();
   }
 
-  // ═══════════════════════════════════════════════════
-  // ÉDITEUR — FAQ (préserve les champs avancés non affichés)
-  // ═══════════════════════════════════════════════════
-  // ═══════════════════════════════════════════════════
-  // IMPORT WORD — un .docx converti en cartes FAQ à valider
-  // Convention attendue : question en gras ou en titre, suivie
-  // du texte de la réponse en paragraphe(s) normal(aux).
-  // ═══════════════════════════════════════════════════
+  function renderTeamEditor(content) {
+    const container = document.getElementById('adminTeamEditor');
+    if (!container) return;
+
+    content.ambassadorsContent = content.ambassadorsContent || {};
+    content.ambassadors = content.ambassadors || [];
+    content.teamContent = content.teamContent || {};
+    content.team = content.team || [];
+
+    const openAmbassadorIds = new Set();
+    const openTeamIds = new Set();
+
+    function ambassadorCardHtml(a, index, total) {
+      const isOpen = openAmbassadorIds.has(a.id);
+      return `
+        <div class="faq-card ${isOpen ? 'open' : ''}" data-ambassador-card="${a.id}">
+          <button type="button" class="faq-card-header" data-ambassador-toggle="${a.id}">
+            <span class="tag-pill">${escapeHtml(a.tag || '')}</span>
+            <span class="faq-card-title">${escapeHtml(a.name || '(sans nom)')}</span>
+            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+          </button>
+          <div class="faq-card-body">
+            <div class="faq-card-body-inner">
+              <label class="admin-editor-label">Photo</label>
+              ${uploaderHtml('amb' + a.id, a.imageUrl, { shape: 'circle', label: 'Photo' })}
+              <label class="admin-editor-label">Nom</label>
+              <input type="text" class="form-input" data-ambassador-field="name" value="${escapeHtml(a.name || '')}">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <div>
+                  <label class="admin-editor-label">Rôle</label>
+                  <input type="text" class="form-input" data-ambassador-field="role" value="${escapeHtml(a.role || '')}">
+                </div>
+                <div>
+                  <label class="admin-editor-label">Direction / tag</label>
+                  <input type="text" class="form-input" data-ambassador-field="tag" value="${escapeHtml(a.tag || '')}">
+                </div>
+              </div>
+              <label class="admin-editor-label">Initiales (utilisées si aucune photo)</label>
+              <input type="text" class="form-input" data-ambassador-field="initials" value="${escapeHtml(a.initials || '')}" maxlength="2" style="max-width:100px;">
+              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+                <button type="button" class="admin-modal-cancel" data-ambassador-up="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
+                <button type="button" class="admin-modal-cancel" data-ambassador-down="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
+                <button type="button" class="admin-delete-btn" data-ambassador-delete="${a.id}" style="margin-top:0;">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function bindAmbassadorCard(a) {
+      const card = container.querySelector(`[data-ambassador-card="${a.id}"]`);
+      if (!card) return;
+      card.querySelector('[data-ambassador-toggle]').addEventListener('click', () => {
+        const nowOpen = card.classList.toggle('open');
+        if (nowOpen) openAmbassadorIds.add(a.id); else openAmbassadorIds.delete(a.id);
+      });
+      bindUploader('amb' + a.id, a, 'imageUrl');
+      card.querySelectorAll('[data-ambassador-field]').forEach(field => {
+        field.addEventListener('input', () => {
+          const key = field.dataset.ambassadorField;
+          a[key] = field.value;
+          if (key === 'name') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans nom)'; }
+          if (key === 'tag') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
+        });
+      });
+      card.querySelector('[data-ambassador-up]')?.addEventListener('click', () => {
+        const idx = content.ambassadors.findIndex(x => x.id === a.id);
+        moveItem(content.ambassadors, idx, -1);
+        renderAmbassadorsList();
+      });
+      card.querySelector('[data-ambassador-down]')?.addEventListener('click', () => {
+        const idx = content.ambassadors.findIndex(x => x.id === a.id);
+        moveItem(content.ambassadors, idx, 1);
+        renderAmbassadorsList();
+      });
+      card.querySelector('[data-ambassador-delete]').addEventListener('click', () => {
+        if (!confirm('Supprimer définitivement cet ambassadeur ?')) return;
+        content.ambassadors = content.ambassadors.filter(x => x.id !== a.id);
+        openAmbassadorIds.delete(a.id);
+        renderAmbassadorsList();
+      });
+    }
+
+    function renderAmbassadorsList() {
+      const listEl = document.getElementById('ambassadorsAdminList');
+      if (!listEl) return;
+      listEl.innerHTML = content.ambassadors.length
+        ? content.ambassadors.map((a, i) => ambassadorCardHtml(a, i, content.ambassadors.length)).join('')
+        : '<div class="kpi-empty">Aucun ambassadeur pour l\'instant.</div>';
+      content.ambassadors.forEach(bindAmbassadorCard);
+    }
+
+    function teamMemberCardHtml(t, index, total) {
+      const isOpen = openTeamIds.has(t.id);
+      return `
+        <div class="faq-card ${isOpen ? 'open' : ''}" data-team-card="${t.id}">
+          <button type="button" class="faq-card-header" data-team-toggle="${t.id}">
+            <span class="tag-pill" style="${t.badge==='Parella' ? 'background:var(--mint-soft); color:var(--teal);' : ''}">${escapeHtml(t.badge || 'XYZ')}</span>
+            <span class="faq-card-title">${escapeHtml(t.name || '(sans nom)')}</span>
+            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+          </button>
+          <div class="faq-card-body">
+            <div class="faq-card-body-inner">
+              <label class="admin-editor-label">Photo</label>
+              ${uploaderHtml('team' + t.id, t.imageUrl, { shape: 'square', label: 'Photo' })}
+              <label class="admin-editor-label">Nom</label>
+              <input type="text" class="form-input" data-team-field="name" value="${escapeHtml(t.name || '')}">
+              <label class="admin-editor-label">Titre / fonction</label>
+              <input type="text" class="form-input" data-team-field="title" value="${escapeHtml(t.title || '')}">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <div>
+                  <label class="admin-editor-label">Groupe</label>
+                  <select class="form-input" data-team-field="badge">
+                    <option value="XYZ" ${t.badge!=='Parella'?'selected':''}>XYZ</option>
+                    <option value="Parella" ${t.badge==='Parella'?'selected':''}>Parella</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="admin-editor-label">Initiales (si aucune photo)</label>
+                  <input type="text" class="form-input" data-team-field="initials" value="${escapeHtml(t.initials || '')}" maxlength="2">
+                </div>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+                <button type="button" class="admin-modal-cancel" data-team-up="${t.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
+                <button type="button" class="admin-modal-cancel" data-team-down="${t.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
+                <button type="button" class="admin-delete-btn" data-team-delete="${t.id}" style="margin-top:0;">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function bindTeamCard(t) {
+      const card = container.querySelector(`[data-team-card="${t.id}"]`);
+      if (!card) return;
+      card.querySelector('[data-team-toggle]').addEventListener('click', () => {
+        const nowOpen = card.classList.toggle('open');
+        if (nowOpen) openTeamIds.add(t.id); else openTeamIds.delete(t.id);
+      });
+      bindUploader('team' + t.id, t, 'imageUrl');
+      card.querySelectorAll('[data-team-field]').forEach(field => {
+        const evt = field.tagName === 'SELECT' ? 'change' : 'input';
+        field.addEventListener(evt, () => {
+          const key = field.dataset.teamField;
+          t[key] = field.value;
+          if (key === 'name') { const el = card.querySelector('.faq-card-title'); if (el) el.textContent = field.value || '(sans nom)'; }
+          if (key === 'badge') {
+            const pill = card.querySelector('.tag-pill');
+            if (pill) { pill.textContent = field.value; pill.style.cssText = field.value === 'Parella' ? 'background:var(--mint-soft); color:var(--teal);' : ''; }
+          }
+        });
+      });
+      card.querySelector('[data-team-up]')?.addEventListener('click', () => {
+        const idx = content.team.findIndex(x => x.id === t.id);
+        moveItem(content.team, idx, -1);
+        renderTeamList();
+      });
+      card.querySelector('[data-team-down]')?.addEventListener('click', () => {
+        const idx = content.team.findIndex(x => x.id === t.id);
+        moveItem(content.team, idx, 1);
+        renderTeamList();
+      });
+      card.querySelector('[data-team-delete]').addEventListener('click', () => {
+        if (!confirm('Supprimer définitivement cette personne ?')) return;
+        content.team = content.team.filter(x => x.id !== t.id);
+        openTeamIds.delete(t.id);
+        renderTeamList();
+      });
+    }
+
+    function renderTeamList() {
+      const listEl = document.getElementById('teamAdminList');
+      if (!listEl) return;
+      listEl.innerHTML = content.team.length
+        ? content.team.map((t, i) => teamMemberCardHtml(t, i, content.team.length)).join('')
+        : '<div class="kpi-empty">Aucune personne pour l\'instant.</div>';
+      content.team.forEach(bindTeamCard);
+    }
+
+    container.innerHTML = `
+      <div class="admin-editor-panel" style="margin-bottom:28px;">
+        <div class="kpi-section-title">Textes — page Ambassadeurs</div>
+        <div class="kpi-section-sub">Pour un paragraphe en plusieurs blocs, laisse une ligne vide entre eux. Pour un mot en gras, entoure-le de **double astérisques**.</div>
+        <label class="admin-editor-label">Titre de l'intro</label>
+        <input type="text" class="form-input" id="ambIntroTitleInput" value="${escapeHtml(content.ambassadorsContent.introTitle || '')}">
+        <label class="admin-editor-label">Texte de l'intro</label>
+        <textarea class="form-input admin-editor-textarea" id="ambIntroBodyInput" style="min-height:120px;">${escapeHtml(content.ambassadorsContent.introBody || '')}</textarea>
+        <label class="admin-editor-label">Sous-titre du compteur (ex. "toutes directions")</label>
+        <input type="text" class="form-input" id="ambRosterLabelInput" value="${escapeHtml(content.ambassadorsContent.rosterLabel || '')}">
+        <label class="admin-editor-label">Titre de l'appel à l'action</label>
+        <input type="text" class="form-input" id="ambCtaTitleInput" value="${escapeHtml(content.ambassadorsContent.ctaTitle || '')}">
+        <label class="admin-editor-label">Texte de l'appel à l'action</label>
+        <textarea class="form-input admin-editor-textarea" id="ambCtaBodyInput">${escapeHtml(content.ambassadorsContent.ctaBody || '')}</textarea>
+      </div>
+
+      <div class="admin-editor-panel" style="margin-bottom:28px;">
+        <div class="kpi-section-title">Ambassadeurs</div>
+        <div class="kpi-section-sub">La photo est facultative — sans photo, les initiales sont affichées.</div>
+        <div class="faq-card-list" id="ambassadorsAdminList" style="margin-top:20px;"></div>
+        <button type="button" class="admin-modal-cancel" id="addAmbassadorBtn" style="flex:none; padding:0 20px; margin-top:16px;">+ Ajouter un ambassadeur</button>
+      </div>
+
+      <div class="admin-editor-panel" style="margin-bottom:28px;">
+        <div class="kpi-section-title">Textes — page Équipe projet</div>
+        <label class="admin-editor-label">Texte d'intro Parella (mot en gras entre **...**)</label>
+        <textarea class="form-input admin-editor-textarea" id="teamParellaIntroInput">${escapeHtml(content.teamContent.parellaIntro || '')}</textarea>
+        <label class="admin-editor-label">Titre de l'appel à l'action</label>
+        <input type="text" class="form-input" id="teamCtaTitleInput" value="${escapeHtml(content.teamContent.ctaTitle || '')}">
+        <label class="admin-editor-label">Texte de l'appel à l'action</label>
+        <textarea class="form-input admin-editor-textarea" id="teamCtaBodyInput">${escapeHtml(content.teamContent.ctaBody || '')}</textarea>
+      </div>
+
+      <div class="admin-editor-panel">
+        <div class="kpi-section-title">Équipe projet</div>
+        <div class="kpi-section-sub">Une seule liste — le groupe (XYZ ou Parella) déterminant la section d'affichage sur la page publique.</div>
+        <div class="faq-card-list" id="teamAdminList" style="margin-top:20px;"></div>
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <button type="button" class="admin-modal-cancel" id="addTeamMemberBtn" style="flex:none; padding:0 20px;">+ Ajouter une personne</button>
+          <button type="button" class="search-btn" id="saveTeamBtn">Enregistrer Ambassadeurs &amp; Équipe</button>
+        </div>
+      </div>`;
+
+    document.getElementById('ambIntroTitleInput').addEventListener('input', e => { content.ambassadorsContent.introTitle = e.target.value; });
+    document.getElementById('ambIntroBodyInput').addEventListener('input', e => { content.ambassadorsContent.introBody = e.target.value; });
+    document.getElementById('ambRosterLabelInput').addEventListener('input', e => { content.ambassadorsContent.rosterLabel = e.target.value; });
+    document.getElementById('ambCtaTitleInput').addEventListener('input', e => { content.ambassadorsContent.ctaTitle = e.target.value; });
+    document.getElementById('ambCtaBodyInput').addEventListener('input', e => { content.ambassadorsContent.ctaBody = e.target.value; });
+    document.getElementById('teamParellaIntroInput').addEventListener('input', e => { content.teamContent.parellaIntro = e.target.value; });
+    document.getElementById('teamCtaTitleInput').addEventListener('input', e => { content.teamContent.ctaTitle = e.target.value; });
+    document.getElementById('teamCtaBodyInput').addEventListener('input', e => { content.teamContent.ctaBody = e.target.value; });
+
+    document.getElementById('addAmbassadorBtn').addEventListener('click', () => {
+      const id = `amb-${Date.now()}`;
+      const newAmbassador = { id, initials: '', name: 'Nouvel ambassadeur', role: '', tag: '', imageUrl: '' };
+      content.ambassadors = [newAmbassador, ...content.ambassadors];
+      openAmbassadorIds.add(id);
+      renderAmbassadorsList();
+      document.querySelector(`[data-ambassador-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector(`[data-ambassador-card="${id}"] input[data-ambassador-field="name"]`)?.focus();
+    });
+
+    document.getElementById('addTeamMemberBtn').addEventListener('click', () => {
+      const id = `team-${Date.now()}`;
+      const newMember = { id, initials: '', name: 'Nouvelle personne', title: '', badge: 'XYZ', imageUrl: '' };
+      content.team = [newMember, ...content.team];
+      openTeamIds.add(id);
+      renderTeamList();
+      document.querySelector(`[data-team-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector(`[data-team-card="${id}"] input[data-team-field="name"]`)?.focus();
+    });
+
+    document.getElementById('saveTeamBtn').addEventListener('click', async () => {
+      const result = await saveContent(buildSavePayload(content));
+      if (handleSaveResult(result, 'Ambassadeurs & Équipe enregistrés.')) {
+        renderAmbassadorsFront(content);
+        renderTeamFront(content);
+      }
+    });
+
+    renderAmbassadorsList();
+    renderTeamList();
+  }
+
+  function renderVisualsEditor(content) {
+    const container = document.getElementById('adminVisualsEditor');
+    if (!container) return;
+
+    content.plans = content.plans || [];
+    const openPlanIds = new Set();
+
+    function planCardAdminHtml(p, index, total) {
+      const isOpen = openPlanIds.has(p.id);
+      return `
+        <div class="faq-card ${isOpen ? 'open' : ''}" data-plan-admin-card="${p.id}">
+          <button type="button" class="faq-card-header" data-plan-admin-toggle="${p.id}">
+            <span class="tag-pill">${escapeHtml(p.type || '')}</span>
+            <span class="faq-card-title">${escapeHtml(p.title || '(sans titre)')}</span>
+            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+          </button>
+          <div class="faq-card-body">
+            <div class="faq-card-body-inner">
+              <label class="admin-editor-label">Visuel (image PNG/JPEG ou PDF)</label>
+              ${uploaderHtml('plan' + p.id, p.imageUrl, { shape: 'square', size: 56, label: 'Visuel', accept: 'image/png,image/jpeg,application/pdf' })}
+              <label class="admin-editor-label">Titre</label>
+              <input type="text" class="form-input" data-plan-field="title" value="${escapeHtml(p.title || '')}">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                <div>
+                  <label class="admin-editor-label">Type (badge affiché sur le visuel)</label>
+                  <input type="text" class="form-input" data-plan-field="type" value="${escapeHtml(p.type || '')}" placeholder="ex. Plan, 3D">
+                </div>
+                <div>
+                  <label class="admin-editor-label">Tags de filtre (séparés par des virgules)</label>
+                  <input type="text" class="form-input" data-plan-field="tags" value="${escapeHtml(p.tags || '')}" placeholder="ex. Macro-zoning, Ambiance">
+                </div>
+              </div>
+              <label class="admin-editor-label">Commentaire</label>
+              <textarea class="form-input admin-editor-textarea" data-plan-field="comment" style="min-height:160px;">${escapeHtml(p.comment || '')}</textarea>
+              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+                <button type="button" class="admin-modal-cancel" data-plan-up="${p.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
+                <button type="button" class="admin-modal-cancel" data-plan-down="${p.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
+                <button type="button" class="admin-delete-btn" data-plan-delete="${p.id}" style="margin-top:0;">Supprimer ce visuel</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function bindPlanCard(p) {
+      const card = container.querySelector(`[data-plan-admin-card="${p.id}"]`);
+      if (!card) return;
+      card.querySelector('[data-plan-admin-toggle]').addEventListener('click', () => {
+        const nowOpen = card.classList.toggle('open');
+        if (nowOpen) openPlanIds.add(p.id); else openPlanIds.delete(p.id);
+      });
+      bindUploader('plan' + p.id, p, 'imageUrl');
+      card.querySelectorAll('[data-plan-field]').forEach(field => {
+        field.addEventListener('input', () => {
+          const key = field.dataset.planField;
+          p[key] = field.value;
+          if (key === 'title') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans titre)'; }
+          if (key === 'type') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
+        });
+      });
+      card.querySelector('[data-plan-up]')?.addEventListener('click', () => {
+        const idx = content.plans.findIndex(x => x.id === p.id);
+        moveItem(content.plans, idx, -1);
+        renderPlansAdminList();
+      });
+      card.querySelector('[data-plan-down]')?.addEventListener('click', () => {
+        const idx = content.plans.findIndex(x => x.id === p.id);
+        moveItem(content.plans, idx, 1);
+        renderPlansAdminList();
+      });
+      card.querySelector('[data-plan-delete]').addEventListener('click', () => {
+        if (!confirm('Supprimer définitivement ce visuel ?')) return;
+        content.plans = content.plans.filter(x => x.id !== p.id);
+        openPlanIds.delete(p.id);
+        renderPlansAdminList();
+      });
+    }
+
+    function renderPlansAdminList() {
+      const listEl = document.getElementById('plansAdminList');
+      if (!listEl) return;
+      listEl.innerHTML = content.plans.length
+        ? content.plans.map((p, i) => planCardAdminHtml(p, i, content.plans.length)).join('')
+        : '<div class="kpi-empty">Aucun visuel pour l\'instant.</div>';
+      content.plans.forEach(bindPlanCard);
+    }
+
+    container.innerHTML = `
+      <div class="admin-editor-panel">
+        <div class="kpi-section-title">Plans &amp; 3D</div>
+        <div class="kpi-section-sub">Les filtres affichés sur la page publique sont générés automatiquement à partir des types et tags saisis ci-dessous. Un visuel PDF s'ouvre dans un nouvel onglet au clic ; une image s'ouvre dans la visionneuse zoomable.</div>
+        <div class="faq-card-list" id="plansAdminList" style="margin-top:20px;"></div>
+        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <button type="button" class="admin-modal-cancel" id="addPlanBtn" style="flex:none; padding:0 20px;">+ Ajouter un visuel</button>
+          <button type="button" class="search-btn" id="savePlansBtn">Enregistrer Plans &amp; 3D</button>
+        </div>
+      </div>`;
+
+    document.getElementById('addPlanBtn').addEventListener('click', () => {
+      const id = `plan-${Date.now()}`;
+      const newPlan = { id, type: 'Plan', tags: '', title: 'Nouveau visuel', imageUrl: '', comment: '' };
+      content.plans = [newPlan, ...content.plans];
+      openPlanIds.add(id);
+      renderPlansAdminList();
+      document.querySelector(`[data-plan-admin-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.querySelector(`[data-plan-admin-card="${id}"] input[data-plan-field="title"]`)?.focus();
+    });
+
+    document.getElementById('savePlansBtn').addEventListener('click', async () => {
+      const result = await saveContent(buildSavePayload(content));
+      if (handleSaveResult(result, 'Plans & 3D enregistrés.')) {
+        renderPlansFront(content.plans);
+      }
+    });
+
+    renderPlansAdminList();
+  }
+
   async function parseDocxToFaqEntries(file) {
     if (typeof mammoth === 'undefined') {
       throw new Error("La librairie de lecture Word n'a pas pu se charger — vérifie ta connexion.");
@@ -3494,8 +3688,6 @@ CALENDRIER
       }
     });
 
-    // Repli si aucun gras/titre détecté : un paragraphe = une question,
-    // à compléter manuellement ensuite (mieux que de ne rien importer).
     if (!blocks.length) {
       nodes.forEach(el => {
         const text = el.textContent.trim();
@@ -3517,8 +3709,6 @@ CALENDRIER
       }));
   }
 
-  // Comparaison de titres insensible aux accents/majuscules, en réutilisant
-  // le même normalisateur que le moteur de recherche public.
   function isDuplicateTitle(title) {
     const norm = normalize(title || '');
     return norm.length > 0 && faqData.some(e => normalize(e.title || '') === norm);
@@ -3552,8 +3742,6 @@ CALENDRIER
 
     modal.classList.add('open');
 
-    // onclick (plutôt qu'addEventListener) pour ne jamais empiler des
-    // écouteurs si la fenêtre de révision est ouverte plusieurs fois.
     document.getElementById('importReviewCancel').onclick = () => modal.classList.remove('open');
 
     document.getElementById('importReviewConfirm').onclick = async () => {
@@ -3583,8 +3771,8 @@ CALENDRIER
     let activeFilter = 'all';
     let activeCategory = 'all';
     let searchTerm = '';
-    const openCardIds = new Set();  // cartes publiées actuellement dépliées
-    const draftOpenIds = new Set(); // brouillons actuellement dépliés
+    const openCardIds = new Set();
+    const draftOpenIds = new Set();
     content.faqDrafts = content.faqDrafts || [];
 
     function statusLabelFor(status) {
@@ -3605,7 +3793,6 @@ CALENDRIER
       return filterOk && catOk && searchOk;
     }
 
-    // Bloc de champs partagé entre les cartes publiées et les brouillons.
     function fieldsBlockHtml(entry) {
       return `
         <label class="admin-editor-label">Titre / question</label>
@@ -3647,9 +3834,6 @@ CALENDRIER
             if (pill) { pill.className = `status-pill ${entry.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}`; pill.textContent = statusLabelFor(entry.status); }
           } else if (key === 'category') {
             entry.category = field.value.trim();
-            // Le tag thématique affiché dans l'en-tête n'existe que sur les
-            // cartes publiées ; sa mise à jour visuelle est gérée séparément
-            // dans bindCard() pour ce cas précis.
           } else {
             entry[key] = field.value;
             if (key === 'title') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans titre)'; }
@@ -3658,7 +3842,6 @@ CALENDRIER
       });
     }
 
-    // ── Cartes publiées (faqData, utilisées par le moteur de recherche) ──
     function cardHtml(entry) {
       const isOpen = openCardIds.has(entry.id);
       return `
@@ -3684,23 +3867,18 @@ CALENDRIER
     function bindCard(entry) {
       const card = container.querySelector(`[data-faq-card="${entry.id}"]`);
       if (!card) return;
-
       card.querySelector('[data-faq-toggle]').addEventListener('click', () => {
         const nowOpen = card.classList.toggle('open');
         if (nowOpen) openCardIds.add(entry.id); else openCardIds.delete(entry.id);
       });
-
       bindFields(card, entry);
-      // Rafraîchit le tag thématique affiché dans l'en-tête (spécifique aux cartes publiées).
       card.querySelector('[data-faq-field="category"]').addEventListener('input', e => {
         card.querySelector('.tag-pill').textContent = categoryLabel(e.target.value.trim());
       });
-
       card.querySelector('[data-faq-save]').addEventListener('click', async () => {
         const result = await saveContent(buildSavePayload(content));
         handleSaveResult(result, `« ${entry.title || 'Cette question'} » publiée.`);
       });
-
       card.querySelector('[data-faq-delete]').addEventListener('click', () => {
         if (!confirm('Supprimer définitivement cette entrée FAQ ?')) return;
         faqData = faqData.filter(e => e.id !== entry.id);
@@ -3721,7 +3899,6 @@ CALENDRIER
       visible.forEach(bindCard);
     }
 
-    // ── Brouillons (content.faqDrafts, jamais utilisés par la recherche) ──
     function draftCardHtml(entry) {
       const isOpen = draftOpenIds.has(entry.id);
       return `
@@ -3748,14 +3925,11 @@ CALENDRIER
       const zone = document.getElementById('faqDraftsZone');
       const card = zone?.querySelector(`[data-draft-card="${entry.id}"]`);
       if (!card) return;
-
       card.querySelector('[data-draft-toggle]').addEventListener('click', () => {
         const nowOpen = card.classList.toggle('open');
         if (nowOpen) draftOpenIds.add(entry.id); else draftOpenIds.delete(entry.id);
       });
-
       bindFields(card, entry);
-
       card.querySelector('[data-draft-publish]').addEventListener('click', () => publishDraft(entry.id));
       card.querySelector('[data-draft-delete]').addEventListener('click', async () => {
         if (!confirm('Supprimer définitivement ce brouillon ?')) return;
@@ -3874,7 +4048,7 @@ CALENDRIER
     document.getElementById('importFaqWordBtn').addEventListener('click', () => importFaqWordInput.click());
     importFaqWordInput.addEventListener('change', async () => {
       const file = importFaqWordInput.files[0];
-      importFaqWordInput.value = ''; // permet de réimporter le même fichier plus tard
+      importFaqWordInput.value = '';
       if (!file) return;
       showToast('Lecture du fichier Word en cours...');
       try {
@@ -3899,7 +4073,7 @@ CALENDRIER
       if (!confirm("Remplacer la liste actuelle par la base de questions par défaut ? Toutes les modifications non enregistrées seront perdues.")) return;
       faqData = JSON.parse(JSON.stringify(FAQ_BUILTIN_BACKUP));
       openCardIds.clear();
-      renderFaqEditor(content); // re-render complet (les thématiques disponibles peuvent changer)
+      renderFaqEditor(content);
       showToast('Questions par défaut restaurées — pense à cliquer sur "Enregistrer" pour les publier.');
     });
 
@@ -3923,7 +4097,6 @@ CALENDRIER
     const totalVisits       = new Set(kpi.visitSessions || []).size;
     const totalContacts     = kpi.contactSubmissions.length;
 
-    // Feuille Synthèse
     const summaryData = [
       ['Projet XYZ — Export KPIs', ''],
       ['Généré le', new Date().toLocaleString('fr-FR')],
@@ -3940,7 +4113,6 @@ CALENDRIER
     wsSummary['!cols'] = [{ wch: 38 }, { wch: 24 }];
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Synthèse');
 
-    // Feuille Questions posées
     const qRows = [['Question', 'Réponse trouvée', 'Sujet correspondant', 'Date']];
     kpi.faqAsked.slice().sort((a,b) => b.ts - a.ts).forEach(a => {
       qRows.push([a.q, a.matched ? 'Oui' : 'Non', a.entryId || '', new Date(a.ts).toLocaleString('fr-FR')]);
@@ -3949,7 +4121,6 @@ CALENDRIER
     wsQ['!cols'] = [{ wch: 50 }, { wch: 16 }, { wch: 24 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, wsQ, 'Questions posées');
 
-    // Feuille Trous FAQ (questions sans réponse)
     const gapRows = [['Question sans réponse trouvée', 'Date']];
     kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).forEach(a => {
       gapRows.push([a.q, new Date(a.ts).toLocaleString('fr-FR')]);
@@ -3958,14 +4129,12 @@ CALENDRIER
     wsGaps['!cols'] = [{ wch: 55 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, wsGaps, 'Trous FAQ');
 
-    // Feuille Consultations par onglet
     const tabRows = [['Onglet', 'Consultations']];
     Object.keys(TAB_LABELS).forEach(id => tabRows.push([TAB_LABELS[id], kpi.tabViews[id] || 0]));
     const wsTabs = XLSX.utils.aoa_to_sheet(tabRows);
     wsTabs['!cols'] = [{ wch: 24 }, { wch: 16 }];
     XLSX.utils.book_append_sheet(wb, wsTabs, 'Consultations onglets');
 
-    // Feuille Articles — libellés dynamiques (contenu actuel du Planning & Actus)
     const articleLabels = {};
     (currentAdminContent?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
     const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
@@ -3975,7 +4144,6 @@ CALENDRIER
     wsArt['!cols'] = [{ wch: 50 }, { wch: 14 }];
     XLSX.utils.book_append_sheet(wb, wsArt, 'Articles');
 
-    // Feuille Demandes de contact
     const contactRows = [['Nom', 'Email', 'Message', 'Date']];
     kpi.contactSubmissions.slice().reverse().forEach(c => {
       contactRows.push([c.name, c.email, c.message, new Date(c.ts).toLocaleString('fr-FR')]);
@@ -3988,6 +4156,10 @@ CALENDRIER
     XLSX.writeFile(wb, filename);
     showToast('Export Excel généré.');
   }
+
+
+
+
 
 </script>
   <script src="/themes/rainbow-glass.js"></script>

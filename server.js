@@ -13,13 +13,6 @@ const UPLOADS_DIR = path.join(ROOT, 'uploads');
 const ALLOWED_UPLOAD_TYPES = { 'image/png': '.png', 'image/jpeg': '.jpg', 'image/jpg': '.jpg', 'application/pdf': '.pdf' };
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 Mo
 
-// ═══════════════════════════════════════════════════
-// AUTHENTIFICATION ADMIN — jeton dérivé du mot de passe
-// Volontairement déterministe (pas stocké en mémoire) : reste valide
-// après un redémarrage du serveur tant que ADMIN_PASSWORD ne change pas.
-// C'est adapté à un POC/démo protégé par mot de passe ; pour une vraie
-// prod multi-utilisateurs, il faudrait des sessions expirables classiques.
-// ═══════════════════════════════════════════════════
 function computeAdminToken() {
   return crypto.createHmac('sha256', ADMIN_PASSWORD).update('xyz-admin-session').digest('hex');
 }
@@ -29,11 +22,6 @@ function isAuthorized(req) {
   return typeof token === 'string' && token === computeAdminToken();
 }
 
-// ═══════════════════════════════════════════════════
-// CONTENU PAR DÉFAUT — structuré, jamais de HTML brut.
-// titleLine1 + titleAccent sont recomposés côté client :
-// titleLine1<br><span class="accent">titleAccent</span>
-// ═══════════════════════════════════════════════════
 const defaultState = {
   faqAsked: [],
   articleOpens: {},
@@ -80,56 +68,20 @@ const defaultContent = {
       desc: "Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail."
     }
   },
-  faqEntries: [], // vide = le client garde sa base FAQ intégrée par défaut
-  faqDrafts: [],  // questions importées en attente de validation, jamais utilisées par la recherche publique
-
-  // ═══════════════════════════════════════════════════
-  // PLANNING & ACTUALITÉS — jalons de la timeline + articles publiés.
-  // Repris tels quels depuis la version précédemment codée en dur dans
-  // index.html, pour que la mise à jour n'efface aucun contenu existant.
-  // ═══════════════════════════════════════════════════
+  faqEntries: [],
+  faqDrafts: [],
   progress: {
     stepLine1: 'Étape 3',
     stepLine2: 'sur 6',
     percent: 42
   },
   milestones: [
-    {
-      id: 'm1', status: 'done',
-      date: 'Oct. 2025',
-      label: 'Lancement du projet',
-      desc: "Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel."
-    },
-    {
-      id: 'm2', status: 'done',
-      date: 'Déc. 2025 – Fév. 2026',
-      label: 'Cadrage & choix du site',
-      desc: "Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux."
-    },
-    {
-      id: 'm3', status: 'current',
-      date: 'Mars – Juin 2026',
-      label: 'Conception & co-construction',
-      desc: "Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site."
-    },
-    {
-      id: 'm4', status: 'future',
-      date: 'Juil. – Sept. 2026',
-      label: 'Préparation opérationnelle',
-      desc: "Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site."
-    },
-    {
-      id: 'm5', status: 'future',
-      date: 'Sem. du 14 oct. 2026',
-      label: 'Déménagement',
-      desc: "Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place."
-    },
-    {
-      id: 'm6', status: 'future',
-      date: 'Nov. 2026+',
-      label: 'Installation & ajustements',
-      desc: "Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture."
-    }
+    { id: 'm1', status: 'done', date: 'Oct. 2025', label: 'Lancement du projet', desc: "Décision de déménagement actée. Constitution de l'équipe projet. Premiers échanges avec les instances représentatives du personnel." },
+    { id: 'm2', status: 'done', date: 'Déc. 2025 – Fév. 2026', label: 'Cadrage & choix du site', desc: "Analyse des sites candidats. Sélection du nouveau site. Validation du programme immobilier et du budget. Information des partenaires sociaux." },
+    { id: 'm3', status: 'current', date: 'Mars – Juin 2026', label: 'Conception & co-construction', desc: "Ateliers de personnalisation des espaces. Finalisation des plans de micro-zoning. Lancement du réseau d'ambassadeurs. Premières visites du site." },
+    { id: 'm4', status: 'future', date: 'Juil. – Sept. 2026', label: 'Préparation opérationnelle', desc: "Travaux d'aménagement intérieur. Préparation logistique des équipes. Communications de bascule. Formations à la prise en main du nouveau site." },
+    { id: 'm5', status: 'future', date: 'Sem. du 14 oct. 2026', label: 'Déménagement', desc: "Bascule progressive des équipes sur le nouveau site. Accueil renforcé. Support IT et logistique en temps réel. Équipe projet disponible sur place." },
+    { id: 'm6', status: 'future', date: 'Nov. 2026+', label: 'Installation & ajustements', desc: "Enquête de satisfaction post-installation. Ajustements des espaces et des règles de vie. Bilan du projet et clôture." }
   ],
   articles: [
     {
@@ -263,6 +215,84 @@ Nous serons honnêtes : tous les arbitrages ne sont pas encore rendus. Nous auri
 
 L'engagement que nous prenons, c'est celui de la transparence progressive : vous informer au fur et à mesure que les décisions sont prises, pas quand tout est parfait. Ce site est l'outil de cet engagement. Si une information que nous avons donnée doit être corrigée, nous le dirons clairement, avec les raisons.`
     }
+  ],
+
+  // ═══════════════════════════════════════════════════
+  // AMBASSADEURS — paragraphes d'intro/CTA + roster de personnes.
+  // ═══════════════════════════════════════════════════
+  ambassadorsContent: {
+    introTitle: "Quel est leur rôle exactement ?",
+    introBody: "Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.\n\nConcrètement, ils font trois choses : ils **relaient les informations** du projet au plus près de leurs collègues, ils **remontent les questions et préoccupations** du terrain vers l'équipe projet via un canal dédié, et ils **participent à la co-construction** des usages et des règles de vie sur le nouveau site.\n\nSi vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.",
+    rosterLabel: "toutes directions",
+    ctaTitle: "Vous souhaitez devenir ambassadeur ?",
+    ctaBody: "Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ."
+  },
+  ambassadors: [
+    { id: 'amb-1', initials: 'SL', name: 'Sophie Lecomte', role: 'Responsable comptabilité clients', tag: 'Finance', imageUrl: '' },
+    { id: 'amb-2', initials: 'TM', name: 'Thomas Meunier', role: 'Chargé de développement RH', tag: 'Ressources humaines', imageUrl: '' },
+    { id: 'amb-3', initials: 'AL', name: 'Amina Laaroussi', role: 'Chef de projet digital', tag: 'Marketing', imageUrl: '' },
+    { id: 'amb-4', initials: 'PD', name: 'Pierre Dumont', role: 'Ingénieur infrastructure', tag: 'DSI', imageUrl: '' },
+    { id: 'amb-5', initials: 'CR', name: 'Claire Renard', role: 'Juriste droit des affaires', tag: 'Juridique', imageUrl: '' },
+    { id: 'amb-6', initials: 'JB', name: 'Julien Berger', role: 'Responsable supply chain', tag: 'Opérations', imageUrl: '' },
+    { id: 'amb-7', initials: 'NF', name: 'Nathalie Ferrand', role: 'Assistante de direction', tag: 'Direction générale', imageUrl: '' },
+    { id: 'amb-8', initials: 'KD', name: 'Karim Djebbar', role: 'Analyste financier senior', tag: 'Contrôle de gestion', imageUrl: '' },
+    { id: 'amb-9', initials: 'MB', name: 'Marie Blanchard', role: 'Responsable formation', tag: 'Ressources humaines', imageUrl: '' },
+    { id: 'amb-10', initials: 'RP', name: 'Romain Petit', role: 'Développeur back-end', tag: 'DSI', imageUrl: '' },
+    { id: 'amb-11', initials: 'LV', name: 'Laura Vasseur', role: 'Chargée de communication interne', tag: 'Communication', imageUrl: '' },
+    { id: 'amb-12', initials: 'FB', name: 'François Bouchard', role: 'Responsable maintenance', tag: 'Services généraux', imageUrl: '' }
+  ],
+
+  // ═══════════════════════════════════════════════════
+  // ÉQUIPE PROJET — une seule liste, différenciée par le champ badge.
+  // ═══════════════════════════════════════════════════
+  teamContent: {
+    parellaIntro: "**Parella** est le cabinet de conseil en immobilier de travail qui accompagne XYZ dans la conception des espaces, l'animation des ateliers de co-construction et la conduite du changement. Son équipe travaille en binôme avec l'équipe projet interne depuis le début du cadrage.",
+    ctaTitle: "Une question pour l'équipe projet ?",
+    ctaBody: "Vous pouvez contacter l'équipe via le formulaire disponible dans l'onglet FAQ. Toutes les demandes sont lues et traitées dans les meilleurs délais."
+  },
+  team: [
+    { id: 'team-1', initials: 'SC', name: 'Stéphanie Collet', title: 'Directrice des Ressources Humaines — Cheffe de projet', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-2', initials: 'BM', name: 'Bruno Marchand', title: 'Directeur Immobilier & Services Généraux', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-3', initials: 'EG', name: 'Élodie Garnier', title: 'RRH — Accompagnement au changement & communication projet', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-4', initials: 'OT', name: 'Olivier Thibaut', title: 'Responsable logistique & coordination déménagement', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-5', initials: 'CV', name: 'Céline Vidal', title: 'DSI — Référente IT du projet', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-6', initials: 'LP', name: 'Laurent Peyre', title: 'Responsable travaux & coordination technique site', badge: 'XYZ', imageUrl: '' },
+    { id: 'team-7', initials: 'MH', name: 'Mathieu Hernandez', title: 'Associé — Directeur de mission', badge: 'Parella', imageUrl: '' },
+    { id: 'team-8', initials: 'IR', name: 'Isabelle Rousseau', title: 'Manager — Conduite du changement & communication', badge: 'Parella', imageUrl: '' },
+    { id: 'team-9', initials: 'AK', name: 'Antoine Keller', title: 'Consultant senior — Design des espaces de travail', badge: 'Parella', imageUrl: '' },
+    { id: 'team-10', initials: 'SN', name: 'Sara Nguyen', title: 'Consultante — Animation ateliers & diagnostic usage', badge: 'Parella', imageUrl: '' },
+    { id: 'team-11', initials: 'GF', name: 'Guillaume Faure', title: 'Consultant — Programmation immobilière & zoning', badge: 'Parella', imageUrl: '' }
+  ],
+
+  // ═══════════════════════════════════════════════════
+  // PLANS & 3D — un visuel par carte (image ou PDF, même champ imageUrl ;
+  // le type réel est déduit de l'extension au moment de l'affichage).
+  // ═══════════════════════════════════════════════════
+  plans: [
+    {
+      id: 'plan-1', type: 'Plan', tags: 'Macro-zoning', title: 'Plan macro-zoning — vue générale niveau R+1', imageUrl: 'Plan.jpg',
+      comment: "Ce plan présente la répartition grande maille des usages sur le niveau R+1, principal plateau de travail du site. Les zones colorées correspondent aux grandes familles d'usages : bleu clair pour les espaces de travail ouverts, bleu foncé pour les zones de concentration, vert pour les espaces collaboratifs, ocre pour les salles de réunion formelle, orange pour les cabines phoniques en accès libre. Le niveau est organisé autour d'une colonne vertébrale centrale qui sépare les espaces de concentration (côté nord) des espaces collaboratifs (côté sud, plus lumineux). On remarque la densité des cabines phoniques : neuf cabines réparties sur l'ensemble du plateau, soit une cabine pour environ vingt postes — un ratio volontairement généreux. L'implantation précise des équipes sur ce plateau n'est pas encore arrêtée et sera co-construite dans les ateliers d'avril."
+    },
+    {
+      id: 'plan-2', type: '3D', tags: 'Ambiance', title: 'Vue 3D — espace de convivialité central', imageUrl: 'Vue3D.jpg',
+      comment: "Cet espace de 180 m² est conçu pour être le cœur battant du site. Lumineux, ouvert, il accueillera les pauses, les déjeuners informels et les échanges spontanés entre équipes. Le mobilier est volontairement mixte : tables hautes pour les échanges debout, assises basses pour les moments détendus, coins semi-privatifs délimités par des cloisons végétalisées. L'îlot central accueille les équipements de restauration légère. Les matériaux — bois clair, béton poncé, végétation intérieure, textile acoustique — créent une ambiance chaleureuse tout en maintenant le temps de réverbération sous 0,6 seconde."
+    },
+    {
+      id: 'plan-3', type: 'Plan', tags: 'Micro-zoning', title: 'Plan micro-zoning — équipe Finance & Contrôle de gestion (exemple)', imageUrl: '',
+      comment: "Ce plan de détail est présenté à titre d'exemple pour illustrer le niveau de précision des plans de micro-zoning par équipe. Il ne reflète pas l'implantation définitive — celle-ci sera construite dans l'atelier dédié, prévu mi-avril. On distingue 24 postes organisés en îlots de 4, séparés par des cloisons basses (H.140 cm), deux cabines phoniques à moins de 15 mètres de tout poste, une salle de réunion attenante de 6 personnes, et un espace de rangement avec casiers individuels nominatifs. L'orientation des îlots, la position des cloisons et l'attribution des casiers peuvent être ajustés dans l'atelier."
+    },
+    {
+      id: 'plan-4', type: '3D', tags: 'Concentration', title: 'Vue 3D — cabine phonique et zone de focus', imageUrl: '',
+      comment: "Cette vue présente les deux dispositifs les plus attendus : les cabines phoniques individuelles et la zone de focus collective. Chaque cabine fait environ 2 m², équipée d'un siège ergonomique, d'un écran externe (USB-C), d'une ventilation silencieuse et d'un éclairage variable. Isolation acoustique : Rw 38 dB. Accès libre sans réservation, voyant vert/rouge visible depuis l'extérieur. La zone de focus adjacente est régie par des règles strictes : silence complet, pas de téléphone, pas de conversations. Délimitée par un changement de revêtement de sol et une signalétique discrète."
+    },
+    {
+      id: 'plan-5', type: 'Plan', tags: 'Macro-zoning', title: 'Plan macro-zoning — rez-de-chaussée complet', imageUrl: '',
+      comment: "Le rez-de-chaussée concentre les fonctions d'accueil et de services. On y trouve : l'accueil principal avec contrôle d'accès par badge, un espace restauration de 400 m² (120 couverts + terrasse extérieure 60 places), trois salles de réunion grandes capacités (20, 30 et 40 personnes) accessibles sans badge, le point colis (accès 24h/24), la salle de sport et les vestiaires (sous-sol), et le local vélos sécurisé (accès direct depuis la rue). Les modalités de fonctionnement de l'espace restauration — self, formule plateau, commande digitale — ne sont pas encore arrêtées."
+    },
+    {
+      id: 'plan-6', type: '3D', tags: 'Ambiance', title: "Vue 3D — hall d'entrée depuis l'accueil", imageUrl: '',
+      comment: "Le hall est traversé par une lumière naturelle zénithale provenant d'une verrière d'environ 80 m² située au-dessus de la double hauteur centrale (6,5 m). Les matériaux — pierre claire au sol, béton ciré sur les parties structurelles, panneau bois sur les cloisons légères — créent une ambiance à la fois minérale et chaleureuse. L'escalier principal, généreusement dimensionné (2,4 m de largeur), est visible depuis l'entrée pour encourager son usage. Lors des premières semaines, une équipe d'accueil renforcée sera présente en déambulation pour orienter les collaborateurs et faciliter la prise en main du site."
+    }
   ]
 };
 
@@ -270,8 +300,6 @@ function stripTags(value) {
   return String(value || '').replace(/<[^>]+>/g, '').trim();
 }
 
-// Répare/complète une entrée de contenu qui viendrait d'une ancienne
-// version (titre en HTML brut) ou d'un champ manquant.
 function normalizeScopeContent(scope, raw) {
   const fallback = defaultContent.publicContent[scope] || {};
   const out = {
@@ -280,7 +308,6 @@ function normalizeScopeContent(scope, raw) {
     titleAccent: typeof raw?.titleAccent === 'string' ? raw.titleAccent : '',
     desc: typeof raw?.desc === 'string' ? raw.desc : fallback.desc || ''
   };
-  // Migration depuis l'ancien format (title en HTML avec <br> et <span class="accent">)
   if (!out.titleLine1 && !out.titleAccent && typeof raw?.title === 'string') {
     const parts = raw.title.split(/<br\s*\/?>/i);
     out.titleLine1 = stripTags(parts[0] || '');
@@ -302,11 +329,6 @@ function normalizePublicContent(raw) {
   return out;
 }
 
-// ═══════════════════════════════════════════════════
-// PLANNING & ACTUALITÉS — normalisation défensive (mêmes garanties que
-// pour le reste du contenu : jamais de crash si un champ manque ou si
-// le fichier content.json vient d'une version antérieure au CMS actuel).
-// ═══════════════════════════════════════════════════
 function normalizeProgress(raw) {
   const fallback = defaultContent.progress;
   const percentRaw = Number(raw?.percent);
@@ -349,20 +371,20 @@ function normalizeArticles(raw) {
   return raw.map((a, i) => normalizeArticle(a, i));
 }
 
-function normalizePlan(raw, index) {
+// ═══════════════════════════════════════════════════
+// AMBASSADEURS / ÉQUIPE / PLANS — mêmes garanties défensives que le
+// reste du contenu (jamais de crash si un champ manque ou si le fichier
+// content.json vient d'une version antérieure au CMS actuel).
+// ═══════════════════════════════════════════════════
+function normalizeAmbassadorsContent(raw) {
+  const fallback = defaultContent.ambassadorsContent;
   return {
-    id: typeof raw?.id === 'string' && raw.id ? raw.id : `plan-${Date.now()}-${index}`,
-    type: typeof raw?.type === 'string' ? raw.type : 'Plan',
-    tags: typeof raw?.tags === 'string' ? raw.tags : '',
-    title: typeof raw?.title === 'string' ? raw.title : '',
-    imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : '',
-    comment: typeof raw?.comment === 'string' ? raw.comment : ''
+    introTitle: typeof raw?.introTitle === 'string' ? raw.introTitle : fallback.introTitle,
+    introBody: typeof raw?.introBody === 'string' ? raw.introBody : fallback.introBody,
+    rosterLabel: typeof raw?.rosterLabel === 'string' ? raw.rosterLabel : fallback.rosterLabel,
+    ctaTitle: typeof raw?.ctaTitle === 'string' ? raw.ctaTitle : fallback.ctaTitle,
+    ctaBody: typeof raw?.ctaBody === 'string' ? raw.ctaBody : fallback.ctaBody
   };
-}
-
-function normalizePlans(raw) {
-  if (!Array.isArray(raw)) return structuredClone(defaultContent.plans);
-  return raw.map((p, i) => normalizePlan(p, i));
 }
 
 function normalizeAmbassador(raw, index) {
@@ -381,13 +403,22 @@ function normalizeAmbassadors(raw) {
   return raw.map((a, i) => normalizeAmbassador(a, i));
 }
 
+function normalizeTeamContent(raw) {
+  const fallback = defaultContent.teamContent;
+  return {
+    parellaIntro: typeof raw?.parellaIntro === 'string' ? raw.parellaIntro : fallback.parellaIntro,
+    ctaTitle: typeof raw?.ctaTitle === 'string' ? raw.ctaTitle : fallback.ctaTitle,
+    ctaBody: typeof raw?.ctaBody === 'string' ? raw.ctaBody : fallback.ctaBody
+  };
+}
+
 function normalizeTeamMember(raw, index) {
   return {
     id: typeof raw?.id === 'string' && raw.id ? raw.id : `team-${Date.now()}-${index}`,
     initials: typeof raw?.initials === 'string' ? raw.initials : '',
     name: typeof raw?.name === 'string' ? raw.name : '',
     title: typeof raw?.title === 'string' ? raw.title : '',
-    badge: typeof raw?.badge === 'string' ? raw.badge : 'XYZ',
+    badge: raw?.badge === 'Parella' ? 'Parella' : 'XYZ',
     imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : ''
   };
 }
@@ -395,6 +426,22 @@ function normalizeTeamMember(raw, index) {
 function normalizeTeam(raw) {
   if (!Array.isArray(raw)) return structuredClone(defaultContent.team);
   return raw.map((t, i) => normalizeTeamMember(t, i));
+}
+
+function normalizePlan(raw, index) {
+  return {
+    id: typeof raw?.id === 'string' && raw.id ? raw.id : `plan-${Date.now()}-${index}`,
+    type: typeof raw?.type === 'string' ? raw.type : 'Plan',
+    tags: typeof raw?.tags === 'string' ? raw.tags : '',
+    title: typeof raw?.title === 'string' ? raw.title : '',
+    imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : '',
+    comment: typeof raw?.comment === 'string' ? raw.comment : ''
+  };
+}
+
+function normalizePlans(raw) {
+  if (!Array.isArray(raw)) return structuredClone(defaultContent.plans);
+  return raw.map((p, i) => normalizePlan(p, i));
 }
 
 function ensureDataStore() {
@@ -453,9 +500,11 @@ function readContentState() {
       progress: normalizeProgress(parsed.progress),
       milestones: normalizeMilestones(parsed.milestones),
       articles: normalizeArticles(parsed.articles),
-      plans: normalizePlans(parsed.plans),
+      ambassadorsContent: normalizeAmbassadorsContent(parsed.ambassadorsContent),
       ambassadors: normalizeAmbassadors(parsed.ambassadors),
-      team: normalizeTeam(parsed.team)
+      teamContent: normalizeTeamContent(parsed.teamContent),
+      team: normalizeTeam(parsed.team),
+      plans: normalizePlans(parsed.plans)
     };
   } catch (error) {
     fs.writeFileSync(CONTENT_FILE, JSON.stringify(defaultContent, null, 2), 'utf8');
@@ -473,9 +522,11 @@ function writeContentState(contentState) {
     progress: normalizeProgress(contentState.progress),
     milestones: normalizeMilestones(contentState.milestones),
     articles: normalizeArticles(contentState.articles),
-    plans: normalizePlans(contentState.plans),
+    ambassadorsContent: normalizeAmbassadorsContent(contentState.ambassadorsContent),
     ambassadors: normalizeAmbassadors(contentState.ambassadors),
-    team: normalizeTeam(contentState.team)
+    teamContent: normalizeTeamContent(contentState.teamContent),
+    team: normalizeTeam(contentState.team),
+    plans: normalizePlans(contentState.plans)
   };
   fs.writeFileSync(CONTENT_FILE, JSON.stringify(safe, null, 2), 'utf8');
   return safe;
@@ -558,7 +609,12 @@ const server = http.createServer(async (req, res) => {
         faqDrafts: parsed.faqDrafts,
         progress: parsed.progress,
         milestones: parsed.milestones,
-        articles: parsed.articles
+        articles: parsed.articles,
+        ambassadorsContent: parsed.ambassadorsContent,
+        ambassadors: parsed.ambassadors,
+        teamContent: parsed.teamContent,
+        team: parsed.team,
+        plans: parsed.plans
       });
       sendJson(res, 200, { ok: true, content: saved });
     } catch (error) {
