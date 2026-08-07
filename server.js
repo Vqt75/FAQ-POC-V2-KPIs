@@ -590,12 +590,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname === '/api/kpi') {
+    if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
     sendJson(res, 200, readKpiState());
     return;
   }
 
   if (req.method === 'GET' && url.pathname === '/api/content') {
-    sendJson(res, 200, readContentState());
+    const full = readContentState();
+    if (isAuthorized(req)) {
+      sendJson(res, 200, full);
+    } else {
+      // Public-by-design : contenu destiné aux collaborateurs uniquement.
+      // faqDrafts est réservé à l'admin — en attente de validation, jamais publié.
+      const { faqDrafts, ...publicSafe } = full;
+      sendJson(res, 200, publicSafe);
+    }
     return;
   }
 

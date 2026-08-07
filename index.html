@@ -3315,7 +3315,8 @@
 
   async function loadKpi() {
     try {
-      const res = await fetch('/api/kpi');
+      const res = await fetch('/api/kpi', { headers: { 'x-admin-token': getAdminToken() } });
+      if (res.status === 401) return { unauthorized: true };
       if (!res.ok) throw new Error('API KPI indisponible');
       const data = await res.json();
       return {
@@ -3358,7 +3359,7 @@
   // ═══════════════════════════════════════════════════
   async function loadContent() {
     try {
-      const res = await fetch('/api/content');
+      const res = await fetch('/api/content', { headers: { 'x-admin-token': getAdminToken() } });
       if (!res.ok) throw new Error('API contenu indisponible');
       const data = await res.json();
       return {
@@ -4633,6 +4634,12 @@ CALENDRIER
 
   async function refreshAdminPage() {
     const [kpi, content] = await Promise.all([loadKpi(), loadContent()]);
+    if (kpi.unauthorized) {
+      showToast('Votre session a expiré. Reconnectez-vous.');
+      clearAdminToken();
+      openAdminModal();
+      return;
+    }
     currentAdminContent = content;
     if (content.faqEntries.length) faqData = content.faqEntries;
     const adminProjectName = document.getElementById('adminProjectName');
@@ -6828,6 +6835,12 @@ CALENDRIER
       return;
     }
     const kpi = await loadKpi();
+    if (kpi.unauthorized) {
+      showToast('Votre session a expiré. Reconnectez-vous.');
+      clearAdminToken();
+      openAdminModal();
+      return;
+    }
     const wb = XLSX.utils.book_new();
 
     const totalAsked        = kpi.faqAsked.length;
