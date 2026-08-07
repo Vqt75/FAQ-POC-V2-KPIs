@@ -456,12 +456,38 @@ function ensureDataStore() {
   }
 }
 
+const HEX_COLOR_RE = /^#[0-9A-Fa-f]{6}$/;
+
+function normalizeBrandColors(raw) {
+  const fallback = ['#1E1D1E', '#C2AF7E'];
+  if (!Array.isArray(raw)) return fallback;
+  const cleaned = raw.filter(c => typeof c === 'string' && HEX_COLOR_RE.test(c)).slice(0, 2);
+  return cleaned.length ? cleaned : fallback;
+}
+
+function normalizeBrandFont(raw, index) {
+  const fallbackName = index === 0 ? 'Roboto' : 'Italiana';
+  return {
+    name: typeof raw?.name === 'string' && raw.name.trim() ? raw.name.trim() : fallbackName,
+    fileName: typeof raw?.fileName === 'string' ? raw.fileName : '',
+    source: raw?.source === 'upload' ? 'upload' : 'system'
+  };
+}
+
+function normalizeBrandFonts(raw) {
+  const fallback = [normalizeBrandFont(null, 0), normalizeBrandFont(null, 1)];
+  if (!Array.isArray(raw) || !raw.length) return fallback;
+  return raw.slice(0, 2).map((f, i) => normalizeBrandFont(f, i));
+}
+
 function normalizeBranding(raw) {
   const theme = (raw?.theme === 'rainbow-glass' || raw?.theme === 'midnight-frost') ? raw.theme : 'default';
   return {
     projectName: typeof raw?.projectName === 'string' && raw.projectName.trim() ? raw.projectName : defaultContent.branding.projectName,
     logoUrl: typeof raw?.logoUrl === 'string' ? raw.logoUrl : '',
-    theme
+    theme,
+    colors: normalizeBrandColors(raw?.colors),
+    fonts: normalizeBrandFonts(raw?.fonts)
   };
 }
 
