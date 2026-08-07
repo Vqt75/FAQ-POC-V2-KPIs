@@ -2876,6 +2876,7 @@
 
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
+  <link rel="stylesheet" href="./themes/midnight-frost.css">
   <link rel="stylesheet" href="./demo/storm-demo.css">
 </head>
 <body>
@@ -3508,8 +3509,11 @@
   // Applique le thème public sans toucher à l'administration.
   // Le thème actuel reste la valeur par défaut.
   function applyTheme(theme) {
-    const normalizedTheme = theme === 'rainbow-glass' ? 'rainbow-glass' : 'default';
+    const normalizedTheme = theme === 'rainbow-glass'
+      ? 'rainbow-glass'
+      : (theme === 'midnight-frost' ? 'midnight-frost' : 'default');
     document.body.classList.toggle('theme-rainbow-glass', normalizedTheme === 'rainbow-glass');
+    document.body.classList.toggle('theme-midnight-frost', normalizedTheme === 'midnight-frost');
     document.body.dataset.publicTheme = normalizedTheme;
     document.dispatchEvent(new CustomEvent('storm-theme-change', {
       detail: { theme: normalizedTheme }
@@ -5123,10 +5127,10 @@ CALENDRIER
           <div class="storm-theme-grid" id="stormThemeGrid">
             <button
               type="button"
-              class="storm-theme-option ${branding.theme !== 'rainbow-glass' ? 'selected is-previewing is-applied' : ''}"
+              class="storm-theme-option ${(!branding.theme || branding.theme === 'default') ? 'selected is-previewing is-applied' : ''}"
               data-theme-value="default"
               data-preview-theme="ivory"
-              aria-pressed="${branding.theme !== 'rainbow-glass' ? 'true' : 'false'}"
+              aria-pressed="${(!branding.theme || branding.theme === 'default') ? 'true' : 'false'}"
             >
               <span class="storm-theme-active-badge">Actif</span>
               <div class="storm-theme-preview ivory">
@@ -5163,12 +5167,12 @@ CALENDRIER
 
             <button
               type="button"
-              class="storm-theme-option"
+              class="storm-theme-option ${branding.theme === 'midnight-frost' ? 'selected is-previewing is-applied' : ''}"
+              data-theme-value="midnight-frost"
               data-preview-theme="midnight-frost"
-              aria-pressed="false"
-              title="Aperçu disponible. Le thème sera relié au moteur de publication dans une prochaine étape."
+              aria-pressed="${branding.theme === 'midnight-frost' ? 'true' : 'false'}"
             >
-              <span class="storm-theme-badge">Aperçu</span>
+              <span class="storm-theme-active-badge">Actif</span>
               <div class="storm-theme-preview midnight">
                 <span style="position:absolute;left:15px;bottom:15px;font-size:.54rem;font-weight:600;color:white;z-index:2;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(branding.projectName || 'Projet')}</span>
               </div>
@@ -5185,15 +5189,17 @@ CALENDRIER
           <div class="storm-theme-note" id="brandingThemeHelp">
             ${branding.theme === 'rainbow-glass'
               ? 'Rainbow Glass est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.'
-              : 'Ivory est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.'}
+              : (branding.theme === 'midnight-frost'
+                ? 'Midnight Frost est sélectionné. Le contenu reste identique ; la marque devient lumière dans une interface nocturne.'
+                : 'Ivory est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.')}
           </div>
 
           <div class="storm-theme-sampler-shell">
             <div class="storm-theme-sampler-toolbar"><i></i><i></i><i></i><span>Aperçu de votre projet</span></div>
-            <div id="stormThemeSamplerHost">${themeSamplerHtml(branding.theme === 'rainbow-glass' ? 'rainbow-glass' : 'ivory')}</div>
+            <div id="stormThemeSamplerHost">${themeSamplerHtml(branding.theme === 'rainbow-glass' ? 'rainbow-glass' : (branding.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory'))}</div>
           </div>
           <div class="storm-theme-sampler-caption">
-            <span><strong id="stormThemeSamplerLabel">${branding.theme === 'rainbow-glass' ? 'Rainbow Glass' : 'Ivory'}</strong> · aperçu construit à partir de votre projet.</span>
+            <span><strong id="stormThemeSamplerLabel">${branding.theme === 'rainbow-glass' ? 'Rainbow Glass' : (branding.theme === 'midnight-frost' ? 'Midnight Frost' : 'Ivory')}</strong> · aperçu construit à partir de votre projet.</span>
             <span id="stormThemeSamplerState">Sélection actuelle</span>
           </div>
           <div class="storm-client-example-row">
@@ -5263,10 +5269,12 @@ CALENDRIER
       const samplerHost = document.getElementById('stormThemeSamplerHost');
       const samplerLabel = document.getElementById('stormThemeSamplerLabel');
       const samplerState = document.getElementById('stormThemeSamplerState');
-      let previewTheme = branding.theme === 'rainbow-glass' ? 'rainbow-glass' : 'ivory';
+      let previewTheme = branding.theme === 'rainbow-glass' ? 'rainbow-glass' : (branding.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory');
 
       function appliedPreviewTheme() {
-        return content.branding?.theme === 'rainbow-glass' ? 'rainbow-glass' : 'ivory';
+        return content.branding?.theme === 'rainbow-glass'
+          ? 'rainbow-glass'
+          : (content.branding?.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory');
       }
 
       function refreshThemeCards(preview) {
@@ -5286,16 +5294,11 @@ CALENDRIER
         samplerHost.innerHTML = themeSamplerHtml(theme);
         samplerLabel.textContent = samplerThemeLabel(theme);
 
-        const supported = theme === 'ivory' || theme === 'rainbow-glass';
         const isApplied = theme === appliedPreviewTheme();
-
-        if (theme === 'midnight-frost') {
-          samplerState.textContent = 'Aperçu uniquement';
-          themeHelp.textContent = 'Midnight Frost est présenté ici en aperçu. Cette édition sera reliée au moteur de publication dans une prochaine étape.';
-        } else {
-          samplerState.textContent = isApplied ? 'Sélection actuelle' : 'Nouvelle sélection';
-          themeHelp.textContent = `${samplerThemeLabel(theme)} est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.`;
-        }
+        samplerState.textContent = isApplied ? 'Sélection actuelle' : 'Nouvelle sélection';
+        themeHelp.textContent = theme === 'midnight-frost'
+          ? 'Midnight Frost est sélectionné. Le contenu reste identique ; la marque devient lumière dans une interface nocturne.'
+          : `${samplerThemeLabel(theme)} est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.`;
 
         refreshThemeCards(theme);
 
@@ -5312,12 +5315,10 @@ CALENDRIER
         option.addEventListener('click', () => {
           const theme = option.dataset.previewTheme;
 
-          // Ivory and Rainbow Glass are already understood by the current engine.
-          // Midnight Frost is deliberately preview-only until that engine is connected.
-          if (theme === 'ivory' || theme === 'rainbow-glass') {
-            content.branding = content.branding || {};
-            content.branding.theme = theme === 'rainbow-glass' ? 'rainbow-glass' : 'default';
-          }
+          content.branding = content.branding || {};
+          content.branding.theme = theme === 'rainbow-glass'
+            ? 'rainbow-glass'
+            : (theme === 'midnight-frost' ? 'midnight-frost' : 'default');
 
           renderThemeSampler(theme, true);
         });
@@ -6903,6 +6904,7 @@ CALENDRIER
 
 </script>
   <script src="./themes/rainbow-glass.js"></script>
+  <script src="./themes/midnight-frost.js"></script>
   <script src="./demo/storm-demo.js"></script>
 </body>
 </html>

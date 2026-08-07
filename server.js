@@ -457,7 +457,7 @@ function ensureDataStore() {
 }
 
 function normalizeBranding(raw) {
-  const theme = raw?.theme === 'rainbow-glass' ? 'rainbow-glass' : 'default';
+  const theme = (raw?.theme === 'rainbow-glass' || raw?.theme === 'midnight-frost') ? raw.theme : 'default';
   return {
     projectName: typeof raw?.projectName === 'string' && raw.projectName.trim() ? raw.projectName : defaultContent.branding.projectName,
     logoUrl: typeof raw?.logoUrl === 'string' ? raw.logoUrl : '',
