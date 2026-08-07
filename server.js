@@ -445,6 +445,54 @@ function normalizePlans(raw) {
   return raw.map((p, i) => normalizePlan(p, i));
 }
 
+const FAQ_STATUS_LABELS = {
+  confirmed: 'Réponse confirmée',
+  partial: 'Réponse partielle',
+  waiting: 'En attente de décision'
+};
+
+function normalizeStringArray(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(v => typeof v === 'string' && v.trim());
+}
+
+// Contrat vérifié directement sur les 34 entrées réelles (index.html)
+// et sur la sortie de l'import Word (parseDocxToFaqEntries) avant
+// d'écrire cette fonction — voir TECTONIC_AUDIT.md, section « FAQ
+// contract hardening ». Garantit le shape et la compatibilité du
+// moteur ; n'est PAS une couche de correction métier ni de migration
+// sémantique. Un champ tableau mal typé retombe systématiquement sur
+// [] — jamais de tentative d'interprétation ou de découpage.
+function normalizeFaqEntry(raw, index) {
+  const status = ['confirmed', 'partial', 'waiting'].includes(raw?.status) ? raw.status : 'waiting';
+  const statusWasValid = status === raw?.status;
+  const statusLabel = (statusWasValid && typeof raw?.statusLabel === 'string' && raw.statusLabel.trim())
+    ? raw.statusLabel
+    : FAQ_STATUS_LABELS[status];
+  const priorityNum = Number(raw?.priority);
+
+  return {
+    id: typeof raw?.id === 'string' && raw.id ? raw.id : `faq-${Date.now()}-${index}`,
+    title: typeof raw?.title === 'string' ? raw.title : '',
+    answer: typeof raw?.answer === 'string' ? raw.answer : '',
+    status,
+    statusLabel,
+    category: typeof raw?.category === 'string' ? raw.category : '',
+    note: typeof raw?.note === 'string' ? raw.note : '',
+    keywords: normalizeStringArray(raw?.keywords),
+    phrases: normalizeStringArray(raw?.phrases),
+    intentSignals: normalizeStringArray(raw?.intentSignals),
+    emotionSignals: normalizeStringArray(raw?.emotionSignals),
+    negativeSignals: normalizeStringArray(raw?.negativeSignals),
+    priority: Number.isFinite(priorityNum) ? priorityNum : 0
+  };
+}
+
+function normalizeFaqEntries(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw.map((e, i) => normalizeFaqEntry(e, i));
+}
+
 function ensureDataStore() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -523,8 +571,8 @@ function readContentState() {
     return {
       branding: normalizeBranding(parsed.branding),
       publicContent: normalizePublicContent(parsed.publicContent),
-      faqEntries: Array.isArray(parsed.faqEntries) ? parsed.faqEntries : [],
-      faqDrafts: Array.isArray(parsed.faqDrafts) ? parsed.faqDrafts : [],
+      faqEntries: normalizeFaqEntries(parsed.faqEntries),
+      faqDrafts: normalizeFaqEntries(parsed.faqDrafts),
       progress: normalizeProgress(parsed.progress),
       milestones: normalizeMilestones(parsed.milestones),
       articles: normalizeArticles(parsed.articles),
@@ -545,8 +593,8 @@ function writeContentState(contentState) {
   const safe = {
     branding: normalizeBranding(contentState.branding),
     publicContent: normalizePublicContent(contentState.publicContent),
-    faqEntries: Array.isArray(contentState.faqEntries) ? contentState.faqEntries : [],
-    faqDrafts: Array.isArray(contentState.faqDrafts) ? contentState.faqDrafts : [],
+    faqEntries: normalizeFaqEntries(contentState.faqEntries),
+    faqDrafts: normalizeFaqEntries(contentState.faqDrafts),
     progress: normalizeProgress(contentState.progress),
     milestones: normalizeMilestones(contentState.milestones),
     articles: normalizeArticles(contentState.articles),
