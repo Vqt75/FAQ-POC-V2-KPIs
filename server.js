@@ -27,7 +27,8 @@ const defaultState = {
   articleOpens: {},
   tabViews: {},
   contactSubmissions: [],
-  visitSessions: []
+  visitSessions: [],
+  moodEntries: [] // baromètre météo du projet — anonyme, jamais lié à une session
 };
 
 const defaultContent = {
@@ -474,7 +475,8 @@ function readKpiState() {
       articleOpens: parsed.articleOpens && typeof parsed.articleOpens === 'object' ? parsed.articleOpens : {},
       tabViews: parsed.tabViews && typeof parsed.tabViews === 'object' ? parsed.tabViews : {},
       contactSubmissions: Array.isArray(parsed.contactSubmissions) ? parsed.contactSubmissions : [],
-      visitSessions: Array.isArray(parsed.visitSessions) ? parsed.visitSessions : []
+      visitSessions: Array.isArray(parsed.visitSessions) ? parsed.visitSessions : [],
+      moodEntries: Array.isArray(parsed.moodEntries) ? parsed.moodEntries : []
     };
   } catch (error) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(defaultState, null, 2), 'utf8');
@@ -702,6 +704,13 @@ const server = http.createServer(async (req, res) => {
           message: String(parsed.message || ''),
           ts: Number(parsed.ts || Date.now())
         });
+      } else if (parsed.type === 'mood') {
+        const value = Math.round(Number(parsed.value));
+        if (Number.isInteger(value) && value >= 1 && value <= 5) {
+          // Volontairement anonyme : ni sessionId, ni IP, ni aucun identifiant —
+          // seule la valeur et l'horodatage sont conservés.
+          state.moodEntries.push({ value, ts: Number(parsed.ts || Date.now()) });
+        }
       }
 
       writeKpiState(state);
