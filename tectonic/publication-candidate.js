@@ -1,6 +1,6 @@
 // TECTONIC — buildPublicationCandidate()
 //
-// Implémentation conforme à TECTONIC_PUBLICATION_CANDIDATE_DESIGN.md.
+// Implémentation conforme à TECTONIC_PUBLICATION_CANDIDATE.md.
 // Phase 1 du plan d'implémentation : cette fonction est implémentée et
 // testée en isolation — elle n'est encore importée ni appelée nulle
 // part dans server.js (aucun branchement avant la Phase 4).

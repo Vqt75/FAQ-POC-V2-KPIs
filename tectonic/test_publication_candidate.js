@@ -1,5 +1,5 @@
 // Tests de buildPublicationCandidate() — 3 familles, conformes au
-// document gelé TECTONIC_PUBLICATION_CANDIDATE_DESIGN.md §6.
+// document gelé TECTONIC_PUBLICATION_CANDIDATE.md §6.
 // Isolation totale : aucun serveur HTTP, aucun accès disque hors
 // lecture de la fixture, aucun effet de bord sur data/ ou uploads/.
 const assert = require('assert');
