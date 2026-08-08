@@ -643,6 +643,39 @@ function serveStaticFile(res, filePath) {
   });
 }
 
+// Dossiers publics — whitelist positive, construite depuis un audit
+// des usages réels (voir commentaire au point d'appel). Ajouter un
+// dossier ici est un choix délibéré, jamais une conséquence
+// accidentelle de la simple présence d'un fichier sur disque.
+const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads'];
+// Extensions réellement utilisées par ces dossiers aujourd'hui
+// (CSS/JS des thèmes et de la démo, images de marque, uploads
+// png/jpg/pdf — cohérent avec ALLOWED_UPLOAD_TYPES).
+const PUBLIC_STATIC_EXTENSIONS = ['.css', '.js', '.png', '.jpg', '.jpeg', '.pdf'];
+
+function resolvePublicStaticFile(pathname) {
+  const segments = pathname.split('/').filter(Boolean);
+  // Un fichier public vit toujours dans un sous-dossier whitelisté —
+  // jamais directement à la racine (ce qui exclurait déjà server.js,
+  // .gitignore, package.json, les documents TECTONIC_*.md, etc.).
+  if (segments.length < 2) return null;
+  const topDir = segments[0];
+  if (!PUBLIC_STATIC_DIRECTORIES.includes(topDir)) return null;
+
+  const ext = path.extname(pathname).toLowerCase();
+  if (!PUBLIC_STATIC_EXTENSIONS.includes(ext)) return null;
+
+  const resolved = path.normalize(path.join(ROOT, pathname));
+  // Défense en profondeur contre toute tentative de remontée de
+  // chemin (../../server.js), même si la vérification de dossier
+  // ci-dessus la rend déjà très improbable.
+  if (!resolved.startsWith(path.join(ROOT, topDir) + path.sep) && resolved !== path.join(ROOT, topDir)) {
+    return null;
+  }
+  if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) return null;
+  return resolved;
+}
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let body = '';
@@ -809,10 +842,30 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ── Fichiers statiques publics — WHITELIST explicite ──────────
+  // Corrige une faille de sécurité réelle : l'ancien comportement
+  // servait N'IMPORTE QUEL fichier existant sous ROOT (server.js, les
+  // tests, data/content.json et data/kpis.json en clair — tout l'état
+  // autoritaire, y compris faqDrafts et les contacts — étaient donc
+  // publiquement lisibles sans authentification, en contournant
+  // complètement les protections posées sur /api/content et /api/kpi).
+  //
+  // Whitelist construite depuis un audit des usages RÉELS (grep sur
+  // index.html et les fichiers CSS/JS référencés), pas depuis une
+  // supposition — seuls ces 4 dossiers contiennent des ressources
+  // effectivement chargées par le navigateur :
+  //   /assets/...  logo et visuels de marque
+  //   /demo/...    démo de présentation Storm (CSS + JS)
+  //   /themes/...  Rainbow Glass et Midnight Frost (CSS + JS)
+  //   /uploads/... fichiers uploadés par l'admin (png/jpg/pdf)
+  // Jamais /data/**, jamais server.js, jamais tectonic/**, jamais les
+  // documents d'architecture, jamais .git*/.gitignore/package*.json —
+  // une whitelist positive, pas une liste noire qu'il faudrait
+  // deviner à chaque nouveau fichier ajouté au dépôt.
   if (req.method === 'GET') {
-    const requested = path.normalize(path.join(ROOT, url.pathname));
-    if (requested.startsWith(ROOT) && fs.existsSync(requested) && fs.statSync(requested).isFile()) {
-      serveStaticFile(res, requested);
+    const servable = resolvePublicStaticFile(url.pathname);
+    if (servable) {
+      serveStaticFile(res, servable);
       return;
     }
   }
