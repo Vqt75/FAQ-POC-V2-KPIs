@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { publishFromAuthoritativeState, CompilerBlockingError } = require('./tectonic/publish');
 
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'parella2026'; // ⚠️ à changer via la variable d'environnement avant tout partage
@@ -767,6 +768,36 @@ const server = http.createServer(async (req, res) => {
       sendJson(res, 200, { ok: true, url: `/uploads/${safeName}` });
     } catch (error) {
       sendJson(res, 400, { ok: false, error: "Échec de l'envoi du fichier." });
+    }
+    return;
+  }
+
+  // ── Publication (Phase 4 Tectonic) ────────────────────────────
+  // Aucune donnée cliente n'est lue pour cet endpoint (pas d'appel à
+  // readBody) : le serveur publie toujours depuis son propre état
+  // autoritaire, jamais depuis un Manifest ou un contenu envoyé par
+  // le client. C'est une garantie structurelle, pas une simple
+  // discipline — il n'y a tout simplement rien à lire dans le corps
+  // de la requête pour cette route.
+  if (req.method === 'POST' && url.pathname === '/api/admin/publish') {
+    if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
+    try {
+      const authoritativeState = readContentState();
+      const manifestPath = path.join(DATA_DIR, 'manifest.json');
+      const result = publishFromAuthoritativeState(authoritativeState, manifestPath);
+      sendJson(res, 200, { ok: true, revision: result.revision, generatedAt: result.generatedAt });
+    } catch (error) {
+      if (error instanceof CompilerBlockingError) {
+        // Erreur bloquante attendue et déjà porteuse d'un message
+        // utile — le dernier Manifest publié n'a pas été touché.
+        sendJson(res, 422, { ok: false, error: `Publication refusée : ${error.message}` });
+      } else {
+        // Erreur inattendue (échec d'écriture, par exemple) — jamais
+        // de stack trace exposée au client, seulement un message
+        // générique. Le détail reste dans les journaux serveur.
+        console.error('Échec de publication (Phase 4) :', error);
+        sendJson(res, 500, { ok: false, error: 'La publication a échoué. Le dernier Manifest publié reste inchangé.' });
+      }
     }
     return;
   }

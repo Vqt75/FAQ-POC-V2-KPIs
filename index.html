@@ -3187,7 +3187,10 @@
     <div class="admin-main">
       <div class="admin-topbar">
         <div class="admin-topbar-path">Projet / <strong id="adminCurrentPanelLabel">Pilotage</strong></div>
-        <button type="button" class="admin-sidebar-back" id="adminBackBtn">Voir le site ↗</button>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="search-btn" id="adminPublishBtn" style="height:38px; padding:0 18px;">Publier</button>
+          <button type="button" class="admin-sidebar-back" id="adminBackBtn">Voir le site ↗</button>
+        </div>
       </div>
 
       <div class="admin-panel" id="adminPanelDashboard">
@@ -4629,6 +4632,7 @@ CALENDRIER
   const adminBackBtn       = document.getElementById('adminBackBtn');
   const adminLogoutBtn     = document.getElementById('adminLogoutBtn');
   const adminResetBtn      = document.getElementById('adminResetBtn');
+  const adminPublishBtn    = document.getElementById('adminPublishBtn');
 
   let currentAdminContent = { publicContent: {}, faqEntries: [] };
 
@@ -4711,6 +4715,37 @@ CALENDRIER
   }
 
   adminBackBtn.addEventListener('click', goToFaqPage);
+
+  if (adminPublishBtn) {
+    adminPublishBtn.addEventListener('click', async () => {
+      const originalLabel = adminPublishBtn.textContent;
+      adminPublishBtn.disabled = true;
+      adminPublishBtn.textContent = 'Publication en cours…';
+      try {
+        const res = await fetch('/api/admin/publish', {
+          method: 'POST',
+          headers: { 'x-admin-token': getAdminToken() }
+        });
+        if (res.status === 401) {
+          showToast('Votre session a expiré. Reconnectez-vous.');
+          clearAdminToken();
+          openAdminModal();
+          return;
+        }
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          showToast(`Publié avec succès (révision ${data.revision}).`);
+        } else {
+          showToast(data.error || 'La publication a échoué.');
+        }
+      } catch (e) {
+        showToast('La publication a échoué (connexion au serveur impossible).');
+      } finally {
+        adminPublishBtn.disabled = false;
+        adminPublishBtn.textContent = originalLabel;
+      }
+    });
+  }
 
   adminLogoutBtn.addEventListener('click', () => {
     clearAdminToken();
