@@ -628,6 +628,7 @@ function getMimeType(filePath) {
     case '.png': return 'image/png';
     case '.jpg': return 'image/jpeg';
     case '.jpeg': return 'image/jpeg';
+    case '.pdf': return 'application/pdf';
     case '.ico': return 'image/x-icon';
     default: return 'text/plain; charset=utf-8';
   }
@@ -648,7 +649,7 @@ function serveStaticFile(res, filePath) {
 // des usages réels (voir commentaire au point d'appel). Ajouter un
 // dossier ici est un choix délibéré, jamais une conséquence
 // accidentelle de la simple présence d'un fichier sur disque.
-const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads'];
+const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads', 'public'];
 // Extensions réellement utilisées par ces dossiers aujourd'hui
 // (CSS/JS des thèmes et de la démo, images de marque, uploads
 // png/jpg/pdf — cohérent avec ALLOWED_UPLOAD_TYPES).
@@ -677,15 +678,56 @@ function resolvePublicStaticFile(pathname) {
   return resolved;
 }
 
-function readBody(req) {
+// Pas de plafond par défaut — readBody() reste non borné pour les
+// routes qui ne précisent rien (comportement historique de
+// /api/content, /api/admin/login, /api/kpi/track, préservé à
+// l'identique). Seules les routes qui en ont explicitement besoin
+// (contact public, upload) fournissent leur propre limite à l'appel —
+// jamais un plafond global décidé une fois pour toutes les routes.
+// L'upload transporte le fichier en Base64 dans une enveloppe JSON —
+// l'encodage Base64 gonfle la taille d'environ 4/3, plus un peu de
+// marge pour l'enveloppe JSON elle-même (mimeType, guillemets, etc.).
+// Calculée depuis MAX_UPLOAD_BYTES, jamais un nombre magique recopié
+// à côté : si la limite d'upload change un jour, celle-ci suit
+// automatiquement, sans nouvel oubli silencieux.
+const MAX_UPLOAD_BODY_BYTES = Math.ceil(MAX_UPLOAD_BYTES * 4 / 3) + 65536;
+// Le contact public n'a besoin que de quelques centaines d'octets
+// (nom ≤200, email ≤254, message ≤5000 caractères) — une limite
+// nettement plus stricte que le défaut general, cohérente avec les
+// bornes de validation déjà en place plus bas.
+const MAX_CONTACT_BODY_BYTES = 32 * 1024; // 32 Ko
+
+class PayloadTooLargeError extends Error {
+  constructor() { super('Payload trop volumineux.'); this.name = 'PayloadTooLargeError'; }
+}
+
+function readBody(req, maxBytes = Infinity) {
   return new Promise((resolve, reject) => {
     let body = '';
-    req.on('data', chunk => { body += chunk; });
+    let bytes = 0;
+    let aborted = false;
+    req.on('data', chunk => {
+      if (aborted) return;
+      bytes += chunk.length;
+      if (bytes > maxBytes) {
+        aborted = true;
+        // Ne pas détruire req/res ici : sur une connexion HTTP/1.1,
+        // req et res partagent le même socket — le détruire empêcherait
+        // la réponse 413 de partir proprement, et le client verrait une
+        // connexion réinitialisée plutôt qu'une réponse claire.
+        // On arrête simplement d'accumuler (via `aborted`) et on laisse
+        // la requête se terminer normalement.
+        reject(new PayloadTooLargeError());
+        return;
+      }
+      body += chunk;
+    });
     req.on('end', () => {
+      if (aborted) return;
       try { resolve(body ? JSON.parse(body) : {}); }
       catch (e) { reject(e); }
     });
-    req.on('error', reject);
+    req.on('error', err => { if (!aborted) reject(err); });
   });
 }
 
@@ -713,6 +755,112 @@ const server = http.createServer(async (req, res) => {
       const { faqDrafts, ...publicSafe } = full;
       sendJson(res, 200, publicSafe);
     }
+    return;
+  }
+
+  // ── Manifest public (Phase 5 Tectonic) ────────────────────────
+  // Route dédiée, à but unique : sert exclusivement le contenu de
+  // data/manifest.json, jamais content.json, jamais un autre fichier
+  // sous data/. Aucune authentification requise — le Manifest EST la
+  // Public Projection, sa lecture publique est le but recherché
+  // (voir TECTONIC_SITE_MANIFEST.md). Une route dédiée plutôt qu'une
+  // extension de la whitelist statique : on vient de resserrer le
+  // modèle de fichiers statiques, ce n'est pas le moment d'y rouvrir
+  // une exception pour data/.
+  if (req.method === 'GET' && url.pathname === '/api/manifest') {
+    const manifestPath = path.join(DATA_DIR, 'manifest.json');
+    if (!fs.existsSync(manifestPath)) {
+      sendJson(res, 404, { ok: false, error: 'Aucune publication existante.' });
+      return;
+    }
+    try {
+      const raw = fs.readFileSync(manifestPath, 'utf8');
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+      res.end(raw);
+    } catch (error) {
+      sendJson(res, 500, { ok: false, error: 'Lecture du Manifest impossible.' });
+    }
+    return;
+  }
+
+  // ── Soumission de contact (Phase 5 Tectonic) ──────────────────
+  // Endpoint public dédié, distinct de /api/kpi/track — une soumission
+  // de contact est une donnée opérationnelle nominative qui attend une
+  // réponse humaine, pas de la télémétrie passive (voir
+  // TECTONIC_DATA_OWNERSHIP.md, distinction Telemetry / Operational
+  // Submissions). Stockée dans son propre fichier, jamais dans
+  // kpis.json — pas seulement une distinction sémantique dans un
+  // commentaire, une vraie séparation de stockage.
+  // Le Runtime ne relit jamais ces données (aucune route GET créée).
+  if (req.method === 'POST' && url.pathname === '/api/public/contact') {
+    let parsed;
+    try {
+      parsed = await readBody(req, MAX_CONTACT_BODY_BYTES);
+    } catch (error) {
+      if (error instanceof PayloadTooLargeError) {
+        sendJson(res, 413, { ok: false, error: 'Payload trop volumineux.' });
+      } else {
+        sendJson(res, 400, { ok: false, error: 'Payload invalide.' });
+      }
+      return;
+    }
+
+    const name = String(parsed.name || '').trim();
+    const email = String(parsed.email || '').trim();
+    const message = String(parsed.message || '').trim();
+
+    const errors = [];
+    if (!name) errors.push('Le nom est requis.');
+    if (name.length > 200) errors.push('Le nom est trop long.');
+    if (!email) errors.push("L'email est requis.");
+    else if (email.length > 254) errors.push("L'email est trop long.");
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push("L'email n'est pas valide.");
+    if (!message) errors.push('Le message est requis.');
+    if (message.length > 5000) errors.push('Le message est trop long.');
+
+    if (errors.length) {
+      sendJson(res, 400, { ok: false, error: errors.join(' ') });
+      return;
+    }
+
+    // Persistance : jamais de repli silencieux sur [] si le fichier
+    // existant est corrompu — ça effacerait l'historique des demandes
+    // précédentes à la prochaine écriture. Une donnée opérationnelle
+    // nominative mérite mieux qu'un simple compteur qu'on peut
+    // réinitialiser sans y penser.
+    const filePath = path.join(DATA_DIR, 'contact-submissions.json');
+    let submissions = [];
+    if (fs.existsSync(filePath)) {
+      try {
+        const raw = fs.readFileSync(filePath, 'utf8');
+        submissions = JSON.parse(raw);
+        if (!Array.isArray(submissions)) throw new Error('Format inattendu.');
+      } catch (error) {
+        console.error('contact-submissions.json existant est corrompu :', error.message);
+        sendJson(res, 500, { ok: false, error: 'Enregistrement impossible pour le moment.' });
+        return;
+      }
+    }
+    submissions.push({ name, email, message, ts: Date.now() });
+
+    // Écriture atomique — même philosophie que la publication du
+    // Manifest (Phase 4) : écrire un temporaire, le relire, puis
+    // rename. Une écriture interrompue ne doit jamais laisser un
+    // fichier à moitié écrit à la place de l'historique existant.
+    try {
+      const tmpPath = path.join(DATA_DIR, `.contact-submissions.tmp-${process.pid}-${Date.now()}.json`);
+      const serialized = JSON.stringify(submissions, null, 2);
+      fs.writeFileSync(tmpPath, serialized, 'utf8');
+      const reread = fs.readFileSync(tmpPath, 'utf8');
+      JSON.parse(reread); // vérification post-écriture
+      fs.renameSync(tmpPath, filePath);
+    } catch (error) {
+      console.error('Échec de l\'écriture de contact-submissions.json :', error.message);
+      sendJson(res, 500, { ok: false, error: 'Enregistrement impossible pour le moment.' });
+      return;
+    }
+
+    sendJson(res, 200, { ok: true });
     return;
   }
 
@@ -745,7 +893,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'POST' && url.pathname === '/api/admin/upload') {
     if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
     try {
-      const parsed = await readBody(req);
+      const parsed = await readBody(req, MAX_UPLOAD_BODY_BYTES);
       const mimeType = String(parsed.mimeType || '');
       const ext = ALLOWED_UPLOAD_TYPES[mimeType];
       if (!ext) {
@@ -767,7 +915,14 @@ const server = http.createServer(async (req, res) => {
       fs.writeFileSync(path.join(UPLOADS_DIR, safeName), buffer);
       sendJson(res, 200, { ok: true, url: `/uploads/${safeName}` });
     } catch (error) {
-      sendJson(res, 400, { ok: false, error: "Échec de l'envoi du fichier." });
+      if (error instanceof PayloadTooLargeError) {
+        // Préserve la sémantique historique de cette route : un body
+        // trop volumineux répond 413, jamais le 400 générique
+        // "échec de l'envoi" qui masquerait la vraie cause.
+        sendJson(res, 413, { ok: false, error: `Fichier trop volumineux (max ${Math.round(MAX_UPLOAD_BYTES/1024/1024)} Mo).` });
+      } else {
+        sendJson(res, 400, { ok: false, error: "Échec de l'envoi du fichier." });
+      }
     }
     return;
   }
@@ -869,6 +1024,14 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname === '/') {
+    // Opt-in strict (Phase 5) : sans ce paramètre, Pangea reste le
+    // chemin par défaut, strictement inchangé. Seule cette ligne
+    // touche au comportement de la route racine — aucun autre
+    // changement à la logique existante.
+    if (url.searchParams.get('tectonic') === '1') {
+      serveStaticFile(res, path.join(ROOT, 'public', 'tectonic.html'));
+      return;
+    }
     serveStaticFile(res, path.join(ROOT, 'index.html'));
     return;
   }
@@ -883,12 +1046,13 @@ const server = http.createServer(async (req, res) => {
   //
   // Whitelist construite depuis un audit des usages RÉELS (grep sur
   // index.html et les fichiers CSS/JS référencés), pas depuis une
-  // supposition — seuls ces 4 dossiers contiennent des ressources
+  // supposition — seuls ces 5 dossiers contiennent des ressources
   // effectivement chargées par le navigateur :
   //   /assets/...  logo et visuels de marque
   //   /demo/...    démo de présentation Storm (CSS + JS)
   //   /themes/...  Rainbow Glass et Midnight Frost (CSS + JS)
   //   /uploads/... fichiers uploadés par l'admin (png/jpg/pdf)
+  //   /public/...  Runtime Tectonic et renderers (Phase 5)
   // Jamais /data/**, jamais server.js, jamais tectonic/**, jamais les
   // documents d'architecture, jamais .git*/.gitignore/package*.json —
   // une whitelist positive, pas une liste noire qu'il faudrait
