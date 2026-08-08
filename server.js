@@ -1024,15 +1024,17 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (req.method === 'GET' && url.pathname === '/') {
-    // Opt-in strict (Phase 5) : sans ce paramètre, Pangea reste le
-    // chemin par défaut, strictement inchangé. Seule cette ligne
-    // touche au comportement de la route racine — aucun autre
-    // changement à la logique existante.
-    if (url.searchParams.get('tectonic') === '1') {
-      serveStaticFile(res, path.join(ROOT, 'public', 'tectonic.html'));
+    // Phase 6 — cutover de routage, rien d'autre. ?pangea=1 gagne
+    // explicitement (fallback volontaire, humain) ; sinon Tectonic
+    // devient le comportement public par défaut. ?tectonic=1 continue
+    // de fonctionner naturellement (il tombe dans le même cas que
+    // l'absence de paramètre), mais n'est plus nécessaire — pas deux
+    // systèmes de flags, une seule règle simple.
+    if (url.searchParams.get('pangea') === '1') {
+      serveStaticFile(res, path.join(ROOT, 'index.html'));
       return;
     }
-    serveStaticFile(res, path.join(ROOT, 'index.html'));
+    serveStaticFile(res, path.join(ROOT, 'public', 'tectonic.html'));
     return;
   }
 

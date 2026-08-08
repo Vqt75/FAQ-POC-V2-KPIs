@@ -128,10 +128,15 @@ async function main() {
       const shellHtml = await rShell.text();
       check('GET /?tectonic=1 -> 200, sert le shell Tectonic (pas Pangea)',
         rShell.status === 200 && shellHtml.includes('tectonic-root') && !shellHtml.includes('Espace collaborateurs'));
-      const rPangea = await realFetch(`${BASE}/`);
-      const pangeaHtml = await rPangea.text();
-      check('GET / (sans le paramètre) -> Pangea inchangé',
-        rPangea.status === 200 && pangeaHtml.includes('Espace collaborateurs') && !pangeaHtml.includes('tectonic-root'));
+      const rPangeaFallback = await realFetch(`${BASE}/?pangea=1`);
+      const pangeaHtml = await rPangeaFallback.text();
+      // Depuis le cutover de Phase 6, / sert Tectonic par défaut —
+      // Pangea est désormais un fallback explicite via ?pangea=1.
+      // Ce test vérifiait la sémantique Phase 5 (opt-in), devenue
+      // obsolète par construction ; il vérifie maintenant que le
+      // fallback existe toujours et sert le vrai Pangea.
+      check('GET /?pangea=1 -> Pangea toujours disponible en fallback explicite (Phase 6)',
+        rPangeaFallback.status === 200 && pangeaHtml.includes('Espace collaborateurs') && !pangeaHtml.includes('tectonic-root'));
     }
 
     console.log('\n--- 5) Renderer Ivory : import direct réel, chaque module produit son rendu ---');
