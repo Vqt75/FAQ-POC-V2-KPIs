@@ -5,9 +5,11 @@
   Ce script ne touche à AUCUN fichier applicatif de Storm (Tectonic,
   Ivory, Pangea, Manifest, Candidate, Compiler, Publish). Il se
   contente de : vérifier les prérequis, demander le mot de passe admin
-  de façon interactive (jamais écrit sur disque), démarrer Storm via
-  le mécanisme existant (npm start), attendre qu'il réponde, puis
-  exposer un tunnel Cloudflare public temporaire.
+  de façon interactive (jamais écrit sur disque), démarrer Storm
+  directement via node server.js (pas npm, pour éviter toute politique
+  d'exécution PowerShell d'entreprise appliquée spécifiquement à npm),
+  attendre qu'il réponde, puis exposer un tunnel Cloudflare public
+  temporaire.
 
   Usage : double-cliquer sur "Start Storm.cmd" (à côté de ce fichier),
   ou exécuter directement :
@@ -49,7 +51,7 @@ function Test-Prerequisite {
     return $cmd
 }
 
-Test-Prerequisite -Name "node" -InstallHint "Installez Node.js (version LTS) depuis https://nodejs.org/, puis relancez ce lanceur." | Out-Null
+$nodeCmd = Test-Prerequisite -Name "node" -InstallHint "Installez Node.js (version LTS) depuis https://nodejs.org/, puis relancez ce lanceur."
 
 Test-Prerequisite -Name "cloudflared" -InstallHint (
     "Téléchargez cloudflared depuis https://github.com/cloudflare/cloudflared/releases`n" +
@@ -96,14 +98,20 @@ $script:publicUrl = $null
 $script:urlFound = $false
 
 try {
-    # 6. Démarrer Storm via le mécanisme existant (npm start).
-    Write-Host "Démarrage de Storm (npm start)..." -ForegroundColor Cyan
-    $npmPsi = New-Object System.Diagnostics.ProcessStartInfo
-    $npmPsi.FileName = "npm.cmd"
-    $npmPsi.Arguments = "start"
-    $npmPsi.WorkingDirectory = $PSScriptRoot
-    $npmPsi.UseShellExecute = $false
-    $nodeProcess = [System.Diagnostics.Process]::Start($npmPsi)
+    # 6. Démarrer Storm directement via node + server.js (jamais npm,
+    #    dont l'exécution via PowerShell peut être soumise à une
+    #    politique d'entreprise indépendante de celle appliquée à ce
+    #    script lui-même). server.js n'a de toute façon aucune
+    #    dépendance npm externe — "npm start" ne faisait qu'appeler
+    #    "node server.js", donc rien n'est perdu à appeler ce dernier
+    #    directement, avec l'exécutable node déjà détecté ci-dessus.
+    Write-Host "Démarrage de Storm (node server.js)..." -ForegroundColor Cyan
+    $nodePsi = New-Object System.Diagnostics.ProcessStartInfo
+    $nodePsi.FileName = $nodeCmd.Source
+    $nodePsi.Arguments = "server.js"
+    $nodePsi.WorkingDirectory = $PSScriptRoot
+    $nodePsi.UseShellExecute = $false
+    $nodeProcess = [System.Diagnostics.Process]::Start($nodePsi)
 
     # 7. Attendre que http://localhost:3000 réponde.
     Write-Host "Attente de la disponibilité de http://localhost:3000 ..."
