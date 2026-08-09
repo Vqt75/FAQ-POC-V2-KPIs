@@ -1,4 +1,5 @@
 data/
+uploads/
 node_modules/
 *.backup.html
 index.txt
