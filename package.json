@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test:studio-foundation": "node tectonic/studio-v2/test_publication_status.js",
-    "test:studio-shell": "node tectonic/studio-v2/test_studio_shell.js"
+    "test:studio-shell": "node tectonic/studio-v2/test_studio_shell.js",
+    "test:studio-identity": "node tectonic/studio-v2/test_identity_1a.js"
   }
 }

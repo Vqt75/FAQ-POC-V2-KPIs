@@ -1,0 +1,45 @@
+STORM TECTONIC — STUDIO V2 / IDENTITY & APPEARANCE 1A
+
+1. Vérifier que Git Bash indique la branche :
+   tectonic-studio-v2
+
+2. Vérifier :
+   git status
+   -> working tree clean
+
+3. Décompresser ce ZIP.
+
+4. Copier TOUT le contenu du dossier extrait à la racine de
+   FAQ-POC-V2-KPIs.
+   Accepter "Fusionner" et "Remplacer" lorsque Windows le demande.
+   Ne supprimer aucun dossier manuellement.
+
+5. Dans Git Bash :
+   git status
+
+6. Vérifier :
+   node --check server.js
+   npm run test:studio-foundation
+   npm run test:studio-shell
+   npm run test:studio-identity
+
+7. Lancer :
+   npm start
+
+8. Tester le Studio :
+   http://localhost:3000/?pangea=1&admin=1
+
+À vérifier dans Identité & apparence :
+- plus de bloc "Textes du site"
+- Projet : nom + logo
+- Identité visuelle : polices + couleurs
+- Édition Storm : édition actuelle d'abord, autres éditions sur demande
+- aperçu projet
+- démo Wavestone
+- bouton "Enregistrer les réglages"
+- une modification enregistrée ne devient publique qu'après "Publier"
+
+Test optionnel important : importer une police WOFF2/WOFF/TTF/OTF,
+enregistrer, puis publier. La police doit rester disponible après rechargement.
+
+Ne pas commit/push avant validation visuelle.

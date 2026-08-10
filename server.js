@@ -12,7 +12,19 @@ const DATA_DIR = path.join(ROOT, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'kpis.json');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
 const UPLOADS_DIR = path.join(ROOT, 'uploads');
-const ALLOWED_UPLOAD_TYPES = { 'image/png': '.png', 'image/jpeg': '.jpg', 'image/jpg': '.jpg', 'application/pdf': '.pdf' };
+const ALLOWED_UPLOAD_TYPES = {
+  'image/png': '.png',
+  'image/jpeg': '.jpg',
+  'image/jpg': '.jpg',
+  'application/pdf': '.pdf',
+  'font/woff2': '.woff2',
+  'font/woff': '.woff',
+  'font/ttf': '.ttf',
+  'font/otf': '.otf',
+  'application/font-woff': '.woff',
+  'application/x-font-ttf': '.ttf',
+  'application/x-font-opentype': '.otf'
+};
 const MAX_UPLOAD_BYTES = 8 * 1024 * 1024; // 8 Mo
 
 function computeAdminToken() {
@@ -520,7 +532,8 @@ function normalizeBrandFont(raw, index) {
   return {
     name: typeof raw?.name === 'string' && raw.name.trim() ? raw.name.trim() : fallbackName,
     fileName: typeof raw?.fileName === 'string' ? raw.fileName : '',
-    source: raw?.source === 'upload' ? 'upload' : 'system'
+    source: raw?.source === 'upload' ? 'upload' : 'system',
+    assetUrl: typeof raw?.assetUrl === 'string' && raw.assetUrl.startsWith('/uploads/') ? raw.assetUrl : ''
   };
 }
 
@@ -630,6 +643,10 @@ function getMimeType(filePath) {
     case '.jpg': return 'image/jpeg';
     case '.jpeg': return 'image/jpeg';
     case '.pdf': return 'application/pdf';
+    case '.woff2': return 'font/woff2';
+    case '.woff': return 'font/woff';
+    case '.ttf': return 'font/ttf';
+    case '.otf': return 'font/otf';
     case '.ico': return 'image/x-icon';
     default: return 'text/plain; charset=utf-8';
   }
@@ -653,8 +670,8 @@ function serveStaticFile(res, filePath) {
 const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads', 'public'];
 // Extensions réellement utilisées par ces dossiers aujourd'hui
 // (CSS/JS des thèmes et de la démo, images de marque, uploads
-// png/jpg/pdf — cohérent avec ALLOWED_UPLOAD_TYPES).
-const PUBLIC_STATIC_EXTENSIONS = ['.css', '.js', '.png', '.jpg', '.jpeg', '.pdf'];
+// png/jpg/pdf + fichiers de police — cohérent avec ALLOWED_UPLOAD_TYPES).
+const PUBLIC_STATIC_EXTENSIONS = ['.css', '.js', '.png', '.jpg', '.jpeg', '.pdf', '.woff2', '.woff', '.ttf', '.otf'];
 
 function resolvePublicStaticFile(pathname) {
   const segments = pathname.split('/').filter(Boolean);
@@ -919,7 +936,7 @@ const server = http.createServer(async (req, res) => {
       const mimeType = String(parsed.mimeType || '');
       const ext = ALLOWED_UPLOAD_TYPES[mimeType];
       if (!ext) {
-        sendJson(res, 400, { ok: false, error: 'Type de fichier non autorisé (png, jpg ou pdf uniquement).' });
+        sendJson(res, 400, { ok: false, error: 'Type de fichier non autorisé.' });
         return;
       }
       const dataBase64 = String(parsed.dataBase64 || '');

@@ -2475,7 +2475,7 @@
     letter-spacing:-.035em;
   }
   body.storm-admin-open .storm-theme-sampler.theme-ivory .storm-theme-sampler-title .accent {
-    color:var(--brand-secondary,#8F7C4C);
+    color:var(--brand-accent,var(--brand-secondary,#8F7C4C));
   }
   body.storm-admin-open .storm-theme-sampler.theme-ivory .storm-theme-sampler-card {
     border-radius:16px;
@@ -3131,6 +3131,155 @@
     body.storm-admin-open .storm-faq-list { max-height:360px; }
   }
 
+
+  /* ═══════════════════════════════════════════════════
+     STUDIO V2 · 1A — IDENTITÉ & APPARENCE
+     Configuration rare, volontaire, séparée du contenu éditorial.
+  ═══════════════════════════════════════════════════ */
+  body.storm-admin-open .studio-identity-intro {
+    max-width:760px;
+    margin-bottom:30px;
+  }
+  body.storm-admin-open .studio-identity-section {
+    margin-bottom:18px;
+    padding:26px;
+    border-radius:20px;
+    background:rgba(255,255,255,.42);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.74);
+  }
+  body.storm-admin-open .studio-identity-section-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:22px;
+  }
+  body.storm-admin-open .studio-identity-section-head h3 {
+    margin:0;
+    color:var(--ink);
+    font-size:.88rem;
+    font-weight:600;
+    letter-spacing:-.01em;
+  }
+  body.storm-admin-open .studio-identity-section-head p {
+    max-width:610px;
+    margin:6px 0 0;
+    color:var(--ink-50);
+    font-size:.68rem;
+    line-height:1.6;
+  }
+  body.storm-admin-open .studio-identity-project-grid {
+    display:grid;
+    grid-template-columns:minmax(220px,.8fr) minmax(340px,1.2fr);
+    gap:22px;
+    align-items:end;
+  }
+  body.storm-admin-open .storm-edition-current {
+    display:grid;
+    grid-template-columns:160px minmax(0,1fr) auto;
+    gap:20px;
+    align-items:center;
+    padding:14px;
+    border:1px solid rgba(30,29,30,.07);
+    border-radius:17px;
+    background:rgba(255,255,255,.38);
+  }
+  body.storm-admin-open .storm-edition-current .storm-theme-preview {
+    height:92px;
+    margin:0;
+  }
+  body.storm-admin-open .storm-edition-current-copy small {
+    display:block;
+    margin-bottom:5px;
+    color:var(--ink-35);
+    font-size:.52rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  body.storm-admin-open .storm-edition-current-copy strong {
+    display:block;
+    color:var(--ink);
+    font-size:.88rem;
+    font-weight:600;
+  }
+  body.storm-admin-open .storm-edition-current-copy span {
+    display:block;
+    margin-top:5px;
+    color:var(--ink-50);
+    font-size:.63rem;
+    line-height:1.45;
+  }
+  body.storm-admin-open .storm-edition-change-btn {
+    min-height:36px;
+    padding:0 12px;
+    border-radius:10px;
+    background:rgba(30,29,30,.05);
+    color:var(--ink-70);
+    font-size:.62rem;
+    white-space:nowrap;
+  }
+  body.storm-admin-open .storm-edition-change-btn:hover {
+    background:rgba(30,29,30,.085);
+    color:var(--ink);
+  }
+  body.storm-admin-open .storm-edition-chooser {
+    max-height:0;
+    margin-top:0;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(-4px);
+    transition:max-height .52s var(--ease),opacity .22s ease,margin-top .35s ease,transform .35s var(--ease);
+  }
+  body.storm-admin-open .storm-edition-chooser.is-open {
+    max-height:520px;
+    margin-top:18px;
+    opacity:1;
+    transform:none;
+  }
+  body.storm-admin-open .storm-edition-chooser-label {
+    margin:0 0 10px;
+    color:var(--ink-50);
+    font-size:.61rem;
+  }
+  body.storm-admin-open .studio-identity-savebar {
+    position:sticky;
+    bottom:18px;
+    z-index:18;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    margin-top:26px;
+    padding:12px 14px 12px 18px;
+    border:1px solid rgba(30,29,30,.075);
+    border-radius:16px;
+    background:rgba(246,244,238,.90);
+    box-shadow:0 16px 50px rgba(30,29,30,.08),inset 0 1px 0 rgba(255,255,255,.8);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+  body.storm-admin-open .studio-identity-savebar p {
+    margin:0;
+    color:var(--ink-50);
+    font-size:.62rem;
+    line-height:1.45;
+  }
+  body.storm-admin-open .studio-identity-savebar .search-btn {
+    flex:0 0 auto;
+    min-height:38px;
+  }
+  body.storm-admin-open .storm-font-asset-state {
+    display:block;
+    margin-top:4px;
+    color:var(--ink-35);
+    font-size:.52rem;
+  }
+  @media (max-width:900px) {
+    body.storm-admin-open .studio-identity-project-grid { grid-template-columns:1fr; }
+    body.storm-admin-open .storm-edition-current { grid-template-columns:110px minmax(0,1fr); }
+    body.storm-admin-open .storm-edition-current .storm-edition-change-btn { grid-column:1 / -1; justify-self:start; }
+  }
+
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
   <link rel="stylesheet" href="./themes/midnight-frost.css">
@@ -3583,6 +3732,7 @@
 
 <!-- ═══════════════════ SCRIPTS ═══════════════════ -->
 <script src="./storm/rainbow-engine.js"></script>
+<script src="./public/brand-engine.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script>
@@ -3760,10 +3910,13 @@
       reader.onload = async () => {
         try {
           const dataBase64 = String(reader.result).split(',')[1] || '';
+          const ext = String(resized.name || '').split('.').pop().toLowerCase();
+          const inferredMime = ({ woff2:'font/woff2', woff:'font/woff', ttf:'font/ttf', otf:'font/otf' })[ext] || '';
+          const mimeType = resized.type || inferredMime;
           const res = await fetch('/api/admin/upload', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
-            body: JSON.stringify({ filename: resized.name, mimeType: resized.type, dataBase64 })
+            body: JSON.stringify({ filename: resized.name, mimeType, dataBase64 })
           });
           if (res.status === 401) { resolve({ ok: false, unauthorized: true }); return; }
           const data = await res.json().catch(() => ({}));
@@ -5488,9 +5641,12 @@ CALENDRIER
       const fonts = options.fonts || previewFontFamilies;
       const rainbowDecision = window.StormRainbowEngine?.derive(colors) || null;
       const rainbowVars = rainbowDecision?.cssVars || {};
+      const brandDecision = window.StormBrandEngine?.resolve(colors) || null;
+      const brandAccent = brandDecision?.roles?.accent || normalizeHex(colors[1], normalizeHex(colors[0], '#1E1D1E'));
       const rootStyle = [
         `--brand-primary:${normalizeHex(colors[0], '#1E1D1E')}`,
         `--brand-secondary:${normalizeHex(colors[1], normalizeHex(colors[0], '#1E1D1E'))}`,
+        `--brand-accent:${brandAccent}`,
         ...Object.entries(rainbowVars).map(([key, value]) => `${key}:${value}`),
         `--sampler-font-main:${cssFontValue(fonts[0], 'Roboto')}`,
         `--sampler-font-secondary:${cssFontValue(fonts[1] || fonts[0], fonts[0] || 'Roboto')}`
@@ -5564,210 +5720,185 @@ CALENDRIER
       };
     }
 
+    let savedThemeValue = content.branding?.theme || 'default';
+
+    function previewThemeFromValue(value) {
+      return value === 'rainbow-glass' ? 'rainbow-glass' : (value === 'midnight-frost' ? 'midnight-frost' : 'ivory');
+    }
+
+    function editionValueFromPreview(theme) {
+      return theme === 'rainbow-glass' ? 'rainbow-glass' : (theme === 'midnight-frost' ? 'midnight-frost' : 'default');
+    }
+
+    function editionDescription(theme) {
+      if (theme === 'rainbow-glass') return 'Lumineux & expressif';
+      if (theme === 'midnight-frost') return 'Immersif & premium';
+      return 'Clair & essentiel';
+    }
+
+    function ensureAdminFontFaces() {
+      let style = document.getElementById('stormBrandFontFaces');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'stormBrandFontFaces';
+        document.head.appendChild(style);
+      }
+      style.textContent = (content.branding?.fonts || []).map(font => {
+        if (font?.source !== 'upload' || !/^\/uploads\/[a-zA-Z0-9._-]+$/.test(font.assetUrl || '')) return '';
+        const family = String(font.name || 'Storm Brand Font').replace(/["'<>]/g, '').trim();
+        return family ? `@font-face{font-family:"${family}";src:url("${font.assetUrl}");font-display:swap;}` : '';
+      }).join('\n');
+    }
+
     function render() {
       const branding = content.branding || { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' };
+      const savedPreviewTheme = previewThemeFromValue(savedThemeValue);
+      let previewTheme = previewThemeFromValue(branding.theme);
+      ensureAdminFontFaces();
+      previewFontFamilies = [
+        branding.fonts?.[0]?.name || 'Roboto',
+        branding.fonts?.[1]?.name || branding.fonts?.[0]?.name || 'Roboto'
+      ];
+
+      function themeOption(theme, label, description) {
+        const selected = previewTheme === theme;
+        const applied = savedPreviewTheme === theme;
+        const visualClass = theme === 'rainbow-glass' ? 'rainbow' : (theme === 'midnight-frost' ? 'midnight' : 'ivory');
+        const textColor = theme === 'midnight-frost' ? 'color:white;' : '';
+        return `
+          <button type="button" class="storm-theme-option ${selected ? 'selected is-previewing' : ''} ${applied ? 'is-applied' : ''}" data-preview-theme="${theme}" aria-pressed="${selected ? 'true' : 'false'}">
+            <span class="storm-theme-active-badge">${applied ? 'Édition enregistrée' : 'Enregistrée'}</span>
+            <div class="storm-theme-preview ${visualClass}">
+              <span style="position:absolute;left:15px;bottom:15px;font-size:.54rem;font-weight:600;${textColor}z-index:2;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(branding.projectName || 'Projet')}</span>
+            </div>
+            <div class="storm-theme-meta">
+              <div class="storm-theme-copy"><strong>${label}</strong><span>${description}</span></div>
+              <i class="storm-theme-check" aria-hidden="true"></i>
+            </div>
+          </button>`;
+      }
+
       container.innerHTML = `
-        <div class="admin-page-eyebrow">Contenus</div>
+        <div class="admin-page-eyebrow">Administration</div>
         <div class="admin-page-title">Identité &amp; apparence.</div>
-        <div class="admin-page-sub" style="margin-bottom:28px;">Définissez l’identité du projet et l’édition Storm utilisée. Ces réglages sont généralement établis au lancement.</div>
-        <div class="admin-editor-panel" style="margin-bottom:28px;">
-          <div class="kpi-section-title">Identité du projet</div>
-          <div class="kpi-section-sub">Le nom et le logo que les collaborateurs verront dans la navigation du site.</div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; align-items:end;">
+        <div class="admin-page-sub studio-identity-intro">Configurez ce qui identifie le projet et la manière dont Storm traduit sa marque. Ces réglages sont établis au lancement et ne sont modifiés qu’exceptionnellement.</div>
+
+        <section class="studio-identity-section">
+          <div class="studio-identity-section-head">
+            <div><h3>Projet</h3><p>Le nom et le logo qui permettent aux collaborateurs d’identifier immédiatement leur espace projet.</p></div>
+          </div>
+          <div class="studio-identity-project-grid">
             <div>
               <label class="admin-editor-label">Nom du projet</label>
               <input type="text" class="form-input" id="brandingNameInput" value="${escapeHtml(branding.projectName || 'Projet XYZ')}">
             </div>
             <div>
-              <label class="admin-editor-label">Logo du projet</label>
+              <label class="admin-editor-label">Logo</label>
               <div id="brandingLogoDropzone" class="logo-dropzone">
-                <div id="brandingLogoPreview" style="width:42px; height:42px; border:1px solid var(--ink-12); border-radius:10px; overflow:hidden; background:var(--offwhite); flex-shrink:0; display:flex; align-items:center; justify-content:center;">
-                  ${branding.logoUrl ? `<img src="${escapeHtml(branding.logoUrl)}" style="width:100%; height:100%; object-fit:contain;">` : ''}
+                <div id="brandingLogoPreview" style="width:42px;height:42px;border:1px solid var(--ink-12);border-radius:10px;overflow:hidden;background:var(--offwhite);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+                  ${branding.logoUrl ? `<img src="${escapeHtml(branding.logoUrl)}" style="width:100%;height:100%;object-fit:contain;">` : ''}
                 </div>
-                <button type="button" class="admin-modal-cancel" id="brandingLogoUploadBtn" style="flex:none; padding:0 16px; height:36px;">Ajouter un logo</button>
-                <span class="logo-dropzone-hint">ou glissez une image ici</span>
-                <button type="button" class="admin-reset" id="brandingLogoRemoveBtn" style="${branding.logoUrl ? '' : 'display:none;'} margin-left:auto;">Retirer</button>
+                <button type="button" class="admin-modal-cancel" id="brandingLogoUploadBtn" style="flex:none;padding:0 16px;height:36px;">${branding.logoUrl ? 'Remplacer' : 'Ajouter un logo'}</button>
+                <span class="logo-dropzone-hint">PNG ou JPEG · glisser-déposer possible</span>
+                <button type="button" class="admin-reset" id="brandingLogoRemoveBtn" style="${branding.logoUrl ? '' : 'display:none;'}margin-left:auto;">Retirer</button>
                 <input type="file" id="brandingLogoInput" accept="image/png,image/jpeg" style="display:none;">
               </div>
             </div>
-
           </div>
-        </div>
+        </section>
 
-        <div class="admin-editor-panel" style="margin-bottom:28px;">
-          <div class="kpi-section-title">Identité visuelle</div>
-          <div class="kpi-section-sub">Ajoutez les typographies et couleurs de la marque. Storm les traduit ensuite dans l’édition choisie.</div>
-
+        <section class="studio-identity-section">
+          <div class="studio-identity-section-head">
+            <div><h3>Identité visuelle</h3><p>Donnez à Storm les éléments bruts de la marque. Les couleurs restent celles que vous saisissez ; l’édition décide ensuite comment les employer.</p></div>
+          </div>
           <div class="storm-brand-system-grid">
             <section>
               <div class="storm-brand-system-title">Typographies</div>
-              <div class="storm-brand-system-copy">Une police principale est nécessaire. Vous pouvez en ajouter une seconde pour les usages éditoriaux.</div>
+              <div class="storm-brand-system-copy">Une police principale est nécessaire. Une seconde police peut porter les moments plus éditoriaux.</div>
               <div class="storm-font-stack" id="stormFontStack">
-                ${branding.fonts.map((font, index) => `
+                ${(branding.fonts || []).map((font, index) => `
                   <div class="storm-font-card" data-font-slot="${index}">
                     <div>
-                      <span class="storm-font-role">${index === 0 ? 'Police principale' : 'Police secondaire'}</span>
+                      <span class="storm-font-role">${index === 0 ? 'Police principale' : 'Police d’expression'}</span>
                       <span class="storm-font-name" id="stormFontName${index}">${escapeHtml(font.name || (index === 0 ? 'Roboto' : 'Italiana'))}</span>
                       <span class="storm-font-sample" id="stormFontSample${index}" style="font-family:${escapeHtml(cssFontValue(previewFontFamilies[index], index === 0 ? 'Roboto' : 'Italiana'))};">Projet Quatro · Aa Bb Cc</span>
+                      <span class="storm-font-asset-state">${font.source === 'upload' && font.assetUrl ? 'Police importée et disponible à la publication' : 'Police système'}</span>
                     </div>
                     <div class="storm-font-actions">
-                      <button type="button" class="storm-brand-mini-btn" data-font-upload="${index}">${font.fileName ? 'Remplacer' : 'Importer'}</button>
+                      <button type="button" class="storm-brand-mini-btn" data-font-upload="${index}">${font.source === 'upload' ? 'Remplacer' : 'Importer'}</button>
                       ${index === 1 ? '<button type="button" class="storm-brand-mini-btn is-remove" data-font-remove="1">Retirer</button>' : ''}
                       <input type="file" data-font-input="${index}" accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,font/ttf,font/otf" style="display:none;">
                     </div>
-                  </div>
-                `).join('')}
+                  </div>`).join('')}
               </div>
-              ${branding.fonts.length < 2 ? '<button type="button" class="storm-brand-add-btn" id="addSecondFontBtn" style="margin-top:9px;">+ Ajouter une seconde police</button>' : ''}
-              <div class="storm-brand-system-note">Formats acceptés pour l’aperçu : WOFF2, WOFF, TTF et OTF.</div>
+              ${branding.fonts.length < 2 ? '<button type="button" class="storm-brand-add-btn" id="addSecondFontBtn" style="margin-top:9px;">+ Ajouter une police d’expression</button>' : ''}
+              <div class="storm-brand-system-note">WOFF2, WOFF, TTF ou OTF. Une police importée est stockée par Storm et chargée par le site publié.</div>
             </section>
 
             <section>
               <div class="storm-brand-system-title">Couleurs</div>
-              <div class="storm-brand-system-copy">Ajoutez une ou deux couleurs de marque. Le code hexadécimal reste modifiable à tout moment.</div>
+              <div class="storm-brand-system-copy">Une couleur principale suffit. Ajoutez une seconde couleur uniquement si elle appartient réellement à l’identité de marque.</div>
               <div class="storm-color-stack" id="stormColorStack">
-                ${branding.colors.map((color, index) => {
-                  const safeColor = normalizeHex(color, index === 0 ? '#1E1D1E' : '#C2AF7E');
+                ${(branding.colors || []).map((color, index) => {
+                  const safeColor = normalizeHex(color, index === 0 ? '#1E1D1E' : (branding.colors?.[0] || '#1E1D1E'));
                   return `
                     <div class="storm-color-row" data-color-slot="${index}">
                       <input type="color" class="storm-color-picker" data-color-picker="${index}" value="${safeColor}">
-                      <div class="storm-color-copy">
-                        <label>${index === 0 ? 'Couleur principale' : 'Couleur secondaire'}</label>
-                        <input type="text" class="storm-color-hex" data-color-hex="${index}" value="${safeColor}" maxlength="7" spellcheck="false">
-                      </div>
+                      <div class="storm-color-copy"><label>${index === 0 ? 'Couleur principale' : 'Couleur secondaire'}</label><input type="text" class="storm-color-hex" data-color-hex="${index}" value="${safeColor}" maxlength="7" spellcheck="false"></div>
                       ${index === 1 ? '<button type="button" class="storm-brand-mini-btn is-remove" data-color-remove="1">Retirer</button>' : '<span></span>'}
                     </div>`;
                 }).join('')}
               </div>
               ${branding.colors.length < 2 ? '<button type="button" class="storm-brand-add-btn" id="addSecondColorBtn" style="margin-top:9px;">+ Ajouter une seconde couleur</button>' : ''}
-              <div class="storm-brand-system-note">Storm conserve les couleurs saisies comme références de marque ; chaque édition décide ensuite comment les utiliser.</div>
+              <div class="storm-brand-system-note">Storm ne modifie pas silencieusement vos couleurs. Son moteur choisit seulement leur rôle dans chaque édition.</div>
             </section>
           </div>
-        </div>
+        </section>
 
-        <div class="admin-editor-panel" style="margin-bottom:28px;">
-          <div class="kpi-section-title">Édition du site</div>
-          <div class="kpi-section-sub">Choisissez l’atmosphère du site public. Les contenus et la structure restent identiques.</div>
-
-          <div class="storm-theme-grid" id="stormThemeGrid">
-            <button
-              type="button"
-              class="storm-theme-option ${(!branding.theme || branding.theme === 'default') ? 'selected is-previewing is-applied' : ''}"
-              data-theme-value="default"
-              data-preview-theme="ivory"
-              aria-pressed="${(!branding.theme || branding.theme === 'default') ? 'true' : 'false'}"
-            >
-              <span class="storm-theme-active-badge">Actif</span>
-              <div class="storm-theme-preview ivory">
-                <span style="position:absolute;left:15px;bottom:15px;font-size:.54rem;font-weight:600;z-index:2;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(branding.projectName || 'Projet')}</span>
-              </div>
-              <div class="storm-theme-meta">
-                <div class="storm-theme-copy">
-                  <strong>Ivory</strong>
-                  <span>Clair &amp; essentiel</span>
-                </div>
-                <i class="storm-theme-check" aria-hidden="true"></i>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              class="storm-theme-option ${branding.theme === 'rainbow-glass' ? 'selected is-previewing is-applied' : ''}"
-              data-theme-value="rainbow-glass"
-              data-preview-theme="rainbow-glass"
-              aria-pressed="${branding.theme === 'rainbow-glass' ? 'true' : 'false'}"
-            >
-              <span class="storm-theme-active-badge">Actif</span>
-              <div class="storm-theme-preview rainbow">
-                <span style="position:absolute;left:15px;bottom:15px;font-size:.54rem;font-weight:600;z-index:2;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(branding.projectName || 'Projet')}</span>
-              </div>
-              <div class="storm-theme-meta">
-                <div class="storm-theme-copy">
-                  <strong>Rainbow Glass</strong>
-                  <span>Lumineux &amp; expressif</span>
-                </div>
-                <i class="storm-theme-check" aria-hidden="true"></i>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              class="storm-theme-option ${branding.theme === 'midnight-frost' ? 'selected is-previewing is-applied' : ''}"
-              data-theme-value="midnight-frost"
-              data-preview-theme="midnight-frost"
-              aria-pressed="${branding.theme === 'midnight-frost' ? 'true' : 'false'}"
-            >
-              <span class="storm-theme-active-badge">Actif</span>
-              <div class="storm-theme-preview midnight">
-                <span style="position:absolute;left:15px;bottom:15px;font-size:.54rem;font-weight:600;color:white;z-index:2;max-width:70%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(branding.projectName || 'Projet')}</span>
-              </div>
-              <div class="storm-theme-meta">
-                <div class="storm-theme-copy">
-                  <strong>Midnight Frost</strong>
-                  <span>Immersif &amp; premium</span>
-                </div>
-                <i class="storm-theme-check" aria-hidden="true"></i>
-              </div>
-            </button>
+        <section class="studio-identity-section">
+          <div class="studio-identity-section-head">
+            <div><h3>Édition Storm</h3><p>L’édition structure l’atmosphère de l’expérience. Changer d’édition est un choix volontaire : les contenus restent les mêmes, leur expression change.</p></div>
           </div>
 
-          <div class="storm-theme-note" id="brandingThemeHelp">
-            ${branding.theme === 'rainbow-glass'
-              ? 'Rainbow Glass est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.'
-              : (branding.theme === 'midnight-frost'
-                ? 'Midnight Frost est sélectionné. Le contenu reste identique ; la marque devient lumière dans une interface nocturne.'
-                : 'Ivory est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.')}
+          <div class="storm-edition-current" id="stormEditionCurrent">
+            <div class="storm-theme-preview ${previewTheme === 'rainbow-glass' ? 'rainbow' : (previewTheme === 'midnight-frost' ? 'midnight' : 'ivory')}"></div>
+            <div class="storm-edition-current-copy">
+              <small>${previewTheme === savedPreviewTheme ? 'Édition utilisée' : 'Nouvelle édition à enregistrer'}</small>
+              <strong id="stormCurrentEditionLabel">${samplerThemeLabel(previewTheme)}</strong>
+              <span id="stormCurrentEditionDescription">${editionDescription(previewTheme)}</span>
+            </div>
+            <button type="button" class="storm-edition-change-btn" id="toggleEditionChooserBtn">Voir les autres éditions</button>
+          </div>
+
+          <div class="storm-edition-chooser" id="stormEditionChooser" aria-hidden="true">
+            <p class="storm-edition-chooser-label">Comparez les trois éditions avant de modifier ce choix.</p>
+            <div class="storm-theme-grid" id="stormThemeGrid">
+              ${themeOption('ivory', 'Ivory', 'Clair & essentiel')}
+              ${themeOption('rainbow-glass', 'Rainbow Glass', 'Lumineux & expressif')}
+              ${themeOption('midnight-frost', 'Midnight Frost', 'Immersif & premium')}
+            </div>
           </div>
 
           <div class="storm-theme-sampler-shell">
             <div class="storm-theme-sampler-toolbar"><i></i><i></i><i></i><span>Aperçu de votre projet</span></div>
-            <div id="stormThemeSamplerHost">${themeSamplerHtml(branding.theme === 'rainbow-glass' ? 'rainbow-glass' : (branding.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory'))}</div>
+            <div id="stormThemeSamplerHost">${themeSamplerHtml(previewTheme)}</div>
           </div>
           <div class="storm-theme-sampler-caption">
-            <span><strong id="stormThemeSamplerLabel">${branding.theme === 'rainbow-glass' ? 'Rainbow Glass' : (branding.theme === 'midnight-frost' ? 'Midnight Frost' : 'Ivory')}</strong> · aperçu construit à partir de votre projet.</span>
-            <span id="stormThemeSamplerState">Sélection actuelle</span>
+            <span><strong id="stormThemeSamplerLabel">${samplerThemeLabel(previewTheme)}</strong> · aperçu construit à partir de votre projet.</span>
+            <span id="stormThemeSamplerState">${previewTheme === savedPreviewTheme ? 'Édition actuelle' : 'Changement à enregistrer'}</span>
           </div>
-          <div class="storm-client-example-row">
-            <button type="button" class="storm-client-example-btn" id="openWavestonePreviewBtn">Découvrir l’exemple Wavestone ↗</button>
-          </div>
-        </div>
+          <div class="storm-client-example-row"><button type="button" class="storm-client-example-btn" id="openWavestonePreviewBtn">Voir la démo Wavestone ↗</button></div>
+        </section>
 
-        <div class="admin-editor-panel">
-          <div class="kpi-section-title">Textes du site</div>
-          <div class="kpi-section-sub">Choisissez une page, puis ajustez les textes qui lui sont propres.</div>
-          <div class="admin-structure-layout">
-            <div class="admin-list-pane">
-              <div class="admin-editor-head">Pages</div>
-              <div class="admin-stack-list">
-                ${scopes.map(scope => `
-                  <button type="button" class="admin-stack-item ${scope === activeScope ? 'active' : ''}" data-public-scope="${scope}">
-                    <span class="admin-stack-item-title">${PUBLIC_SCOPE_LABELS[scope]}</span>
-                    <span class="admin-stack-item-meta">Section hero</span>
-                  </button>
-                `).join('')}
-              </div>
-            </div>
-            <div class="admin-detail-pane">
-              <div class="admin-detail-card">
-                <div class="admin-detail-head">Édition</div>
-                <div class="admin-detail-title" id="publicDetailTitle">${PUBLIC_SCOPE_LABELS[activeScope]}</div>
-                <div id="publicDetailFields">${fieldsHtml(activeScope)}</div>
-              </div>
-              <div style="margin-top:16px;">
-                <button type="button" class="search-btn" id="savePublicContentBtn">Enregistrer</button>
-              </div>
-            </div>
-          </div>
+        <div class="studio-identity-savebar">
+          <p><strong>Enregistrer</strong> conserve ces réglages dans le Studio. Ils ne deviennent visibles aux collaborateurs qu’au prochain <strong>Publier</strong>.</p>
+          <button type="button" class="search-btn" id="saveIdentityBtn">Enregistrer les réglages</button>
         </div>
 
         <div class="storm-client-preview-modal" id="wavestonePreviewModal" aria-hidden="true">
           <div class="storm-client-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="wavestonePreviewTitle">
             <div class="storm-client-preview-head">
-              <div>
-                <div class="eyebrow">Exemple client</div>
-                <h3 id="wavestonePreviewTitle">Wavestone dans Storm.</h3>
-                <p>Un même projet, trois atmosphères. Les codes Wavestone sont traduits dans chaque édition sans modifier la structure Storm.</p>
-              </div>
+              <div><div class="eyebrow">Exemple client</div><h3 id="wavestonePreviewTitle">Wavestone dans Storm.</h3><p>Un même projet, trois atmosphères. Les codes Wavestone sont traduits dans chaque édition sans modifier la structure Storm.</p></div>
               <button type="button" class="storm-client-preview-close" id="closeWavestonePreviewBtn" aria-label="Fermer">×</button>
             </div>
             <div class="storm-client-preview-tabs">
@@ -5775,314 +5906,241 @@ CALENDRIER
               <button type="button" class="storm-client-preview-tab active" data-wavestone-theme="rainbow-glass">Rainbow Glass</button>
               <button type="button" class="storm-client-preview-tab" data-wavestone-theme="midnight-frost">Midnight Frost</button>
             </div>
-            <div class="storm-theme-sampler-shell" style="margin-top:0;">
-              <div class="storm-theme-sampler-toolbar"><i></i><i></i><i></i><span>Exemple Wavestone</span></div>
-              <div id="wavestoneSamplerHost">${themeSamplerHtml('rainbow-glass', wavestoneSamplerOptions())}</div>
-            </div>
+            <div class="storm-theme-sampler-shell" style="margin-top:0;"><div class="storm-theme-sampler-toolbar"><i></i><i></i><i></i><span>Exemple Wavestone</span></div><div id="wavestoneSamplerHost">${themeSamplerHtml('rainbow-glass', wavestoneSamplerOptions())}</div></div>
           </div>
         </div>`;
 
-      document.getElementById('brandingNameInput').addEventListener('input', e => {
-        content.branding = content.branding || {};
-        content.branding.projectName = e.target.value;
-        const adminProjectName = document.getElementById('adminProjectName');
-        if (adminProjectName) adminProjectName.textContent = e.target.value || 'Projet';
-        renderThemeSampler(previewTheme, false);
-      });
-
-      const themeHelp = document.getElementById('brandingThemeHelp');
       const samplerHost = document.getElementById('stormThemeSamplerHost');
       const samplerLabel = document.getElementById('stormThemeSamplerLabel');
       const samplerState = document.getElementById('stormThemeSamplerState');
-      let previewTheme = branding.theme === 'rainbow-glass' ? 'rainbow-glass' : (branding.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory');
+      const currentEditionLabel = document.getElementById('stormCurrentEditionLabel');
+      const currentEditionDescription = document.getElementById('stormCurrentEditionDescription');
 
-      function appliedPreviewTheme() {
-        return content.branding?.theme === 'rainbow-glass'
-          ? 'rainbow-glass'
-          : (content.branding?.theme === 'midnight-frost' ? 'midnight-frost' : 'ivory');
-      }
-
-      function refreshThemeCards(preview) {
+      function refreshThemeCards() {
+        const savedTheme = previewThemeFromValue(savedThemeValue);
         container.querySelectorAll('[data-preview-theme]').forEach(item => {
           const theme = item.dataset.previewTheme;
-          const isPreview = theme === preview;
-          const isApplied = theme === appliedPreviewTheme();
+          const isPreview = theme === previewTheme;
+          const isApplied = theme === savedTheme;
           item.classList.toggle('selected', isPreview);
           item.classList.toggle('is-previewing', isPreview);
           item.classList.toggle('is-applied', isApplied);
           item.setAttribute('aria-pressed', isPreview ? 'true' : 'false');
+          const badge = item.querySelector('.storm-theme-active-badge');
+          if (badge) badge.textContent = isApplied ? 'Édition enregistrée' : 'Enregistrée';
         });
       }
 
       function renderThemeSampler(theme, animate = true) {
         previewTheme = theme;
+        content.branding.theme = editionValueFromPreview(theme);
         samplerHost.innerHTML = themeSamplerHtml(theme);
         samplerLabel.textContent = samplerThemeLabel(theme);
-
-        const isApplied = theme === appliedPreviewTheme();
-        samplerState.textContent = isApplied ? 'Sélection actuelle' : 'Nouvelle sélection';
-        themeHelp.textContent = theme === 'midnight-frost'
-          ? 'Midnight Frost est sélectionné. Le contenu reste identique ; la marque devient lumière dans une interface nocturne.'
-          : `${samplerThemeLabel(theme)} est sélectionné. Le contenu reste identique ; seule l’atmosphère du site change.`;
-
-        refreshThemeCards(theme);
-
+        currentEditionLabel.textContent = samplerThemeLabel(theme);
+        currentEditionDescription.textContent = editionDescription(theme);
+        const isSaved = theme === previewThemeFromValue(savedThemeValue);
+        samplerState.textContent = isSaved ? 'Édition actuelle' : 'Changement à enregistrer';
+        const current = document.getElementById('stormEditionCurrent');
+        const currentPreview = current?.querySelector('.storm-theme-preview');
+        if (currentPreview) currentPreview.className = `storm-theme-preview ${theme === 'rainbow-glass' ? 'rainbow' : (theme === 'midnight-frost' ? 'midnight' : 'ivory')}`;
+        const currentSmall = current?.querySelector('small');
+        if (currentSmall) currentSmall.textContent = isSaved ? 'Édition utilisée' : 'Nouvelle édition à enregistrer';
+        refreshThemeCards();
         if (animate) {
           const sampler = document.getElementById('stormThemeSampler');
-          if (sampler) {
-            sampler.classList.remove('sampler-animate');
-            requestAnimationFrame(() => sampler.classList.add('sampler-animate'));
-          }
+          if (sampler) requestAnimationFrame(() => { sampler.classList.remove('sampler-animate'); requestAnimationFrame(() => sampler.classList.add('sampler-animate')); });
         }
       }
 
-      container.querySelectorAll('[data-preview-theme]').forEach(option => {
-        option.addEventListener('click', () => {
-          const theme = option.dataset.previewTheme;
-
-          content.branding = content.branding || {};
-          content.branding.theme = theme === 'rainbow-glass'
-            ? 'rainbow-glass'
-            : (theme === 'midnight-frost' ? 'midnight-frost' : 'default');
-
-          renderThemeSampler(theme, true);
-        });
+      document.getElementById('brandingNameInput')?.addEventListener('input', e => {
+        content.branding.projectName = e.target.value;
+        const project = document.getElementById('adminProjectName');
+        if (project) project.textContent = e.target.value || 'Projet';
+        samplerHost.innerHTML = themeSamplerHtml(previewTheme);
       });
+
+      const chooser = document.getElementById('stormEditionChooser');
+      document.getElementById('toggleEditionChooserBtn')?.addEventListener('click', () => {
+        const open = !chooser.classList.contains('is-open');
+        chooser.classList.toggle('is-open', open);
+        chooser.setAttribute('aria-hidden', open ? 'false' : 'true');
+        document.getElementById('toggleEditionChooserBtn').textContent = open ? 'Masquer les éditions' : 'Voir les autres éditions';
+      });
+      container.querySelectorAll('[data-preview-theme]').forEach(option => option.addEventListener('click', () => {
+        renderThemeSampler(option.dataset.previewTheme, true);
+        studioSetSaveState('dirty');
+      }));
 
       function cleanFontName(filename, fallback) {
         const base = String(filename || '').replace(/\.(woff2?|ttf|otf)$/i, '').replace(/[-_]+/g, ' ').trim();
         return base || fallback;
       }
 
-      async function loadPreviewFont(file, index) {
+      async function loadBrandFont(file, index) {
         if (!file) return;
         if (!/\.(woff2?|ttf|otf)$/i.test(file.name || '')) {
-          showToast('Format de police non supporté — utilise WOFF2, WOFF, TTF ou OTF.');
+          showToast('Format de police non supporté — utilisez WOFF2, WOFF, TTF ou OTF.');
+          return;
+        }
+        showToast('Import de la police…');
+        const result = await uploadFile(file);
+        if (!result?.ok || !result.url) {
+          showToast(result?.unauthorized ? 'Session expirée — reconnectez-vous.' : (result?.error || 'Impossible d’importer cette police.'));
           return;
         }
         try {
-          const family = `StormPreviewFont${index}_${Date.now()}`;
-          const buffer = await file.arrayBuffer();
-          const face = new FontFace(family, buffer);
+          const previewFamily = `StormPreviewFont${index}_${Date.now()}`;
+          const face = new FontFace(previewFamily, `url("${result.url}")`);
           await face.load();
           document.fonts.add(face);
-          previewFontFamilies[index] = family;
-
+          previewFontFamilies[index] = previewFamily;
           content.branding.fonts[index] = {
-            name: cleanFontName(file.name, index === 0 ? 'Police principale' : 'Police secondaire'),
+            name: cleanFontName(file.name, index === 0 ? 'Police principale' : 'Police d’expression'),
             fileName: file.name,
-            source: 'upload'
+            source: 'upload',
+            assetUrl: result.url
           };
-
-          const name = document.getElementById(`stormFontName${index}`);
-          const sample = document.getElementById(`stormFontSample${index}`);
-          if (name) name.textContent = content.branding.fonts[index].name;
-          if (sample) sample.style.fontFamily = cssFontValue(family, index === 0 ? 'Roboto' : 'Italiana');
-
-          const uploadButton = container.querySelector(`[data-font-upload="${index}"]`);
-          if (uploadButton) uploadButton.textContent = 'Remplacer';
+          studioSetSaveState('dirty');
           renderThemeSampler(previewTheme, false);
-          showToast('Police chargée dans l’aperçu.');
+          render();
+          showToast('Police importée. Enregistrez les réglages pour la conserver.');
         } catch (error) {
           console.warn(error);
-          showToast('Impossible de prévisualiser cette police.');
+          showToast('La police a été envoyée mais son aperçu n’a pas pu être chargé.');
         }
       }
 
-      container.querySelectorAll('[data-font-upload]').forEach(button => {
-        button.addEventListener('click', () => {
-          container.querySelector(`[data-font-input="${button.dataset.fontUpload}"]`)?.click();
-        });
-      });
-      container.querySelectorAll('[data-font-input]').forEach(input => {
-        input.addEventListener('change', () => {
-          const index = Number(input.dataset.fontInput);
-          const file = input.files?.[0];
-          input.value = '';
-          loadPreviewFont(file, index);
-        });
-      });
+      container.querySelectorAll('[data-font-upload]').forEach(button => button.addEventListener('click', () => container.querySelector(`[data-font-input="${button.dataset.fontUpload}"]`)?.click()));
+      container.querySelectorAll('[data-font-input]').forEach(input => input.addEventListener('change', () => {
+        const index = Number(input.dataset.fontInput);
+        const file = input.files?.[0];
+        input.value = '';
+        loadBrandFont(file, index);
+      }));
       container.querySelector('[data-font-remove="1"]')?.addEventListener('click', () => {
         content.branding.fonts = content.branding.fonts.slice(0, 1);
         previewFontFamilies[1] = previewFontFamilies[0] || 'Roboto';
+        studioSetSaveState('dirty');
         render();
       });
       document.getElementById('addSecondFontBtn')?.addEventListener('click', () => {
         if (content.branding.fonts.length >= 2) return;
-        content.branding.fonts.push({ name: 'Italiana', fileName: '', source: 'system' });
-        previewFontFamilies[1] = 'Italiana';
+        content.branding.fonts.push({ name: 'Italiana', fileName: '', source: 'system', assetUrl: '' });
+        studioSetSaveState('dirty');
         render();
       });
 
       function setBrandColor(index, raw, source) {
-        const fallback = index === 0 ? '#1E1D1E' : (content.branding.colors[0] || '#C2AF7E');
+        const fallback = index === 0 ? '#1E1D1E' : (content.branding.colors[0] || '#1E1D1E');
         const value = normalizeHex(raw, fallback);
         content.branding.colors[index] = value;
         const picker = container.querySelector(`[data-color-picker="${index}"]`);
         const hex = container.querySelector(`[data-color-hex="${index}"]`);
         if (picker && source !== 'picker') picker.value = value;
         if (hex && source !== 'hex') hex.value = value;
-        renderThemeSampler(previewTheme, false);
+        samplerHost.innerHTML = themeSamplerHtml(previewTheme);
       }
-
-      container.querySelectorAll('[data-color-picker]').forEach(input => {
-        input.addEventListener('input', () => {
-          const index = Number(input.dataset.colorPicker);
-          setBrandColor(index, input.value, 'picker');
-          const hex = container.querySelector(`[data-color-hex="${index}"]`);
-          if (hex) hex.value = input.value.toUpperCase();
-        });
-      });
+      container.querySelectorAll('[data-color-picker]').forEach(input => input.addEventListener('input', () => {
+        const index = Number(input.dataset.colorPicker);
+        setBrandColor(index, input.value, 'picker');
+        const hex = container.querySelector(`[data-color-hex="${index}"]`);
+        if (hex) hex.value = input.value.toUpperCase();
+      }));
       container.querySelectorAll('[data-color-hex]').forEach(input => {
         input.addEventListener('input', () => {
           const index = Number(input.dataset.colorHex);
           const raw = input.value.trim().toUpperCase();
           if (/^#[0-9A-F]{6}$/.test(raw)) setBrandColor(index, raw, 'hex');
         });
-        input.addEventListener('blur', () => {
-          const index = Number(input.dataset.colorHex);
-          setBrandColor(index, input.value, 'none');
-        });
+        input.addEventListener('blur', () => setBrandColor(Number(input.dataset.colorHex), input.value, 'none'));
       });
       container.querySelector('[data-color-remove="1"]')?.addEventListener('click', () => {
         content.branding.colors = content.branding.colors.slice(0, 1);
+        studioSetSaveState('dirty');
         render();
       });
       document.getElementById('addSecondColorBtn')?.addEventListener('click', () => {
         if (content.branding.colors.length >= 2) return;
-        content.branding.colors.push('#C2AF7E');
+        content.branding.colors.push(content.branding.colors[0] || '#1E1D1E');
+        studioSetSaveState('dirty');
         render();
       });
 
       const wavestoneModal = document.getElementById('wavestonePreviewModal');
       const wavestoneHost = document.getElementById('wavestoneSamplerHost');
-
       function renderWavestoneSampler(theme, animate = true) {
         wavestoneHost.innerHTML = themeSamplerHtml(theme, wavestoneSamplerOptions());
-        wavestoneModal.querySelectorAll('[data-wavestone-theme]').forEach(button => {
-          button.classList.toggle('active', button.dataset.wavestoneTheme === theme);
-        });
+        wavestoneModal.querySelectorAll('[data-wavestone-theme]').forEach(button => button.classList.toggle('active', button.dataset.wavestoneTheme === theme));
         if (animate) {
           const sampler = wavestoneHost.querySelector('.storm-theme-sampler');
-          requestAnimationFrame(() => {
-            sampler?.classList.remove('sampler-animate');
-            requestAnimationFrame(() => sampler?.classList.add('sampler-animate'));
-          });
+          requestAnimationFrame(() => { sampler?.classList.remove('sampler-animate'); requestAnimationFrame(() => sampler?.classList.add('sampler-animate')); });
         }
       }
-
-      document.getElementById('openWavestonePreviewBtn').addEventListener('click', () => {
+      document.getElementById('openWavestonePreviewBtn')?.addEventListener('click', () => {
         wavestoneModal.classList.add('open');
         wavestoneModal.setAttribute('aria-hidden', 'false');
         renderWavestoneSampler('rainbow-glass', true);
       });
-      document.getElementById('closeWavestonePreviewBtn').addEventListener('click', () => {
+      document.getElementById('closeWavestonePreviewBtn')?.addEventListener('click', () => {
         wavestoneModal.classList.remove('open');
         wavestoneModal.setAttribute('aria-hidden', 'true');
       });
-      wavestoneModal.addEventListener('click', event => {
+      wavestoneModal?.addEventListener('click', event => {
         if (event.target === wavestoneModal) {
           wavestoneModal.classList.remove('open');
           wavestoneModal.setAttribute('aria-hidden', 'true');
         }
       });
-      wavestoneModal.querySelectorAll('[data-wavestone-theme]').forEach(button => {
-        button.addEventListener('click', () => renderWavestoneSampler(button.dataset.wavestoneTheme, true));
-      });
+      wavestoneModal?.querySelectorAll('[data-wavestone-theme]').forEach(button => button.addEventListener('click', () => renderWavestoneSampler(button.dataset.wavestoneTheme, true)));
 
       const logoInput = document.getElementById('brandingLogoInput');
       const logoDropzone = document.getElementById('brandingLogoDropzone');
-      document.getElementById('brandingLogoUploadBtn').addEventListener('click', () => logoInput.click());
-
+      document.getElementById('brandingLogoUploadBtn')?.addEventListener('click', () => logoInput?.click());
       async function handleLogoFile(file) {
         if (!file) return;
         if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-          showToast('Format non supporté — utilise un PNG ou un JPEG.');
+          showToast('Format non supporté — utilisez un PNG ou un JPEG.');
           return;
         }
-        showToast('Envoi du logo en cours...');
+        showToast('Envoi du logo…');
         const result = await uploadFile(file, 640);
         if (!result?.ok || !result.url) {
           showToast(result?.unauthorized ? 'Session expirée — reconnectez-vous.' : 'Impossible d’envoyer ce logo.');
           return;
         }
-        content.branding = content.branding || {};
         content.branding.logoUrl = result.url;
-        document.getElementById('brandingLogoPreview').innerHTML = `<img src="${escapeHtml(result.url)}" style="width:100%; height:100%; object-fit:contain;">`;
-        document.getElementById('brandingLogoRemoveBtn').style.display = '';
-        renderThemeSampler(previewTheme, false);
-        showToast('Logo envoyé — clique sur "Enregistrer" pour le publier.');
+        studioSetSaveState('dirty');
+        render();
+        showToast('Logo envoyé. Enregistrez les réglages pour le conserver.');
       }
-
-      logoInput.addEventListener('change', () => {
-        const file = logoInput.files[0];
-        logoInput.value = '';
-        handleLogoFile(file);
-      });
-
-      ['dragenter', 'dragover'].forEach(evt => logoDropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        logoDropzone.classList.add('drag-over');
-      }));
-      ['dragleave', 'drop'].forEach(evt => logoDropzone.addEventListener(evt, e => {
-        e.preventDefault();
-        logoDropzone.classList.remove('drag-over');
-      }));
-      logoDropzone.addEventListener('drop', e => {
-        const file = e.dataTransfer?.files?.[0];
-        if (file) handleLogoFile(file);
-      });
-
-      document.getElementById('brandingLogoRemoveBtn').addEventListener('click', () => {
-        content.branding = content.branding || {};
+      logoInput?.addEventListener('change', () => { const file = logoInput.files?.[0]; logoInput.value = ''; handleLogoFile(file); });
+      ['dragenter', 'dragover'].forEach(evt => logoDropzone?.addEventListener(evt, e => { e.preventDefault(); logoDropzone.classList.add('drag-over'); }));
+      ['dragleave', 'drop'].forEach(evt => logoDropzone?.addEventListener(evt, e => { e.preventDefault(); logoDropzone.classList.remove('drag-over'); }));
+      logoDropzone?.addEventListener('drop', e => { const file = e.dataTransfer?.files?.[0]; if (file) handleLogoFile(file); });
+      document.getElementById('brandingLogoRemoveBtn')?.addEventListener('click', () => {
         content.branding.logoUrl = '';
-        document.getElementById('brandingLogoPreview').innerHTML = '';
-        document.getElementById('brandingLogoRemoveBtn').style.display = 'none';
-        renderThemeSampler(previewTheme, false);
+        studioSetSaveState('dirty');
+        render();
       });
 
-      container.querySelectorAll('[data-public-scope]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          syncFieldsIntoContent();
-          activeScope = btn.dataset.publicScope;
-          container.querySelectorAll('[data-public-scope]').forEach(b => b.classList.toggle('active', b === btn));
-          document.getElementById('publicDetailTitle').textContent = PUBLIC_SCOPE_LABELS[activeScope];
-          document.getElementById('publicDetailFields').innerHTML = fieldsHtml(activeScope);
-          bindPublicFieldPreview();
-        });
-      });
-
-      function bindPublicFieldPreview() {
-        document.querySelectorAll('#publicDetailFields [data-scope][data-field]').forEach(input => {
-          input.addEventListener('input', () => {
-            // Mirror only into the in-memory object already used by the editor.
-            // No save, endpoint or payload change.
-            const scope = input.dataset.scope;
-            const field = input.dataset.field;
-            if (!content.publicContent[scope]) content.publicContent[scope] = {};
-            content.publicContent[scope][field] = input.value;
-            if (scope === 'faq') renderThemeSampler(previewTheme, false);
-          });
-        });
-      }
-      bindPublicFieldPreview();
-
-      document.getElementById('savePublicContentBtn').addEventListener('click', async () => {
-        syncFieldsIntoContent();
+      document.getElementById('saveIdentityBtn')?.addEventListener('click', async () => {
+        const name = String(content.branding.projectName || '').trim();
+        if (!name) {
+          showToast('Ajoutez un nom de projet avant d’enregistrer.');
+          document.getElementById('brandingNameInput')?.focus();
+          return;
+        }
+        content.branding.projectName = name;
         const result = await saveContent(buildSavePayload(content));
-        if (handleSaveResult(result, 'Identité et contenus enregistrés.')) {
-          applyPublicContent(content.publicContent);
+        if (handleSaveResult(result, 'Identité et apparence enregistrées.')) {
+          if (result.content?.branding) content.branding = result.content.branding;
+          savedThemeValue = content.branding.theme || 'default';
           applyBranding(content.branding);
+          render();
         }
       });
-    }
 
-    function syncFieldsIntoContent() {
-      document.querySelectorAll('#publicDetailFields [data-scope][data-field]').forEach(input => {
-        const scope = input.dataset.scope, field = input.dataset.field;
-        if (!content.publicContent[scope]) content.publicContent[scope] = {};
-        content.publicContent[scope][field] = input.value;
-      });
+      refreshThemeCards();
     }
 
     render();

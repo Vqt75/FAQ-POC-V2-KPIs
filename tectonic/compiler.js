@@ -59,24 +59,16 @@ function compileBranding(candidate) {
 
   function compileFont(f, fallbackFamily, slotName) {
     const family = (f && typeof f.name === 'string' && f.name.trim()) ? f.name : fallbackFamily;
-    // La vraie normalizeBrandFont() de Pangea ne stocke qu'un
-    // `fileName` (simple nom de fichier), jamais une URL servable —
-    // aucune convention d'URL n'existe pour les polices uploadées.
-    // Construire une URL inventée (ex. `/uploads/${fileName}`)
-    // produirait un Manifest qui affirme "utilise Client Sans" sans
-    // donner au Runtime le moyen réel de la charger — un Manifest
-    // formellement valide mais fonctionnellement mensonger. Plus sûr :
-    // refuser explicitement la publication plutôt que de la laisser
-    // passer avec une identité typographique cassée. Tant que Pangea
-    // n'a aucune police réellement marquée "upload" (le cas aujourd'hui,
-    // vérifié sur les vraies données), ceci ne bloque rien en pratique.
     if (f && f.source === 'upload') {
-      throw new CompilerBlockingError(
-        `Police "${family}" (${slotName}) marquée comme uploadée, mais aucune URL ` +
-        `exploitable n'est disponible (stratégie d'URL des assets encore ouverte — ` +
-        `voir TECTONIC_SITE_MANIFEST.md §12). Publication refusée plutôt que de ` +
-        `produire un Manifest qui prétend charger une police inaccessible.`
-      );
+      const assetUrl = typeof f.assetUrl === 'string' ? f.assetUrl.trim() : '';
+      if (!assetUrl || !assetUrl.startsWith('/uploads/')) {
+        throw new CompilerBlockingError(
+          `Police "${family}" (${slotName}) marquée comme uploadée, mais aucun asset ` +
+          `servable n'est disponible. Réimportez la police dans Identité & apparence ` +
+          `avant de publier.`
+        );
+      }
+      return { family, asset: wrapAsset(assetUrl, '') };
     }
     return { family, asset: null };
   }
@@ -85,7 +77,11 @@ function compileBranding(candidate) {
     logo: wrapAsset(branding.logoUrl, logoAlt),
     colors: {
       primary: colorsArr[0] || '#1E1D1E',
-      secondary: colorsArr[1] || '#C2AF7E'
+      // Une seule couleur explicitement fournie reste une seule identité :
+      // on ne fabrique jamais un beige de secours qui n'appartient pas à la marque.
+      secondary: colorsArr.length > 1
+        ? colorsArr[1]
+        : (colorsArr.length === 1 ? colorsArr[0] : '#C2AF7E')
     },
     fonts: {
       primary: compileFont(fontsArr[0], 'Roboto', 'primary'),

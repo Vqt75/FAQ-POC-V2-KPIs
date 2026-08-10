@@ -77,12 +77,18 @@ function isNeutralBrandColor(value) {
 }
 
 function resolveExpressionAccent(primary, secondary) {
-  const canvas = '#F7F7F5';
-  const ink = '#171717';
-  const isUsable = color => !isNeutralBrandColor(color) && colorContrast(color, canvas) >= 1.8;
+  // Identity 1A : même resolver que le Studio quand le Brand Engine partagé
+  // est chargé par tectonic.html. Le fallback conserve le comportement
+  // historique pour les tests/imports isolés du renderer.
+  const shared = globalThis && globalThis.StormBrandEngine;
+  if (shared && typeof shared.resolve === 'function') {
+    const decision = shared.resolve([primary, secondary], { canvas: '#F7F7F5' });
+    if (decision && decision.roles && decision.roles.accent) return decision.roles.accent;
+  }
 
-  // A black/white/neutral primary is already represented by Ivory's core ink/surface,
-  // so the second brand color becomes the expressive signature when it is usable.
+  const canvas = '#F7F7F5';
+  const ink = '#1E1D1E';
+  const isUsable = color => !isNeutralBrandColor(color) && colorContrast(color, canvas) >= 1.8;
   if (isNeutralBrandColor(primary)) return isUsable(secondary) ? secondary : ink;
   if (isUsable(primary)) return primary;
   if (isUsable(secondary)) return secondary;
@@ -100,6 +106,18 @@ function renderLandingStatement(statement) {
 function safeCssFont(value, fallback) {
   const v = String(value || '').replace(/[^a-zA-Z0-9 _-]/g, '').trim();
   return v || fallback;
+}
+
+function safeFontAssetUrl(value) {
+  const v = String(value || '').trim();
+  return /^\/uploads\/[a-zA-Z0-9._-]+$/.test(v) ? v : '';
+}
+
+function fontFaceCss(font, fallbackFamily) {
+  const family = safeCssFont(font && font.family, fallbackFamily);
+  const url = safeFontAssetUrl(font && font.asset && font.asset.url);
+  if (!url) return '';
+  return `@font-face{font-family:"${family}";src:url("${url}");font-display:swap;}`;
 }
 
 function currentMilestone(timeline) {
@@ -5522,6 +5540,10 @@ export function render(manifest, root, actions) {
   const expressionAccent = resolveExpressionAccent(primary, secondary);
   const fontPrimary = safeCssFont(fonts.primary && fonts.primary.family, 'Roboto');
   const fontSecondary = safeCssFont(fonts.secondary && fonts.secondary.family, 'Italiana');
+  const fontAssetsCss = [
+    fontFaceCss(fonts.primary, 'Roboto'),
+    fontFaceCss(fonts.secondary, 'Italiana')
+  ].filter(Boolean).join('');
   const projectName = esc(manifest.project && manifest.project.name);
   const logoHtml = branding.logo && branding.logo.url
     ? `<img src="${esc(branding.logo.url)}" alt="${esc(branding.logo.alt)}">`
@@ -5551,7 +5573,7 @@ export function render(manifest, root, actions) {
     .join('');
 
   root.innerHTML = `
-    <style>${STYLE}</style>
+    <style>${fontAssetsCss}${STYLE}</style>
     <div class="tct-site" style="--tct-primary:${primary};--tct-secondary:${secondary};--tct-expression-accent:${expressionAccent};--tct-font-primary:'${fontPrimary}';--tct-font-secondary:'${fontSecondary}';">
       <header class="tct-header" id="tct-site-header">
         <div class="tct-header-inner">

@@ -530,11 +530,12 @@ paramètre supplémentaire pour autant (`compile(candidate, context,
 capabilities)` aurait été une option, écartée pour ne pas multiplier
 les signatures sans bénéfice net pour ce POC).
 
-**Anticipé mais volontairement pas ajouté maintenant** : la résolution
-des assets pourrait un jour dépendre similairement d'un
-`assetBaseUrl` dans le contexte — mais tant que la stratégie d'URL des
-assets n'est pas tranchée (question ouverte, §9), l'ajouter
-maintenant serait deviner une réponse qu'on n'a pas encore.
+**Précision Identity 1A** : pour Tectonic V1, les assets gérés par
+Storm utilisent le contrat relatif `/uploads/...` sur la même origine.
+Le Compiler accepte donc une police `source: "upload"` uniquement si
+son `assetUrl` est un chemin servable sous `/uploads/`; sinon il bloque
+la publication. Un éventuel `assetBaseUrl` reste une possibilité pour
+un futur déploiement multi-origine, sans être nécessaire aujourd'hui.
 
 **Précision importante** : `revision` identifie une *publication*, pas
 une exécution arbitraire de la fonction. Compiler en mode preview, ou

@@ -402,13 +402,18 @@ meta: {
 
 ## 7. Stratégie des assets
 
-Pangea stocke aujourd'hui des chemins bruts type `/uploads/xyz.png`,
-valides uniquement parce que le Runtime et le serveur qui héberge les
-fichiers sont le même processus. Pour un Manifest pensé comme
-renderer-agnostic, cette hypothèse ne peut pas être gardée telle
-quelle — la résolution d'URL (relative vs absolue) reste une question
-ouverte (§12), mais **la forme minimale de l'objet asset est tranchée
-pour la V1** : `{ url, alt }`, jamais une chaîne nue ni `{ url }` seul.
+Pangea stocke des chemins bruts type `/uploads/xyz.png`. **Tectonic V1
+conserve volontairement ce contrat relatif pour les assets gérés par
+l'instance Storm elle-même** : le serveur génère un chemin opaque sous
+`/uploads/`, le Compiler le transporte sans l'inventer et le Runtime le
+résout sur la même origine. Cette décision est suffisante pour le
+déploiement mono-instance actuel et ferme notamment le circuit des
+polices importées dans Studio Identity 1A. La forme minimale de l'objet
+asset reste `{ url, alt }`, jamais une chaîne nue ni `{ url }` seul.
+
+Une future architecture où le Runtime et les assets seraient servis par
+des origines différentes pourra résoudre ces chemins à la publication
+(ou introduire un `assetBaseUrl`) sans changer la sémantique des contenus.
 
 Raison du choix : Pangea n'a aujourd'hui aucune métadonnée
 d'accessibilité (aucun texte alternatif stocké nulle part) — c'est un
@@ -600,7 +605,7 @@ optionnel (comme `moodNudge`) n'est activé pour ce projet.
 | `project.name` | `branding.projectName` | mapping direct |
 | `branding.logo` | `branding.logoUrl` | mapping direct (chaîne → objet `{url}`) |
 | `branding.colors` | `branding.colors[0]`/`[1]` | mapping direct (tableau → objet nommé) |
-| `branding.fonts` | `branding.fonts[0].name`/`[1].name` | mapping avec changement de forme : `family` mappé directement, `asset` nouveau (aucun équivalent Pangea — l'upload de police n'est pas encore branché) |
+| `branding.fonts` | `branding.fonts[0/1].name` + `assetUrl` | mapping avec changement de forme : `family` mappé directement ; une police système produit `asset: null`, une police importée produit `asset: {url}` depuis son `assetUrl` persistant sous `/uploads/` |
 | `edition.id` | `branding.theme` | **corrigé après Phase 2** — pas un mapping direct : Pangea stocke `'default'` en interne pour l'édition affichée et prévisualisée sous le nom "Ivory" (`data-theme-value="default"` associé à `data-preview-theme="ivory"` dans l'admin). Le Compiler traduit explicitement `'default'` → `'ivory'` avant validation contre `context.supportedEditions` — jamais le nom legacy propagé tel quel jusqu'au Runtime. Ce document de conception ne documentait pas encore ce cas particulier au moment du gel ; la traduction vit dans l'implémentation (`tectonic/compiler.js`, `LEGACY_THEME_TO_EDITION`), découverte et validée pendant la revue de Phase 2. |
 | `modules.*` | — | **nouveau champ Tectonic**, aucun équivalent Pangea |
 | `navigation` | — | **nouveau**, configuration éditable — pas un dérivé de `modules` |
@@ -688,11 +693,10 @@ optionnel (comme `moodNudge`) n'est activé pour ce projet.
 1. **`project.id`/`project.status`** — non retenus, par manque de
    besoin démontré tant que Storm reste mono-projet côté instance. À
    revoir si le Studio gère un jour plusieurs projets.
-2. **Stratégie d'URL des assets** — chemins relatifs (`/uploads/...`)
-   supposent que le Runtime et le serveur qui sert les fichiers sont
-   le même processus. Un Manifest vraiment renderer-agnostic devrait
-   probablement porter des URLs absolues ou résolues à la compilation
-   — pas tranché ici.
+2. **Déploiement multi-origine des assets** — Tectonic V1 tranche les
+   assets gérés par Storm en `/uploads/...` sur la même origine. Le cas
+   CDN / domaine d'assets séparé reste différé ; il ne remet pas en
+   cause le contrat V1.
 3. **Métadonnées d'accessibilité au-delà de `alt`** — `width`/`height`
    restent différés (voir décision 4 ci-dessus). Pas un manque
    bloquant, juste pas encore nécessaire.
