@@ -53,7 +53,8 @@ const candidate = {
   publicContent: ...,
   milestones: ...,
   articles: ...,
-  plans: ...,
+  spaces: ...,      // Studio V2 — espaces sémantiques et leurs médias
+  plans: ...,       // projection legacy temporaire pour Pangea
   ambassadorsContent: ..., ambassadors: ...,
   teamContent: ..., team: ...,
   faqEntries: ...,

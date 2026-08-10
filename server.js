@@ -6,6 +6,7 @@ const { publishFromAuthoritativeState, CompilerBlockingError } = require('./tect
 const { getPublicationStatus } = require('./tectonic/studio-v2/publication-status');
 const { createDefaultProject, normalizeProject } = require('./tectonic/studio-v2/project-schema');
 const { normalizeNewsBlocks, newsBlocksToPlainText, newsBlocksToLegacyBody } = require('./tectonic/news-content');
+const { createDefaultSpaces, normalizeSpaces, bootstrapSpaces, spacesToLegacyPlans } = require('./tectonic/spaces-content');
 
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'parella2026'; // ⚠️ à changer via la variable d'environnement avant tout partage
@@ -54,6 +55,8 @@ const defaultContent = {
     theme: 'default' // thème visuel public : 'default' ou 'rainbow-glass'
   },
   project: createDefaultProject(),
+  spaces: createDefaultSpaces(),
+  spacesInitialized: true,
   publicContent: {
     faq: {
       eyebrow: 'Projet XYZ — Base de connaissance',
@@ -654,6 +657,11 @@ function readContentState() {
       ambassadors: normalizeAmbassadors(parsed.ambassadors),
       teamContent: normalizeTeamContent(parsed.teamContent),
       team: normalizeTeam(parsed.team),
+      // Bootstrap 4A.1 : une ancienne clé `spaces: []` ne doit pas neutraliser
+      // la migration des plans ni la démo pré-rédigée. Le marqueur persistant
+      // permet néanmoins de respecter un vide volontaire après sauvegarde 4A.
+      spaces: bootstrapSpaces(parsed.spaces, normalizePlans(parsed.plans), parsed.spacesInitialized === true),
+      spacesInitialized: true,
       plans: normalizePlans(parsed.plans)
     };
   } catch (error) {
@@ -677,8 +685,14 @@ function writeContentState(contentState) {
     ambassadors: normalizeAmbassadors(contentState.ambassadors),
     teamContent: normalizeTeamContent(contentState.teamContent),
     team: normalizeTeam(contentState.team),
-    plans: normalizePlans(contentState.plans)
+    spaces: normalizeSpaces(contentState.spaces, normalizePlans(contentState.plans)),
+    spacesInitialized: true,
+    plans: []
   };
+  // Pendant la coexistence, `spaces` est la source sémantique Tectonic ;
+  // `plans` reste une projection de compatibilité pour Pangea, jamais une seconde
+  // source de vérité éditoriale.
+  safe.plans = spacesToLegacyPlans(safe.spaces);
   fs.writeFileSync(CONTENT_FILE, JSON.stringify(safe, null, 2), 'utf8');
   return safe;
 }
@@ -981,6 +995,7 @@ const server = http.createServer(async (req, res) => {
         ambassadors: parsed.ambassadors,
         teamContent: parsed.teamContent,
         team: parsed.team,
+        spaces: parsed.spaces,
         plans: parsed.plans
       });
       sendJson(res, 200, { ok: true, content: saved });

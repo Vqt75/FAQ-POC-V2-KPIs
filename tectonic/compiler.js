@@ -16,6 +16,7 @@
 // d'un bug JS ordinaire.
 // ─────────────────────────────────────────────────────────────────
 const { normalizeNewsBlocks, newsBlocksToPlainText } = require('./news-content');
+const { SPACE_STATUS, normalizeSpaces } = require('./spaces-content');
 
 class CompilerBlockingError extends Error {
   constructor(message) {
@@ -260,23 +261,35 @@ function compileTimeline(candidate) {
 // ─────────────────────────────────────────────────────────────────
 function compileSpaces(candidate) {
   const scope = candidate?.publicContent?.plans || {};
-  const plans = Array.isArray(candidate?.plans) ? candidate.plans : [];
+  const spaces = normalizeSpaces(candidate?.spaces, candidate?.plans);
   return {
     intro: {
       eyebrow: scope.eyebrow || '',
       title: [scope.titleLine1, scope.titleAccent].filter(Boolean).join(' '),
       description: scope.desc || ''
     },
-    items: plans.map(p => ({
-      id: p.id,
-      type: p.type || '',
-      tags: typeof p.tags === 'string'
-        ? p.tags.split(',').map(t => t.trim()).filter(Boolean)
-        : (Array.isArray(p.tags) ? p.tags : []),
-      title: p.title || '',
-      comment: p.comment || '',
-      asset: wrapAsset(p.imageUrl, p.title || '')
-    }))
+    items: spaces.map(space => {
+      const status = SPACE_STATUS[space.status] || SPACE_STATUS.designing;
+      const media = (space.media || []).map(asset => ({
+        url: asset.url,
+        alt: asset.alt || asset.label || space.name || '',
+        label: asset.label || '',
+        kind: asset.kind || 'view'
+      }));
+      return {
+        id: space.id,
+        type: 'Espace',
+        title: space.name || '',
+        location: space.location || '',
+        comment: space.description || '',
+        status: status.label,
+        statusBody: status.body,
+        usageTags: Array.isArray(space.usages) ? space.usages : [],
+        usages: Array.isArray(space.usages) ? space.usages : [],
+        media,
+        asset: media[0] || null
+      };
+    })
   };
 }
 

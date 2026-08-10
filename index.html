@@ -4012,6 +4012,114 @@
     body.storm-admin-open .studio-news-readtime { grid-column:auto; }
   }
 
+  /* ── Espaces 4A : un espace métier, pas une bibliothèque de fichiers ── */
+  body.storm-admin-open .studio-spaces-head {
+    display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin-bottom:34px;
+  }
+  body.storm-admin-open .studio-spaces-head > div { max-width:720px; }
+  body.storm-admin-open .studio-spaces-head h1 {
+    margin:4px 0 10px; color:var(--ink); font-family:'Italiana',serif; font-size:clamp(2.6rem,4.3vw,4.4rem); font-weight:400; letter-spacing:-.045em; line-height:.98;
+  }
+  body.storm-admin-open .studio-spaces-head p { margin:0; max-width:660px; color:var(--ink-50); font-size:.72rem; line-height:1.65; }
+  body.storm-admin-open .studio-spaces-save { flex:0 0 auto; min-width:164px; }
+  body.storm-admin-open .studio-spaces-layout {
+    display:grid; grid-template-columns:minmax(248px,300px) minmax(0,1fr); gap:24px; align-items:start;
+  }
+  body.storm-admin-open .studio-spaces-index {
+    position:sticky; top:84px; padding:18px; border:1px solid rgba(30,29,30,.08); border-radius:18px; background:rgba(255,255,255,.42);
+  }
+  body.storm-admin-open .studio-spaces-index-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  body.storm-admin-open .studio-spaces-index-head strong { font-size:.70rem; font-weight:600; }
+  body.storm-admin-open .studio-spaces-index-head span { color:var(--ink-35); font-size:.55rem; }
+  body.storm-admin-open .studio-spaces-index-note { margin:7px 0 15px; color:var(--ink-35); font-size:.55rem; line-height:1.5; }
+  body.storm-admin-open .studio-spaces-list { display:grid; gap:3px; }
+  body.storm-admin-open .studio-space-row {
+    display:grid; grid-template-columns:18px minmax(0,1fr) 24px; align-items:center; min-height:56px; border-radius:11px; transition:background .16s ease,opacity .16s ease,transform .16s ease;
+  }
+  body.storm-admin-open .studio-space-row:hover { background:rgba(30,29,30,.035); }
+  body.storm-admin-open .studio-space-row.is-active { background:rgba(30,29,30,.07); }
+  body.storm-admin-open .studio-space-row.is-dragging { opacity:.4; }
+  body.storm-admin-open .studio-space-row.is-drop-target { transform:translateY(2px); box-shadow:inset 0 1px 0 rgba(30,29,30,.22); }
+  body.storm-admin-open .studio-space-drag { color:var(--ink-25); font-size:.70rem; cursor:grab; text-align:center; }
+  body.storm-admin-open .studio-space-row-main { min-width:0; padding:10px 6px; text-align:left; }
+  body.storm-admin-open .studio-space-row-main strong { display:block; overflow:hidden; color:var(--ink); font-size:.65rem; font-weight:600; white-space:nowrap; text-overflow:ellipsis; }
+  body.storm-admin-open .studio-space-row-main span { display:block; overflow:hidden; margin-top:4px; color:var(--ink-35); font-size:.53rem; white-space:nowrap; text-overflow:ellipsis; }
+  body.storm-admin-open .studio-space-media-count { width:22px; height:22px; display:grid; place-items:center; border-radius:50%; background:rgba(30,29,30,.05); color:var(--ink-35); font-size:.50rem; }
+  body.storm-admin-open .studio-space-add { width:100%; min-height:38px; margin-top:12px; border-top:1px solid rgba(30,29,30,.07); padding-top:11px; color:var(--ink-50); font-size:.60rem; text-align:left; }
+  body.storm-admin-open .studio-space-empty-list { padding:18px 4px; color:var(--ink-35); font-size:.58rem; }
+  body.storm-admin-open .studio-spaces-detail {
+    min-width:0; padding:24px clamp(22px,3vw,42px) 10px; border:1px solid rgba(30,29,30,.08); border-radius:20px; background:rgba(255,255,255,.55); box-shadow:0 12px 34px rgba(30,29,30,.025);
+  }
+  body.storm-admin-open .studio-space-detail-head { display:flex; align-items:flex-start; justify-content:space-between; gap:24px; padding-bottom:24px; }
+  body.storm-admin-open .studio-space-detail-head span { display:block; margin-bottom:5px; color:var(--ink-35); font-size:.50rem; letter-spacing:.13em; text-transform:uppercase; }
+  body.storm-admin-open .studio-space-detail-head h2 { margin:0; color:var(--ink); font-size:1.28rem; font-weight:600; letter-spacing:-.025em; }
+  body.storm-admin-open .studio-space-delete { padding:8px 0; color:var(--ink-35); font-size:.55rem; }
+  body.storm-admin-open .studio-space-delete:hover { color:#8a2d2d; }
+  body.storm-admin-open .studio-space-section { padding:28px 0 30px; border-top:1px solid rgba(30,29,30,.075); }
+  body.storm-admin-open .studio-space-section-intro { display:grid; grid-template-columns:minmax(150px,210px) minmax(0,1fr); gap:24px; margin-bottom:18px; }
+  body.storm-admin-open .studio-space-section-intro strong { color:var(--ink); font-size:.68rem; font-weight:600; }
+  body.storm-admin-open .studio-space-section-intro p { margin:0; max-width:520px; color:var(--ink-35); font-size:.57rem; line-height:1.55; }
+  body.storm-admin-open .studio-space-fields.two { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  body.storm-admin-open .studio-space-fields label,
+  body.storm-admin-open .studio-space-field-full label,
+  body.storm-admin-open .studio-space-media-fields label { display:block; margin-bottom:7px; color:var(--ink-50); font-size:.56rem; font-weight:600; }
+  body.storm-admin-open .studio-space-fields label span,
+  body.storm-admin-open .studio-space-media-fields label span { color:var(--ink-25); font-weight:400; }
+  body.storm-admin-open .studio-space-field-full { margin-top:14px; }
+  body.storm-admin-open .studio-space-field-full textarea { min-height:96px; resize:vertical; line-height:1.55; }
+  body.storm-admin-open .studio-space-statuses { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  body.storm-admin-open .studio-space-status {
+    min-height:92px; padding:14px; border:1px solid rgba(30,29,30,.08); border-radius:14px; background:rgba(255,255,255,.32); text-align:left; transition:border-color .16s ease,background .16s ease,box-shadow .16s ease;
+  }
+  body.storm-admin-open .studio-space-status:hover { border-color:rgba(30,29,30,.15); }
+  body.storm-admin-open .studio-space-status.is-active { border-color:rgba(30,29,30,.20); background:white; box-shadow:0 5px 18px rgba(30,29,30,.04); }
+  body.storm-admin-open .studio-space-status i { width:14px; height:14px; display:block; margin-bottom:10px; border:1px solid rgba(30,29,30,.18); border-radius:50%; background:white; }
+  body.storm-admin-open .studio-space-status.is-active i { border:4px solid var(--ink); }
+  body.storm-admin-open .studio-space-status strong { display:block; color:var(--ink); font-size:.61rem; font-weight:600; }
+  body.storm-admin-open .studio-space-status span { display:block; margin-top:4px; color:var(--ink-35); font-size:.51rem; line-height:1.4; }
+  body.storm-admin-open .studio-space-usage-grid { display:flex; flex-wrap:wrap; gap:7px; }
+  body.storm-admin-open .studio-space-usage { cursor:pointer; }
+  body.storm-admin-open .studio-space-usage input { position:absolute; opacity:0; pointer-events:none; }
+  body.storm-admin-open .studio-space-usage span { display:block; min-height:34px; padding:9px 12px; border:1px solid rgba(30,29,30,.09); border-radius:999px; background:rgba(255,255,255,.30); color:var(--ink-50); font-size:.57rem; transition:all .16s ease; }
+  body.storm-admin-open .studio-space-usage:hover span { border-color:rgba(30,29,30,.16); color:var(--ink); }
+  body.storm-admin-open .studio-space-usage.is-active span { border-color:var(--ink); background:var(--ink); color:white; }
+  body.storm-admin-open .studio-space-media-list { display:grid; gap:10px; }
+  body.storm-admin-open .studio-space-media-item { position:relative; display:grid; grid-template-columns:124px minmax(0,1fr) 28px; gap:16px; padding:12px; border:1px solid rgba(30,29,30,.08); border-radius:15px; background:rgba(255,255,255,.34); }
+  body.storm-admin-open .studio-space-media-preview { width:124px; min-height:116px; overflow:hidden; border-radius:10px; background:rgba(30,29,30,.04); }
+  body.storm-admin-open .studio-space-media-preview img { width:100%; height:100%; min-height:116px; object-fit:cover; display:block; }
+  body.storm-admin-open .studio-space-media-pdf { height:100%; min-height:116px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; padding:12px; text-align:center; }
+  body.storm-admin-open .studio-space-media-pdf span { padding:5px 7px; border-radius:5px; background:var(--ink); color:white; font-size:.48rem; font-weight:700; letter-spacing:.08em; }
+  body.storm-admin-open .studio-space-media-pdf small { max-width:100%; overflow:hidden; color:var(--ink-50); font-size:.49rem; white-space:nowrap; text-overflow:ellipsis; }
+  body.storm-admin-open .studio-space-media-fields { display:grid; grid-template-columns:1fr; align-content:start; gap:0; }
+  body.storm-admin-open .studio-space-media-fields .form-input { margin-bottom:10px; }
+  body.storm-admin-open .studio-space-media-remove { width:26px; height:26px; border-radius:8px; color:var(--ink-35); font-size:.9rem; }
+  body.storm-admin-open .studio-space-media-remove:hover { background:rgba(30,29,30,.05); color:var(--ink); }
+  body.storm-admin-open .studio-space-media-empty { margin:0 0 12px; color:var(--ink-35); font-size:.57rem; }
+  body.storm-admin-open .studio-space-dropzone { display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:82px; margin-top:12px; padding:16px 18px; border:1px dashed rgba(30,29,30,.17); border-radius:15px; background:rgba(255,255,255,.20); cursor:pointer; transition:border-color .16s ease,background .16s ease; }
+  body.storm-admin-open .studio-space-dropzone:hover,
+  body.storm-admin-open .studio-space-dropzone.is-dragging { border-color:rgba(30,29,30,.38); background:rgba(255,255,255,.58); }
+  body.storm-admin-open .studio-space-dropzone strong { display:block; color:var(--ink); font-size:.61rem; font-weight:600; }
+  body.storm-admin-open .studio-space-dropzone span { display:block; margin-top:4px; color:var(--ink-35); font-size:.52rem; }
+  body.storm-admin-open .studio-space-secondary { flex:0 0 auto; min-height:34px; padding:0 12px; border:1px solid rgba(30,29,30,.09); border-radius:9px; background:rgba(255,255,255,.65); color:var(--ink-70); font-size:.56rem; }
+  body.storm-admin-open .studio-space-no-selection { min-height:360px; display:grid; place-content:center; text-align:center; }
+  body.storm-admin-open .studio-space-no-selection strong { font-size:.82rem; }
+  body.storm-admin-open .studio-space-no-selection p { max-width:380px; margin:8px auto 0; color:var(--ink-35); font-size:.60rem; line-height:1.55; }
+  @media(max-width:980px) {
+    body.storm-admin-open .studio-spaces-layout { grid-template-columns:1fr; }
+    body.storm-admin-open .studio-spaces-index { position:relative; top:auto; }
+    body.storm-admin-open .studio-spaces-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  }
+  @media(max-width:680px) {
+    body.storm-admin-open .studio-spaces-head { display:block; }
+    body.storm-admin-open .studio-spaces-save { margin-top:18px; }
+    body.storm-admin-open .studio-spaces-list,
+    body.storm-admin-open .studio-space-fields.two,
+    body.storm-admin-open .studio-space-statuses { grid-template-columns:1fr; }
+    body.storm-admin-open .studio-space-section-intro { grid-template-columns:1fr; gap:6px; }
+    body.storm-admin-open .studio-space-media-item { grid-template-columns:86px minmax(0,1fr) 26px; }
+    body.storm-admin-open .studio-space-media-preview { width:86px; }
+  }
+
   /* ── Actualités 3A.1 : éditeur riche sémantique, jamais décoratif ── */
   body.storm-admin-open .studio-news-rich-section { margin-top:32px; }
   body.storm-admin-open .studio-news-rich-doctrine {
@@ -4870,6 +4978,8 @@
         ambassadors: Array.isArray(data.ambassadors) ? data.ambassadors : [],
         teamContent: data.teamContent && typeof data.teamContent === 'object' ? data.teamContent : {},
         team: Array.isArray(data.team) ? data.team : [],
+        spaces: Array.isArray(data.spaces) ? data.spaces : [],
+        spacesInitialized: data.spacesInitialized === true,
         plans: Array.isArray(data.plans) ? data.plans : []
       };
     } catch (e) {
@@ -4877,7 +4987,7 @@
       return {
         branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, project: studioDefaultProjectSeed(), publicContent: {}, faqEntries: [], faqDrafts: [],
         progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [],
-        ambassadorsContent: {}, ambassadors: [], teamContent: {}, team: [], plans: []
+        ambassadorsContent: {}, ambassadors: [], teamContent: {}, team: [], spaces: [], spacesInitialized: false, plans: []
       };
     }
   }
@@ -4896,6 +5006,7 @@
       ambassadors: content.ambassadors,
       teamContent: content.teamContent,
       team: content.team,
+      spaces: content.spaces,
       plans: content.plans
     };
   }
@@ -9043,121 +9154,331 @@ CALENDRIER
     const container = document.getElementById('adminVisualsEditor');
     if (!container) return;
 
-    content.plans = content.plans || [];
-    const openPlanIds = new Set();
+    const USAGES = ['Se concentrer','Collaborer','Se réunir','Échanger de façon informelle','Faire une pause','Travailler autrement','Accueillir'];
+    const STATUS = {
+      designing: { label:'En cours de conception', hint:'L’espace peut encore évoluer.' },
+      approved: { label:'Validé', hint:'Les grands principes sont arrêtés.' },
+      delivered: { label:'Livré', hint:'L’espace est prêt à être découvert.' }
+    };
+    const MEDIA_KIND = {
+      view: 'Une vue de l’espace',
+      plan: 'Un plan à explorer',
+      document: 'Un document à consulter'
+    };
 
-    function planCardAdminHtml(p, index, total) {
-      const isOpen = openPlanIds.has(p.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-plan-admin-card="${p.id}">
-          <button type="button" class="faq-card-header" data-plan-admin-toggle="${p.id}">
-            <span class="tag-pill">${escapeHtml(p.type || '')}</span>
-            <span class="faq-card-title">${escapeHtml(p.title || '(sans titre)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
+    function text(value) { return String(value ?? ''); }
+    function uid(prefix) { return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,7)}`; }
+    function normalizeMedia(asset) {
+      if (!asset || !asset.url) return null;
+      return {
+        id: asset.id || uid('space-media'),
+        kind: ['view','plan','document'].includes(asset.kind) ? asset.kind : (/\.pdf(?:$|\?)/i.test(asset.url) ? 'document' : 'view'),
+        url: asset.url,
+        label: text(asset.label),
+        alt: text(asset.alt)
+      };
+    }
+    function normalizeSpace(space, index) {
+      return {
+        id: space?.id || uid('space'),
+        name: text(space?.name || space?.title || `Espace ${index + 1}`),
+        location: text(space?.location),
+        status: STATUS[space?.status] ? space.status : 'designing',
+        description: text(space?.description || space?.comment),
+        usages: Array.isArray(space?.usages) ? [...new Set(space.usages.filter(Boolean))] : (Array.isArray(space?.usageTags) ? [...new Set(space.usageTags.filter(Boolean))] : []),
+        media: (Array.isArray(space?.media) ? space.media : []).map(normalizeMedia).filter(Boolean)
+      };
+    }
+
+    function studioDefaultSpacesSeed() {
+      return [
+        { id:'space-overview', name:'Vue d’ensemble du futur site', location:'Niveau R+1', status:'designing', description:'Une première lecture du futur environnement de travail : les différentes familles d’usages s’organisent autour d’une circulation centrale, avec des zones plus calmes et d’autres plus collaboratives.', usages:['Travailler autrement','Collaborer','Se concentrer'], media:[] },
+        { id:'space-workcafe', name:'Work-café', location:'Cœur du site', status:'approved', description:'Un espace central, lumineux et polyvalent pour déjeuner, faire une pause, retrouver un collègue ou travailler ponctuellement dans un cadre plus informel.', usages:['Faire une pause','Échanger de façon informelle','Travailler autrement'], media:[] },
+        { id:'space-workfloor', name:'Plateau de travail', location:'Niveau R+1', status:'designing', description:'Des postes partagés organisés en quartiers d’équipe, associés à des espaces de proximité pour alterner concentration, échanges rapides et travail collectif.', usages:['Se concentrer','Collaborer','Travailler autrement'], media:[] },
+        { id:'space-focus', name:'Espaces de concentration', location:'À proximité des plateaux de travail', status:'approved', description:'Des zones silencieuses et des cabines phoniques permettent de s’isoler pour une tâche exigeante, un appel ou une visioconférence sans gêner le collectif.', usages:['Se concentrer','Travailler autrement'], media:[] },
+        { id:'space-meeting', name:'Salles de réunion', location:'Réparties sur les niveaux de travail', status:'designing', description:'Plusieurs formats de salles accompagnent les réunions d’équipe, les ateliers et les échanges hybrides avec des participants à distance.', usages:['Se réunir','Collaborer'], media:[] },
+        { id:'space-services', name:'Accueil & services', location:'Rez-de-chaussée', status:'designing', description:'Le rez-de-chaussée rassemble l’accueil et les principaux services du quotidien afin de rendre l’arrivée sur site simple et lisible.', usages:['Accueillir','Faire une pause','Échanger de façon informelle'], media:[] }
+      ].map(normalizeSpace);
+    }
+
+    function studioMigrateLegacyPlans(plans) {
+      if (!Array.isArray(plans) || !plans.length) return [];
+      return plans.map((plan, index) => normalizeSpace({
+        id: plan?.id || `legacy-space-${index + 1}`,
+        name: plan?.title || `Espace ${index + 1}`,
+        description: plan?.comment || '',
+        status: 'designing',
+        usages: ['Travailler autrement'],
+        media: plan?.imageUrl ? [{
+          id: `legacy-space-media-${index + 1}`,
+          kind: /plan|zoning|implantation/i.test(`${plan?.type || ''} ${plan?.tags || ''} ${plan?.title || ''}`) ? 'plan' : (/\.pdf(?:$|\?)/i.test(plan.imageUrl) ? 'document' : 'view'),
+          url: plan.imageUrl,
+          label: plan.title || '',
+          alt: plan.title || ''
+        }] : []
+      }, index));
+    }
+
+    const rawSpaces = Array.isArray(content.spaces) ? content.spaces : [];
+    if (!rawSpaces.length && content.spacesInitialized !== true) {
+      const migrated = studioMigrateLegacyPlans(content.plans);
+      content.spaces = migrated.length ? migrated : studioDefaultSpacesSeed();
+    } else {
+      content.spaces = rawSpaces.map(normalizeSpace);
+    }
+    let selectedId = content.spaces[0]?.id || null;
+    let draggingId = null;
+
+    function selectedSpace() { return content.spaces.find(space => space.id === selectedId) || null; }
+    function markDirty() { studioSetSaveState('dirty'); }
+    function mediaKindLabel(kind) { return MEDIA_KIND[kind] || MEDIA_KIND.view; }
+    function statusLabel(status) { return STATUS[status]?.label || STATUS.designing.label; }
+    function safeName(name) { return text(name).trim() || 'Sans nom'; }
+
+    function mediaPreview(asset) {
+      const pdf = /\.pdf(?:$|\?)/i.test(asset.url || '');
+      if (pdf) return `<div class="studio-space-media-pdf"><span>PDF</span><small>${escapeHtml(asset.label || 'Document')}</small></div>`;
+      return `<img src="${escapeHtml(asset.url)}" alt="${escapeHtml(asset.alt || asset.label || '')}">`;
+    }
+
+    function renderList() {
+      const list = document.getElementById('studioSpacesList');
+      const count = document.getElementById('studioSpacesCount');
+      if (!list) return;
+      if (count) count.textContent = `${content.spaces.length} espace${content.spaces.length > 1 ? 's' : ''}`;
+      list.innerHTML = content.spaces.length ? content.spaces.map(space => `
+        <div class="studio-space-row ${space.id === selectedId ? 'is-active' : ''}" draggable="true" data-space-row="${escapeHtml(space.id)}">
+          <span class="studio-space-drag" aria-hidden="true">⋮⋮</span>
+          <button type="button" class="studio-space-row-main" data-space-select="${escapeHtml(space.id)}">
+            <strong>${escapeHtml(safeName(space.name))}</strong>
+            <span>${escapeHtml(space.location || statusLabel(space.status))}</span>
           </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              <label class="admin-editor-label">Visuel (image PNG/JPEG ou PDF)</label>
-              ${uploaderHtml('plan' + p.id, p.imageUrl, { shape: 'square', size: 56, label: 'Visuel', accept: 'image/png,image/jpeg,application/pdf' })}
-              <label class="admin-editor-label">Titre</label>
-              <input type="text" class="form-input" data-plan-field="title" value="${escapeHtml(p.title || '')}">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                <div>
-                  <label class="admin-editor-label">Type de contenu</label>
-                  <input type="text" class="form-input" data-plan-field="type" value="${escapeHtml(p.type || '')}" placeholder="ex. Plan, 3D">
-                </div>
-                <div>
-                  <label class="admin-editor-label">Filtres</label>
-                  <input type="text" class="form-input" data-plan-field="tags" value="${escapeHtml(p.tags || '')}" placeholder="ex. Macro-zoning, Ambiance">
-                </div>
+          <span class="studio-space-media-count" title="${space.media.length} média(s)">${space.media.length}</span>
+        </div>`).join('') : `<div class="studio-space-empty-list">Aucun espace pour le moment.</div>`;
+
+      list.querySelectorAll('[data-space-select]').forEach(button => button.addEventListener('click', () => {
+        selectedId = button.dataset.spaceSelect;
+        renderList();
+        renderDetail();
+      }));
+      list.querySelectorAll('[data-space-row]').forEach(row => {
+        row.addEventListener('dragstart', event => {
+          draggingId = row.dataset.spaceRow;
+          row.classList.add('is-dragging');
+          event.dataTransfer.effectAllowed = 'move';
+        });
+        row.addEventListener('dragend', () => { draggingId = null; row.classList.remove('is-dragging'); });
+        row.addEventListener('dragover', event => { event.preventDefault(); row.classList.add('is-drop-target'); });
+        row.addEventListener('dragleave', () => row.classList.remove('is-drop-target'));
+        row.addEventListener('drop', event => {
+          event.preventDefault();
+          row.classList.remove('is-drop-target');
+          const targetId = row.dataset.spaceRow;
+          if (!draggingId || draggingId === targetId) return;
+          const from = content.spaces.findIndex(space => space.id === draggingId);
+          const to = content.spaces.findIndex(space => space.id === targetId);
+          if (from < 0 || to < 0) return;
+          const [moved] = content.spaces.splice(from, 1);
+          content.spaces.splice(to, 0, moved);
+          markDirty();
+          renderList();
+        });
+      });
+    }
+
+    async function addFiles(files) {
+      const space = selectedSpace();
+      if (!space || !files?.length) return;
+      for (const file of [...files]) {
+        if (!['image/png','image/jpeg','image/jpg','application/pdf'].includes(file.type)) {
+          showToast('Ajoutez une image PNG/JPEG ou un PDF.');
+          continue;
+        }
+        showToast(`Envoi de ${file.name}…`);
+        const result = await uploadFile(file, file.type.startsWith('image/') ? 2200 : undefined);
+        if (result.unauthorized) { showToast('Votre session a expiré. Reconnectez-vous.'); clearAdminToken(); openAdminModal(); return; }
+        if (!result.ok) { showToast(result.error || "Échec de l'envoi."); continue; }
+        const isPdf = file.type === 'application/pdf';
+        space.media.push({
+          id: uid('space-media'),
+          kind: isPdf ? 'document' : 'view',
+          url: result.url,
+          label: file.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' '),
+          alt: isPdf ? '' : safeName(space.name)
+        });
+        markDirty();
+      }
+      renderList();
+      renderDetail();
+      showToast('Média ajouté.');
+    }
+
+    function renderMedia(space) {
+      return `
+        <div class="studio-space-media-list">
+          ${space.media.length ? space.media.map(asset => `
+            <article class="studio-space-media-item" data-space-media="${escapeHtml(asset.id)}">
+              <div class="studio-space-media-preview">${mediaPreview(asset)}</div>
+              <div class="studio-space-media-fields">
+                <label>Comment ce média doit-il être utilisé ?</label>
+                <select class="form-input" data-space-media-kind>
+                  ${Object.entries(MEDIA_KIND).map(([value,label]) => `<option value="${value}" ${asset.kind === value ? 'selected' : ''}>${label}</option>`).join('')}
+                </select>
+                <label>${asset.kind === 'document' ? 'Titre du document' : 'Légende'} <span>(facultatif)</span></label>
+                <input type="text" class="form-input" data-space-media-label value="${escapeHtml(asset.label || '')}" placeholder="Ex. Vue depuis l’entrée">
+                ${asset.kind !== 'document' ? `<label>Description de l’image <span>(accessibilité)</span></label><input type="text" class="form-input" data-space-media-alt value="${escapeHtml(asset.alt || '')}" placeholder="Décrivez brièvement ce que montre l’image">` : ''}
               </div>
-              <label class="admin-editor-label">Texte d'accompagnement</label>
-              <textarea class="form-input admin-editor-textarea" data-plan-field="comment" style="min-height:160px;">${escapeHtml(p.comment || '')}</textarea>
-              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="admin-modal-cancel" data-plan-up="${p.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
-                <button type="button" class="admin-modal-cancel" data-plan-down="${p.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
-                <button type="button" class="admin-delete-btn" data-plan-delete="${p.id}" style="margin-top:0;">Supprimer ce visuel</button>
-              </div>
-            </div>
-          </div>
+              <button type="button" class="studio-space-media-remove" data-space-media-remove aria-label="Retirer ce média">×</button>
+            </article>`).join('') : `<p class="studio-space-media-empty">Aucun visuel pour le moment. L’espace peut être enregistré sans média.</p>`}
+        </div>
+        <div class="studio-space-dropzone" id="studioSpaceDropzone" tabindex="0">
+          <input type="file" id="studioSpaceMediaInput" accept="image/png,image/jpeg,application/pdf" multiple hidden>
+          <div><strong>Déposez vos visuels ou documents ici</strong><span>Images PNG/JPEG ou PDF · plusieurs fichiers possibles</span></div>
+          <button type="button" class="studio-space-secondary" id="studioSpaceBrowseMedia">Parcourir</button>
         </div>`;
     }
 
-    function bindPlanCard(p) {
-      const card = container.querySelector(`[data-plan-admin-card="${p.id}"]`);
-      if (!card) return;
-      card.querySelector('[data-plan-admin-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openPlanIds.add(p.id); else openPlanIds.delete(p.id);
-      });
-      bindUploader('plan' + p.id, p, 'imageUrl');
-      card.querySelectorAll('[data-plan-field]').forEach(field => {
-        field.addEventListener('input', () => {
-          const key = field.dataset.planField;
-          p[key] = field.value;
-          if (key === 'title') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans titre)'; }
-          if (key === 'type') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
+    function bindMedia(space) {
+      document.querySelectorAll('[data-space-media]').forEach(card => {
+        const asset = space.media.find(item => item.id === card.dataset.spaceMedia);
+        if (!asset) return;
+        card.querySelector('[data-space-media-kind]')?.addEventListener('change', event => {
+          asset.kind = event.target.value;
+          markDirty();
+          renderDetail();
+        });
+        card.querySelector('[data-space-media-label]')?.addEventListener('input', event => { asset.label = event.target.value; markDirty(); });
+        card.querySelector('[data-space-media-alt]')?.addEventListener('input', event => { asset.alt = event.target.value; markDirty(); });
+        card.querySelector('[data-space-media-remove]')?.addEventListener('click', () => {
+          space.media = space.media.filter(item => item.id !== asset.id);
+          markDirty();
+          renderList();
+          renderDetail();
         });
       });
-      card.querySelector('[data-plan-up]')?.addEventListener('click', () => {
-        const idx = content.plans.findIndex(x => x.id === p.id);
-        moveItem(content.plans, idx, -1);
-        renderPlansAdminList();
-      });
-      card.querySelector('[data-plan-down]')?.addEventListener('click', () => {
-        const idx = content.plans.findIndex(x => x.id === p.id);
-        moveItem(content.plans, idx, 1);
-        renderPlansAdminList();
-      });
-      card.querySelector('[data-plan-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement ce visuel ?')) return;
-        content.plans = content.plans.filter(x => x.id !== p.id);
-        openPlanIds.delete(p.id);
-        renderPlansAdminList();
-      });
+      const zone = document.getElementById('studioSpaceDropzone');
+      const input = document.getElementById('studioSpaceMediaInput');
+      document.getElementById('studioSpaceBrowseMedia')?.addEventListener('click', () => input?.click());
+      zone?.addEventListener('click', event => { if (event.target === zone || event.target.closest('div')) input?.click(); });
+      input?.addEventListener('change', () => { const files = input.files; input.value = ''; addFiles(files); });
+      ['dragenter','dragover'].forEach(name => zone?.addEventListener(name, event => { event.preventDefault(); zone.classList.add('is-dragging'); }));
+      ['dragleave','drop'].forEach(name => zone?.addEventListener(name, event => { event.preventDefault(); zone.classList.remove('is-dragging'); }));
+      zone?.addEventListener('drop', event => addFiles(event.dataTransfer?.files));
     }
 
-    function renderPlansAdminList() {
-      const listEl = document.getElementById('plansAdminList');
-      if (!listEl) return;
-      listEl.innerHTML = content.plans.length
-        ? content.plans.map((p, i) => planCardAdminHtml(p, i, content.plans.length)).join('')
-        : '<div class="kpi-empty">Aucun visuel pour l\'instant.</div>';
-      content.plans.forEach(bindPlanCard);
+    function renderDetail() {
+      const detail = document.getElementById('studioSpacesDetail');
+      if (!detail) return;
+      const space = selectedSpace();
+      if (!space) {
+        detail.innerHTML = `<div class="studio-space-no-selection"><strong>Ajoutez un premier espace</strong><p>Décrivez un lieu tel qu’il existe dans le projet ; Storm s’occupe de sa présentation publique.</p></div>`;
+        return;
+      }
+      detail.innerHTML = `
+        <div class="studio-space-detail-head">
+          <div><span>Espace</span><h2>${escapeHtml(safeName(space.name))}</h2></div>
+          <button type="button" class="studio-space-delete" id="studioSpaceDelete">Supprimer</button>
+        </div>
+
+        <section class="studio-space-section">
+          <div class="studio-space-section-intro"><strong>Identifier l’espace</strong><p>Les informations que les collaborateurs doivent comprendre en premier.</p></div>
+          <div class="studio-space-fields two">
+            <div><label>Nom de l’espace</label><input type="text" class="form-input" id="studioSpaceName" value="${escapeHtml(space.name)}" placeholder="Ex. Work-café"></div>
+            <div><label>Où se trouve-t-il ? <span>(facultatif)</span></label><input type="text" class="form-input" id="studioSpaceLocation" value="${escapeHtml(space.location)}" placeholder="Ex. Niveau 5"></div>
+          </div>
+          <div class="studio-space-field-full"><label>À quoi ressemble-t-il, ou quelle est son intention ?</label><textarea class="form-input" id="studioSpaceDescription" rows="4" placeholder="Expliquez simplement ce que les collaborateurs doivent retenir.">${escapeHtml(space.description)}</textarea></div>
+        </section>
+
+        <section class="studio-space-section">
+          <div class="studio-space-section-intro"><strong>Où en est cet espace ?</strong><p>Un état de projet, pas un pourcentage d’avancement.</p></div>
+          <div class="studio-space-statuses">
+            ${Object.entries(STATUS).map(([value,item]) => `<button type="button" class="studio-space-status ${space.status === value ? 'is-active' : ''}" data-space-status="${value}"><i></i><strong>${item.label}</strong><span>${item.hint}</span></button>`).join('')}
+          </div>
+        </section>
+
+        <section class="studio-space-section">
+          <div class="studio-space-section-intro"><strong>À quoi sert-il ?</strong><p>Choisissez les usages humains. Pas de tags techniques de type « 3D », « étage » ou « macro-zoning ».</p></div>
+          <div class="studio-space-usage-grid">
+            ${USAGES.map(usage => `<label class="studio-space-usage ${space.usages.includes(usage) ? 'is-active' : ''}"><input type="checkbox" value="${escapeHtml(usage)}" ${space.usages.includes(usage) ? 'checked' : ''}><span>${escapeHtml(usage)}</span></label>`).join('')}
+          </div>
+        </section>
+
+        <section class="studio-space-section">
+          <div class="studio-space-section-intro"><strong>Visuels &amp; documents</strong><p>Ajoutez ce qui aide réellement à se projeter. Storm adapte ensuite l’affichage à la nature du média.</p></div>
+          ${renderMedia(space)}
+        </section>`;
+
+      const name = document.getElementById('studioSpaceName');
+      const location = document.getElementById('studioSpaceLocation');
+      const description = document.getElementById('studioSpaceDescription');
+      name?.addEventListener('input', event => { space.name = event.target.value; markDirty(); renderList(); document.querySelector('.studio-space-detail-head h2').textContent = safeName(space.name); });
+      location?.addEventListener('input', event => { space.location = event.target.value; markDirty(); renderList(); });
+      description?.addEventListener('input', event => { space.description = event.target.value; markDirty(); });
+      document.querySelectorAll('[data-space-status]').forEach(button => button.addEventListener('click', () => {
+        space.status = button.dataset.spaceStatus;
+        markDirty();
+        renderList();
+        renderDetail();
+      }));
+      document.querySelectorAll('.studio-space-usage input').forEach(input => input.addEventListener('change', () => {
+        space.usages = [...document.querySelectorAll('.studio-space-usage input:checked')].map(item => item.value);
+        markDirty();
+        input.closest('.studio-space-usage')?.classList.toggle('is-active', input.checked);
+      }));
+      document.getElementById('studioSpaceDelete')?.addEventListener('click', () => {
+        if (!confirm(`Supprimer définitivement « ${safeName(space.name)} » ?`)) return;
+        const index = content.spaces.findIndex(item => item.id === space.id);
+        content.spaces.splice(index, 1);
+        selectedId = content.spaces[Math.min(index, content.spaces.length - 1)]?.id || null;
+        markDirty();
+        renderList();
+        renderDetail();
+      });
+      bindMedia(space);
     }
 
     container.innerHTML = `
-      <div class="admin-page-eyebrow">Contenus</div>
-      <div class="admin-page-title">Plans &amp; 3D.</div>
-      <div class="admin-page-sub" style="margin-bottom:28px;">Ajoutez les visuels du projet. Storm organise leur présentation sur le site.</div>
-      <div class="admin-editor-panel">
-        <div class="kpi-section-title">Plans &amp; 3D</div>
-        <div class="kpi-section-sub">Ajoutez vos plans et vues 3D. Storm organise automatiquement les filtres et leur affichage sur le site.</div>
-        <div class="faq-card-list" id="plansAdminList" style="margin-top:20px;"></div>
-        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-          <button type="button" class="admin-modal-cancel" id="addPlanBtn" style="flex:none; padding:0 20px;">+ Ajouter un visuel</button>
-          <button type="button" class="search-btn" id="savePlansBtn">Enregistrer</button>
+      <div class="studio-spaces-head">
+        <div>
+          <div class="admin-page-eyebrow">Contenus</div>
+          <h1>Espaces.</h1>
+          <p>Décrivez les lieux tels qu’ils existent dans le projet. Storm transforme ces informations en un parcours de découverte cohérent.</p>
         </div>
+        <button type="button" class="search-btn studio-spaces-save" id="studioSpacesSave">Enregistrer les espaces</button>
+      </div>
+      <div class="studio-spaces-layout">
+        <aside class="studio-spaces-index">
+          <div class="studio-spaces-index-head"><strong>Espaces du projet</strong><span id="studioSpacesCount"></span></div>
+          <p class="studio-spaces-index-note">L’ordre ci-dessous devient l’ordre de découverte. Faites glisser une ligne pour le modifier.</p>
+          <div class="studio-spaces-list" id="studioSpacesList"></div>
+          <button type="button" class="studio-space-add" id="studioSpaceAdd">+ Ajouter un espace</button>
+        </aside>
+        <main class="studio-spaces-detail" id="studioSpacesDetail"></main>
       </div>`;
 
-    document.getElementById('addPlanBtn').addEventListener('click', () => {
-      const id = `plan-${Date.now()}`;
-      const newPlan = { id, type: 'Plan', tags: '', title: 'Nouveau visuel', imageUrl: '', comment: '' };
-      content.plans = [newPlan, ...content.plans];
-      openPlanIds.add(id);
-      renderPlansAdminList();
-      document.querySelector(`[data-plan-admin-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.querySelector(`[data-plan-admin-card="${id}"] input[data-plan-field="title"]`)?.focus();
+    document.getElementById('studioSpaceAdd')?.addEventListener('click', () => {
+      const space = { id:uid('space'), name:'Nouvel espace', location:'', status:'designing', description:'', usages:[], media:[] };
+      content.spaces.push(space);
+      selectedId = space.id;
+      markDirty();
+      renderList();
+      renderDetail();
+      setTimeout(() => { const input=document.getElementById('studioSpaceName'); input?.focus(); input?.select(); }, 0);
     });
-
-    document.getElementById('savePlansBtn').addEventListener('click', async () => {
+    document.getElementById('studioSpacesSave')?.addEventListener('click', async () => {
       const result = await saveContent(buildSavePayload(content));
-      if (handleSaveResult(result, 'Plans & 3D enregistrés.')) {
-        renderPlansFront(content.plans);
+      if (handleSaveResult(result, 'Les espaces sont enregistrés.')) {
+        if (Array.isArray(result.content?.spaces)) content.spaces = result.content.spaces.map(normalizeSpace);
+        if (Array.isArray(result.content?.plans)) content.plans = result.content.plans;
+        currentAdminContent = content;
+        renderList();
+        renderDetail();
+        renderPlansFront(content.plans || []);
       }
     });
 
-    renderPlansAdminList();
+    renderList();
+    renderDetail();
   }
 
   async function parseDocxToFaqEntries(file) {

@@ -693,11 +693,14 @@ function spaceSemanticText(item) {
   return [
     item && item.type,
     item && item.title,
-    ...((item && item.tags) || [])
+    item && item.location,
+    ...((item && item.tags) || []),
+    ...((item && item.usageTags) || [])
   ].filter(Boolean).join(' ');
 }
 
 function isInspectableSpace(item, asset = spacePrimaryAsset(item)) {
+  if (asset && ['view', 'plan', 'document'].includes(asset.kind)) return asset.kind === 'plan';
   if (asset && asset.url && isPdfUrl(asset.url)) return true;
   return /\b(plan|zoning|schema|schéma|implantation|plateau|niveau|rdc|étage|etage)\b/i.test(spaceSemanticText(item));
 }
@@ -742,8 +745,8 @@ function renderSpaceImageButton(asset, item, className, mode = 'view') {
         data-tct-inspect-kind="pdf">
         <span class="tct-space-document-mark">PDF</span>
         <span class="tct-space-document-copy">
-          <strong>${esc(item.title || 'Plan du projet')}</strong>
-          <em>Ouvrir en mode inspection</em>
+          <strong>${esc(asset.label || item.title || (asset.kind === 'plan' ? 'Plan du projet' : 'Document du projet'))}</strong>
+          <em>${asset.kind === 'plan' ? 'Explorer le plan' : 'Consulter le document'}</em>
         </span>
       </button>`;
   }
@@ -777,7 +780,7 @@ function renderSpaceIndexItem(item, originalIndex, sequenceIndex) {
           : `<div class="tct-space-empty-media"><span>${esc(item.type || 'Espace')}</span></div>`}
       </div>
       <div class="tct-space-story-copy">
-        <span>${esc(item.type || (inspectable ? 'Plan' : 'Espace'))}</span>
+        <span>${esc(item.location || item.type || (inspectable ? 'Plan' : 'Espace'))}</span>
         <h2><a href="#space-${encodeURIComponent(key)}" data-tct-route>${esc(item.title || 'Un espace du projet')}</a></h2>
         ${item.comment ? `<p>${esc(item.comment)}</p>` : ''}
         <a class="tct-text-link" href="#space-${encodeURIComponent(key)}" data-tct-route>Découvrir cet espace <span aria-hidden="true">→</span></a>
@@ -811,7 +814,7 @@ function renderSpaceDetail(item, items, index) {
       <a class="tct-space-back" href="#spaces" data-tct-route><span aria-hidden="true">←</span> Tous les espaces</a>
 
       <header class="tct-space-detail-opening tct-reveal" data-tct-reveal>
-        <div class="tct-space-detail-eyebrow">${esc(item.type || 'Espace')}</div>
+        <div class="tct-space-detail-eyebrow">${esc(item.location ? `Espace · ${item.location}` : (item.type || 'Espace'))}</div>
         <h1>${esc(item.title || 'Un espace du projet')}</h1>
         <p>${esc(item.comment || 'Découvrez l’orientation actuellement imaginée pour cet espace et la manière dont elle accompagne les usages de la journée.')}</p>
       </header>
@@ -832,7 +835,7 @@ function renderSpaceDetail(item, items, index) {
               data-tct-inspect-src="${esc(primary.url)}"
               data-tct-inspect-title="${esc(item.title || primary.alt || 'Plan')}"
               data-tct-inspect-kind="${isPdfUrl(primary.url) ? 'pdf' : 'image'}">
-              Explorer le plan <span aria-hidden="true">↗</span>
+              ${primary.kind === 'plan' ? 'Explorer le plan' : 'Consulter le document'} <span aria-hidden="true">↗</span>
             </button>`
           : ''}
       </section>

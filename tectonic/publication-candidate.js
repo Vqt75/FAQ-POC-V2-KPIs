@@ -79,6 +79,7 @@ function buildPublicationCandidate(publicationSnapshot) {
     publicContent: snapshot.publicContent,
     milestones: snapshot.milestones,
     articles: snapshot.articles,
+    spaces: snapshot.spaces,
     plans: snapshot.plans,
     ambassadorsContent: snapshot.ambassadorsContent,
     ambassadors: snapshot.ambassadors,

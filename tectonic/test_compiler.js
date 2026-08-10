@@ -69,8 +69,8 @@ if (referenceManifest) {
     referenceManifest.content.home.now && referenceManifest.content.home.now.value === 'Conception & co-construction');
   checkTrue('content.home.featured résout le premier article par défaut',
     referenceManifest.content.home.featured && referenceManifest.content.home.featured.source.module === 'news');
-  checkTrue('content.spaces.items[0].tags est bien un tableau (pas la chaîne Pangea brute)',
-    Array.isArray(referenceManifest.content.spaces.items[0].tags));
+  checkTrue('content.spaces.items[0].usageTags est bien un tableau sémantique',
+    Array.isArray(referenceManifest.content.spaces.items[0].usageTags));
   checkTrue('content.news.items[0].summary vient bien de "chapeau" (renommage appliqué)',
     referenceManifest.content.news.items[0].summary.length > 0);
   checkTrue('content.team.intro.introBody vient bien de "parellaIntro" (généralisation appliquée)',
@@ -123,11 +123,11 @@ candidateWithLogo.branding.logoUrl = '/uploads/logo-test.png';
 const manifestWithLogo = compile(candidateWithLogo, baseContext);
 check('logo sans alt configuré -> alt = ""', manifestWithLogo.branding.logo.alt, '');
 
-console.log('\n-- 4c. visuel Plans & 3D sans alt configuré -> alt = titre du contenu --');
-checkTrue('asset spaces -> alt = titre du plan associé',
+console.log('\n-- 4c. média d’espace sans alt configuré -> alt éditorial sûr --');
+checkTrue('asset spaces -> alt non vide quand un visuel legacy possède un libellé',
   referenceManifest.content.spaces.items[0].asset === null
-    ? true // pas d'image réelle dans ce plan précis, rien à vérifier
-    : referenceManifest.content.spaces.items[0].asset.alt === referenceManifest.content.spaces.items[0].title);
+    ? true
+    : typeof referenceManifest.content.spaces.items[0].asset.alt === 'string' && referenceManifest.content.spaces.items[0].asset.alt.length > 0);
 const candidateWithPlanImage = JSON.parse(JSON.stringify(realCandidate));
 candidateWithPlanImage.plans[0].imageUrl = '/uploads/plan-test.jpg';
 const manifestWithPlanImage = compile(candidateWithPlanImage, baseContext);

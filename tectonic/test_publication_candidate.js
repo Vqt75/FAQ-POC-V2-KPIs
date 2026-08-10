@@ -130,7 +130,7 @@ console.log('le document gelé autorise — ni une clé manquante, ni une clé i
 // publication-candidate.js — toute clé absente de cette liste ou toute
 // clé produite en trop fait échouer ce test, quelle qu'elle soit.
 const EXPECTED_TOP_LEVEL_KEYS = [
-  'branding', 'project', 'publicContent', 'milestones', 'articles', 'plans',
+  'branding', 'project', 'publicContent', 'milestones', 'articles', 'spaces', 'plans',
   'ambassadorsContent', 'ambassadors', 'teamContent', 'team',
   'faqEntries', 'modules', 'navigation'
 ].sort();
