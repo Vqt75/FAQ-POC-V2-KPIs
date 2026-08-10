@@ -4703,6 +4703,18 @@ CALENDRIER
   adminModalCancel.addEventListener('click', closeAdminModal);
   adminModal.addEventListener('click', e => { if (e.target === adminModal) closeAdminModal(); });
 
+  // POC bridge depuis Ivory : /?pangea=1&admin=1 ouvre directement
+  // l'accès Administration. Ce paramètre reste une commodité de démo,
+  // pas une route publique définitive du futur back-office.
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') !== '1') return;
+    requestAnimationFrame(() => {
+      if (getAdminToken()) openAdminPage();
+      else openAdminModal();
+    });
+  });
+
   function goToFaqPage() {
     document.body.classList.remove('storm-admin-open');
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
