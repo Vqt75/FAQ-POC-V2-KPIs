@@ -1173,8 +1173,8 @@ function faqItemsForQuestions(questions) {
 function faqStatusLabel(entry) {
   if (!entry) return '';
   if (entry.status === 'waiting') return 'En cours de définition';
-  if (entry.status === 'partial') return 'Réponse partielle';
-  if (entry.status === 'confirmed') return 'Réponse confirmée';
+  if (entry.status === 'partial') return 'Susceptible d’évoluer';
+  if (entry.status === 'confirmed') return 'Information confirmée';
   return entry.statusLabel || '';
 }
 

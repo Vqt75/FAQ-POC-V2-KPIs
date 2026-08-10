@@ -521,9 +521,9 @@ function normalizePlans(raw) {
 }
 
 const FAQ_STATUS_LABELS = {
-  confirmed: 'Réponse confirmée',
-  partial: 'Réponse partielle',
-  waiting: 'En attente de décision'
+  confirmed: 'Information confirmée',
+  partial: 'Information susceptible d’évoluer',
+  waiting: 'Information en cours de définition'
 };
 
 function normalizeStringArray(raw) {
@@ -540,10 +540,11 @@ function normalizeStringArray(raw) {
 // [] — jamais de tentative d'interprétation ou de découpage.
 function normalizeFaqEntry(raw, index) {
   const status = ['confirmed', 'partial', 'waiting'].includes(raw?.status) ? raw.status : 'waiting';
-  const statusWasValid = status === raw?.status;
-  const statusLabel = (statusWasValid && typeof raw?.statusLabel === 'string' && raw.statusLabel.trim())
-    ? raw.statusLabel
-    : FAQ_STATUS_LABELS[status];
+  // Questions 5A : le libellé de fiabilité est une convention produit,
+  // pas un morceau de copy libre. On le dérive toujours du statut pour éviter
+  // de faire coexister les anciens « Réponse partielle / En attente » avec
+  // la nouvelle grammaire sociotechnique de Studio.
+  const statusLabel = FAQ_STATUS_LABELS[status];
   const priorityNum = Number(raw?.priority);
 
   return {
