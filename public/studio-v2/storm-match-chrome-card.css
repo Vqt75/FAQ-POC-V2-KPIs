@@ -1,0 +1,130 @@
+/* Storm Studio V2 — Questions 5A.3 */
+/* Storm Match chrome / nacre card */
+
+.storm-match-card {
+  position: relative;
+  margin: 24px 0 40px;
+  padding: 22px 26px 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(244,243,239,0.92) 55%, rgba(239,237,231,0.98) 100%),
+    radial-gradient(circle at top left, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 38%),
+    linear-gradient(135deg, rgba(220,224,232,0.26) 0%, rgba(255,255,255,0.14) 38%, rgba(203,210,221,0.18) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.78) inset,
+    0 14px 36px rgba(21, 19, 18, 0.055),
+    0 3px 10px rgba(21, 19, 18, 0.035);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.storm-match-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 26%);
+  opacity: 0.95;
+}
+
+.storm-match-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.92), rgba(255,255,255,0));
+  opacity: 0.85;
+}
+
+.storm-match-card__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 18px 20px;
+  align-items: start;
+}
+
+.storm-match-card__eyebrow {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(78, 79, 83, 0.7);
+}
+
+.storm-match-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.storm-match-card__title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.1;
+  font-weight: 600;
+  color: #171514;
+}
+
+.storm-match-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(173, 178, 187, 0.58);
+  background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(236,238,242,0.68));
+  box-shadow: 0 1px 0 rgba(255,255,255,0.65) inset;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(45, 48, 54, 0.82);
+}
+
+.storm-match-card__copy {
+  margin: 8px 0 0;
+  max-width: 74ch;
+  font-size: 17px;
+  line-height: 1.58;
+  color: rgba(29, 28, 27, 0.9);
+}
+
+.storm-match-card--compact {
+  margin-top: 18px;
+}
+
+@media (max-width: 900px) {
+  .storm-match-card {
+    padding: 20px 20px 22px;
+    border-radius: 22px;
+  }
+
+  .storm-match-card__inner {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .storm-match-card__eyebrow {
+    margin-top: 0;
+  }
+
+  .storm-match-card__copy {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storm-match-card,
+  .storm-match-card::before,
+  .storm-match-card::after {
+    transition: none !important;
+  }
+}
