@@ -15,6 +15,8 @@
 // appelants (et les tests) distinguent une erreur bloquante attendue
 // d'un bug JS ordinaire.
 // ─────────────────────────────────────────────────────────────────
+const { normalizeNewsBlocks, newsBlocksToPlainText } = require('./news-content');
+
 class CompilerBlockingError extends Error {
   constructor(message) {
     super(message);
@@ -145,6 +147,77 @@ function compileNavigation(candidate) {
 }
 
 // ─────────────────────────────────────────────────────────────────
+// content.project — structure éditoriale sémantique de « Le projet ».
+// Aucun champ de layout n'est accepté ici : uniquement la nature et
+// le contenu des sections. timeline / team restent des références vers
+// leurs collections compilées séparément.
+// ─────────────────────────────────────────────────────────────────
+function compileProjectContent(candidate) {
+  const source = candidate?.project && typeof candidate.project === 'object' ? candidate.project : {};
+  const intro = source.intro && typeof source.intro === 'object' ? source.intro : {};
+  const sections = Array.isArray(source.sections) ? source.sections.filter(section => section && section.enabled !== false) : [];
+
+  function compileAsset(asset) {
+    if (!asset || !asset.url) return null;
+    return wrapAsset(asset.url, asset.alt || '');
+  }
+
+  function compileSection(section) {
+    if (!section || !section.type) return null;
+    const id = section.id || '';
+    const type = String(section.type);
+    const base = { id, type };
+
+    if (type === 'focus' || type === 'text') {
+      return { ...base, title: section.title || '', body: section.body || '' };
+    }
+    if (type === 'quote') {
+      return { ...base, quote: section.quote || '', attribution: section.attribution || '' };
+    }
+    if (type === 'keyFigures') {
+      return {
+        ...base,
+        title: section.title || '',
+        items: (Array.isArray(section.items) ? section.items : []).map(item => ({
+          value: item?.value || '',
+          label: item?.label || ''
+        }))
+      };
+    }
+    if (type === 'choices') {
+      return {
+        ...base,
+        title: section.title || '',
+        items: (Array.isArray(section.items) ? section.items : []).map(item => ({
+          title: item?.title || '',
+          body: item?.body || ''
+        }))
+      };
+    }
+    if (type === 'image') {
+      return { ...base, asset: compileAsset(section.asset), caption: section.caption || '' };
+    }
+    if (type === 'gallery') {
+      return {
+        ...base,
+        title: section.title || '',
+        items: (Array.isArray(section.items) ? section.items : []).map(compileAsset).filter(Boolean)
+      };
+    }
+    if (type === 'timeline' || type === 'team') return base;
+    return null;
+  }
+
+  return {
+    intro: {
+      title: intro.title || '',
+      body: intro.body || intro.description || ''
+    },
+    sections: sections.map(compileSection).filter(Boolean)
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────
 // content.timeline
 // ─────────────────────────────────────────────────────────────────
 function computeProgressFromMilestones(milestones) {
@@ -210,23 +283,49 @@ function compileSpaces(candidate) {
 // ─────────────────────────────────────────────────────────────────
 // content.news
 // ─────────────────────────────────────────────────────────────────
+function estimateReadingMinutes(text) {
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
+}
+
 function compileNews(candidate) {
   const scope = candidate?.publicContent?.actu || {};
   const articles = Array.isArray(candidate?.articles) ? candidate.articles : [];
+  const orderedArticles = articles
+    .map((article, index) => ({ article, index }))
+    .sort((left, right) => {
+      const a = String(left.article?.publishedAt || '');
+      const b = String(right.article?.publishedAt || '');
+      if (a && b && a !== b) return b.localeCompare(a);
+      if (a && !b) return -1;
+      if (!a && b) return 1;
+      return left.index - right.index;
+    })
+    .map(entry => entry.article);
   return {
     intro: {
       eyebrow: scope.eyebrow || '',
       title: [scope.titleLine1, scope.titleAccent].filter(Boolean).join(' '),
       description: scope.desc || ''
     },
-    items: articles.map(a => ({
-      id: a.id,
-      tag: a.tag || '',
-      date: a.date || '',
-      title: a.title || '',
-      summary: a.chapeau || '',
-      body: a.body || ''
-    }))
+    items: orderedArticles.map(a => {
+      const blocks = normalizeNewsBlocks(a.contentBlocks, a.body || '');
+      return {
+        id: a.id,
+        tag: a.tag || '',
+        date: a.date || '',
+        publishedAt: a.publishedAt || '',
+        readingMinutes: estimateReadingMinutes(newsBlocksToPlainText(blocks)),
+        title: a.title || '',
+        summary: a.chapeau || '',
+        body: a.body || '',
+        blocks,
+        asset: a.asset && a.asset.url ? {
+          url: a.asset.url,
+          alt: a.asset.alt || a.title || ''
+        } : null
+      };
+    })
   };
 }
 
@@ -454,7 +553,10 @@ function compile(candidate, context) {
   // Étape 6 — content, module par module activé. L'ordre est
   // contraint : timeline et news doivent être compilés avant home.
   const content = {};
-  if (modules.timeline) content.timeline = compileTimeline(candidate);
+  if (modules.timeline) {
+    content.timeline = compileTimeline(candidate);
+    content.project = compileProjectContent(candidate);
+  }
   if (modules.spaces) content.spaces = compileSpaces(candidate);
   if (modules.news) content.news = compileNews(candidate);
   if (modules.questions) content.questions = compileQuestions(candidate);

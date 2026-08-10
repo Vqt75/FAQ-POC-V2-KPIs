@@ -134,7 +134,7 @@ function findNewsItem(news, id) {
 }
 
 // Experience v2 keeps the authored article text intact, but gives its
-// lightweight `##` convention semantic structure for editorial reading.
+// lightweight legacy `##` convention semantic structure for editorial reading.
 function articleBodyToHtml(text) {
   const lines = String(text || '').split(/\r?\n/);
   const chunks = [];
@@ -163,11 +163,112 @@ function articleBodyToHtml(text) {
   return chunks.join('');
 }
 
+function safeNewsHref(value) {
+  const href = String(value || '').trim();
+  return /^(https?:\/\/|mailto:|\/|#)/i.test(href) ? href : '';
+}
+
+function renderNewsRuns(runs) {
+  if (!Array.isArray(runs)) return '';
+  return runs.map(run => {
+    let value = esc(run && run.text || '');
+    if (!value) return '';
+    if (run && run.bold) value = `<strong>${value}</strong>`;
+    if (run && run.italic) value = `<em>${value}</em>`;
+    if (run && run.highlight) value = `<mark>${value}</mark>`;
+    const href = safeNewsHref(run && run.href);
+    if (href) value = `<a href="${esc(href)}">${value}</a>`;
+    return value;
+  }).join('');
+}
+
+function formatDocumentMeta(block) {
+  const bytes = Number(block && block.fileSize || 0);
+  let size = '';
+  if (Number.isFinite(bytes) && bytes > 0) {
+    if (bytes >= 1024 * 1024) size = `${(bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1).replace('.', ',')} Mo`;
+    else size = `${Math.max(1, Math.round(bytes / 1024))} Ko`;
+  }
+  return ['PDF', size].filter(Boolean).join(' · ');
+}
+
+function renderNewsBlocks(blocks, legacyBody) {
+  if (!Array.isArray(blocks) || !blocks.length) return articleBodyToHtml(legacyBody);
+
+  return blocks.map(block => {
+    if (!block || typeof block !== 'object') return '';
+    if (block.type === 'paragraph') {
+      const html = renderNewsRuns(block.runs);
+      return html ? `<p>${html}</p>` : '';
+    }
+    if (block.type === 'heading') {
+      const html = renderNewsRuns(block.runs);
+      return html ? `<h2>${html}</h2>` : '';
+    }
+    if (block.type === 'bulletList' || block.type === 'orderedList') {
+      const tag = block.type === 'orderedList' ? 'ol' : 'ul';
+      const items = (block.items || []).map(item => `<li>${renderNewsRuns(item && item.runs)}</li>`).join('');
+      return items ? `<${tag} class="tct-news-rich-list">${items}</${tag}>` : '';
+    }
+    if (block.type === 'image' && block.asset && block.asset.url) {
+      return `
+        <figure class="tct-news-inline-media tct-reveal" data-tct-reveal>
+          ${renderAsset(block.asset, 'tct-news-inline-image')}
+          ${(block.asset.caption || block.asset.alt) ? `<figcaption>${esc(block.asset.caption || block.asset.alt)}</figcaption>` : ''}
+        </figure>`;
+    }
+    if (block.type === 'gallery' && Array.isArray(block.items) && block.items.length) {
+      return `
+        <figure class="tct-news-inline-gallery tct-reveal" data-tct-reveal>
+          <div class="tct-news-inline-gallery-grid">
+            ${block.items.map(asset => asset && asset.url ? `<div>${renderAsset(asset, 'tct-news-inline-gallery-image')}</div>` : '').join('')}
+          </div>
+          ${block.caption ? `<figcaption>${esc(block.caption)}</figcaption>` : ''}
+        </figure>`;
+    }
+    if (block.type === 'document' && block.asset && block.asset.url) {
+      const href = safeNewsHref(block.asset.url);
+      if (!href) return '';
+      const title = block.title || 'Document à consulter';
+      const meta = formatDocumentMeta(block);
+      return `
+        <div class="tct-news-inline-document">
+          <button type="button" class="tct-news-document-open" data-tct-pdf-reader data-tct-pdf-src="${esc(href)}" data-tct-pdf-title="${esc(title)}">
+            <span class="tct-news-document-kicker">${esc(meta)}</span>
+            <strong>${esc(title)}</strong>
+            ${block.description ? `<p>${esc(block.description)}</p>` : ''}
+            <em>Consulter →</em>
+          </button>
+          <a class="tct-news-document-download" href="${esc(href)}" download>Télécharger</a>
+        </div>`;
+    }
+    return '';
+  }).join('');
+}
+
 function splitNewsMeta(value) {
   const parts = String(value || '').split('·').map(part => part.trim()).filter(Boolean);
   return {
     date: parts[0] || '',
     extra: parts.slice(1).join(' · ')
+  };
+}
+
+function formatNewsPublishedAt(value) {
+  const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return '';
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('fr-FR', { day:'numeric', month:'long', year:'numeric' }).format(date);
+}
+
+function newsMeta(item) {
+  const legacy = splitNewsMeta(item && item.date);
+  const date = formatNewsPublishedAt(item && item.publishedAt) || legacy.date;
+  const minutes = Number(item && item.readingMinutes);
+  return {
+    date,
+    extra: Number.isFinite(minutes) && minutes > 0 ? `${minutes} min` : legacy.extra
   };
 }
 
@@ -856,7 +957,7 @@ function renderSpaces(spaces) {
 
 // ── Actualités Experience v2 : chronologie éditoriale + page article ──
 function renderNewsArticle(item, allItems, index) {
-  const meta = splitNewsMeta(item.date);
+  const meta = newsMeta(item);
   const asset = newsAsset(item);
   const older = allItems[index + 1] || null;
 
@@ -885,7 +986,7 @@ function renderNewsArticle(item, allItems, index) {
           <span>${esc(meta.date)}</span>
         </aside>
         <div class="tct-news-article-reading">
-          ${articleBodyToHtml(item.body)}
+          ${renderNewsBlocks(item.blocks, item.body)}
         </div>
       </div>
 
@@ -914,7 +1015,7 @@ function renderNews(news) {
   const previous = items.slice(1);
 
   const leadHtml = lead ? (() => {
-    const meta = splitNewsMeta(lead.date);
+    const meta = newsMeta(lead);
     const asset = newsAsset(lead);
     return `
       <article class="tct-news-lead tct-reveal" data-tct-reveal>
@@ -937,7 +1038,7 @@ function renderNews(news) {
   })() : '';
 
   const archive = previous.map((item, index) => {
-    const meta = splitNewsMeta(item.date);
+    const meta = newsMeta(item);
     const compact = index >= 2;
     return `
       <article class="tct-news-row ${compact ? 'is-compact' : ''} tct-reveal" data-tct-reveal>
@@ -3369,6 +3470,173 @@ const STYLE = `
   }
   .tct-news-article-reading h2:first-child { margin-top:0; }
 
+  .tct-news-article-reading strong { font-weight:700; }
+  .tct-news-article-reading em { font-style:italic; }
+  .tct-news-article-reading mark {
+    padding:.08em .18em;
+    border-radius:.18em;
+    background:color-mix(in srgb,var(--tct-expression-accent,var(--tct-ink)) 13%,transparent);
+    color:inherit;
+  }
+  .tct-news-article-reading a {
+    color:inherit;
+    text-decoration-thickness:1px;
+    text-underline-offset:4px;
+  }
+  .tct-news-rich-list {
+    margin:0 0 2em;
+    padding-left:1.35em;
+    color:var(--tct-ink);
+    font-size:clamp(1rem,1.06vw,1.08rem);
+    line-height:1.78;
+  }
+  .tct-news-rich-list li { margin:.42em 0; padding-left:.28em; }
+  .tct-news-rich-list + h2 { margin-top:clamp(62px,7vw,94px); }
+  .tct-news-inline-media,
+  .tct-news-inline-gallery {
+    margin:clamp(54px,6vw,82px) 0;
+  }
+  .tct-news-inline-image {
+    display:block;
+    width:100%;
+    max-height:720px;
+    object-fit:cover;
+  }
+  .tct-news-inline-media figcaption,
+  .tct-news-inline-gallery figcaption {
+    margin-top:12px;
+    color:var(--tct-faint);
+    font-size:.72rem;
+    line-height:1.55;
+  }
+  .tct-news-inline-gallery-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:clamp(8px,1.2vw,16px);
+  }
+  .tct-news-inline-gallery-grid > div:nth-child(3n+1):last-child { grid-column:1 / -1; }
+  .tct-news-inline-gallery-image {
+    display:block;
+    width:100%;
+    aspect-ratio:4/3;
+    object-fit:cover;
+  }
+  .tct-news-inline-document {
+    position:relative;
+    margin:clamp(42px,5vw,70px) 0;
+    border-top:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);
+    border-bottom:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);
+  }
+  .tct-news-document-open {
+    width:100%;
+    min-height:124px;
+    padding:22px 116px 22px 0;
+    display:grid;
+    gap:7px;
+    border:0;
+    background:transparent;
+    color:var(--tct-ink);
+    text-align:left;
+    cursor:pointer;
+  }
+  .tct-news-document-kicker {
+    color:var(--tct-faint);
+    font-size:.58rem;
+    font-weight:600;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+  }
+  .tct-news-document-open strong { max-width:34rem; font-size:1rem; font-weight:600; line-height:1.35; }
+  .tct-news-document-open p {
+    max-width:36rem;
+    margin:0;
+    color:var(--tct-muted);
+    font-size:.78rem;
+    line-height:1.55;
+  }
+  .tct-news-document-open em {
+    margin-top:7px;
+    color:var(--tct-muted);
+    font-size:.72rem;
+    font-style:normal;
+    transition:transform .22s ease;
+  }
+  .tct-news-document-open:hover em { transform:translateX(3px); }
+  .tct-news-document-download {
+    position:absolute;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--tct-muted);
+    font-size:.68rem;
+    text-decoration:none;
+  }
+  .tct-news-document-download:hover { color:var(--tct-ink); text-decoration:underline; text-underline-offset:4px; }
+  @media (max-width:720px) {
+    .tct-news-inline-gallery-grid { grid-template-columns:1fr; }
+    .tct-news-inline-gallery-grid > div:nth-child(3n+1):last-child { grid-column:auto; }
+  }
+
+  .tct-pdf-reader {
+    position:fixed;
+    inset:0;
+    z-index:10020;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr);
+    background:var(--tct-canvas,#f7f7f5);
+    color:var(--tct-ink,#1e1d1e);
+  }
+  .tct-pdf-reader-bar {
+    position:relative;
+    z-index:2;
+    min-height:66px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:18px;
+    padding:10px clamp(14px,2.2vw,30px);
+    border-bottom:1px solid color-mix(in srgb,var(--tct-ink) 9%,transparent);
+    background:color-mix(in srgb,var(--tct-canvas) 88%,transparent);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+  }
+  .tct-pdf-reader-left { min-width:0; display:flex; align-items:center; gap:14px; }
+  .tct-pdf-reader-back,
+  .tct-pdf-reader-action {
+    min-height:36px;
+    padding:0 13px;
+    border:0;
+    border-radius:999px;
+    background:color-mix(in srgb,var(--tct-ink) 6%,transparent);
+    color:var(--tct-ink);
+    cursor:pointer;
+    font:inherit;
+    font-size:.66rem;
+    text-decoration:none;
+  }
+  .tct-pdf-reader-back:hover,
+  .tct-pdf-reader-action:hover { background:color-mix(in srgb,var(--tct-ink) 10%,transparent); }
+  .tct-pdf-reader-title {
+    min-width:0;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    font-size:.72rem;
+    font-weight:600;
+  }
+  .tct-pdf-reader-actions { display:flex; align-items:center; gap:8px; }
+  .tct-pdf-reader-stage { min-width:0; min-height:0; overflow:hidden; background:#e9e9e6; }
+  .tct-pdf-reader-frame { width:100%; height:100%; border:0; background:#fff; }
+  @media (max-width:720px) {
+    .tct-news-document-open { padding-right:0; padding-bottom:54px; }
+    .tct-news-document-download { top:auto; right:auto; left:0; bottom:20px; transform:none; }
+    .tct-pdf-reader-bar { min-height:58px; grid-template-columns:minmax(0,1fr) auto; padding:8px 10px; }
+    .tct-pdf-reader-left { gap:8px; }
+    .tct-pdf-reader-title { font-size:.64rem; }
+    .tct-pdf-reader-action[data-pdf-fullscreen] { display:none; }
+    .tct-pdf-reader-action { padding:0 10px; }
+  }
+
   .tct-news-article-exit {
     display:grid;
     grid-template-columns:repeat(12,minmax(0,1fr));
@@ -4705,6 +4973,61 @@ function wireInteractions(root, manifest, actions) {
 
   function lockMedia() { document.body.classList.add('tct-media-open'); }
   function unlockMedia() { document.body.classList.remove('tct-media-open'); }
+
+  // A project document is read as a native Storm object, not as a browser attachment.
+  root.querySelectorAll('[data-tct-pdf-reader]').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const active = document.activeElement;
+      const src = safeNewsHref(trigger.dataset.tctPdfSrc || '');
+      if (!src) return;
+      const title = trigger.dataset.tctPdfTitle || 'Document';
+      const viewerSrc = `${src}${src.includes('#') ? '&' : '#'}toolbar=0&navpanes=0&scrollbar=1&view=FitH`;
+      const overlay = document.createElement('div');
+      overlay.className = 'tct-pdf-reader';
+      overlay.setAttribute('role','dialog');
+      overlay.setAttribute('aria-modal','true');
+      overlay.setAttribute('aria-label', `Lecture — ${title}`);
+      overlay.innerHTML = `
+        <header class="tct-pdf-reader-bar">
+          <div class="tct-pdf-reader-left">
+            <button type="button" class="tct-pdf-reader-back" data-pdf-close>← Retour à l’article</button>
+            <strong class="tct-pdf-reader-title">${esc(title)}</strong>
+          </div>
+          <div class="tct-pdf-reader-actions">
+            <button type="button" class="tct-pdf-reader-action" data-pdf-fullscreen>Plein écran</button>
+            <a class="tct-pdf-reader-action" href="${esc(src)}" download>Télécharger</a>
+          </div>
+        </header>
+        <div class="tct-pdf-reader-stage">
+          <iframe class="tct-pdf-reader-frame" src="${esc(viewerSrc)}" title="${esc(title)}"></iframe>
+        </div>`;
+      document.body.appendChild(overlay);
+      lockMedia();
+
+      const closeBtn=overlay.querySelector('[data-pdf-close]');
+      const fullscreenBtn=overlay.querySelector('[data-pdf-fullscreen]');
+      if (!overlay.requestFullscreen) fullscreenBtn?.remove();
+      fullscreenBtn?.addEventListener('click', async () => {
+        try {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else await overlay.requestFullscreen();
+        } catch (error) { /* Fullscreen is optional; reading still works. */ }
+      });
+      const close = async () => {
+        if (document.fullscreenElement === overlay) {
+          try { await document.exitFullscreen(); } catch (error) {}
+        }
+        overlay.remove();
+        unlockMedia();
+        document.removeEventListener('keydown',onKey);
+        if (active && typeof active.focus === 'function') active.focus();
+      };
+      const onKey=e=>{ if(e.key==='Escape' && !document.fullscreenElement) close(); };
+      document.addEventListener('keydown',onKey);
+      closeBtn?.addEventListener('click',close);
+      closeBtn?.focus();
+    });
+  });
 
   // An architectural image is looked at: fullscreen, clear exit, no tool theatre.
   root.querySelectorAll('[data-tct-view-src]').forEach(trigger => {

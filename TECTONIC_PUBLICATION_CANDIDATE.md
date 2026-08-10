@@ -49,6 +49,7 @@ delete candidate.faqDrafts;
 // ATTENDU
 const candidate = {
   branding: ...,
+  project: ...,       // Studio V2 — structure sémantique « Le projet »
   publicContent: ...,
   milestones: ...,
   articles: ...,
@@ -223,3 +224,10 @@ détail (§4) — reconnue comme pièce nécessaire, pas plus.
 **Prêt pour le freeze — plus de question ouverte. Après ce document,
 la conception des frontières principales de Tectonic est terminée ;
 la suite peut redevenir du code.**
+
+
+---
+
+## Addendum Tectonic Studio V2 — Project 2A
+
+Le vertical slice `Le projet` ajoute `project` à la whitelist positive du Publication Candidate. Cette entrée transporte uniquement l’introduction et des sections sémantiques normalisées ; aucun réglage de layout n’est éligible. `milestones` et `team` restent des sources autoritaires séparées et ne sont jamais dupliquées dans `project`.

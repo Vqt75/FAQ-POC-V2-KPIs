@@ -7,6 +7,8 @@
     "start": "node server.js",
     "test:studio-foundation": "node tectonic/studio-v2/test_publication_status.js",
     "test:studio-shell": "node tectonic/studio-v2/test_studio_shell.js",
-    "test:studio-identity": "node tectonic/studio-v2/test_identity_1a.js"
+    "test:studio-identity": "node tectonic/studio-v2/test_identity_1a.js",
+    "test:studio-project": "node tectonic/studio-v2/test_project_2a.js",
+    "test:studio-news": "node tectonic/studio-v2/test_news_3a2.js"
   }
 }

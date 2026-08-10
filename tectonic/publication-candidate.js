@@ -75,6 +75,7 @@ function buildPublicationCandidate(publicationSnapshot) {
   // omission par oubli.
   return {
     branding: snapshot.branding,
+    project: snapshot.project,
     publicContent: snapshot.publicContent,
     milestones: snapshot.milestones,
     articles: snapshot.articles,

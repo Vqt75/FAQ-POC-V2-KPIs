@@ -4,6 +4,8 @@ const path = require('path');
 const crypto = require('crypto');
 const { publishFromAuthoritativeState, CompilerBlockingError } = require('./tectonic/publish');
 const { getPublicationStatus } = require('./tectonic/studio-v2/publication-status');
+const { createDefaultProject, normalizeProject } = require('./tectonic/studio-v2/project-schema');
+const { normalizeNewsBlocks, newsBlocksToPlainText, newsBlocksToLegacyBody } = require('./tectonic/news-content');
 
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'parella2026'; // ⚠️ à changer via la variable d'environnement avant tout partage
@@ -51,6 +53,7 @@ const defaultContent = {
     logoUrl: '', // vide = losange géométrique par défaut
     theme: 'default' // thème visuel public : 'default' ou 'rainbow-glass'
   },
+  project: createDefaultProject(),
   publicContent: {
     faq: {
       eyebrow: 'Projet XYZ — Base de connaissance',
@@ -370,14 +373,69 @@ function normalizeMilestones(raw) {
   return raw.map((m, i) => normalizeMilestone(m, i));
 }
 
+const NEWS_MONTHS_FR = {
+  janvier:1, fevrier:2, février:2, mars:3, avril:4, mai:5, juin:6,
+  juillet:7, aout:8, août:8, septembre:9, octobre:10, novembre:11, decembre:12, décembre:12
+};
+
+function inferPublishedAtFromLegacyDate(value) {
+  const text = String(value || '').split('·')[0].trim().toLowerCase();
+  const match = text.match(/^(\d{1,2})\s+([a-zàâäéèêëîïôöùûüç]+)\s+(\d{4})$/i);
+  if (!match) return '';
+  const day = Number(match[1]);
+  const month = NEWS_MONTHS_FR[match[2]];
+  const year = Number(match[3]);
+  if (!day || !month || !year) return '';
+  return `${String(year).padStart(4,'0')}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+}
+
+function normalizeNewsAsset(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const url = typeof raw.url === 'string' ? raw.url.trim() : '';
+  if (!url) return null;
+  return {
+    url,
+    alt: typeof raw.alt === 'string' ? raw.alt.slice(0, 500) : ''
+  };
+}
+
+function estimateNewsReadingMinutes(text) {
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 220));
+}
+
+function legacyNewsDateFromPublishedAt(publishedAt, textForReading) {
+  const match = String(publishedAt || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return '';
+  const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const day = Number(match[3]);
+  const month = months[Number(match[2]) - 1];
+  const year = Number(match[1]);
+  if (!day || !month || !year) return '';
+  return `${day} ${month} ${year} · ${estimateNewsReadingMinutes(textForReading)} min`;
+}
+
 function normalizeArticle(raw, index) {
+  const legacyDate = typeof raw?.date === 'string' ? raw.date : '';
+  const publishedAt = typeof raw?.publishedAt === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.publishedAt)
+    ? raw.publishedAt
+    : inferPublishedAtFromLegacyDate(legacyDate);
+  const legacyBody = typeof raw?.body === 'string' ? raw.body : '';
+  const contentBlocks = normalizeNewsBlocks(raw?.contentBlocks, legacyBody);
+  const normalizedBody = newsBlocksToLegacyBody(contentBlocks);
+  const readingText = newsBlocksToPlainText(contentBlocks);
+  const asset = normalizeNewsAsset(raw?.asset)
+    || (typeof raw?.imageUrl === 'string' && raw.imageUrl ? { url: raw.imageUrl, alt: '' } : null);
   return {
     id: typeof raw?.id === 'string' && raw.id ? raw.id : `a-${Date.now()}-${index}`,
-    tag: typeof raw?.tag === 'string' ? raw.tag : '',
-    date: typeof raw?.date === 'string' ? raw.date : '',
+    tag: typeof raw?.tag === 'string' ? raw.tag.slice(0, 120) : '',
+    date: publishedAt ? legacyNewsDateFromPublishedAt(publishedAt, readingText) : legacyDate,
+    publishedAt,
     title: typeof raw?.title === 'string' ? raw.title : '',
     chapeau: typeof raw?.chapeau === 'string' ? raw.chapeau : '',
-    body: typeof raw?.body === 'string' ? raw.body : ''
+    body: normalizedBody,
+    contentBlocks,
+    asset
   };
 }
 
@@ -433,7 +491,7 @@ function normalizeTeamMember(raw, index) {
     initials: typeof raw?.initials === 'string' ? raw.initials : '',
     name: typeof raw?.name === 'string' ? raw.name : '',
     title: typeof raw?.title === 'string' ? raw.title : '',
-    badge: raw?.badge === 'Parella' ? 'Parella' : 'XYZ',
+    badge: typeof raw?.badge === 'string' ? raw.badge.slice(0, 240) : '',
     imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : ''
   };
 }
@@ -585,6 +643,7 @@ function readContentState() {
     const parsed = JSON.parse(raw);
     return {
       branding: normalizeBranding(parsed.branding),
+      project: normalizeProject(parsed.project),
       publicContent: normalizePublicContent(parsed.publicContent),
       faqEntries: normalizeFaqEntries(parsed.faqEntries),
       faqDrafts: normalizeFaqEntries(parsed.faqDrafts),
@@ -607,6 +666,7 @@ function writeContentState(contentState) {
   ensureDataStore();
   const safe = {
     branding: normalizeBranding(contentState.branding),
+    project: normalizeProject(contentState.project),
     publicContent: normalizePublicContent(contentState.publicContent),
     faqEntries: normalizeFaqEntries(contentState.faqEntries),
     faqDrafts: normalizeFaqEntries(contentState.faqDrafts),
@@ -910,6 +970,7 @@ const server = http.createServer(async (req, res) => {
       const parsed = await readBody(req);
       const saved = writeContentState({
         branding: parsed.branding,
+        project: parsed.project,
         publicContent: parsed.publicContent,
         faqEntries: parsed.faqEntries,
         faqDrafts: parsed.faqDrafts,

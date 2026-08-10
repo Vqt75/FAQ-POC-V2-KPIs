@@ -126,11 +126,11 @@ console.log('Ne teste plus seulement l\'absence des 4 champs interdits déjà v�
 console.log('vérifie que l\'ENSEMBLE des clés produites correspond exactement à ce que');
 console.log('le document gelé autorise — ni une clé manquante, ni une clé imprévue.\n');
 
-// Liste fermée, exactement les 12 clés listées dans le whitelist de
+// Liste fermée, exactement les clés listées dans le whitelist de
 // publication-candidate.js — toute clé absente de cette liste ou toute
 // clé produite en trop fait échouer ce test, quelle qu'elle soit.
 const EXPECTED_TOP_LEVEL_KEYS = [
-  'branding', 'publicContent', 'milestones', 'articles', 'plans',
+  'branding', 'project', 'publicContent', 'milestones', 'articles', 'plans',
   'ambassadorsContent', 'ambassadors', 'teamContent', 'team',
   'faqEntries', 'modules', 'navigation'
 ].sort();
