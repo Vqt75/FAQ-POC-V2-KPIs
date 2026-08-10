@@ -4,6 +4,7 @@
   "private": true,
   "description": "Local demo with admin password protection and server-side KPI storage.",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test:studio-foundation": "node tectonic/studio-v2/test_publication_status.js"
   }
 }

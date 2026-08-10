@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { publishFromAuthoritativeState, CompilerBlockingError } = require('./tectonic/publish');
+const { getPublicationStatus } = require('./tectonic/studio-v2/publication-status');
 
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'parella2026'; // ⚠️ à changer via la variable d'environnement avant tout partage
@@ -779,6 +780,27 @@ const server = http.createServer(async (req, res) => {
       res.end(raw);
     } catch (error) {
       sendJson(res, 500, { ok: false, error: 'Lecture du Manifest impossible.' });
+    }
+    return;
+  }
+
+
+  // ── Studio V2 — état de publication (Foundation) ──────────────
+  // Réponse admin-only destinée à la future topbar Studio. Elle compare
+  // la projection publique compilée de l'état SAUVEGARDÉ avec le dernier
+  // Manifest publié. Elle ne compare jamais content.json brut : un brouillon
+  // FAQ ou toute autre donnée Studio-only ne doit pas allumer à tort
+  // « modifications non publiées ».
+  if (req.method === 'GET' && url.pathname === '/api/admin/publication-status') {
+    if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
+    try {
+      const authoritativeState = readContentState();
+      const manifestPath = path.join(DATA_DIR, 'manifest.json');
+      const status = getPublicationStatus(authoritativeState, manifestPath);
+      sendJson(res, 200, { ok: true, ...status });
+    } catch (error) {
+      console.error('Impossible de calculer l’état de publication Studio :', error);
+      sendJson(res, 500, { ok: false, error: 'Impossible de vérifier l’état de publication.' });
     }
     return;
   }
