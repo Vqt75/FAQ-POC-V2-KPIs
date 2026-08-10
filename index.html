@@ -4629,66 +4629,109 @@
 
 
   /* ═══════════════════════════════════════════════════
-     STUDIO V2 — STORM MATCH PRODUCT NOTE / 5A.2
+     STUDIO V2 — STORM MATCH CHROME PRODUCT NOTE / 5A.3
      Une information produit, pas une bannière marketing.
      ═══════════════════════════════════════════════════ */
   body.storm-admin-open .studio-product-note {
+    position:relative;
     display:grid;
-    grid-template-columns:auto minmax(0,1fr);
-    gap:18px;
+    grid-template-columns:126px minmax(0,1fr);
+    gap:20px;
     align-items:start;
-    margin:-6px 0 30px;
-    padding:17px 20px 18px;
-    border-top:1px solid rgba(30,29,30,.09);
-    border-bottom:1px solid rgba(30,29,30,.09);
+    margin:4px 0 34px;
+    padding:22px 26px 24px;
+    border:1px solid rgba(255,255,255,.78);
+    border-radius:24px;
     color:var(--ink);
+    overflow:hidden;
+    isolation:isolate;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.84) 0%, rgba(246,245,242,.92) 54%, rgba(238,237,233,.98) 100%),
+      radial-gradient(circle at 10% 0%, rgba(255,255,255,.92) 0%, rgba(255,255,255,0) 40%),
+      linear-gradient(135deg, rgba(210,216,225,.28) 0%, rgba(255,255,255,.12) 42%, rgba(197,204,214,.2) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.88),
+      inset 0 -1px 0 rgba(125,131,142,.08),
+      0 16px 38px rgba(26,24,22,.055),
+      0 3px 10px rgba(26,24,22,.035);
+  }
+  body.storm-admin-open .studio-product-note::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    border-radius:inherit;
+    background:linear-gradient(180deg, rgba(255,255,255,.46) 0%, rgba(255,255,255,0) 28%);
+    z-index:0;
+  }
+  body.storm-admin-open .studio-product-note::after {
+    content:'';
+    position:absolute;
+    top:0;
+    left:22px;
+    right:22px;
+    height:1px;
+    pointer-events:none;
+    background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.98), rgba(255,255,255,0));
+    opacity:.9;
+    z-index:0;
+  }
+  body.storm-admin-open .studio-product-note > * {
+    position:relative;
+    z-index:1;
   }
   body.storm-admin-open .studio-product-note-kicker {
-    padding-top:3px;
-    color:var(--ink-35);
-    font-size:.58rem;
+    padding-top:4px;
+    color:rgba(72,74,80,.62);
+    font-size:.56rem;
     font-weight:700;
-    letter-spacing:.15em;
-    line-height:1.4;
+    letter-spacing:.18em;
+    line-height:1.35;
     text-transform:uppercase;
     white-space:nowrap;
   }
   body.storm-admin-open .studio-product-note strong {
-    display:block;
-    margin:0 0 4px;
-    font-size:.88rem;
-    font-weight:650;
-    letter-spacing:-.015em;
+    display:inline-block;
+    margin:0 0 6px;
+    font-size:.94rem;
+    font-weight:680;
+    letter-spacing:-.018em;
   }
   body.storm-admin-open .studio-product-note p {
     margin:0;
     max-width:760px;
-    color:var(--ink-45);
-    font-size:.72rem;
-    line-height:1.55;
+    color:rgba(40,40,43,.72);
+    font-size:.73rem;
+    line-height:1.58;
   }
   body.storm-admin-open .studio-match-note strong::after {
     content:'Engine';
-    display:inline-block;
-    margin-left:7px;
-    padding:2px 6px;
-    border:1px solid rgba(30,29,30,.12);
+    display:inline-flex;
+    align-items:center;
+    min-height:22px;
+    margin-left:9px;
+    padding:0 8px;
+    border:1px solid rgba(154,160,170,.42);
     border-radius:999px;
-    color:var(--ink-38);
-    font-size:.5rem;
+    background:linear-gradient(180deg, rgba(255,255,255,.72), rgba(233,235,239,.66));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.82);
+    color:rgba(55,58,64,.7);
+    font-size:.48rem;
     font-weight:700;
-    letter-spacing:.1em;
-    line-height:1.2;
+    letter-spacing:.12em;
+    line-height:1;
     text-transform:uppercase;
     vertical-align:2px;
   }
   @media (max-width:680px) {
     body.storm-admin-open .studio-product-note {
       grid-template-columns:1fr;
-      gap:6px;
-      padding-left:0;
-      padding-right:0;
+      gap:8px;
+      margin-top:0;
+      padding:20px;
+      border-radius:22px;
     }
+    body.storm-admin-open .studio-product-note-kicker { padding-top:0; }
   }
 
 </style>
@@ -9968,7 +10011,7 @@ CALENDRIER
       if (!entry) {
         detail.innerHTML = `
           <div class="studio-question-empty">
-            <div><strong>Sélectionnez une question</strong><p>Modifiez une réponse existante ou ajoutez une question. Storm garde le moteur de recherche et les signaux techniques hors de votre chemin.</p></div>
+            <div><strong>Sélectionnez une question</strong><p>Modifiez une réponse existante ou ajoutez une question. Storm Match garde le moteur de recherche et les signaux techniques hors de votre chemin.</p></div>
           </div>`;
         return;
       }
@@ -10009,7 +10052,7 @@ CALENDRIER
         </section>
 
         <section class="studio-question-section">
-          <div class="studio-question-section-intro"><strong>Autres façons de poser cette question</strong><p>Ajoutez quelques formulations naturelles. Storm les utilise pour retrouver cette réponse même lorsque les collaborateurs n’emploient pas les mêmes mots que vous.</p></div>
+          <div class="studio-question-section-intro"><strong>Autres façons de poser cette question</strong><p>Ajoutez quelques formulations naturelles. Storm Match les utilise pour retrouver cette réponse même lorsque les collaborateurs n’emploient pas les mêmes mots que vous.</p></div>
           <div class="studio-question-phrases" id="studioQuestionPhrases">${entry.phrases.map(phraseChip).join('')}</div>
           <div class="studio-question-phrase-input-row">
             <input type="text" class="form-input" id="studioQuestionPhraseInput" placeholder="Ex. Est-ce que les places seront libres ?">
@@ -10106,7 +10149,7 @@ CALENDRIER
         <div class="studio-domain-head-copy">
           <div class="admin-page-eyebrow">Contenus</div>
           <h1>Questions.</h1>
-          <p>Renseignez les réponses utiles au projet. Storm reconnaît ensuite les différentes façons dont les collaborateurs peuvent poser la même question.</p>
+          <p>Renseignez les réponses utiles au projet. Storm Match reconnaît ensuite les différentes façons dont les collaborateurs peuvent poser la même question.</p>
         </div>
         <button type="button" class="search-btn studio-questions-save studio-domain-save" id="studioQuestionsSave">Enregistrer les questions</button>
       </div>
@@ -10115,7 +10158,7 @@ CALENDRIER
         <div class="studio-product-note-kicker">Introducing</div>
         <div>
           <strong>Storm Match</strong>
-          <p>Les collaborateurs n’ont pas besoin d’employer les mêmes mots. Storm rapproche leurs formulations de la bonne réponse.</p>
+          <p>Les collaborateurs n’ont pas besoin d’employer les mêmes mots. Storm Match rapproche leurs formulations de la bonne réponse.</p>
         </div>
       </aside>
 

@@ -23,7 +23,7 @@ function ok(condition, label) {
   console.log(`OK — ${label}`);
 }
 
-console.log('\n=== Studio Questions 5A.2 — vérité métier + Storm Match ===');
+console.log('\n=== Studio Questions 5A.4 — langage Storm Match cohérent ===');
 ok(start >= 0, 'Questions possède un éditeur Studio V2 dédié');
 ok(editor.includes('<h1>Questions.</h1>'), 'le domaine est nommé Questions');
 ok(editor.includes('Enregistrer les questions'), 'la sauvegarde reste globale pour le domaine');
@@ -59,16 +59,28 @@ ok(indexHtml.includes('studio-project-head studio-domain-head'), 'Le projet réu
 ok(indexHtml.includes('studio-news-head studio-domain-head'), 'Actualités réutilise le hero commun');
 ok(indexHtml.includes('studio-spaces-head studio-domain-head'), 'Espaces réutilise le hero commun');
 ok(editor.includes('studio-questions-head studio-domain-head'), 'Questions réutilise exactement le même hero commun');
-ok(editor.includes('Renseignez les réponses utiles au projet.'), 'l’introduction Questions est raccourcie et reste orientée tâche');
+ok(editor.includes('Renseignez les réponses utiles au projet. Storm Match reconnaît ensuite'), 'le hero attribue explicitement la reconnaissance des formulations à Storm Match');
 ok(indexHtml.indexOf('.studio-domain-head {') > indexHtml.indexOf('.studio-questions-head p {'), 'la règle commune est placée après les styles historiques et les normalise réellement');
 
 console.log('\n=== Storm Match — information produit ===');
 ok(editor.includes('Introducing'), 'Questions présente Storm Match comme une capacité produit discrète');
 ok(editor.includes('<strong>Storm Match</strong>'), 'le nom Storm Match est visible dans le back-office');
-ok(editor.includes('Les collaborateurs n’ont pas besoin d’employer les mêmes mots.'), 'la note explique le bénéfice utilisateur plutôt que la plomberie technique');
+ok(editor.includes('Les collaborateurs n’ont pas besoin d’employer les mêmes mots. Storm Match rapproche'), 'la note attribue explicitement le rapprochement des formulations à Storm Match');
 ok(indexHtml.includes('.studio-product-note {'), 'la note Storm Match possède un composant d’information produit réutilisable');
 ok(indexHtml.includes('.studio-match-note'), 'Storm Match utilise la variante dédiée du composant produit');
+ok(indexHtml.includes('border-radius:24px'), 'Storm Match est rendu comme un cartouche autonome aux coins généreux');
+ok(indexHtml.includes('linear-gradient(180deg, rgba(255,255,255,.84)'), 'Storm Match utilise une matière nacrée / chromée distincte');
+ok(indexHtml.includes('box-shadow:'), 'Storm Match possède une profondeur très légère plutôt que des filets séparateurs');
+const productNoteCssStart = indexHtml.indexOf('body.storm-admin-open .studio-product-note {');
+const productNoteCssEnd = indexHtml.indexOf('}', productNoteCssStart);
+const productNoteCss = indexHtml.slice(productNoteCssStart, productNoteCssEnd + 1);
+ok(productNoteCssStart >= 0 && !productNoteCss.includes('border-top:') && !productNoteCss.includes('border-bottom:'), 'le cartouche Storm Match n’utilise plus les anciens filets séparateurs');
 ok(!editor.includes('fuzzy matching') && !editor.includes('lemmatisation') && !editor.includes('keywords pondérés'), 'aucun jargon du moteur n’est exposé dans la note produit');
+ok(editor.includes('Storm Match les utilise pour retrouver cette réponse'), 'l’aide sur les formulations alternatives nomme Storm Match');
+ok(editor.includes('Storm Match garde le moteur de recherche et les signaux techniques hors de votre chemin'), 'l’état vide nomme Storm Match lorsqu’il décrit la capacité de recherche');
+ok(!editor.includes('Storm reconnaît ensuite les différentes façons'), 'l’ancien wording générique Storm a disparu du hero Questions');
+ok(!editor.includes('Storm rapproche leurs formulations'), 'l’ancien wording générique Storm a disparu du cartouche produit');
+
 
 console.log('\n=== Données / compatibilité moteur ===');
 ok(serverJs.includes("confirmed: 'Information confirmée'"), 'Node dérive le nouveau libellé confirmed');
@@ -114,4 +126,4 @@ if (process.exitCode) {
   console.error(`\n${checks} vérifications passées avant échec.`);
   process.exit(process.exitCode);
 }
-console.log(`\nOK — Studio Questions 5A.2 : ${checks} vérifications validées.`);
+console.log(`\nOK — Studio Questions 5A.4 : ${checks} vérifications validées.`);
