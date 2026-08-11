@@ -1343,8 +1343,16 @@
   }
   body.storm-admin-open .studio-save-state.is-dirty { color:#7b6334; }
   body.storm-admin-open .studio-save-state.is-dirty::before { background:#C2AF7E; }
+  body.storm-admin-open .studio-save-state.is-saving { color:var(--ink-50); }
+  body.storm-admin-open .studio-save-state.is-saving::before {
+    background:#8f8b82;
+    animation:studio-save-pulse .82s ease-in-out infinite alternate;
+  }
+  body.storm-admin-open .studio-save-state.is-error { color:#8b5454; }
+  body.storm-admin-open .studio-save-state.is-error::before { background:#a76b6b; }
   body.storm-admin-open .studio-save-state.is-saved { color:var(--ink-35); }
   body.storm-admin-open .studio-save-state.is-saved::before { background:#7f9a8e; }
+  @keyframes studio-save-pulse { from { opacity:.42; transform:scale(.88); } to { opacity:1; transform:scale(1.08); } }
 
   body.storm-admin-open .studio-topbar-actions {
     display:flex;
@@ -3349,33 +3357,10 @@
     color:var(--ink-50);
     font-size:.61rem;
   }
-  body.storm-admin-open .studio-identity-savebar {
-    position:sticky;
-    bottom:18px;
-    z-index:18;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    margin-top:26px;
-    padding:12px 14px 12px 18px;
-    border:1px solid rgba(30,29,30,.075);
-    border-radius:16px;
-    background:rgba(246,244,238,.90);
-    box-shadow:0 16px 50px rgba(30,29,30,.08),inset 0 1px 0 rgba(255,255,255,.8);
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
-  }
-  body.storm-admin-open .studio-identity-savebar p {
-    margin:0;
-    color:var(--ink-50);
-    font-size:.62rem;
-    line-height:1.45;
-  }
-  body.storm-admin-open .studio-identity-savebar .search-btn {
-    flex:0 0 auto;
-    min-height:38px;
-  }
+  /* 7A.3 — Save lives with the domain, never over the content. */
+  body.storm-admin-open .studio-identity-savebar { display:none !important; }
+  body.storm-admin-open .studio-identity-domain-head { margin-bottom:26px; }
+
   body.storm-admin-open .storm-font-asset-state {
     display:block;
     margin-top:4px;
@@ -5144,6 +5129,57 @@
     border-top:1px solid rgba(30,29,30,.055);
     background:linear-gradient(180deg,rgba(246,244,238,0),#F6F4EE 18%);
   }
+  body.storm-admin-open .studio-context-save-dock {
+    display:grid;
+    grid-template-rows:0fr;
+    opacity:0;
+    transform:translateY(4px);
+    pointer-events:none;
+    transition:grid-template-rows .15s var(--ease-soft),opacity .14s ease,transform .15s var(--ease-soft),margin .15s var(--ease-soft);
+    margin:0;
+  }
+  body.storm-admin-open .studio-context-save-dock.is-visible {
+    grid-template-rows:1fr;
+    opacity:1;
+    transform:none;
+    pointer-events:auto;
+    margin:0 0 9px;
+  }
+  body.storm-admin-open .studio-context-save-dock-inner { min-height:0; overflow:hidden; }
+  body.storm-admin-open .studio-context-save-dock-card {
+    padding:8px 9px 9px;
+    border:1px solid rgba(30,29,30,.07);
+    border-radius:13px;
+    background:rgba(255,255,255,.42);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+  }
+  body.storm-admin-open .studio-context-save-dock-label {
+    display:block;
+    margin:0 2px 6px;
+    color:var(--ink-35);
+    font-size:.48rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  body.storm-admin-open .studio-context-save-btn {
+    width:100%;
+    min-height:34px;
+    padding:0 11px;
+    border:0;
+    border-radius:10px;
+    background:var(--ink);
+    color:#fff;
+    font:600 .62rem/1 inherit;
+    cursor:pointer;
+    transition:transform .14s var(--ease-soft),background .14s ease,opacity .14s ease;
+  }
+  body.storm-admin-open .studio-context-save-btn:hover { background:#000; transform:translateY(-1px); }
+  body.storm-admin-open .studio-context-save-btn:active { transform:scale(.985); }
+  body.storm-admin-open .studio-context-save-btn:disabled { opacity:.38; cursor:default; transform:none; }
+
   body.storm-admin-open .studio-demo-dock {
     padding:10px 11px 11px;
     border:1px solid rgba(255,255,255,.66);
@@ -5245,6 +5281,7 @@
     body.storm-admin-open .admin-nav-item,
     body.storm-admin-open .admin-nav-item::before,
     body.storm-admin-open .studio-demo-dock-arrow { transition:none !important; }
+    body.storm-admin-open .studio-context-save-dock, body.storm-admin-open .studio-context-save-btn { transition:none !important; }
   }
 
 </style>
@@ -5555,6 +5592,14 @@
       </nav>
 
       <div class="admin-sidebar-footer">
+        <div class="studio-context-save-dock" id="studioContextSaveDock" aria-hidden="true">
+          <div class="studio-context-save-dock-inner">
+            <div class="studio-context-save-dock-card">
+              <span class="studio-context-save-dock-label" id="studioContextSaveLabel">Rubrique</span>
+              <button type="button" class="studio-context-save-btn" id="studioContextSaveBtn">Enregistrer</button>
+            </div>
+          </div>
+        </div>
         <div class="studio-demo-dock" aria-label="Mode démo">
           <span class="studio-demo-dock-label">Mode démo</span>
           <button type="button" class="admin-sidebar-back" id="stormDemoLaunchBtn">
@@ -5874,21 +5919,25 @@
   }
 
   async function saveContent(contentState) {
+    const saveSource = document.body.dataset.studioSaveSource || 'manual';
+    delete document.body.dataset.studioSaveSource;
+    studioSetSaveState('saving');
     try {
       const res = await fetch('/api/content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
         body: JSON.stringify(contentState)
       });
-      if (res.status === 401) return { ok: false, unauthorized: true };
-      if (!res.ok) return { ok: false };
+      if (res.status === 401) { studioSetSaveState('error'); return { ok:false, unauthorized:true, saveSource }; }
+      if (!res.ok) { studioSetSaveState('error'); return { ok:false, saveSource }; }
       const data = await res.json();
       studioSetSaveState('saved');
       setTimeout(() => refreshStudioPublicationStatus(), 0);
-      return { ok: true, content: data.content };
+      return { ok:true, content:data.content, saveSource };
     } catch (e) {
       console.warn('Sauvegarde impossible :', e);
-      return { ok: false };
+      studioSetSaveState('error');
+      return { ok:false, saveSource };
     }
   }
 
@@ -7110,15 +7159,92 @@ CALENDRIER
   let currentStudioKpi = null;
   let currentPublicationStatus = null;
   let studioSaveDirty = false;
+  let studioSaveMode = 'saved';
+  let studioAutosaveTimer = null;
+  let studioSaveObserver = null;
+  let studioSaveObserverFrame = 0;
+
+  const STUDIO_SAVE_BUTTONS = {
+    identity:'saveIdentityBtn',
+    project:'studioProjectSave',
+    news:'studioNewsSave',
+    spaces:'studioSpacesSave',
+    questions:'studioQuestionsSave',
+    ambassadors:'studioAmbSave'
+  };
+
+  function studioCurrentSaveButton() {
+    const route = document.body.dataset.studioRoute || '';
+    const id = STUDIO_SAVE_BUTTONS[route];
+    return id ? document.getElementById(id) : null;
+  }
+
+  function studioScheduleAutosave() {
+    clearTimeout(studioAutosaveTimer);
+    const route = document.body.dataset.studioRoute || '';
+    if (!STUDIO_SAVE_BUTTONS[route]) return;
+    studioAutosaveTimer = setTimeout(() => studioRunSave('auto'), 900);
+  }
+
+  function studioRunSave(source = 'manual') {
+    clearTimeout(studioAutosaveTimer);
+    const button = studioCurrentSaveButton();
+    if (!button || button.disabled || studioSaveMode === 'saving') return false;
+    document.body.dataset.studioSaveSource = source;
+    button.click();
+    // If validation prevents the actual save request, never leak the source
+    // into the next manual save. saveContent consumes it immediately otherwise.
+    setTimeout(() => {
+      if (document.body.dataset.studioSaveSource === source) delete document.body.dataset.studioSaveSource;
+    }, 1200);
+    return true;
+  }
 
   function studioSetSaveState(mode) {
     const el = document.getElementById('studioSaveState');
-    if (!el) return;
-    studioSaveDirty = mode === 'dirty';
-    el.classList.toggle('is-dirty', studioSaveDirty);
-    el.classList.toggle('is-saved', !studioSaveDirty);
-    el.textContent = studioSaveDirty ? 'Modifications à enregistrer' : 'Tout est enregistré';
+    studioSaveMode = mode;
+    studioSaveDirty = mode !== 'saved';
+    if (el) {
+      el.classList.toggle('is-dirty', mode === 'dirty');
+      el.classList.toggle('is-saving', mode === 'saving');
+      el.classList.toggle('is-error', mode === 'error');
+      el.classList.toggle('is-saved', mode === 'saved');
+      el.textContent = mode === 'saving' ? 'Enregistrement…'
+        : mode === 'error' ? 'Enregistrement impossible'
+        : mode === 'dirty' ? 'Modifications en cours'
+        : 'Tout est enregistré';
+    }
+    if (mode === 'dirty') studioScheduleAutosave();
     if (currentPublicationStatus) renderPublicationStatus(currentPublicationStatus);
+  }
+
+  function studioBindContextSaveDock() {
+    if (studioSaveObserver) { studioSaveObserver.disconnect(); studioSaveObserver = null; }
+    const dock = document.getElementById('studioContextSaveDock');
+    const dockBtn = document.getElementById('studioContextSaveBtn');
+    const dockLabel = document.getElementById('studioContextSaveLabel');
+    const heroButton = studioCurrentSaveButton();
+    const route = document.body.dataset.studioRoute || '';
+    if (!dock || !dockBtn || !heroButton || !STUDIO_SAVE_BUTTONS[route]) {
+      dock?.classList.remove('is-visible');
+      dock?.setAttribute('aria-hidden','true');
+      return;
+    }
+    const label = document.querySelector(`.admin-nav-item[data-studio-route="${route}"]`)?.dataset.studioLabel || 'Rubrique';
+    if (dockLabel) dockLabel.textContent = label;
+    dockBtn.onclick = () => studioRunSave('manual');
+    const root = document.querySelector('.admin-main');
+    studioSaveObserver = new IntersectionObserver(entries => {
+      const visible = !entries[0]?.isIntersecting;
+      dock.classList.toggle('is-visible', visible);
+      dock.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    }, { root, threshold:.2, rootMargin:'-74px 0px 0px 0px' });
+    studioSaveObserver.observe(heroButton);
+  }
+
+  function studioQueueContextSaveDockBind() {
+    cancelAnimationFrame(studioSaveObserverFrame);
+    studioSaveObserverFrame = requestAnimationFrame(() => studioBindContextSaveDock());
   }
 
   async function loadPublicationStatus() {
@@ -7240,6 +7366,7 @@ CALENDRIER
     studioSetSaveState('saved');
     renderStudioOverview(kpi, content, publicationStatus);
     applyStudioRoute(document.body.dataset.studioRoute || 'overview', { scroll:false });
+    studioQueueContextSaveDockBind();
   }
 
   function openAdminPage() {
@@ -7361,6 +7488,7 @@ CALENDRIER
     }
     const label = document.getElementById('adminCurrentPanelLabel');
     if (label) label.textContent = item.dataset.studioLabel || item.textContent.trim();
+    studioQueueContextSaveDockBind();
 
     const planningTitle = document.getElementById('studioPlanningTitle');
     const planningSub = document.getElementById('studioPlanningSub');
@@ -7393,6 +7521,15 @@ CALENDRIER
     applyStudioRoute(item.dataset.studioRoute || 'overview');
   });
 
+  document.addEventListener('keydown', e => {
+    if (!document.body.classList.contains('storm-admin-open')) return;
+    if (!(e.ctrlKey || e.metaKey) || String(e.key).toLowerCase() !== 's') return;
+    const route = document.body.dataset.studioRoute || '';
+    if (!STUDIO_SAVE_BUTTONS[route]) return;
+    e.preventDefault();
+    studioRunSave('manual');
+  });
+
   document.getElementById('page-admin')?.addEventListener('click', e => {
     const shortcut = e.target.closest('[data-studio-go]');
     if (!shortcut) return;
@@ -7411,6 +7548,13 @@ CALENDRIER
   document.getElementById('page-admin')?.addEventListener('change', e => {
     if (e.target.closest('.admin-panel') && !e.target.closest('#adminPanelDashboard')) studioSetSaveState('dirty');
   }, true);
+
+  const studioAdminMainObserver = new MutationObserver(() => {
+    if (!document.body.classList.contains('storm-admin-open')) return;
+    studioQueueContextSaveDockBind();
+  });
+  const studioAdminMainNode = document.querySelector('.admin-main');
+  if (studioAdminMainNode) studioAdminMainObserver.observe(studioAdminMainNode, { childList:true, subtree:true });
 
   studioPublishBtn?.addEventListener('click', async () => {
     if (studioSaveDirty) {
@@ -7606,19 +7750,20 @@ CALENDRIER
   }
 
   function handleSaveResult(result, successMessage) {
+    const isAuto = result?.saveSource === 'auto';
     if (result.ok) {
       studioSetSaveState('saved');
       refreshStudioPublicationStatus().then(status => {
         renderStudioOverview(currentStudioKpi, currentAdminContent, status);
       });
-      showToast(successMessage);
+      if (!isAuto) showToast(successMessage);
       return true;
     }
     if (result.unauthorized) {
       showToast('Votre session a expiré. Reconnectez-vous.');
       clearAdminToken();
       openAdminModal();
-    } else {
+    } else if (!isAuto) {
       showToast("Impossible d’enregistrer pour le moment. Réessayez.");
     }
     return false;
@@ -7862,9 +8007,14 @@ CALENDRIER
       }
 
       container.innerHTML = `
-        <div class="admin-page-eyebrow">Administration</div>
-        <div class="admin-page-title">Identité &amp; apparence.</div>
-        <div class="admin-page-sub studio-identity-intro">Configurez ce qui identifie le projet et la manière dont Storm traduit sa marque. Ces réglages sont établis au lancement et ne sont modifiés qu’exceptionnellement.</div>
+        <div class="studio-domain-head studio-identity-domain-head">
+          <div class="studio-domain-head-copy">
+            <div class="admin-page-eyebrow">Administration</div>
+            <h1>Identité &amp; apparence.</h1>
+            <p>Configurez ce qui identifie le projet et la manière dont Storm traduit sa marque. Ces réglages sont établis au lancement et ne sont modifiés qu’exceptionnellement.</p>
+          </div>
+          <button type="button" class="studio-domain-save" id="saveIdentityBtn">Enregistrer les réglages</button>
+        </div>
 
         <section class="studio-identity-section">
           <div class="studio-identity-section-head">
@@ -7972,11 +8122,6 @@ CALENDRIER
           </div>
           <div class="storm-client-example-row"><button type="button" class="storm-client-example-btn" id="openWavestonePreviewBtn">Voir la démo Wavestone ↗</button></div>
         </section>
-
-        <div class="studio-identity-savebar">
-          <p><strong>Enregistrer</strong> conserve ces réglages dans le Studio. Ils ne deviennent visibles aux collaborateurs qu’au prochain <strong>Publier</strong>.</p>
-          <button type="button" class="search-btn" id="saveIdentityBtn">Enregistrer les réglages</button>
-        </div>
 
         <div class="storm-client-preview-modal" id="wavestonePreviewModal" aria-hidden="true">
           <div class="storm-client-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="wavestonePreviewTitle">
@@ -8209,17 +8354,23 @@ CALENDRIER
       document.getElementById('saveIdentityBtn')?.addEventListener('click', async () => {
         const name = String(content.branding.projectName || '').trim();
         if (!name) {
-          showToast('Ajoutez un nom de projet avant d’enregistrer.');
-          document.getElementById('brandingNameInput')?.focus();
+          const isAuto = document.body.dataset.studioSaveSource === 'auto';
+          delete document.body.dataset.studioSaveSource;
+          if (!isAuto) {
+            showToast('Ajoutez un nom de projet avant d’enregistrer.');
+            document.getElementById('brandingNameInput')?.focus();
+          }
           return;
         }
         content.branding.projectName = name;
         const result = await saveContent(buildSavePayload(content));
         if (handleSaveResult(result, 'Identité et apparence enregistrées.')) {
-          if (result.content?.branding) content.branding = result.content.branding;
+          if (result.saveSource !== 'auto' && result.content?.branding) content.branding = result.content.branding;
           savedThemeValue = content.branding.theme || 'default';
           applyBranding(content.branding);
-          render();
+          currentAdminContent = content;
+          if (result.saveSource !== 'auto') render();
+          else studioQueueContextSaveDockBind();
         }
       });
 
@@ -8830,11 +8981,14 @@ CALENDRIER
         content.progress = computeProgressFromMilestones(content.milestones);
         const result = await saveContent(buildSavePayload(content));
         if (handleSaveResult(result, 'Le projet est enregistré.')) {
-          if (result.content?.project) content.project = result.content.project;
-          if (Array.isArray(result.content?.milestones)) content.milestones = result.content.milestones;
-          if (Array.isArray(result.content?.team)) content.team = result.content.team;
+          if (result.saveSource !== 'auto') {
+            if (result.content?.project) content.project = result.content.project;
+            if (Array.isArray(result.content?.milestones)) content.milestones = result.content.milestones;
+            if (Array.isArray(result.content?.team)) content.team = result.content.team;
+          }
           currentAdminContent = content;
-          render();
+          if (result.saveSource !== 'auto') render();
+          else studioQueueContextSaveDockBind();
         }
       });
     }
@@ -9476,7 +9630,7 @@ CALENDRIER
         const toolbar=document.getElementById('studioNewsRichToolbar'); toolbar?.querySelectorAll('button').forEach(button=>button.addEventListener('mousedown',e=>{if(button.dataset.newsFormat)e.preventDefault();})); toolbar?.querySelectorAll('[data-news-format]').forEach(button=>button.addEventListener('click',()=>{ if(button.dataset.newsFormat==='link') bindLinkPanel(article); else applyInlineFormat(article,button.dataset.newsFormat); })); toolbar?.querySelectorAll('[data-news-structure]').forEach(button=>button.addEventListener('click',()=>applyStructure(article,button.dataset.newsStructure)));
         document.getElementById('studioNewsAddParagraph')?.addEventListener('click',()=>{const block={id:uid('paragraph'),type:'paragraph',runs:[]};insertBlock(article,block);focusEditable(block.id);});
       }
-      document.getElementById('studioNewsSave')?.addEventListener('click',async()=>{content.articles.forEach(syncLegacy);const result=await saveContent(buildSavePayload(content));if(handleSaveResult(result,'Les actualités sont enregistrées.')){if(Array.isArray(result.content?.articles))content.articles=result.content.articles.map(hydrateArticle);currentAdminContent=content;render();}});
+      document.getElementById('studioNewsSave')?.addEventListener('click',async()=>{content.articles.forEach(syncLegacy);const result=await saveContent(buildSavePayload(content));if(handleSaveResult(result,'Les actualités sont enregistrées.')){if(result.saveSource!=='auto'&&Array.isArray(result.content?.articles))content.articles=result.content.articles.map(hydrateArticle);currentAdminContent=content;if(result.saveSource!=='auto')render();else studioQueueContextSaveDockBind();}});
     }
     render();
   }
@@ -9963,7 +10117,7 @@ CALENDRIER
       document.getElementById('studioAmbSave')?.addEventListener('click',async()=>{
         c.ctaTitle=c.joinEnabled?c.joinTitle:''; c.ctaBody=c.joinEnabled?c.joinBody:'';
         const result=await saveContent(buildSavePayload(content));
-        if(handleSaveResult(result,'Ambassadeurs enregistrés.')){renderAmbassadorsFront(content);}
+        if(handleSaveResult(result,'Ambassadeurs enregistrés.')){currentAdminContent=content;if(result.saveSource!=='auto')renderAmbassadorsFront(content);else studioQueueContextSaveDockBind();}
       });
     }
 
@@ -10289,12 +10443,13 @@ CALENDRIER
     document.getElementById('studioSpacesSave')?.addEventListener('click', async () => {
       const result = await saveContent(buildSavePayload(content));
       if (handleSaveResult(result, 'Les espaces sont enregistrés.')) {
-        if (Array.isArray(result.content?.spaces)) content.spaces = result.content.spaces.map(normalizeSpace);
-        if (Array.isArray(result.content?.plans)) content.plans = result.content.plans;
+        if (result.saveSource !== 'auto') {
+          if (Array.isArray(result.content?.spaces)) content.spaces = result.content.spaces.map(normalizeSpace);
+          if (Array.isArray(result.content?.plans)) content.plans = result.content.plans;
+        }
         currentAdminContent = content;
-        renderList();
-        renderDetail();
-        renderPlansFront(content.plans || []);
+        if (result.saveSource !== 'auto') { renderList(); renderDetail(); renderPlansFront(content.plans || []); }
+        else studioQueueContextSaveDockBind();
       }
     });
 
@@ -10760,11 +10915,13 @@ CALENDRIER
     document.getElementById('studioQuestionsSave')?.addEventListener('click', async () => {
       const result = await saveContent(buildSavePayload(content));
       if (handleSaveResult(result, 'Les questions sont enregistrées.')) {
-        if (Array.isArray(result.content?.faqEntries)) faqData = result.content.faqEntries;
-        if (Array.isArray(result.content?.faqDrafts)) content.faqDrafts = result.content.faqDrafts;
+        if (result.saveSource !== 'auto') {
+          if (Array.isArray(result.content?.faqEntries)) faqData = result.content.faqEntries;
+          if (Array.isArray(result.content?.faqDrafts)) content.faqDrafts = result.content.faqDrafts;
+        }
         currentAdminContent = content;
-        renderList();
-        renderDetail();
+        if (result.saveSource !== 'auto') { renderList(); renderDetail(); }
+        else studioQueueContextSaveDockBind();
       }
     });
 

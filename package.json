@@ -15,6 +15,7 @@
     "test:studio-ambassadors": "node tectonic/studio-v2/test_ambassadors_6a.js",
     "test:studio-pilotage": "node tectonic/studio-v2/test_pilotage_7a.js",
     "test:studio-layout": "node tectonic/studio-v2/test_layout_7a1.js",
-    "test:studio-navigation": "node tectonic/studio-v2/test_navigation_7a2.js"
+    "test:studio-navigation": "node tectonic/studio-v2/test_navigation_7a2.js",
+    "test:studio-save": "node tectonic/studio-v2/test_save_doctrine_7a3.js"
   }
 }
