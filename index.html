@@ -1605,6 +1605,114 @@
     line-height:1.55;
   }
 
+
+
+  /* ═══════════════════════════════════════════════════
+     STUDIO V2 — PILOTAGE 7A
+     Un lieu d'écoute du projet, pas un dashboard marketing.
+     ═══════════════════════════════════════════════════ */
+  body.storm-admin-open .studio-pilotage-head { margin-bottom:22px; }
+  body.storm-admin-open .studio-pilotage-actions {
+    flex:0 0 auto; display:flex; align-items:center; gap:12px; padding-bottom:1px;
+  }
+  body.storm-admin-open .studio-pilotage-export {
+    min-height:44px; padding:0 18px; border:1px solid rgba(24,22,20,.10); border-radius:22px;
+    background:rgba(255,255,255,.58); color:var(--ink); font-size:.69rem; font-weight:600;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.82); cursor:pointer;
+  }
+  body.storm-admin-open .studio-pilotage-context {
+    display:flex; align-items:center; gap:9px; width:max-content; max-width:100%;
+    margin:0 0 42px; padding:9px 13px; border-radius:999px;
+    background:rgba(255,255,255,.38); color:var(--ink-50); font-size:.65rem; line-height:1.45;
+  }
+  body.storm-admin-open .studio-pilotage-context-dot {
+    width:6px; height:6px; border-radius:50%; background:#6E826F; box-shadow:0 0 0 4px rgba(110,130,111,.10); flex:0 0 auto;
+  }
+  body.storm-admin-open .studio-pilotage-block { margin:0 0 62px; }
+  body.storm-admin-open .studio-pilotage-block--secondary { margin-bottom:34px; }
+  body.storm-admin-open .studio-pilotage-section-head {
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,430px); gap:32px; align-items:end;
+    margin-bottom:20px;
+  }
+  body.storm-admin-open .studio-pilotage-kicker {
+    margin-bottom:7px; color:var(--ink-35); font-family:'Roboto Mono',monospace; font-size:.58rem;
+    letter-spacing:.10em; text-transform:uppercase;
+  }
+  body.storm-admin-open .studio-pilotage-section-head h2 {
+    margin:0; color:var(--ink); font-family:'Italiana',serif; font-weight:400;
+    font-size:clamp(1.65rem,2.5vw,2.35rem); letter-spacing:-.025em; line-height:1.05;
+  }
+  body.storm-admin-open .studio-pilotage-section-head > p {
+    margin:0; color:var(--ink-50); font-size:.7rem; line-height:1.62;
+  }
+  body.storm-admin-open .studio-signal-cards {
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px;
+  }
+  body.storm-admin-open .studio-signal-card {
+    min-height:132px; padding:21px 22px; border-radius:20px; background:rgba(255,255,255,.44);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.78); display:flex; flex-direction:column; justify-content:space-between;
+  }
+  body.storm-admin-open .studio-signal-card strong {
+    font-family:'Italiana',serif; font-size:2.15rem; font-weight:400; line-height:1; letter-spacing:-.03em;
+  }
+  body.storm-admin-open .studio-signal-card span { color:var(--ink-50); font-size:.68rem; line-height:1.45; }
+  body.storm-admin-open .studio-signal-card em {
+    width:max-content; padding:4px 8px; border-radius:999px; background:rgba(29,28,27,.05);
+    color:var(--ink-50); font-style:normal; font-size:.58rem;
+  }
+  body.storm-admin-open .studio-signal-cards--answers { margin-bottom:12px; }
+  body.storm-admin-open .studio-pilotage-subgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  body.storm-admin-open .studio-pilotage-surface {
+    min-width:0; padding:22px 24px; border-radius:20px; background:rgba(255,255,255,.40);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.74);
+  }
+  body.storm-admin-open .studio-pilotage-surface-head {
+    display:flex; justify-content:space-between; gap:14px; align-items:flex-start; margin-bottom:18px;
+  }
+  body.storm-admin-open .studio-pilotage-surface-head > div { display:flex; flex-direction:column; gap:4px; }
+  body.storm-admin-open .studio-pilotage-surface-head strong { font-size:.78rem; font-weight:650; color:var(--ink); }
+  body.storm-admin-open .studio-pilotage-surface-head span { color:var(--ink-35); font-size:.63rem; line-height:1.4; }
+  body.storm-admin-open .studio-pilotage-product {
+    flex:0 0 auto; padding:5px 9px; border-radius:999px; background:rgba(29,28,27,.05);
+    color:var(--ink-50)!important; font-family:'Roboto Mono',monospace; font-size:.55rem!important; letter-spacing:.04em;
+  }
+  body.storm-admin-open .studio-signal-list { display:flex; flex-direction:column; }
+  body.storm-admin-open .studio-signal-row {
+    display:grid; grid-template-columns:minmax(0,1fr) auto; gap:16px; align-items:center;
+    padding:14px 0; border-bottom:1px solid rgba(29,28,27,.065);
+  }
+  body.storm-admin-open .studio-signal-row:last-child { border-bottom:0; }
+  body.storm-admin-open .studio-signal-row-copy { min-width:0; }
+  body.storm-admin-open .studio-signal-row-copy strong {
+    display:block; margin-bottom:4px; color:var(--ink); font-size:.75rem; font-weight:500; line-height:1.45;
+  }
+  body.storm-admin-open .studio-signal-row-copy span { color:var(--ink-35); font-size:.62rem; }
+  body.storm-admin-open .studio-signal-action {
+    border:0; background:transparent; color:var(--ink); padding:8px 0; font-size:.64rem; font-weight:650; cursor:pointer; white-space:nowrap;
+  }
+  body.storm-admin-open .studio-signal-action:hover { text-decoration:underline; text-underline-offset:3px; }
+  body.storm-admin-open .studio-pilotage-privacy { margin:14px 0 0; color:var(--ink-35); font-size:.61rem; line-height:1.55; }
+  body.storm-admin-open .studio-pilotage-about {
+    margin:0 0 24px; padding:16px 18px; border-radius:16px; background:rgba(255,255,255,.28); color:var(--ink-50);
+  }
+  body.storm-admin-open .studio-pilotage-about summary { cursor:pointer; color:var(--ink-50); font-size:.66rem; font-weight:600; }
+  body.storm-admin-open .studio-pilotage-about p { margin:10px 0 0; max-width:850px; font-size:.64rem; line-height:1.6; }
+  body.storm-admin-open #adminPanelDashboard .kpi-bar-row { gap:12px; padding:7px 0; }
+  body.storm-admin-open #adminPanelDashboard .kpi-bar-label { max-width:220px; font-size:.68rem; }
+  body.storm-admin-open #adminPanelDashboard .kpi-bar-track { height:5px; background:rgba(29,28,27,.07); }
+  body.storm-admin-open #adminPanelDashboard .kpi-bar-fill { background:var(--ink); opacity:.74; }
+  body.storm-admin-open #adminPanelDashboard .kpi-bar-value { width:30px; font-size:.65rem; }
+  body.storm-admin-open #adminPanelDashboard .kpi-empty { padding:10px 0; font-size:.68rem; line-height:1.5; }
+  @media (max-width:900px) {
+    body.storm-admin-open .studio-pilotage-section-head { grid-template-columns:1fr; gap:8px; }
+    body.storm-admin-open .studio-pilotage-subgrid { grid-template-columns:1fr; }
+  }
+  @media (max-width:720px) {
+    body.storm-admin-open .studio-pilotage-head { align-items:stretch; }
+    body.storm-admin-open .studio-pilotage-actions { align-items:flex-start; }
+    body.storm-admin-open .studio-signal-cards { grid-template-columns:1fr; }
+  }
+
   body.storm-admin-open .admin-editor-panel {
     padding:24px;
     border-radius:20px;
@@ -4808,6 +4916,337 @@
   body.storm-admin-open .studio-amb-danger{margin-top:28px;border:0;background:transparent;color:#9a3c33;padding:0;font-size:.72rem;cursor:pointer;}
   @media(max-width:980px){body.storm-admin-open .studio-amb-layout{grid-template-columns:1fr;}body.storm-admin-open .studio-amb-detail{min-height:0;}body.storm-admin-open .studio-amb-two{grid-template-columns:1fr;}}
 
+
+
+  /* ═══════════════════════════════════════════════════
+     STUDIO V2 — 7A.1 / RESPONSIVE CANVAS
+     Le Studio doit toujours tenir dans le viewport : sidebar + domaine.
+     Les composants se recomposent ; la page entière ne scrolle jamais en X.
+  ═══════════════════════════════════════════════════ */
+  body.storm-admin-open {
+    --studio-sidebar:clamp(210px,17vw,244px);
+    --studio-gutter:clamp(18px,2.25vw,34px);
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+  }
+  body.storm-admin-open #page-admin {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    overflow-x:clip;
+  }
+  body.storm-admin-open .admin-shell {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    grid-template-columns:var(--studio-sidebar) minmax(0,1fr);
+    overflow:visible;
+  }
+  body.storm-admin-open .admin-sidebar {
+    min-width:0;
+    max-width:100%;
+  }
+  body.storm-admin-open .admin-main {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    padding-left:var(--studio-gutter);
+    padding-right:var(--studio-gutter);
+    overflow-x:clip;
+  }
+  body.storm-admin-open .admin-topbar {
+    width:auto;
+    min-width:0;
+    max-width:none;
+    margin-left:calc(-1 * var(--studio-gutter));
+    margin-right:calc(-1 * var(--studio-gutter));
+    padding-left:var(--studio-gutter);
+    padding-right:var(--studio-gutter);
+  }
+  body.storm-admin-open .admin-panel {
+    width:100%;
+    max-width:1120px;
+    min-width:0;
+  }
+  body.storm-admin-open .admin-panel > *,
+  body.storm-admin-open #adminProjectEditor,
+  body.storm-admin-open #adminNewsEditor,
+  body.storm-admin-open #adminVisualsEditor,
+  body.storm-admin-open #adminFaqEditor,
+  body.storm-admin-open #adminTeamEditor,
+  body.storm-admin-open #adminContentEditor {
+    min-width:0;
+    max-width:100%;
+  }
+
+  /* Les enfants de grilles/flex ne doivent jamais imposer leur min-content au shell. */
+  body.storm-admin-open .studio-domain-head > *,
+  body.storm-admin-open .studio-project-layout > *,
+  body.storm-admin-open .studio-news-layout > *,
+  body.storm-admin-open .studio-spaces-layout > *,
+  body.storm-admin-open .studio-questions-layout > *,
+  body.storm-admin-open .studio-amb-layout > *,
+  body.storm-admin-open .studio-pilotage-subgrid > *,
+  body.storm-admin-open .studio-pilotage-section-head > *,
+  body.storm-admin-open .studio-overview-grid > *,
+  body.storm-admin-open .studio-overview-head > * {
+    min-width:0;
+    max-width:100%;
+  }
+  body.storm-admin-open input,
+  body.storm-admin-open textarea,
+  body.storm-admin-open select,
+  body.storm-admin-open iframe,
+  body.storm-admin-open img,
+  body.storm-admin-open video,
+  body.storm-admin-open canvas {
+    max-width:100%;
+  }
+
+  /* Fenêtres desktop intermédiaires / scaling Windows : on garde les deux colonnes,
+     mais la colonne d'index devient proportionnelle au canvas disponible. */
+  @media (max-width:1360px) and (min-width:901px) {
+    body.storm-admin-open .studio-project-layout {
+      grid-template-columns:minmax(250px,32%) minmax(0,1fr);
+      gap:16px;
+    }
+    body.storm-admin-open .studio-news-layout.is-editing {
+      grid-template-columns:minmax(260px,30%) minmax(0,1fr);
+      gap:16px;
+    }
+    body.storm-admin-open .studio-spaces-layout {
+      grid-template-columns:minmax(230px,30%) minmax(0,1fr);
+      gap:18px;
+    }
+    body.storm-admin-open .studio-questions-layout {
+      grid-template-columns:minmax(260px,34%) minmax(0,1fr);
+      gap:20px;
+    }
+    body.storm-admin-open .studio-amb-layout {
+      grid-template-columns:minmax(260px,34%) minmax(0,1fr);
+      gap:20px;
+    }
+    body.storm-admin-open .storm-faq-layout.is-editing {
+      grid-template-columns:minmax(235px,.72fr) minmax(0,1.28fr);
+      column-gap:16px;
+    }
+    body.storm-admin-open .storm-faq-layout.is-editing .storm-faq-preview-pane {
+      grid-column:2;
+      position:relative;
+      top:auto;
+      margin-top:16px;
+    }
+  }
+
+  /* Le hero doit pouvoir respirer sans pousser le bouton hors écran. */
+  @media (max-width:1180px) and (min-width:681px) {
+    body.storm-admin-open .studio-domain-head {
+      gap:20px;
+    }
+    body.storm-admin-open .studio-domain-head-copy {
+      flex:1 1 auto;
+      width:auto;
+    }
+    body.storm-admin-open .studio-domain-save {
+      min-width:0;
+      padding-left:20px;
+      padding-right:20px;
+    }
+    body.storm-admin-open .studio-topbar-actions {
+      gap:6px;
+    }
+    body.storm-admin-open .studio-publication-state {
+      padding-left:8px;
+      padding-right:8px;
+    }
+  }
+
+  /* Au breakpoint mobile existant, le shell repasse proprement sur une seule colonne. */
+  @media (max-width:900px) {
+    body.storm-admin-open {
+      --studio-sidebar:0px;
+      --studio-gutter:22px;
+    }
+    body.storm-admin-open .admin-shell { grid-template-columns:1fr; }
+    body.storm-admin-open .admin-sidebar { display:none; }
+    body.storm-admin-open .admin-main { padding-left:var(--studio-gutter); padding-right:var(--studio-gutter); }
+    body.storm-admin-open .admin-topbar {
+      margin-left:calc(-1 * var(--studio-gutter));
+      margin-right:calc(-1 * var(--studio-gutter));
+      padding-left:var(--studio-gutter);
+      padding-right:var(--studio-gutter);
+    }
+  }
+
+
+  /* ═══════════════════════════════════════════════════
+     STUDIO V2 — 7A.2 / NAVIGATION CONTINUITY
+     Shell applicatif : contexte et actions restent en place ; seule la
+     navigation centrale et le domaine actif défilent. Transitions rapides,
+     jamais décoratives.
+  ═══════════════════════════════════════════════════ */
+  body.storm-admin-open {
+    height:100dvh;
+    overflow:hidden;
+  }
+  /* Pangea continue d'exister derrière le fallback, mais ne doit jamais
+     traverser visuellement le shell Tectonic. */
+  body.storm-admin-open > .nav {
+    display:none !important;
+  }
+  body.storm-admin-open #page-admin {
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+  }
+  body.storm-admin-open .admin-shell {
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+  }
+  body.storm-admin-open .admin-sidebar {
+    position:relative;
+    top:auto;
+    height:100dvh;
+    min-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  body.storm-admin-open .admin-sidebar-header,
+  body.storm-admin-open .admin-project-card,
+  body.storm-admin-open .admin-sidebar-footer {
+    flex:0 0 auto;
+  }
+  body.storm-admin-open .admin-sidebar-nav {
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(30,29,30,.12) transparent;
+    padding-right:4px;
+    margin-right:-4px;
+  }
+  body.storm-admin-open .admin-sidebar-nav::-webkit-scrollbar { width:5px; }
+  body.storm-admin-open .admin-sidebar-nav::-webkit-scrollbar-thumb {
+    border-radius:999px;
+    background:rgba(30,29,30,.12);
+  }
+  body.storm-admin-open .admin-sidebar-nav::-webkit-scrollbar-track { background:transparent; }
+
+  body.storm-admin-open .admin-sidebar-footer {
+    gap:7px;
+    margin-top:10px;
+    padding-top:12px;
+    border-top:1px solid rgba(30,29,30,.055);
+    background:linear-gradient(180deg,rgba(246,244,238,0),#F6F4EE 18%);
+  }
+  body.storm-admin-open .studio-demo-dock {
+    padding:10px 11px 11px;
+    border:1px solid rgba(255,255,255,.66);
+    border-radius:13px;
+    background:
+      linear-gradient(145deg,rgba(255,255,255,.68),rgba(239,237,231,.64)),
+      radial-gradient(circle at 14% 0%,rgba(255,255,255,.72),transparent 42%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 5px 18px rgba(30,29,30,.025);
+  }
+  body.storm-admin-open .studio-demo-dock-label {
+    display:block;
+    margin-bottom:5px;
+    color:var(--ink-35);
+    font-size:.47rem;
+    line-height:1;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+  }
+  body.storm-admin-open .studio-demo-dock .admin-sidebar-back {
+    width:100%;
+    min-height:26px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    color:var(--ink-70);
+    background:transparent;
+    font-size:.62rem;
+    font-weight:500;
+  }
+  body.storm-admin-open .studio-demo-dock .admin-sidebar-back:hover {
+    background:transparent;
+    color:var(--ink);
+  }
+  body.storm-admin-open .studio-demo-dock-arrow {
+    color:var(--ink-35);
+    transition:transform 140ms cubic-bezier(.2,.8,.2,1),color 140ms ease;
+  }
+  body.storm-admin-open .studio-demo-dock .admin-sidebar-back:hover .studio-demo-dock-arrow {
+    color:var(--ink);
+    transform:translate(1px,-1px);
+  }
+  body.storm-admin-open .admin-sidebar-logout {
+    min-height:30px;
+    padding:0 11px;
+  }
+
+  body.storm-admin-open .admin-main {
+    height:100dvh;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:clip;
+    overscroll-behavior:contain;
+    scroll-behavior:smooth;
+    scrollbar-gutter:stable;
+  }
+  body.storm-admin-open .admin-topbar {
+    z-index:60;
+  }
+
+  /* 120–180 ms : l'état change avec continuité, sans faire attendre. */
+  body.storm-admin-open .admin-nav-item {
+    transition:
+      background-color 140ms cubic-bezier(.2,.8,.2,1),
+      color 140ms cubic-bezier(.2,.8,.2,1),
+      box-shadow 140ms cubic-bezier(.2,.8,.2,1),
+      transform 140ms cubic-bezier(.2,.8,.2,1);
+  }
+  body.storm-admin-open .admin-nav-item:hover { transform:translateX(1px); }
+  body.storm-admin-open .admin-nav-item.active { transform:none; }
+  body.storm-admin-open .admin-nav-item::before {
+    transition:background-color 140ms ease,transform 140ms cubic-bezier(.2,.8,.2,1);
+  }
+  body.storm-admin-open .admin-nav-item.active::before {
+    transform:translateY(-50%) scale(1.08);
+  }
+  @keyframes studioPanelEnter7A2 {
+    from { opacity:.72; transform:translateY(5px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  body.storm-admin-open .admin-panel.studio-panel-enter {
+    animation:studioPanelEnter7A2 160ms cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  @media (max-height:720px) and (min-width:901px) {
+    body.storm-admin-open .admin-sidebar { padding-top:18px; padding-bottom:14px; }
+    body.storm-admin-open .admin-sidebar-header { margin-bottom:18px; }
+    body.storm-admin-open .admin-project-card { margin-bottom:10px; padding-top:10px; padding-bottom:10px; }
+    body.storm-admin-open .admin-nav-group-label { margin-top:12px; }
+    body.storm-admin-open .admin-nav-item { min-height:32px; }
+    body.storm-admin-open .admin-sidebar-footer { margin-top:7px; padding-top:8px; }
+    body.storm-admin-open .studio-demo-dock { padding-top:8px; padding-bottom:8px; }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    body.storm-admin-open .admin-main { scroll-behavior:auto; }
+    body.storm-admin-open .admin-panel.studio-panel-enter { animation:none !important; }
+    body.storm-admin-open .admin-nav-item,
+    body.storm-admin-open .admin-nav-item::before,
+    body.storm-admin-open .studio-demo-dock-arrow { transition:none !important; }
+  }
+
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
   <link rel="stylesheet" href="./themes/midnight-frost.css">
@@ -5116,7 +5555,12 @@
       </nav>
 
       <div class="admin-sidebar-footer">
-        <button type="button" class="admin-sidebar-back" id="stormDemoLaunchBtn">Relancer la création ↗</button>
+        <div class="studio-demo-dock" aria-label="Mode démo">
+          <span class="studio-demo-dock-label">Mode démo</span>
+          <button type="button" class="admin-sidebar-back" id="stormDemoLaunchBtn">
+            <span>Relancer la création</span><span class="studio-demo-dock-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
         <button type="button" class="admin-sidebar-logout" id="adminLogoutBtn">Déconnexion</button>
       </div>
     </aside>
@@ -5168,54 +5612,96 @@
       <div class="admin-panel hidden" id="adminPanelProject"><div id="adminProjectEditor"></div></div>
 
       <div class="admin-panel hidden" id="adminPanelDashboard">
-        <div class="admin-page-eyebrow">Pilotage</div>
-        <div class="admin-page-title">Suivez l’activité du site.</div>
-        <div class="admin-page-sub" style="margin-bottom:28px;">Les indicateurs essentiels pour suivre les usages et repérer rapidement ce qui demande votre attention.</div>
-
-        <p class="admin-scope-note">Les indicateurs regroupent les usages de l’ensemble des collaborateurs. Pour ce POC, les données sont stockées localement sur le serveur ; une base de données sera à prévoir pour un déploiement à grande échelle.</p>
-
-        <div class="admin-panel-toolbar">
-          <button type="button" class="admin-export-btn" id="adminExportBtn">Exporter en Excel</button>
-          <button type="button" class="admin-reset" id="adminResetBtn" style="margin-left:auto;">Réinitialiser les données</button>
+        <div class="studio-domain-head studio-pilotage-head">
+          <div class="studio-domain-head-copy">
+            <div class="admin-page-eyebrow">Analyse</div>
+            <h1>Pilotage.</h1>
+            <p>Écoutez ce que le site vous apprend : ce qui est utilisé, ce qui manque et la manière dont le projet est vécu.</p>
+          </div>
+          <div class="studio-pilotage-actions">
+            <button type="button" class="admin-export-btn studio-pilotage-export" id="adminExportBtn">Exporter les données</button>
+            <button type="button" class="admin-reset" id="adminResetBtn">Réinitialiser</button>
+          </div>
         </div>
 
-        <div class="kpi-cards" id="kpiCards"></div>
-
-        <div class="kpi-section">
-          <div class="kpi-section-title">Questions les plus posées</div>
-          <div class="kpi-section-sub">Les sujets qui reviennent le plus souvent dans la FAQ.</div>
-          <div class="kpi-bar-list" id="kpiTopQuestions"></div>
+        <div class="studio-pilotage-context">
+          <span class="studio-pilotage-context-dot"></span>
+          <span>Données agrégées du site. Elles servent à repérer des signaux, pas à mesurer la performance individuelle.</span>
         </div>
 
-        <div class="kpi-section">
-          <div class="kpi-section-title">Questions à compléter</div>
-          <div class="kpi-section-sub">Les recherches qui n’ont pas encore trouvé de réponse dans la FAQ.</div>
-          <div class="kpi-list" id="kpiGaps"></div>
-        </div>
+        <section class="studio-pilotage-block" aria-labelledby="pilotageUsageTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">01 — Usage</div><h2 id="pilotageUsageTitle">Le site est-il utilisé ?</h2></div>
+            <p>Un aperçu de la fréquentation et des interactions avec les contenus.</p>
+          </div>
+          <div class="studio-signal-cards" id="kpiUsageCards"></div>
+        </section>
 
-        <div class="kpi-section">
-          <div class="kpi-section-title">Consultations par section</div>
-          <div class="kpi-section-sub">Les espaces les plus consultés par les collaborateurs.</div>
-          <div class="kpi-bar-list" id="kpiTabs"></div>
-        </div>
+        <section class="studio-pilotage-block" aria-labelledby="pilotageAnswersTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">02 — Information</div><h2 id="pilotageAnswersTitle">Les collaborateurs trouvent-ils ce dont ils ont besoin ?</h2></div>
+            <p>Storm Match fait remonter les questions comprises et les informations encore absentes.</p>
+          </div>
+          <div class="studio-signal-cards studio-signal-cards--answers" id="kpiAnswerCards"></div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>À traiter</strong><span>Recherches sans réponse</span></div><span class="studio-pilotage-product">Storm Match</span></div>
+              <div class="studio-signal-list" id="kpiGaps"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Sujets recherchés</strong><span>Réponses les plus sollicitées</span></div></div>
+              <div class="kpi-bar-list" id="kpiTopQuestions"></div>
+            </div>
+          </div>
+        </section>
 
-        <div class="kpi-section">
-          <div class="kpi-section-title">Actualités les plus consultées</div>
-          <div class="kpi-section-sub">Les publications qui ont suscité le plus d’ouvertures.</div>
-          <div class="kpi-bar-list" id="kpiArticles"></div>
-        </div>
+        <section class="studio-pilotage-block" aria-labelledby="pilotageAttentionTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">03 — Attention</div><h2 id="pilotageAttentionTitle">Qu’est-ce qui attire l’attention ?</h2></div>
+            <p>Les consultations indiquent les sujets qui occupent le terrain, sans transformer les contenus en compétition.</p>
+          </div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Rubriques consultées</strong><span>Répartition des consultations</span></div></div>
+              <div class="kpi-bar-list" id="kpiTabs"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Actualités ouvertes</strong><span>Les publications qui ont été consultées</span></div></div>
+              <div class="kpi-bar-list" id="kpiArticles"></div>
+            </div>
+          </div>
+        </section>
 
-        <div class="kpi-section">
-          <div class="kpi-section-title">Climat du projet</div>
-          <div class="kpi-section-sub">Le ressenti exprimé via la météo du projet — une contribution par jour et par navigateur.</div>
-          <div class="kpi-bar-list" id="kpiMood"></div>
-        </div>
+        <section class="studio-pilotage-block" aria-labelledby="pilotageMoodTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">04 — Climat</div><h2 id="pilotageMoodTitle">Comment le projet est-il vécu ?</h2></div>
+            <p>Le baromètre montre une distribution de ressentis. Storm n’en déduit pas une note moyenne du projet.</p>
+          </div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Répartition des ressentis</strong><span id="kpiMoodCount"></span></div></div>
+              <div class="kpi-bar-list" id="kpiMood"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>7 derniers jours</strong><span id="kpiMoodRecentCount"></span></div></div>
+              <div class="kpi-bar-list" id="kpiMoodRecent"></div>
+              <p class="studio-pilotage-privacy" id="kpiMoodPrivacy"></p>
+            </div>
+          </div>
+        </section>
 
-        <div class="kpi-section">
-          <div class="kpi-section-title">Demandes de contact</div>
-          <div class="kpi-section-sub">Les demandes apparaissent ici tant que le formulaire n’est pas relié à une boîte mail.</div>
-          <div class="kpi-list" id="kpiContacts"></div>
-        </div>
+        <section class="studio-pilotage-block studio-pilotage-block--secondary" id="kpiContactsSection">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">Messages</div><h2>Demandes reçues dans Storm</h2></div>
+            <p>Les messages issus des formulaires Storm apparaissent ici lorsqu’il y en a.</p>
+          </div>
+          <div class="studio-pilotage-surface"><div class="kpi-list" id="kpiContacts"></div></div>
+        </section>
+
+        <details class="studio-pilotage-about">
+          <summary>À propos des données de ce POC</summary>
+          <p>Les données de démonstration sont stockées localement sur le serveur. Un stockage adapté, une politique de conservation et les contrôles de confidentialité devront être définis avant un déploiement à grande échelle.</p>
+        </details>
       </div>
 
       <div class="admin-panel hidden" id="adminPanelContent"><div id="adminContentEditor"></div></div>
@@ -6763,7 +7249,8 @@ CALENDRIER
     document.getElementById('page-admin').classList.add('active');
     document.body.dataset.studioRoute = 'overview';
     navIndicator.style.width = '0px';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'auto' });
+    document.querySelector('.admin-main')?.scrollTo({ top:0, behavior:'auto' });
     refreshAdminPage();
   }
 
@@ -6860,9 +7347,18 @@ CALENDRIER
     const panel = item.dataset.adminPanel;
     document.body.dataset.studioRoute = route;
     document.querySelectorAll('.admin-nav-item').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-panel').forEach(p => p.classList.add('hidden'));
+    document.querySelectorAll('.admin-panel').forEach(p => {
+      p.classList.add('hidden');
+      p.classList.remove('studio-panel-enter');
+    });
     item.classList.add('active');
-    document.getElementById('adminPanel' + panel.charAt(0).toUpperCase() + panel.slice(1))?.classList.remove('hidden');
+    const targetPanel = document.getElementById('adminPanel' + panel.charAt(0).toUpperCase() + panel.slice(1));
+    targetPanel?.classList.remove('hidden');
+    if (targetPanel && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      void targetPanel.offsetWidth;
+      targetPanel.classList.add('studio-panel-enter');
+      window.setTimeout(() => targetPanel.classList.remove('studio-panel-enter'), 180);
+    }
     const label = document.getElementById('adminCurrentPanelLabel');
     if (label) label.textContent = item.dataset.studioLabel || item.textContent.trim();
 
@@ -6883,7 +7379,12 @@ CALENDRIER
       if (peopleSub) peopleSub.textContent = 'Gérez les relais du projet et les informations qui permettent aux collaborateurs de les identifier.';
     }
 
-    if (opts.scroll !== false) window.scrollTo({ top:0, behavior:'smooth' });
+    if (opts.scroll !== false) {
+      const studioScroller = document.querySelector('.admin-main');
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      if (studioScroller) studioScroller.scrollTo({ top:0, behavior });
+      else window.scrollTo({ top:0, behavior });
+    }
   }
 
   document.getElementById('adminSidebarNav')?.addEventListener('click', e => {
@@ -6949,7 +7450,7 @@ CALENDRIER
     }
   });
 
-  const TAB_LABELS = { faq: 'FAQ', actu: 'Actualités', plans: 'Plans & 3D', ambassadeurs: 'Ambassadeurs', equipe: 'Équipe projet' };
+  const TAB_LABELS = { faq: 'Questions', actu: 'Actualités', plans: 'Espaces', ambassadeurs: 'Ambassadeurs', equipe: 'Le projet' };
 
   function fmtDate(ts) {
     return new Date(ts).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
@@ -6972,92 +7473,135 @@ CALENDRIER
   }
 
   function renderKpiDashboard(kpi, content) {
-    const totalAsked        = kpi.faqAsked.length;
-    const totalFound        = kpi.faqAsked.filter(a => a.matched).length;
-    const foundRate         = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
-    const totalArticleOpens = Object.values(kpi.articleOpens).reduce((a,b) => a+b, 0);
-    const totalTabViews     = Object.values(kpi.tabViews).reduce((a,b) => a+b, 0);
-    const totalVisits       = new Set(kpi.visitSessions || []).size;
-    const totalContacts     = kpi.contactSubmissions.length;
-    const moodEntries        = kpi.moodEntries || [];
-    const moodAvg            = moodEntries.length
-      ? (moodEntries.reduce((sum, e) => sum + (Number(e.value) || 0), 0) / moodEntries.length)
-      : null;
+    const faqAsked = Array.isArray(kpi?.faqAsked) ? kpi.faqAsked : [];
+    const moodEntries = Array.isArray(kpi?.moodEntries) ? kpi.moodEntries : [];
+    const contacts = Array.isArray(kpi?.contactSubmissions) ? kpi.contactSubmissions : [];
+    const tabViews = kpi?.tabViews && typeof kpi.tabViews === 'object' ? kpi.tabViews : {};
+    const articleOpens = kpi?.articleOpens && typeof kpi.articleOpens === 'object' ? kpi.articleOpens : {};
+    const totalAsked = faqAsked.length;
+    const totalFound = faqAsked.filter(item => item.matched).length;
+    const foundRate = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
+    const totalArticleOpens = Object.values(articleOpens).reduce((sum, value) => sum + (Number(value) || 0), 0);
+    const totalTabViews = Object.values(tabViews).reduce((sum, value) => sum + (Number(value) || 0), 0);
+    const totalVisits = new Set(kpi?.visitSessions || []).size;
 
-    document.getElementById('kpiCards').innerHTML = `
-      <div class="kpi-card"><div class="kpi-card-value">${totalAsked}</div><div class="kpi-card-label mono">Questions posées</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${foundRate}%</div><div class="kpi-card-label mono">Taux de réponse trouvée</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${totalVisits}</div><div class="kpi-card-label mono">Consultations uniques</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${totalTabViews}</div><div class="kpi-card-label mono">Consultations totales</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${totalArticleOpens}</div><div class="kpi-card-label mono">Ouvertures d'articles</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${totalContacts}</div><div class="kpi-card-label mono">Demandes de contact</div></div>
-      <div class="kpi-card"><div class="kpi-card-value">${moodAvg !== null ? moodAvg.toFixed(1) + '/5' : '—'}</div><div class="kpi-card-label mono">Climat moyen du projet</div></div>
-    `;
+    const card = (value, label, meta='') => `
+      <div class="studio-signal-card">
+        <strong>${escapeHtml(String(value))}</strong>
+        <span>${escapeHtml(label)}</span>
+        ${meta ? `<em>${escapeHtml(meta)}</em>` : '<span></span>'}
+      </div>`;
 
-    const qCounts = {};
-    kpi.faqAsked.forEach(a => {
-      const key = a.q.trim().toLowerCase();
-      if (!qCounts[key]) qCounts[key] = { label: a.q.trim(), value: 0 };
-      qCounts[key].value++;
+    const usageCards = document.getElementById('kpiUsageCards');
+    if (usageCards) usageCards.innerHTML = [
+      card(totalVisits, 'Consultations uniques', 'depuis le début'),
+      card(totalTabViews, 'Consultations de rubriques', 'navigation cumulée'),
+      card(totalArticleOpens, "Ouvertures d’actualités", 'lecture de contenus')
+    ].join('');
+
+    const normalizedGapKey = value => String(value || '').trim().toLocaleLowerCase('fr-FR').replace(/[’']/g,"'").replace(/\s+/g,' ');
+    const gapMap = new Map();
+    faqAsked.filter(item => !item.matched && String(item.q || '').trim()).forEach(item => {
+      const key = normalizedGapKey(item.q);
+      const existing = gapMap.get(key) || { label:String(item.q).trim(), value:0, lastTs:0 };
+      existing.value += 1;
+      existing.lastTs = Math.max(existing.lastTs, Number(item.ts) || 0);
+      gapMap.set(key, existing);
     });
-    const topQuestions = Object.values(qCounts).sort((a,b) => b.value - a.value).slice(0, 8);
-    renderBarList(document.getElementById('kpiTopQuestions'), topQuestions, {
-      emptyText: "Aucune question posée pour le moment."
-    });
+    const groupedGaps = [...gapMap.values()].sort((a,b) => (b.value-a.value) || (b.lastTs-a.lastTs));
 
-    const gaps = kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).slice(0, 15);
+    const answerCards = document.getElementById('kpiAnswerCards');
+    if (answerCards) answerCards.innerHTML = [
+      card(totalAsked, 'Questions posées à Storm Match', 'signal de besoin'),
+      card(`${foundRate}%`, 'Ont trouvé une réponse', totalAsked ? `${totalFound} sur ${totalAsked}` : 'pas encore de données'),
+      card(groupedGaps.length, 'Informations à compléter', groupedGaps.length ? 'action éditoriale' : 'rien à traiter')
+    ].join('');
+
+    const faqLabels = {};
+    (content?.faqEntries || []).forEach(entry => { if (entry?.id) faqLabels[entry.id] = entry.title || entry.question || entry.id; });
+    const matchedCounts = {};
+    faqAsked.filter(item => item.matched && item.entryId).forEach(item => {
+      const id = String(item.entryId);
+      matchedCounts[id] = (matchedCounts[id] || 0) + 1;
+    });
+    const topQuestions = Object.entries(matchedCounts)
+      .map(([id,value]) => ({ label:faqLabels[id] || 'Réponse supprimée', value }))
+      .sort((a,b) => b.value-a.value)
+      .slice(0,8);
+    renderBarList(document.getElementById('kpiTopQuestions'), topQuestions, { emptyText:'Aucun sujet suffisamment sollicité pour le moment.' });
+
     const gapsContainer = document.getElementById('kpiGaps');
-    if (!gaps.length) {
-      gapsContainer.innerHTML = `<div class="kpi-empty">Toutes les questions posées ont trouvé une réponse.</div>`;
-    } else {
-      gapsContainer.innerHTML = gaps.map(g => `
-        <div class="kpi-list-item">
-          <div class="kpi-list-q">« ${String(g.q).replace(/</g,'&lt;')} »</div>
-          <div class="kpi-list-meta">${fmtDate(g.ts)}</div>
-        </div>
-      `).join('');
+    if (gapsContainer) {
+      if (!groupedGaps.length) {
+        gapsContainer.innerHTML = `<div class="kpi-empty">Storm Match n’a détecté aucune information manquante pour le moment.</div>`;
+      } else {
+        gapsContainer.innerHTML = groupedGaps.slice(0,10).map((gap,index) => `
+          <div class="studio-signal-row">
+            <div class="studio-signal-row-copy">
+              <strong>« ${escapeHtml(gap.label)} »</strong>
+              <span>${gap.value} recherche${gap.value>1?'s':''}${gap.lastTs ? ` · dernière ${escapeHtml(fmtDate(gap.lastTs))}` : ''}</span>
+            </div>
+            <button type="button" class="studio-signal-action" data-pilotage-create-answer="${index}">Créer une réponse →</button>
+          </div>`).join('');
+        gapsContainer.querySelectorAll('[data-pilotage-create-answer]').forEach(button => {
+          button.addEventListener('click', () => {
+            const gap = groupedGaps[Number(button.dataset.pilotageCreateAnswer)];
+            if (!gap) return;
+            applyStudioRoute('questions');
+            requestAnimationFrame(() => {
+              document.getElementById('studioQuestionAdd')?.click();
+              setTimeout(() => {
+                const input = document.getElementById('studioQuestionTitle');
+                if (!input) return;
+                input.value = gap.label;
+                input.dispatchEvent(new Event('input', { bubbles:true }));
+                input.focus();
+                input.select();
+              }, 30);
+            });
+          });
+        });
+      }
     }
 
-    const tabEntries = Object.keys(TAB_LABELS).map(id => ({ label: TAB_LABELS[id], value: kpi.tabViews[id] || 0 }));
-    const tabHasData = tabEntries.some(e => e.value > 0);
-    renderBarList(document.getElementById('kpiTabs'), tabHasData ? tabEntries : [], {
-      emptyText: "Aucune navigation enregistrée pour le moment."
-    });
+    const tabEntries = Object.keys(TAB_LABELS).map(id => ({ label:TAB_LABELS[id], value:Number(tabViews[id]) || 0 }));
+    renderBarList(document.getElementById('kpiTabs'), tabEntries.some(item => item.value>0) ? tabEntries : [], { emptyText:'Aucune navigation enregistrée pour le moment.' });
 
     const articleLabels = {};
-    (content?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
-    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
-    const articleEntries = [...articleIds].map(id => ({
-      label: articleLabels[id] || `Article supprimé (${id})`,
-      value: kpi.articleOpens[id] || 0
-    }));
-    const articlesHaveData = articleEntries.some(e => e.value > 0);
-    renderBarList(document.getElementById('kpiArticles'), articlesHaveData ? articleEntries : [], {
-      emptyText: "Aucune actualité ouverte pour le moment."
-    });
+    (content?.articles || []).forEach(article => { if (article?.id) articleLabels[article.id] = article.title || '(sans titre)'; });
+    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(articleOpens)]);
+    const articleEntries = [...articleIds].map(id => ({ label:articleLabels[id] || 'Actualité supprimée', value:Number(articleOpens[id]) || 0 })).sort((a,b)=>b.value-a.value).slice(0,8);
+    renderBarList(document.getElementById('kpiArticles'), articleEntries.some(item => item.value>0) ? articleEntries : [], { emptyText:'Aucune actualité ouverte pour le moment.' });
 
-    const moodBarEntries = [1, 2, 3, 4, 5].map(v => ({
-      label: MOOD_LABELS[v],
-      value: moodEntries.filter(e => Number(e.value) === v).length
-    }));
-    renderBarList(document.getElementById('kpiMood'), moodEntries.length ? moodBarEntries : [], {
-      emptyText: "Aucune contribution à la météo du projet pour le moment."
-    });
+    const moodBars = entries => [1,2,3,4,5].map(value => ({ label:MOOD_LABELS[value], value:entries.filter(item => Number(item.value)===value).length }));
+    renderBarList(document.getElementById('kpiMood'), moodEntries.length ? moodBars(moodEntries) : [], { emptyText:'Aucune contribution au baromètre pour le moment.' });
+    const moodCount = document.getElementById('kpiMoodCount');
+    if (moodCount) moodCount.textContent = `${moodEntries.length} contribution${moodEntries.length>1?'s':''}`;
 
-    const contactsContainer = document.getElementById('kpiContacts');
-    if (!kpi.contactSubmissions.length) {
-      contactsContainer.innerHTML = `<div class="kpi-empty">Aucune demande envoyée pour le moment.</div>`;
+    const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
+    const recentMood = moodEntries.filter(item => (Number(item.ts)||0) >= sevenDaysAgo);
+    const recentCount = document.getElementById('kpiMoodRecentCount');
+    if (recentCount) recentCount.textContent = `${recentMood.length} contribution${recentMood.length>1?'s':''}`;
+    const moodRecent = document.getElementById('kpiMoodRecent');
+    const moodPrivacy = document.getElementById('kpiMoodPrivacy');
+    if (recentMood.length >= 5) {
+      renderBarList(moodRecent, moodBars(recentMood), { emptyText:'' });
+      if (moodPrivacy) moodPrivacy.textContent = 'Agrégation sur 7 jours. Aucun commentaire ni identifiant individuel n’est collecté.';
     } else {
-      contactsContainer.innerHTML = kpi.contactSubmissions.slice().reverse().map(c => `
+      if (moodRecent) moodRecent.innerHTML = `<div class="kpi-empty">Pas assez de réponses récentes pour afficher une tendance.</div>`;
+      if (moodPrivacy) moodPrivacy.textContent = 'Storm attend au moins 5 contributions avant d’afficher une distribution récente.';
+    }
+
+    const contactsSection = document.getElementById('kpiContactsSection');
+    const contactsContainer = document.getElementById('kpiContacts');
+    if (contactsSection) contactsSection.hidden = contacts.length === 0;
+    if (contactsContainer && contacts.length) {
+      contactsContainer.innerHTML = contacts.slice().reverse().map(contact => `
         <div class="kpi-contact-item">
-          <div class="kpi-contact-head">
-            <span class="kpi-contact-name">${String(c.name||'Anonyme').replace(/</g,'&lt;')}</span>
-            <span class="kpi-contact-date">${fmtDate(c.ts)}</span>
-          </div>
-          <div class="kpi-contact-email">${String(c.email||'').replace(/</g,'&lt;')}</div>
-          <div class="kpi-contact-msg">${String(c.message||'').replace(/</g,'&lt;')}</div>
-        </div>
-      `).join('');
+          <div class="kpi-contact-head"><span class="kpi-contact-name">${escapeHtml(contact.name || 'Anonyme')}</span><span class="kpi-contact-date">${escapeHtml(fmtDate(contact.ts))}</span></div>
+          <div class="kpi-contact-email">${escapeHtml(contact.email || '')}</div>
+          <div class="kpi-contact-msg">${escapeHtml(contact.message || '')}</div>
+        </div>`).join('');
     }
   }
 
@@ -10251,7 +10795,7 @@ CALENDRIER
     const totalContacts     = kpi.contactSubmissions.length;
 
     const summaryData = [
-      ['Projet XYZ — Export KPIs', ''],
+      [`${currentAdminContent?.branding?.projectName || 'Projet'} — Export Pilotage`, ''],
       ['Généré le', new Date().toLocaleString('fr-FR')],
       ['', ''],
       ['Indicateur', 'Valeur'],
@@ -10260,7 +10804,8 @@ CALENDRIER
       ['Consultations uniques', totalVisits],
       ['Consultations totales (tous onglets)', totalTabViews],
       ["Ouvertures d'articles", totalArticleOpens],
-      ['Demandes de contact', totalContacts],
+      ['Messages reçus dans Storm', totalContacts],
+      ['Contributions au baromètre', (kpi.moodEntries || []).length],
     ];
     const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
     wsSummary['!cols'] = [{ wch: 38 }, { wch: 24 }];
@@ -10305,9 +10850,18 @@ CALENDRIER
     wsContacts['!cols'] = [{ wch: 24 }, { wch: 28 }, { wch: 60 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, wsContacts, 'Demandes de contact');
 
-    const filename = `Projet-XYZ-KPIs-${new Date().toISOString().slice(0,10)}.xlsx`;
+    const moodRows = [['Ressenti', 'Date']];
+    (kpi.moodEntries || []).slice().sort((a,b) => b.ts-a.ts).forEach(entry => {
+      moodRows.push([MOOD_LABELS[Number(entry.value)] || String(entry.value || ''), new Date(entry.ts).toLocaleString('fr-FR')]);
+    });
+    const wsMood = XLSX.utils.aoa_to_sheet(moodRows);
+    wsMood['!cols'] = [{ wch:24 }, { wch:20 }];
+    XLSX.utils.book_append_sheet(wb, wsMood, 'Climat du projet');
+
+    const safeProjectName = String(currentAdminContent?.branding?.projectName || 'Projet').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'') || 'Projet';
+    const filename = `${safeProjectName}-Pilotage-${new Date().toISOString().slice(0,10)}.xlsx`;
     XLSX.writeFile(wb, filename);
-    showToast('Export Excel généré.');
+    showToast('Export de pilotage généré.');
   }
 
 
