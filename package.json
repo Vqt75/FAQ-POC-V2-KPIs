@@ -17,6 +17,7 @@
     "test:studio-layout": "node tectonic/studio-v2/test_layout_7a1.js",
     "test:studio-navigation": "node tectonic/studio-v2/test_navigation_7a2.js",
     "test:studio-save": "node tectonic/studio-v2/test_save_doctrine_7a3.js",
-    "test:studio-richtext": "node tectonic/studio-v2/test_rich_text_8a.js"
+    "test:studio-richtext": "node tectonic/studio-v2/test_rich_text_8a.js",
+    "test:studio-mood": "node tectonic/studio-v2/test_mood_engine_8b.js && node tectonic/studio-v2/test_tectonic_mood_8b1.js && node tectonic/studio-v2/test_tectonic_mood_8b2.js"
   }
 }

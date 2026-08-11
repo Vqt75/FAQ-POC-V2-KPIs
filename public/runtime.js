@@ -83,9 +83,9 @@ async function loadRenderer(editionId) {
 // Public Core : actions d'interaction fournies aux renderers.
 // Un renderer rend l'UI et appelle ces fonctions ; il ne connaît
 // jamais l'URL d'un endpoint, ni la façon dont la donnée est stockée.
-// Aujourd'hui : uniquement l'escalade de contact (l'issue de secours
-// du parcours FAQ). Le baromètre météo et le tracking d'ouverture
-// restent hors périmètre Phase 5 — voir TECTONIC_PHASE5_PARITY_AUDIT.md.
+// Aujourd'hui : escalade de contact + baromètre météo anonyme.
+// Le renderer exprime une intention ; le Runtime reste propriétaire de
+// l'endpoint et du payload. Le reste du tracking demeure hors renderer.
 // ─────────────────────────────────────────────────────────────────
 function buildPublicCoreActions() {
   return {
@@ -99,6 +99,26 @@ function buildPublicCoreActions() {
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.ok) return { ok: true };
         return { ok: false, error: data.error || 'Envoi impossible.' };
+      } catch (e) {
+        return { ok: false, error: 'Connexion au serveur impossible.' };
+      }
+    },
+
+    async submitMood({ value }) {
+      const numericValue = Math.round(Number(value));
+      if (!Number.isInteger(numericValue) || numericValue < 1 || numericValue > 5) {
+        return { ok: false, error: 'Ressenti invalide.' };
+      }
+      try {
+        const res = await fetch('/api/kpi/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          // Le serveur horodate si ts est absent. Aucune identité ni session.
+          body: JSON.stringify({ type: 'mood', value: numericValue })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) return { ok: true };
+        return { ok: false, error: data.error || 'Enregistrement impossible.' };
       } catch (e) {
         return { ok: false, error: 'Connexion au serveur impossible.' };
       }

@@ -15,20 +15,26 @@
 // écart de parité — voir l'audit).
 
 import { matchFaq, scoreEntry } from '../faq-engine.js';
+import { createMoodSolicitationEngine } from '../mood-engine.js';
 
 function esc(str) {
   return String(str == null ? '' : str)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
-\nfunction inlineRichHtml(value = '') {
-  let safe = esc(value);
-  safe = safe.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
-  safe = safe
-    .replace(/\[\[b\]\]/g, '<strong>').replace(/\[\[\/b\]\]/g, '</strong>')
-    .replace(/\[\[i\]\]/g, '<em>').replace(/\[\[\/i\]\]/g, '</em>')
-    .replace(/\[\[u\]\]/g, '<u>').replace(/\[\[\/u\]\]/g, '</u>');
-  return safe.replace(/\n/g, '<br>');
+
+
+
+// Studio Hardening 8A — semantic inline emphasis shared by descriptive copy.
+// Authors may express emphasis, but never colour, font, size or alignment.
+// Stored tokens stay presentation-agnostic: **bold**, //italic//, ++underline++.
+function inlineRichText(value) {
+  let safe = esc(value || '');
+  safe = safe.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
+  safe = safe.replace(/\+\+([\s\S]+?)\+\+/g, '<u>$1</u>');
+  safe = safe.replace(/\/\/([\s\S]+?)\/\//g, '<em>$1</em>');
+  safe = safe.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
+  return safe.replace(/\r?\n/g, '<br>');
 }
 
 function isPdfUrl(url) {
@@ -571,7 +577,7 @@ function renderProjectSection(section, context = {}) {
       <section class="tct-project-section tct-project-text tct-reveal" data-tct-reveal>
         <div class="tct-project-reading">
           ${section.title ? `<h2>${esc(section.title)}</h2>` : ''}
-          ${section.body ? `<p>${inlineRichHtml(section.body)}</p>` : ''}
+          ${section.body ? `<p>${inlineRichText(section.body)}</p>` : ''}
         </div>
       </section>`;
   }
@@ -583,7 +589,7 @@ function renderProjectSection(section, context = {}) {
           <span>Focus</span>
           <div>
             ${section.title ? `<h2>${esc(section.title)}</h2>` : ''}
-            ${section.body ? `<p>${inlineRichHtml(section.body)}</p>` : ''}
+            ${section.body ? `<p>${inlineRichText(section.body)}</p>` : ''}
           </div>
         </div>
       </section>`;
@@ -673,7 +679,7 @@ function renderProject(project, context = {}) {
       <header class="tct-project-opening tct-reveal" data-tct-reveal>
         <div class="tct-project-opening-eyebrow">Le projet</div>
         <h1>${esc(intro.title || fallback.intro.title)}</h1>
-        <p>${inlineRichHtml(intro.body || intro.description || fallback.intro.body)}</p>
+        <p>${inlineRichText(intro.body || intro.description || fallback.intro.body)}</p>
       </header>
 
       <div class="tct-project-flow">
@@ -791,7 +797,7 @@ function renderSpaceIndexItem(item, originalIndex, sequenceIndex) {
       <div class="tct-space-story-copy">
         <span>${esc(item.location || item.type || (inspectable ? 'Plan' : 'Espace'))}</span>
         <h2><a href="#space-${encodeURIComponent(key)}" data-tct-route>${esc(item.title || 'Un espace du projet')}</a></h2>
-        ${item.comment ? `<p>${esc(item.comment)}</p>` : ''}
+        ${item.comment ? `<p>${inlineRichText(item.comment)}</p>` : ''}
         <a class="tct-text-link" href="#space-${encodeURIComponent(key)}" data-tct-route>Découvrir cet espace <span aria-hidden="true">→</span></a>
       </div>
     </article>`;
@@ -825,7 +831,7 @@ function renderSpaceDetail(item, items, index) {
       <header class="tct-space-detail-opening tct-reveal" data-tct-reveal>
         <div class="tct-space-detail-eyebrow">${esc(item.location ? `Espace · ${item.location}` : (item.type || 'Espace'))}</div>
         <h1>${esc(item.title || 'Un espace du projet')}</h1>
-        <p>${inlineRichHtml(item.comment || 'Découvrez l’orientation actuellement imaginée pour cet espace et la manière dont elle accompagne les usages de la journée.')}</p>
+        <p>${inlineRichText(item.comment || 'Découvrez l’orientation actuellement imaginée pour cet espace et la manière dont elle accompagne les usages de la journée.')}</p>
       </header>
 
       ${primary ? `
@@ -929,7 +935,7 @@ function renderSpaces(spaces) {
         <div class="tct-spaces-lead-copy">
           <span>${isOverviewSpace(lead) ? 'Vue d’ensemble' : esc(lead.type || 'À découvrir')}</span>
           <h2>${esc(lead.title || 'Se projeter dans les futurs espaces.')}</h2>
-          ${lead.comment ? `<p>${esc(lead.comment)}</p>` : ''}
+          ${lead.comment ? `<p>${inlineRichText(lead.comment)}</p>` : ''}
           <a class="tct-text-link" href="#space-${encodeURIComponent(key)}" data-tct-route>
             ${inspectable ? 'Comprendre ce plan' : 'Découvrir cet espace'} <span aria-hidden="true">→</span>
           </a>
@@ -949,7 +955,7 @@ function renderSpaces(spaces) {
         <header class="tct-spaces-opening tct-reveal" data-tct-reveal>
           <div class="tct-spaces-opening-eyebrow">Espaces</div>
           <h1>${esc(openingTitle)}</h1>
-          <p>${esc(openingDescription)}</p>
+          <p>${inlineRichText(openingDescription)}</p>
         </header>
 
         ${items.length ? leadHtml : '<p class="tct-empty">Aucun espace publié pour le moment.</p>'}
@@ -984,7 +990,7 @@ function renderNewsArticle(item, allItems, index) {
           ${meta.extra ? `<em>${esc(meta.extra)}</em>` : ''}
         </div>
         <h1>${esc(item.title)}</h1>
-        ${item.summary ? `<p>${esc(item.summary)}</p>` : ''}
+        ${item.summary ? `<p>${inlineRichText(item.summary)}</p>` : ''}
       </header>
 
       ${asset && asset.url ? `
@@ -1039,7 +1045,7 @@ function renderNews(news) {
         <div class="tct-news-lead-copy">
           ${lead.tag ? `<div class="tct-news-tag">${esc(lead.tag)}</div>` : ''}
           <h2>${esc(lead.title)}</h2>
-          ${lead.summary ? `<p>${esc(lead.summary)}</p>` : ''}
+          ${lead.summary ? `<p>${inlineRichText(lead.summary)}</p>` : ''}
           <a class="tct-text-link" href="#news-${encodeURIComponent(String(lead.id))}" data-tct-route>Lire l’actualité <span aria-hidden="true">→</span></a>
         </div>
         ${asset && asset.url ? `
@@ -1061,7 +1067,7 @@ function renderNews(news) {
         <div class="tct-news-row-copy">
           ${item.tag ? `<span>${esc(item.tag)}</span>` : ''}
           <h3><a href="#news-${encodeURIComponent(String(item.id))}" data-tct-route>${esc(item.title)}</a></h3>
-          ${!compact && item.summary ? `<p>${esc(item.summary)}</p>` : ''}
+          ${!compact && item.summary ? `<p>${inlineRichText(item.summary)}</p>` : ''}
           ${!compact ? `<a class="tct-news-row-action" href="#news-${encodeURIComponent(String(item.id))}" data-tct-route>Lire <span aria-hidden="true">→</span></a>` : ''}
         </div>
       </article>`;
@@ -1192,7 +1198,7 @@ function faqAnswerToHtml(answer) {
     .split(/\n\s*\n/)
     .map(block => block.trim())
     .filter(Boolean)
-    .map(block => `<p>${esc(block).replace(/\n/g, '<br>')}</p>`)
+    .map(block => `<p>${inlineRichText(block)}</p>`)
     .join('');
 }
 
@@ -1312,7 +1318,7 @@ function ambassadorBodyToHtml(value) {
     .split(/\n\s*\n/)
     .map(block => block.trim())
     .filter(Boolean)
-    .map(block => `<p>${inlineRichHtml(block)}</p>`)
+    .map(block => `<p>${inlineRichText(block)}</p>`)
     .join('');
 }
 
@@ -1456,7 +1462,7 @@ function renderAmbassadors(ambassadors) {
             ${join.title ? `<h2>${esc(join.title)}</h2>` : ''}
           </div>
           <div>
-            ${join.body ? `<p>${esc(ambassadorJoinBody(join.body))}</p>` : ''}
+            ${join.body ? `<p>${inlineRichText(ambassadorJoinBody(join.body))}</p>` : ''}
             ${join.mode === 'link' && join.href ? `
               <a class="tct-text-link" href="${esc(join.href)}" ${String(join.href).startsWith('#') ? 'data-tct-route' : ''}>
                 ${esc(join.label || 'Devenir ambassadeur')} <span aria-hidden="true">→</span>
@@ -4962,6 +4968,157 @@ const STYLE = `
     .tct-project-media-img, .tct-project-gallery-img, .tct-news-lead-img, .tct-news-article-img, .tct-space-image-trigger img { transform:none !important; }
   }
 `;
+
+const TCT_MOOD_LABELS = Object.freeze({
+  1: 'Orageux',
+  2: 'Nuageux',
+  3: 'Couvert',
+  4: 'Éclairci',
+  5: 'Ensoleillé'
+});
+
+const TCT_MOOD_ICONS = Object.freeze({
+  1: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5a4 4 0 0 1 .5-7.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1 .3 7.98"/><path d="M13 12l-2.5 4h3L11 20"/></svg>',
+  2: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17.5a4 4 0 0 1 .4-7.98A5.5 5.5 0 0 1 16 8.7a4.2 4.2 0 0 1 3.5 4.15 3.9 3.9 0 0 1-.4 4.65"/><path d="M8 17.5h10.5"/></svg>',
+  3: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.4"/><path d="M11 17.5a4 4 0 0 1 .4-7.9c.4-.05.8-.03 1.2.03A5.5 5.5 0 0 1 22.5 12a4 4 0 0 1-1 5.5"/></svg>',
+  4: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="8" r="3.6"/><path d="M8 2.6v1.4M8 12v1.4M2.6 8h1.4M12 8h1.4M4.3 4.3l1 1M10.7 4.3l-1 1"/><path d="M13 19.5a3.7 3.7 0 0 1 .4-7.36A5 5 0 0 1 22.5 14a3.7 3.7 0 0 1-1 5.5"/></svg>',
+  5: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></svg>'
+});
+
+const TCT_MOOD_STYLE = `
+  .tct-mood-fab{position:fixed;right:24px;bottom:24px;z-index:86;height:48px;max-width:48px;padding:0 13px;display:flex;align-items:center;gap:8px;border:1px solid color-mix(in srgb,var(--tct-ink) 14%,transparent);border-radius:999px;background:color-mix(in srgb,var(--tct-canvas) 88%,transparent);backdrop-filter:blur(22px) saturate(125%);-webkit-backdrop-filter:blur(22px) saturate(125%);box-shadow:0 12px 32px rgba(24,22,20,.09);color:var(--tct-ink);overflow:hidden;cursor:pointer;transition:max-width .16s ease,border-color .16s ease,transform .16s ease,background .16s ease;}
+  .tct-mood-fab:hover{border-color:color-mix(in srgb,var(--tct-ink) 28%,transparent);transform:translateY(-1px);}
+  .tct-mood-fab-icon,.tct-mood-fab-icon svg{width:20px;height:20px;display:block;flex:0 0 20px;}
+  .tct-mood-fab-icon svg,.tct-mood-option svg{fill:none;stroke:currentColor;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;}
+  .tct-mood-fab-label{white-space:nowrap;opacity:0;transform:translateX(4px);font:600 12px/1 var(--tct-font-primary);transition:opacity .14s ease,transform .14s ease;}
+  .tct-mood-fab.is-introduced{max-width:184px;border-color:color-mix(in srgb,var(--tct-expression-accent) 32%,transparent);}
+  .tct-mood-fab.is-introduced .tct-mood-fab-label{opacity:1;transform:none;}
+  .tct-mood-fab.is-answered::after{content:"";position:absolute;right:6px;top:6px;width:6px;height:6px;border-radius:50%;background:var(--tct-expression-accent);}
+  .tct-mood-fab.is-wave{animation:tctMoodFabNudge 1.6s ease-out 1;}
+  @keyframes tctMoodFabNudge{0%{box-shadow:0 12px 32px rgba(24,22,20,.09),0 0 0 0 color-mix(in srgb,var(--tct-expression-accent) 42%,transparent)}55%{box-shadow:0 12px 32px rgba(24,22,20,.09),0 0 0 11px color-mix(in srgb,var(--tct-expression-accent) 18%,transparent)}100%{box-shadow:0 12px 32px rgba(24,22,20,.09),0 0 0 18px transparent}}
+  .tct-mood-panel[hidden]{display:none!important;}
+  .tct-mood-panel{position:fixed;right:24px;bottom:84px;z-index:85;width:min(360px,calc(100vw - 32px));padding:22px;border:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);border-radius:22px;background:color-mix(in srgb,var(--tct-canvas) 94%,white 6%);box-shadow:0 24px 64px rgba(24,22,20,.15);opacity:0;transform:translateY(5px) scale(.99);transition:opacity .15s ease,transform .15s ease;}
+  .tct-mood-panel.is-open{opacity:1;transform:none;}
+  .tct-mood-question{margin:0 0 17px;font:600 15px/1.45 var(--tct-font-primary);letter-spacing:-.01em;color:var(--tct-ink);}
+  .tct-mood-options{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  .tct-mood-option{min-width:0;padding:10px 4px 8px;display:grid;place-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);border-radius:14px;background:transparent;color:color-mix(in srgb,var(--tct-ink) 72%,transparent);cursor:pointer;transition:background .14s ease,border-color .14s ease,transform .14s ease,color .14s ease;}
+  .tct-mood-option:hover{background:color-mix(in srgb,var(--tct-expression-accent) 8%,transparent);border-color:color-mix(in srgb,var(--tct-expression-accent) 38%,transparent);color:var(--tct-ink);transform:translateY(-1px);}
+  .tct-mood-option:disabled{cursor:wait;opacity:.55;}
+  .tct-mood-option svg{width:18px;height:18px;}
+  .tct-mood-option span{font:500 9px/1.15 var(--tct-font-primary);}
+  .tct-mood-note{margin:14px 0 0;font:400 11px/1.45 var(--tct-font-primary);color:color-mix(in srgb,var(--tct-ink) 47%,transparent);}
+  .tct-mood-thanks{font:500 13px/1.55 var(--tct-font-primary);color:var(--tct-ink);}
+  @media(max-width:680px){.tct-mood-fab{right:16px;bottom:16px}.tct-mood-panel{right:16px;bottom:76px}.tct-mood-option span{display:none}.tct-mood-option{padding:12px 4px}}
+  @media(prefers-reduced-motion:reduce){.tct-mood-fab,.tct-mood-fab-label,.tct-mood-panel,.tct-mood-option{transition:none!important}.tct-mood-fab.is-wave{animation:none!important}}
+`;
+
+function renderMoodExperience(manifest) {
+  const config = manifest && manifest.experience && manifest.experience.mood ? manifest.experience.mood : {};
+  if (config.enabled === false || config.status === 'suspended') return '';
+  const question = String(config.question || 'Comment vous sentez-vous par rapport au projet aujourd’hui ?');
+  return `
+    <button type="button" class="tct-mood-fab" data-tct-mood-fab aria-expanded="false" aria-controls="tct-mood-panel" aria-label="Météo du projet">
+      <span class="tct-mood-fab-icon" aria-hidden="true">${TCT_MOOD_ICONS[4]}</span>
+      <span class="tct-mood-fab-label" aria-hidden="true">Météo du projet</span>
+    </button>
+    <section class="tct-mood-panel" id="tct-mood-panel" data-tct-mood-panel hidden aria-label="Météo du projet">
+      <div data-tct-mood-body>
+        <p class="tct-mood-question">${esc(question)}</p>
+        <div class="tct-mood-options">
+          ${[1,2,3,4,5].map(value => `
+            <button type="button" class="tct-mood-option" data-tct-mood-value="${value}" aria-label="${esc(TCT_MOOD_LABELS[value])}" title="${esc(TCT_MOOD_LABELS[value])}">
+              ${TCT_MOOD_ICONS[value]}
+              <span>${esc(TCT_MOOD_LABELS[value])}</span>
+            </button>`).join('')}
+        </div>
+        <p class="tct-mood-note">Anonyme, agrégé uniquement — jamais individuel.</p>
+      </div>
+    </section>`;
+}
+
+function wireMoodExperience(root, actions) {
+  const doc = root.ownerDocument;
+  const win = doc && doc.defaultView;
+  const fab = root.querySelector('[data-tct-mood-fab]');
+  const panel = root.querySelector('[data-tct-mood-panel]');
+  const body = root.querySelector('[data-tct-mood-body]');
+  if (!doc || !win || !fab || !panel || !body) return;
+
+  const answeredKey = 'storm_mood_last_answered';
+  const legacyAnsweredKey = 'xyz_mood_last_answered';
+  const todayStamp = () => new Date().toISOString().slice(0, 10);
+  const safeGet = key => { try { return win.localStorage.getItem(key); } catch { return null; } };
+  const hasAnsweredToday = () => {
+    const today = todayStamp();
+    return safeGet(answeredKey) === today || safeGet(legacyAnsweredKey) === today;
+  };
+  const renderAnswered = () => {
+    body.innerHTML = '<div class="tct-mood-thanks">Merci — votre ressenti a bien été pris en compte.</div>';
+  };
+
+  if (hasAnsweredToday()) { fab.classList.add('is-answered'); renderAnswered(); }
+
+  const open = () => {
+    panel.hidden = false;
+    fab.setAttribute('aria-expanded', 'true');
+    if (typeof win.requestAnimationFrame === 'function') win.requestAnimationFrame(() => panel.classList.add('is-open'));
+    else panel.classList.add('is-open');
+  };
+  const close = () => {
+    panel.classList.remove('is-open');
+    fab.setAttribute('aria-expanded', 'false');
+    win.setTimeout(() => { if (!panel.classList.contains('is-open')) panel.hidden = true; }, 160);
+  };
+
+  fab.addEventListener('click', () => { panel.hidden ? open() : close(); });
+  doc.addEventListener('click', event => {
+    if (panel.hidden || panel.contains(event.target) || fab.contains(event.target)) return;
+    close();
+  });
+  doc.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+
+  body.querySelectorAll('[data-tct-mood-value]').forEach(button => {
+    button.addEventListener('click', async () => {
+      if (hasAnsweredToday()) return;
+      const value = Number(button.dataset.tctMoodValue);
+      if (!Number.isInteger(value) || value < 1 || value > 5) return;
+      body.querySelectorAll('button').forEach(item => { item.disabled = true; });
+      const result = await actions.submitMood({ value });
+      if (!result || !result.ok) {
+        body.querySelectorAll('button').forEach(item => { item.disabled = false; });
+        const note = body.querySelector('.tct-mood-note');
+        if (note) note.textContent = (result && result.error) || 'Enregistrement impossible pour le moment.';
+        return;
+      }
+      try { win.localStorage.setItem(answeredKey, todayStamp()); } catch {}
+      fab.classList.add('is-answered');
+      renderAnswered();
+      win.setTimeout(close, 1000);
+    });
+  });
+
+  const engine = createMoodSolicitationEngine({
+    window: win,
+    document: doc,
+    storage: win.localStorage,
+    sessionStorage: win.sessionStorage,
+    storageKeyPrefix: 'storm_mood',
+    hasAnswered: hasAnsweredToday,
+    isBusy: () => !panel.hidden,
+    onNudge({ reducedMotion, introMs }) {
+      if (hasAnsweredToday()) return;
+      if (!reducedMotion) {
+        fab.classList.add('is-wave');
+        win.setTimeout(() => fab.classList.remove('is-wave'), 1500);
+      }
+      fab.classList.add('is-introduced');
+      win.setTimeout(() => fab.classList.remove('is-introduced'), introMs || 3200);
+      return true;
+    }
+  });
+  engine.start();
+}
+
 function wireInteractions(root, manifest, actions) {
   // Espaces v2 — filters only appear for large collections.
   root.querySelectorAll('[data-space-filter]').forEach(btn => {
@@ -5631,6 +5788,7 @@ function wireInteractions(root, manifest, actions) {
     });
   }
 
+  wireMoodExperience(root, actions);
 }
 
 
@@ -5904,12 +6062,7 @@ export function render(manifest, root, actions) {
     .join('');
 
   root.innerHTML = `
-    <style>${fontAssetsCss}${STYLE}
-  /* Tectonic 8A — semantic emphasis. Authors choose meaning; Ivory chooses appearance. */
-  .tct-project-opening p strong,.tct-project-reading p strong,.tct-project-focus p strong,.tct-space-detail-opening p strong,.tct-ambassadors-role-body strong{font-weight:650;color:var(--tct-ink);}
-  .tct-project-opening p em,.tct-project-reading p em,.tct-project-focus p em,.tct-space-detail-opening p em,.tct-ambassadors-role-body em{font-style:italic;}
-  .tct-project-opening p u,.tct-project-reading p u,.tct-project-focus p u,.tct-space-detail-opening p u,.tct-ambassadors-role-body u{text-decoration-thickness:1px;text-underline-offset:.16em;text-decoration-color:color-mix(in srgb,var(--tct-ink) 55%,transparent);}
-</style>
+    <style>${fontAssetsCss}${STYLE}${TCT_MOOD_STYLE}</style>
     <div class="tct-site" style="--tct-primary:${primary};--tct-secondary:${secondary};--tct-expression-accent:${expressionAccent};--tct-font-primary:'${fontPrimary}';--tct-font-secondary:'${fontSecondary}';">
       <header class="tct-header" id="tct-site-header">
         <div class="tct-header-inner">
@@ -5927,9 +6080,13 @@ export function render(manifest, root, actions) {
       </header>
       <main class="tct-main">${sections}</main>
       ${renderFooter()}
+      ${renderMoodExperience(manifest)}
     </div>`;
 
   if (root.ownerDocument) root.ownerDocument.title = manifest.project && manifest.project.name ? manifest.project.name : 'Projet';
-  wireInteractions(root, manifest, actions || { submitContact: async () => ({ ok: false, error: 'Indisponible.' }) });
+  wireInteractions(root, manifest, actions || {
+    submitContact: async () => ({ ok: false, error: 'Indisponible.' }),
+    submitMood: async () => ({ ok: false, error: 'Indisponible.' })
+  });
   wireFoundation(root, manifest);
 }

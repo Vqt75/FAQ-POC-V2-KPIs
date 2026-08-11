@@ -5286,23 +5286,81 @@
 
 
 
-  /* ── Studio V2 8A — semantic inline rich text ── */
-  body.storm-admin-open .studio-inline-rich {border:1px solid rgba(17,17,17,.12);border-radius:18px;background:rgba(255,255,255,.78);overflow:hidden;transition:border-color 140ms ease,box-shadow 140ms ease,background 140ms ease;}
-  body.storm-admin-open .studio-inline-rich:focus-within {border-color:rgba(17,17,17,.28);box-shadow:0 0 0 3px rgba(17,17,17,.035);background:#fff;}
-  body.storm-admin-open .studio-inline-rich-toolbar {display:flex;align-items:center;gap:4px;min-height:42px;padding:6px 8px;border-bottom:1px solid rgba(17,17,17,.08);background:rgba(247,247,245,.72);}
-  body.storm-admin-open .studio-inline-rich-toolbar button {width:31px;height:29px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:600 .69rem/1 var(--font-core,Arial,sans-serif);cursor:pointer;transition:background 120ms ease,transform 120ms ease;}
-  body.storm-admin-open .studio-inline-rich-toolbar button:hover {background:rgba(17,17,17,.065);}
-  body.storm-admin-open .studio-inline-rich-toolbar button:active {transform:scale(.96);}
-  body.storm-admin-open .studio-inline-rich-toolbar button[data-rich-command="italic"] {font-style:italic;font-family:Georgia,serif;}
-  body.storm-admin-open .studio-inline-rich-toolbar button[data-rich-command="underline"] {text-decoration:underline;text-underline-offset:3px;}
-  body.storm-admin-open .studio-inline-rich-hint {margin-left:auto;padding:0 6px 0 10px;color:var(--ink-35);font-size:.54rem;line-height:1.25;white-space:nowrap;}
-  body.storm-admin-open .studio-inline-rich-editor {min-height:112px;padding:15px 16px 16px;outline:none;font:400 .72rem/1.62 var(--font-core,Arial,sans-serif);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;}
-  body.storm-admin-open .studio-inline-rich-editor[data-size="large"] {min-height:150px;}
-  body.storm-admin-open .studio-inline-rich-editor:empty::before {content:attr(data-placeholder);color:rgba(17,17,17,.30);pointer-events:none;}
-  body.storm-admin-open .studio-inline-rich-editor strong {font-weight:700;}
-  body.storm-admin-open .studio-inline-rich-editor em {font-style:italic;}
-  body.storm-admin-open .studio-inline-rich-editor u {text-decoration-thickness:1px;text-underline-offset:3px;}
-  @media (max-width:760px){body.storm-admin-open .studio-inline-rich-hint{display:none;}}
+/* Studio V2 — Hardening 8A: inline rich-text descriptions */
+body.storm-admin-open .studio-inline-editor {
+  border:1px solid var(--ink-12);
+  border-radius:14px;
+  background:#fff;
+  overflow:hidden;
+  transition:border-color 140ms ease, box-shadow 140ms ease;
+}
+body.storm-admin-open .studio-inline-editor:focus-within {
+  border-color:var(--ink-35);
+  box-shadow:0 0 0 3px rgba(30,29,30,.045);
+}
+body.storm-admin-open .studio-inline-toolbar {
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  padding:5px 7px;
+  border-bottom:1px solid var(--ink-08);
+  background:rgba(247,247,245,.72);
+}
+body.storm-admin-open .studio-inline-toolbar button {
+  width:30px;
+  height:28px;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  color:var(--ink-60);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  font:inherit;
+  font-size:.72rem;
+  transition:background 120ms ease,color 120ms ease,transform 120ms ease;
+}
+body.storm-admin-open .studio-inline-toolbar button:hover {
+  background:var(--ink-06);
+  color:var(--ink);
+}
+body.storm-admin-open .studio-inline-toolbar button:active { transform:scale(.96); }
+body.storm-admin-open .studio-inline-toolbar button[data-inline-command="italic"] { font-style:italic; }
+body.storm-admin-open .studio-inline-toolbar button[data-inline-command="underline"] { text-decoration:underline; text-underline-offset:2px; }
+body.storm-admin-open .studio-inline-toolbar-note {
+  margin-left:auto;
+  color:var(--ink-35);
+  font-size:.54rem;
+  padding-right:5px;
+  white-space:nowrap;
+}
+body.storm-admin-open .studio-inline-surface {
+  min-height:96px;
+  padding:15px 16px;
+  outline:none;
+  color:var(--ink);
+  font-size:.78rem;
+  line-height:1.65;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+body.storm-admin-open .studio-inline-surface:empty::before {
+  content:attr(data-placeholder);
+  color:var(--ink-28);
+  pointer-events:none;
+}
+body.storm-admin-open .studio-inline-surface strong { font-weight:700; }
+body.storm-admin-open .studio-inline-surface em { font-style:italic; }
+body.storm-admin-open .studio-inline-surface u { text-decoration:underline; text-underline-offset:2px; }
+body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { min-height:78px; }
+@media (max-width:820px) {
+  body.storm-admin-open .studio-inline-toolbar-note { display:none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  body.storm-admin-open .studio-inline-editor,
+  body.storm-admin-open .studio-inline-toolbar button { transition:none !important; }
+}
 
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
@@ -5788,7 +5846,7 @@
 
 <div class="mood-popover" id="moodPopover">
   <div id="moodPopoverBody">
-    <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet ?</div>
+    <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet aujourd’hui ?</div>
     <div class="mood-popover-options" id="moodOptions">
       <button type="button" class="mood-option" data-mood-value="1" aria-label="Orageux" title="Orageux">
         <svg viewBox="0 0 24 24"><path d="M6 16.5a4 4 0 0 1 .5-7.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1 .3 7.98"/><path d="M13 12l-2.5 4h3L11 20"/></svg>
@@ -6271,7 +6329,7 @@
               <span class="article-date mono">${escapeHtml(a.date || '')}</span>
             </div>
             <div class="article-title">${escapeHtml(a.title || '')}</div>
-            <div class="article-chapeau">${escapeHtml(a.chapeau || '')}</div>
+            <div class="article-chapeau">${richTextToHtml(a.chapeau || '')}</div>
           </div>
           <span class="article-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
         </button>
@@ -6290,87 +6348,13 @@
     observeNewReveals(listEl);
   }
 
-  function semanticInlineMarkupToHtml(text) {
-    let safe = escapeHtml(text || '');
-    // Legacy content can still contain **bold**. Studio 8A hides these
-    // markers and migrates edited values to semantic inline markers.
-    safe = safe.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
-    safe = safe
-      .replace(/\[\[b\]\]/g, '<strong>').replace(/\[\[\/b\]\]/g, '</strong>')
-      .replace(/\[\[i\]\]/g, '<em>').replace(/\[\[\/i\]\]/g, '</em>')
-      .replace(/\[\[u\]\]/g, '<u>').replace(/\[\[\/u\]\]/g, '</u>');
-    return safe.replace(/\n/g, '<br>');
-  }
-
-  function richTextToHtml(text) { return semanticInlineMarkupToHtml(text); }
-  function studioRichValueToHtml(value) { return semanticInlineMarkupToHtml(String(value || '')); }
-
-  function studioRichNodeToMarkup(node) {
-    if (!node) return '';
-    if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || '';
-    if (node.nodeType !== Node.ELEMENT_NODE) return '';
-    const tag = node.tagName.toLowerCase();
-    const inner = [...node.childNodes].map(studioRichNodeToMarkup).join('');
-    if (tag === 'strong' || tag === 'b') return `[[b]]${inner}[[/b]]`;
-    if (tag === 'em' || tag === 'i') return `[[i]]${inner}[[/i]]`;
-    if (tag === 'u') return `[[u]]${inner}[[/u]]`;
-    if (tag === 'br') return '\n';
-    if (tag === 'div' || tag === 'p') return `${inner}\n`;
-    return inner;
-  }
-
-  function studioRichEditorValue(editor) {
-    return [...(editor?.childNodes || [])].map(studioRichNodeToMarkup).join('')
-      .replace(/\u00a0/g, ' ').replace(/\n{3,}/g, '\n\n').replace(/\n+$/g, '');
-  }
-
-  function studioRichFieldHtml(id, value, options = {}) {
-    const placeholder = escapeHtml(options.placeholder || 'Écrivez quelques lignes…');
-    const size = escapeHtml(options.size || 'default');
-    return `<div class="studio-inline-rich" data-studio-rich-field="${escapeHtml(id)}">
-      <div class="studio-inline-rich-toolbar" role="toolbar" aria-label="Mise en forme du texte">
-        <button type="button" data-rich-command="bold" title="Gras — Ctrl+B" aria-label="Gras"><strong>B</strong></button>
-        <button type="button" data-rich-command="italic" title="Italique — Ctrl+I" aria-label="Italique">I</button>
-        <button type="button" data-rich-command="underline" title="Souligner — Ctrl+U" aria-label="Souligner">U</button>
-        <span class="studio-inline-rich-hint">Sélectionnez un passage</span>
-      </div>
-      <div class="studio-inline-rich-editor" data-studio-rich-editor="${escapeHtml(id)}" data-size="${size}" contenteditable="true" spellcheck="true" data-placeholder="${placeholder}">${studioRichValueToHtml(value)}</div>
-    </div>`;
-  }
-
-  function bindStudioRichField(root, id, onChange) {
-    const shell = root?.querySelector(`[data-studio-rich-field="${CSS.escape(id)}"]`);
-    const editor = shell?.querySelector(`[data-studio-rich-editor="${CSS.escape(id)}"]`);
-    if (!shell || !editor) return;
-    const persist = () => onChange(studioRichEditorValue(editor));
-    const apply = command => {
-      const sel = window.getSelection();
-      if (!sel || sel.rangeCount === 0 || sel.isCollapsed || !editor.contains(sel.anchorNode) || !editor.contains(sel.focusNode)) {
-        showToast('Sélectionnez d’abord le passage à mettre en forme.');
-        editor.focus();
-        return;
-      }
-      document.execCommand(command, false, null);
-      persist();
-    };
-    shell.querySelectorAll('[data-rich-command]').forEach(button => {
-      button.addEventListener('mousedown', event => event.preventDefault());
-      button.addEventListener('click', () => apply(button.dataset.richCommand));
-    });
-    editor.addEventListener('input', persist);
-    editor.addEventListener('paste', event => {
-      event.preventDefault();
-      document.execCommand('insertText', false, event.clipboardData?.getData('text/plain') || '');
-      persist();
-    });
-    editor.addEventListener('keydown', event => {
-      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
-      const key = event.key.toLowerCase();
-      const command = key === 'b' ? 'bold' : key === 'i' ? 'italic' : key === 'u' ? 'underline' : '';
-      if (!command) return;
-      event.preventDefault();
-      apply(command);
-    });
+  function richTextToHtml(text) {
+    let escaped = escapeHtml(text || '');
+    escaped = escaped.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
+    escaped = escaped.replace(/\+\+([\s\S]+?)\+\+/g, '<u>$1</u>');
+    escaped = escaped.replace(/\/\/([\s\S]+?)\/\//g, '<em>$1</em>');
+    escaped = escaped.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
+    return escaped.replace(/\r?\n/g, '<br>');
   }
 
   function initialsFromName(name) {
@@ -6408,7 +6392,7 @@
         <div class="plan-info">
           <div class="plan-tags">${tagsArr.map(t => `<span class="tag-pill">${escapeHtml(t)}</span>`).join('')}</div>
           <div class="plan-title">${escapeHtml(plan.title || '')}</div>
-          <p class="plan-comment">${escapeHtml(plan.comment || '')}</p>
+          <p class="plan-comment">${richTextToHtml(plan.comment || '')}</p>
           <button class="plan-more">Lire la suite ↓</button>
         </div>
       </div>`;
@@ -7063,7 +7047,7 @@ CALENDRIER
     resultQ.textContent = question;
     resultStatus.className   = "status-pill r-item r-2 " + (entry.status === "confirmed" ? "status-confirmed" : "status-pending");
     resultStatus.textContent = entry.statusLabel;
-    resultAnswer.textContent = entry.answer;
+    resultAnswer.innerHTML = richTextToHtml(entry.answer);
     resultNote.textContent   = entry.note || "";
     resultNote.style.display = entry.note ? "block" : "none";
     setTimeout(() => {
@@ -7120,30 +7104,65 @@ CALENDRIER
   });
 
   // ═══════════════════════════════════════════════════
-  // BAROMÈTRE MÉTÉO DU PROJET — bouton flottant discret, présent sur
-  // toutes les pages. Ne s'ouvre jamais tout seul ; une réponse par
-  // jour et par navigateur ; jamais liée à une identité côté serveur.
+  // MOOD SOLICITATION ENGINE — sollicitation comportementale calme.
+  // La météo reste accessible manuellement à tout moment, mais Storm ne
+  // la signale qu'après une vraie période d'attention et à un moment calme.
+  // Jamais d'ouverture automatique ; un seul nudge par jour et par navigateur.
   // ═══════════════════════════════════════════════════
-  const MOOD_LAST_KEY = 'xyz_mood_last_answered';
+  const MOOD_LAST_KEY = 'storm_mood_last_answered';
+  const MOOD_LEGACY_LAST_KEY = 'xyz_mood_last_answered';
+  const MOOD_NUDGE_KEY = 'storm_mood_nudge_shown';
+  const MOOD_LEGACY_NUDGE_KEY = 'xyz_mood_intro_shown';
+  const MOOD_SESSION_THRESHOLD_KEY = 'storm_mood_attention_threshold';
   const MOOD_LABELS = { 1: 'Orageux', 2: 'Nuageux', 3: 'Couvert', 4: 'Éclairci', 5: 'Ensoleillé' };
+  const MOOD_ENGINE = Object.freeze({
+    minActiveMs: 25000,
+    maxActiveMs: 40000,
+    quietMs: 1500,
+    fallbackExposureMs: 35000,
+    minScrollExposure: 0.55,
+    introMs: 3200
+  });
 
   function todayStamp() {
     return new Date().toISOString().slice(0, 10);
   }
 
   function hasAnsweredMoodToday() {
-    return localStorage.getItem(MOOD_LAST_KEY) === todayStamp();
+    const today = todayStamp();
+    return localStorage.getItem(MOOD_LAST_KEY) === today || localStorage.getItem(MOOD_LEGACY_LAST_KEY) === today;
+  }
+
+  function hasNudgedMoodToday() {
+    const today = todayStamp();
+    return localStorage.getItem(MOOD_NUDGE_KEY) === today || localStorage.getItem(MOOD_LEGACY_NUDGE_KEY) === today;
+  }
+
+  function markMoodAnsweredToday() {
+    localStorage.setItem(MOOD_LAST_KEY, todayStamp());
+  }
+
+  function markMoodNudgedToday() {
+    localStorage.setItem(MOOD_NUDGE_KEY, todayStamp());
+  }
+
+  function moodAttentionThreshold() {
+    const stored = Number(sessionStorage.getItem(MOOD_SESSION_THRESHOLD_KEY));
+    if (stored >= MOOD_ENGINE.minActiveMs && stored <= MOOD_ENGINE.maxActiveMs) return stored;
+    const threshold = Math.round(MOOD_ENGINE.minActiveMs + Math.random() * (MOOD_ENGINE.maxActiveMs - MOOD_ENGINE.minActiveMs));
+    sessionStorage.setItem(MOOD_SESSION_THRESHOLD_KEY, String(threshold));
+    return threshold;
   }
 
   function renderMoodPopoverBody() {
     const body = document.getElementById('moodPopoverBody');
     if (!body) return;
     if (hasAnsweredMoodToday()) {
-      body.innerHTML = `<div class="mood-popover-thanks">Merci pour votre retour aujourd'hui. <strong>Revenez demain</strong> pour un nouveau relevé.</div>`;
+      body.innerHTML = `<div class="mood-popover-thanks">Merci pour votre retour aujourd’hui.</div>`;
       return;
     }
     body.innerHTML = `
-      <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet ?</div>
+      <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet aujourd’hui ?</div>
       <div class="mood-popover-options" id="moodOptions">
         ${[1,2,3,4,5].map(v => `<button type="button" class="mood-option" data-mood-value="${v}" aria-label="${MOOD_LABELS[v]}" title="${MOOD_LABELS[v]}">${MOOD_ICONS[v]}</button>`).join('')}
       </div>
@@ -7153,10 +7172,10 @@ CALENDRIER
         const value = Number(btn.dataset.moodValue);
         if (!value) return;
         trackMood(value);
-        localStorage.setItem(MOOD_LAST_KEY, todayStamp());
+        markMoodAnsweredToday();
         document.getElementById('moodFab')?.classList.add('answered-today');
-        body.innerHTML = `<div class="mood-popover-thanks">Merci — <strong>${escapeHtml(MOOD_LABELS[value])}</strong> a bien été enregistré.</div>`;
-        setTimeout(closeMoodPopover, 1400);
+        body.innerHTML = `<div class="mood-popover-thanks">Merci — votre ressenti a bien été pris en compte.</div>`;
+        setTimeout(closeMoodPopover, 1000);
       });
     });
   }
@@ -7179,6 +7198,7 @@ CALENDRIER
 
     if (hasAnsweredMoodToday()) fab.classList.add('answered-today');
 
+    // L'ouverture est toujours un geste explicite de l'utilisateur.
     fab.addEventListener('click', () => {
       popover.classList.contains('open') ? closeMoodPopover() : openMoodPopover();
     });
@@ -7202,28 +7222,87 @@ CALENDRIER
     5: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></svg>'
   };
 
-  const MOOD_INTRO_KEY = 'xyz_mood_intro_shown';
-
-  // Nudge discret : une pulsation, puis une étiquette qui se déploie
-  // brièvement — une seule fois par jour, jamais si déjà répondu.
-  function runMoodFabIntro() {
+  function initMoodSolicitationEngine() {
     const fab = document.getElementById('moodFab');
-    if (!fab || hasAnsweredMoodToday()) return;
-    if (localStorage.getItem(MOOD_INTRO_KEY) === todayStamp()) return;
-    localStorage.setItem(MOOD_INTRO_KEY, todayStamp());
+    const popover = document.getElementById('moodPopover');
+    if (!fab || !popover || hasAnsweredMoodToday() || hasNudgedMoodToday()) return;
 
-    setTimeout(() => {
-      fab.classList.add('pulse');
-      setTimeout(() => {
-        fab.classList.remove('pulse');
-        fab.classList.add('intro');
-        setTimeout(() => fab.classList.remove('intro'), 3600);
-      }, 1500);
-    }, 1400);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const thresholdMs = moodAttentionThreshold();
+    let activeMs = 0;
+    let lastTick = performance.now();
+    let lastInteractionAt = Date.now();
+    let lastScrollY = window.scrollY || 0;
+    let scrollExposurePx = 0;
+    let meaningfulInteractions = 0;
+    let nudged = false;
+
+    const noteInteraction = () => { lastInteractionAt = Date.now(); };
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      scrollExposurePx += Math.min(Math.abs(y - lastScrollY), window.innerHeight * 0.75);
+      lastScrollY = y;
+      noteInteraction();
+    };
+    const onMeaningfulClick = event => {
+      if (event.target.closest('#moodFab, #moodPopover')) return;
+      if (event.target.closest('a, button, [role="button"], .tab-btn, [data-tab]')) meaningfulInteractions += 1;
+      noteInteraction();
+    };
+
+    window.addEventListener('scroll', onScroll, { passive:true });
+    window.addEventListener('wheel', noteInteraction, { passive:true });
+    window.addEventListener('touchmove', noteInteraction, { passive:true });
+    document.addEventListener('click', onMeaningfulClick, { passive:true });
+    document.addEventListener('keydown', noteInteraction, { passive:true });
+
+    const cleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('wheel', noteInteraction);
+      window.removeEventListener('touchmove', noteInteraction);
+      document.removeEventListener('click', onMeaningfulClick);
+      document.removeEventListener('keydown', noteInteraction);
+      clearInterval(ticker);
+    };
+
+    const isActivelyAttending = () => document.visibilityState === 'visible' && document.hasFocus() && !document.body.classList.contains('storm-admin-open');
+    const hasMeaningfulExposure = () => {
+      const viewport = Math.max(window.innerHeight || 1, 1);
+      return scrollExposurePx >= viewport * MOOD_ENGINE.minScrollExposure || meaningfulInteractions >= 1 || activeMs >= MOOD_ENGINE.fallbackExposureMs;
+    };
+    const isCalmMoment = () => {
+      const active = document.activeElement;
+      const typing = active && (active.matches?.('input, textarea, select') || active.isContentEditable);
+      const modalOpen = Boolean(document.querySelector('.modal.open, .studio-modal.open, [aria-modal="true"]:not([hidden])'));
+      return !typing && !modalOpen && !popover.classList.contains('open') && (Date.now() - lastInteractionAt) >= MOOD_ENGINE.quietMs;
+    };
+
+    const nudgeOnce = () => {
+      if (nudged || hasAnsweredMoodToday() || hasNudgedMoodToday()) return;
+      nudged = true;
+      markMoodNudgedToday();
+      if (!reducedMotion) fab.classList.add('pulse');
+      fab.classList.add('intro');
+      window.setTimeout(() => {
+        fab.classList.remove('pulse', 'intro');
+      }, MOOD_ENGINE.introMs);
+      cleanup();
+    };
+
+    const ticker = window.setInterval(() => {
+      const now = performance.now();
+      const delta = Math.min(now - lastTick, 1000);
+      lastTick = now;
+      if (isActivelyAttending()) activeMs += Math.max(0, delta);
+      if (activeMs < thresholdMs) return;
+      if (!hasMeaningfulExposure()) return;
+      if (!isCalmMoment()) return;
+      nudgeOnce();
+    }, 500);
   }
 
   initMoodWidget();
-  runMoodFabIntro();
+  initMoodSolicitationEngine();
 
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
@@ -8526,6 +8605,93 @@ CALENDRIER
     return { project, bootstrapped: !hasSections };
   }
 
+
+
+  // Studio V2 — Hardening 8A: small semantic inline editor for descriptions.
+  // The author chooses emphasis, never typography, colour or size.
+  // Storage remains a portable lightweight string so every edition can decide presentation.
+  function studioInlineMarkupToEditorHtml(value) {
+    let safe = escapeHtml(String(value || ''));
+    safe = safe.replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>');
+    safe = safe.replace(/\+\+([\s\S]+?)\+\+/g, '<u>$1</u>');
+    safe = safe.replace(/\/\/([\s\S]+?)\/\//g, '<em>$1</em>');
+    // Legacy single-star italics are accepted when they already exist in content.
+    safe = safe.replace(/(^|[^*])\*([^*\n]+?)\*(?!\*)/g, '$1<em>$2</em>');
+    return safe.replace(/\r?\n/g, '<br>');
+  }
+
+  function studioInlineEditorToMarkup(surface) {
+    if (!surface) return '';
+    function walk(node) {
+      if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || '';
+      if (node.nodeType !== Node.ELEMENT_NODE) return '';
+      const tag = node.tagName.toLowerCase();
+      if (tag === 'br') return '\n';
+      const inner = [...node.childNodes].map(walk).join('');
+      if (tag === 'strong' || tag === 'b') return `**${inner}**`;
+      if (tag === 'em' || tag === 'i') return `//${inner}//`;
+      if (tag === 'u') return `++${inner}++`;
+      if (tag === 'div' || tag === 'p') return `${inner}\n`;
+      return inner;
+    }
+    return [...surface.childNodes].map(walk).join('')
+      .replace(/\u00a0/g, ' ')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/\n+$/g, '');
+  }
+
+  function studioInlineEditorHtml(id, value, options = {}) {
+    const minHeight = Number(options.minHeight || 96);
+    const placeholder = options.placeholder || 'Écrivez ici…';
+    const compact = options.compact ? ' is-compact' : '';
+    return `<div class="studio-inline-editor${compact}" data-inline-editor="${escapeHtml(id)}">
+      <div class="studio-inline-toolbar" role="toolbar" aria-label="Mise en forme du texte">
+        <button type="button" data-inline-command="bold" aria-label="Mettre la sélection en gras" title="Gras"><strong>B</strong></button>
+        <button type="button" data-inline-command="italic" aria-label="Mettre la sélection en italique" title="Italique">I</button>
+        <button type="button" data-inline-command="underline" aria-label="Souligner la sélection" title="Souligner">U</button>
+        <span class="studio-inline-toolbar-note">Sélectionnez le texte à mettre en forme</span>
+      </div>
+      <div class="studio-inline-surface" id="${escapeHtml(id)}" contenteditable="true" spellcheck="true" data-placeholder="${escapeHtml(placeholder)}" style="min-height:${minHeight}px;">${studioInlineMarkupToEditorHtml(value)}</div>
+    </div>`;
+  }
+
+  function studioBindInlineEditor(root, id, onChange) {
+    const surface = root && root.querySelector ? root.querySelector(`#${id}`) : document.getElementById(id);
+    if (!surface) return null;
+    const wrapper = surface.closest('.studio-inline-editor');
+    const commit = () => onChange && onChange(studioInlineEditorToMarkup(surface));
+
+    wrapper?.querySelectorAll('[data-inline-command]').forEach(button => {
+      button.addEventListener('mousedown', event => event.preventDefault());
+      button.addEventListener('click', () => {
+        const selection = window.getSelection();
+        if (!selection || !selection.rangeCount || selection.isCollapsed) {
+          showToast('Sélectionnez d’abord le texte à mettre en forme.');
+          surface.focus();
+          return;
+        }
+        const range = selection.getRangeAt(0);
+        if (!surface.contains(range.commonAncestorContainer)) {
+          showToast('Sélectionnez du texte dans ce champ.');
+          return;
+        }
+        surface.focus();
+        document.execCommand(button.dataset.inlineCommand, false, null);
+        commit();
+      });
+    });
+
+    surface.addEventListener('input', commit);
+    surface.addEventListener('paste', event => {
+      event.preventDefault();
+      const text = event.clipboardData?.getData('text/plain') || '';
+      document.execCommand('insertText', false, text);
+    });
+    return surface;
+  }
+
+
   function renderProjectEditor(content) {
     const container = document.getElementById('adminProjectEditor');
     if (!container) return;
@@ -8723,7 +8889,7 @@ CALENDRIER
               <input type="text" class="form-input" id="projectIntroTitle" value="${escapeHtml(content.project.intro.title || '')}" placeholder="Ce que les collaborateurs doivent comprendre d’abord">
               <p class="studio-project-help">Cette ouverture reste toujours en premier. Storm décide ensuite de sa composition selon l’édition utilisée.</p>
               <label class="admin-editor-label">En quelques lignes</label>
-              ${studioRichFieldHtml('projectIntroBody', content.project.intro.body || '', { size:'large', placeholder:'Donnez le contexte sans entrer encore dans tous les détails.' })}
+              ${studioInlineEditorHtml('projectIntroBody', content.project.intro.body || '', { minHeight:150, placeholder:'Donnez le contexte sans entrer encore dans tous les détails.' })}
             </div>
           </section>`;
       }
@@ -8742,7 +8908,7 @@ CALENDRIER
           <label class="admin-editor-label">Titre</label>
           <input type="text" class="form-input" data-project-field="title" value="${escapeHtml(section.title || '')}">
           <label class="admin-editor-label">Texte</label>
-          ${studioRichFieldHtml('projectSectionBody', section.body || '', { size:'large', placeholder:'Rédigez le texte de cette section.' })}`;
+          ${studioInlineEditorHtml('projectSectionBody', section.body || '', { minHeight:180, placeholder:'Développez cette idée en quelques paragraphes.' })}`;
       } else if (section.type === 'quote') {
         fields = `
           <label class="admin-editor-label">Citation</label>
@@ -8959,7 +9125,7 @@ CALENDRIER
 
       const introTitle = document.getElementById('projectIntroTitle');
       introTitle?.addEventListener('input', () => { content.project.intro.title = introTitle.value; markDirty(); refreshActiveRow(); });
-      bindStudioRichField(container, 'projectIntroBody', value => { content.project.intro.body = value; markDirty(); });
+      studioBindInlineEditor(container, 'projectIntroBody', value => { content.project.intro.body = value; markDirty(); });
 
       const section = activeSection();
       if (section) {
@@ -8973,7 +9139,9 @@ CALENDRIER
         container.querySelectorAll('[data-project-field]').forEach(field => {
           field.addEventListener('input', () => { section[field.dataset.projectField] = field.value; markDirty(); refreshActiveRow(); });
         });
-        if (section.type === 'focus' || section.type === 'text') bindStudioRichField(container, 'projectSectionBody', value => { section.body = value; markDirty(); refreshActiveRow(); });
+        if (section.type === 'focus' || section.type === 'text') {
+          studioBindInlineEditor(container, 'projectSectionBody', value => { section.body = value; markDirty(); refreshActiveRow(); });
+        }
 
         if (section.type === 'keyFigures' || section.type === 'choices') {
           section.items = Array.isArray(section.items) ? section.items : [];
@@ -9414,7 +9582,7 @@ CALENDRIER
           <div><label class="studio-news-field-label" for="studioNewsTag">Thématique <span style="letter-spacing:0;text-transform:none;color:var(--ink-35);">(facultative)</span></label><input type="text" class="form-input" id="studioNewsTag" list="studioNewsTagSuggestions" value="${escapeHtml(article.tag || '')}" placeholder="Ex. Espaces"><datalist id="studioNewsTagSuggestions"><option value="Projet"><option value="Calendrier"><option value="Espaces"><option value="Écoute"><option value="Vie au bureau"></datalist></div>
           <div class="studio-news-readtime" id="studioNewsReadtime">≈ ${minutes} min de lecture</div>
         </div>
-        <div class="studio-news-section"><label class="studio-news-field-label" for="studioNewsSummary">En quelques lignes</label><textarea class="form-input studio-news-summary" id="studioNewsSummary" placeholder="Donnez l’essentiel avant que la personne ouvre l’article.">${escapeHtml(article.chapeau || '')}</textarea></div>
+        <div class="studio-news-section"><label class="studio-news-field-label" for="studioNewsSummary">En quelques lignes</label>${studioInlineEditorHtml('studioNewsSummary', article.chapeau || '', { minHeight:90, compact:true, placeholder:'Donnez l’essentiel avant que la personne ouvre l’article.' })}</div>
         ${mediaHtml(article)}
         <div class="studio-news-section studio-news-rich-section">
           <div class="studio-news-section-head"><div><span class="studio-news-field-label">Article</span><span class="studio-news-rich-doctrine">Hiérarchie et emphase seulement — Storm gère la mise en forme.</span></div></div>
@@ -9722,8 +9890,9 @@ CALENDRIER
       if(article){
         document.getElementById('studioNewsBack')?.addEventListener('click',()=>{activeId='';activeBlockId='';pendingMediaInsertion=null;render();});
         document.getElementById('studioNewsDelete')?.addEventListener('click',()=>{const label=article.title?`« ${article.title} »`:'cette actualité';if(!confirm(`Supprimer définitivement ${label} ? Les statistiques de consultation déjà enregistrées resteront disponibles dans Pilotage.`))return;content.articles=content.articles.filter(item=>String(item.id)!==String(article.id));activeId='';activeBlockId='';markDirty();render();});
-        const title=document.getElementById('studioNewsTitle'),date=document.getElementById('studioNewsDate'),tag=document.getElementById('studioNewsTag'),summary=document.getElementById('studioNewsSummary');
-        title?.addEventListener('input',()=>{article.title=title.value;markDirty();updateListWithoutClosing();}); date?.addEventListener('change',()=>{article.publishedAt=date.value;markDirty();updateListWithoutClosing();}); tag?.addEventListener('input',()=>{article.tag=tag.value;markDirty();updateListWithoutClosing();}); summary?.addEventListener('input',()=>{article.chapeau=summary.value;markDirty();updateListWithoutClosing();});
+        const title=document.getElementById('studioNewsTitle'),date=document.getElementById('studioNewsDate'),tag=document.getElementById('studioNewsTag');
+        title?.addEventListener('input',()=>{article.title=title.value;markDirty();updateListWithoutClosing();}); date?.addEventListener('change',()=>{article.publishedAt=date.value;markDirty();updateListWithoutClosing();}); tag?.addEventListener('input',()=>{article.tag=tag.value;markDirty();updateListWithoutClosing();});
+        studioBindInlineEditor(container,'studioNewsSummary',value=>{article.chapeau=value;markDirty();updateListWithoutClosing();});
         bindCoverMedia(article); bindRichBlocks(article); bindInlineMedia(article);
         const toolbar=document.getElementById('studioNewsRichToolbar'); toolbar?.querySelectorAll('button').forEach(button=>button.addEventListener('mousedown',e=>{if(button.dataset.newsFormat)e.preventDefault();})); toolbar?.querySelectorAll('[data-news-format]').forEach(button=>button.addEventListener('click',()=>{ if(button.dataset.newsFormat==='link') bindLinkPanel(article); else applyInlineFormat(article,button.dataset.newsFormat); })); toolbar?.querySelectorAll('[data-news-structure]').forEach(button=>button.addEventListener('click',()=>applyStructure(article,button.dataset.newsStructure)));
         document.getElementById('studioNewsAddParagraph')?.addEventListener('click',()=>{const block={id:uid('paragraph'),type:'paragraph',runs:[]};insertBlock(article,block);focusEditable(block.id);});
@@ -10116,7 +10285,7 @@ CALENDRIER
         <div class="studio-amb-detail-kicker">Réseau d’ambassadeurs</div><h2 class="studio-amb-network-title">Des relais au plus près du terrain.</h2>
         <div class="studio-amb-fields">
           <div><label class="admin-editor-label">Comment présenter leur rôle ?</label><input class="form-input" id="ambIntroTitleInput" value="${escapeHtml(c.introTitle || '')}" placeholder="Ex. Quel est leur rôle exactement ?"></div>
-          <div><label class="admin-editor-label">En quelques lignes</label>${studioRichFieldHtml('ambIntroBodyInput', c.introBody || '', { size:'large', placeholder:'Expliquez simplement le rôle des ambassadeurs.' })}</div>
+          <div><label class="admin-editor-label">En quelques lignes</label>${studioInlineEditorHtml('ambIntroBodyInput', c.introBody || '', { minHeight:145, placeholder:'Expliquez simplement le rôle du réseau.' })}</div>
           <div><label class="admin-editor-label">Précision sous le nombre d’ambassadeurs <span style="font-weight:400;text-transform:none;letter-spacing:0;">(facultatif)</span></label><input class="form-input" id="ambRosterLabelInput" value="${escapeHtml(c.rosterLabel || '')}" placeholder="Ex. toutes directions"></div>
 
           <div class="studio-amb-section">
@@ -10128,7 +10297,7 @@ CALENDRIER
             <div class="studio-amb-section-head"><div><strong>Recrutement</strong><p>Afficher un appel à rejoindre le réseau uniquement lorsqu’il est réellement ouvert.</p></div><button type="button" class="studio-amb-switch ${c.joinEnabled?'is-on':''}" id="ambJoinToggle" aria-pressed="${c.joinEnabled?'true':'false'}"></button></div>
             ${c.joinEnabled ? `<div class="studio-amb-fields">
               <div><label class="admin-editor-label">Titre</label><input class="form-input" id="ambJoinTitle" value="${escapeHtml(c.joinTitle || '')}"></div>
-              <div><label class="admin-editor-label">Message</label>${studioRichFieldHtml('ambJoinBody', c.joinBody || '', { placeholder:'Expliquez pourquoi et comment rejoindre le réseau.' })}</div>
+              <div><label class="admin-editor-label">Message</label>${studioInlineEditorHtml('ambJoinBody', c.joinBody || '', { minHeight:96, compact:true, placeholder:'Expliquez en quelques lignes pourquoi et comment rejoindre le réseau.' })}</div>
               <div><label class="admin-editor-label">Comment manifester son intérêt ?</label><div class="studio-amb-choice"><button type="button" class="${c.joinMode==='inline'?'is-active':''}" data-amb-join-mode="inline">Directement dans Storm</button><button type="button" class="${c.joinMode==='link'?'is-active':''}" data-amb-join-mode="link">Via un lien</button></div></div>
               <div class="studio-amb-two"><div><label class="admin-editor-label">Libellé de l’action</label><input class="form-input" id="ambJoinLabel" value="${escapeHtml(c.joinLabel || 'Devenir ambassadeur')}"></div>${c.joinMode==='link'?`<div><label class="admin-editor-label">Lien</label><input class="form-input" id="ambJoinHref" value="${escapeHtml(c.joinHref || '')}" placeholder="https://…"></div>`:'<div></div>'}</div>
             </div>` : ''}
@@ -10187,8 +10356,8 @@ CALENDRIER
       if(activeId==='network'){
         const wire=(id,key,event='input')=>document.getElementById(id)?.addEventListener(event,e=>{c[key]=e.target.value; if(key==='joinTitle')c.ctaTitle=e.target.value; if(key==='joinBody')c.ctaBody=e.target.value; mark();});
         wire('ambIntroTitleInput','introTitle'); wire('ambRosterLabelInput','rosterLabel'); wire('ambJoinTitle','joinTitle'); wire('ambJoinLabel','joinLabel'); wire('ambJoinHref','joinHref');
-        bindStudioRichField(container, 'ambIntroBodyInput', value => { c.introBody = value; mark(); });
-        bindStudioRichField(container, 'ambJoinBody', value => { c.joinBody = value; c.ctaBody = value; mark(); });
+        studioBindInlineEditor(container,'ambIntroBodyInput',value=>{c.introBody=value;mark();});
+        studioBindInlineEditor(container,'ambJoinBody',value=>{c.joinBody=value;c.ctaBody=value;mark();});
         document.getElementById('ambContactToggle')?.addEventListener('click',()=>{c.contactEnabled=!c.contactEnabled;mark();render();});
         document.getElementById('ambJoinToggle')?.addEventListener('click',()=>{c.joinEnabled=!c.joinEnabled;c.ctaTitle=c.joinEnabled?c.joinTitle:'';c.ctaBody=c.joinEnabled?c.joinBody:'';mark();render();});
         container.querySelectorAll('[data-amb-join-mode]').forEach(btn=>btn.addEventListener('click',()=>{c.joinMode=btn.dataset.ambJoinMode;mark();render();}));
@@ -10461,7 +10630,7 @@ CALENDRIER
             <div><label>Nom de l’espace</label><input type="text" class="form-input" id="studioSpaceName" value="${escapeHtml(space.name)}" placeholder="Ex. Work-café"></div>
             <div><label>Où se trouve-t-il ? <span>(facultatif)</span></label><input type="text" class="form-input" id="studioSpaceLocation" value="${escapeHtml(space.location)}" placeholder="Ex. Niveau 5"></div>
           </div>
-          <div class="studio-space-field-full"><label>À quoi ressemble-t-il, ou quelle est son intention ?</label>${studioRichFieldHtml('studioSpaceDescription', space.description, { placeholder:'Expliquez simplement ce que les collaborateurs doivent retenir.' })}</div>
+          <div class="studio-space-field-full"><label>À quoi ressemble-t-il, ou quelle est son intention ?</label>${studioInlineEditorHtml('studioSpaceDescription', space.description || '', { minHeight:105, placeholder:'Expliquez simplement ce que les collaborateurs doivent retenir.' })}</div>
         </section>
 
         <section class="studio-space-section">
@@ -10487,7 +10656,7 @@ CALENDRIER
       const location = document.getElementById('studioSpaceLocation');
       name?.addEventListener('input', event => { space.name = event.target.value; markDirty(); renderList(); document.querySelector('.studio-space-detail-head h2').textContent = safeName(space.name); });
       location?.addEventListener('input', event => { space.location = event.target.value; markDirty(); renderList(); });
-      bindStudioRichField(detail, 'studioSpaceDescription', value => { space.description = value; markDirty(); });
+      studioBindInlineEditor(detail, 'studioSpaceDescription', value => { space.description = value; markDirty(); });
       document.querySelectorAll('[data-space-status]').forEach(button => button.addEventListener('click', () => {
         space.status = button.dataset.spaceStatus;
         markDirty();
@@ -10808,11 +10977,11 @@ CALENDRIER
           </div>
           <div class="studio-question-field">
             <label>Que peut-on répondre ?</label>
-            <textarea class="form-input studio-question-answer" id="studioQuestionAnswer" placeholder="Donnez une réponse directe, utile et compréhensible sans connaître le projet de l’intérieur.">${escapeHtml(entry.answer || '')}</textarea>
+            ${studioInlineEditorHtml('studioQuestionAnswer', entry.answer || '', { minHeight:145, placeholder:'Donnez une réponse directe, utile et compréhensible sans connaître le projet de l’intérieur.' })}
           </div>
           <details class="studio-question-note-details" ${entry.note ? 'open' : ''} style="margin-top:18px;">
             <summary style="cursor:pointer;color:var(--ink-50);font-size:.75rem;">${entry.note ? 'Précision complémentaire' : '+ Ajouter une précision complémentaire'}</summary>
-            <div class="studio-question-field" style="margin-top:12px;"><textarea class="form-input" id="studioQuestionNote" rows="3" placeholder="Facultatif — un contexte ou une nuance qui aide à interpréter la réponse.">${escapeHtml(entry.note || '')}</textarea></div>
+            <div class="studio-question-field" style="margin-top:12px;">${studioInlineEditorHtml('studioQuestionNote', entry.note || '', { minHeight:82, compact:true, placeholder:'Facultatif — un contexte ou une nuance qui aide à interpréter la réponse.' })}</div>
           </details>
         </section>
 
@@ -10841,8 +11010,6 @@ CALENDRIER
         ${isDraft ? '<button type="button" class="studio-question-import-integrate" id="studioQuestionIntegrate">Ajouter aux questions du projet →</button>' : ''}`;
 
       const title = document.getElementById('studioQuestionTitle');
-      const answer = document.getElementById('studioQuestionAnswer');
-      const note = document.getElementById('studioQuestionNote');
       const category = document.getElementById('studioQuestionCategory');
       title?.addEventListener('input', event => {
         entry.title = event.target.value;
@@ -10851,8 +11018,8 @@ CALENDRIER
         if (heading) heading.textContent = entry.title || 'Question sans titre';
         renderList();
       });
-      answer?.addEventListener('input', event => { entry.answer = event.target.value; markDirty(); });
-      note?.addEventListener('input', event => { entry.note = event.target.value; markDirty(); });
+      studioBindInlineEditor(detail, 'studioQuestionAnswer', value => { entry.answer = value; markDirty(); });
+      studioBindInlineEditor(detail, 'studioQuestionNote', value => { entry.note = value; markDirty(); });
       category?.addEventListener('input', event => { entry.category = event.target.value.trim(); markDirty(); renderList(); });
 
       detail.querySelectorAll('[data-question-status]').forEach(button => {
