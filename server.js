@@ -1033,8 +1033,12 @@ const server = http.createServer(async (req, res) => {
     if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
     try {
       const parsed = await readBody(req);
+      // STUDIO V2 — 8D.2 / STRUCTURE PERSISTENCE HARDENING
+      // Les écrans Studio historiques envoient parfois des payloads partiels.
+      // Une omission ne doit jamais réinitialiser une décision de structure.
+      const existingContent = readContentState();
       const saved = writeContentState({
-        siteStructure: parsed.siteStructure,
+        siteStructure: parsed.siteStructure ?? existingContent.siteStructure,
         branding: parsed.branding,
         project: parsed.project,
         publicContent: parsed.publicContent,

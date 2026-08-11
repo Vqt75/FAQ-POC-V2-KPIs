@@ -6248,12 +6248,20 @@ body.storm-admin-open .studio-structure-note {
   async function saveContent(contentState) {
     const saveSource = document.body.dataset.studioSaveSource || 'manual';
     delete document.body.dataset.studioSaveSource;
+    // STUDIO V2 — 8D.2 / STRUCTURE PERSISTENCE HARDENING
+    // Dernière frontière avant POST : aucune sauvegarde Studio ne peut
+    // effacer la structure par omission d'un payload historique.
+    const liveStructure = contentState?.siteStructure || currentAdminContent?.siteStructure;
+    const liveTeam = contentState?.team || currentAdminContent?.team || [];
+    const stateToSave = liveStructure
+      ? { ...contentState, siteStructure: studioNormalizeSiteStructure(liveStructure, liveTeam) }
+      : contentState;
     studioSetSaveState('saving');
     try {
       const res = await fetch('/api/content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
-        body: JSON.stringify(contentState)
+        body: JSON.stringify(stateToSave)
       });
       if (res.status === 401) { studioSetSaveState('error'); return { ok:false, unauthorized:true, saveSource }; }
       if (!res.ok) { studioSetSaveState('error'); return { ok:false, saveSource }; }
