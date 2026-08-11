@@ -19,8 +19,15 @@ function todayStamp() {
 function createMoodSolicitationEngine(options = {}) {
   const win = options.window || globalThis.window;
   const doc = options.document || (win && win.document);
-  const storage = options.storage || (win && win.localStorage);
-  const sessionStorage = options.sessionStorage || (win && win.sessionStorage);
+  // Sur une origine restreinte (Safari privé, origine opaque, iframe
+  // sandboxée), lire win.localStorage/win.sessionStorage lève une
+  // exception au moment même d'accéder à la propriété — pas seulement
+  // à l'appel de getItem/setItem. Ce repli ne doit donc jamais accéder
+  // directement à win.localStorage sans protection, même comme
+  // simple valeur par défaut.
+  const safeStorageRef = getter => { try { return getter(); } catch { return null; } };
+  const storage = options.storage || (win && safeStorageRef(() => win.localStorage));
+  const sessionStorage = options.sessionStorage || (win && safeStorageRef(() => win.sessionStorage));
   const config = Object.freeze({ ...DEFAULTS, ...(options.config || {}) });
   const prefix = options.storageKeyPrefix || 'storm_mood';
   const nudgeKey = `${prefix}_nudge_shown`;

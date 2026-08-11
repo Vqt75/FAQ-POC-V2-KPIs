@@ -5097,11 +5097,20 @@ function wireMoodExperience(root, actions) {
     });
   });
 
+  // Même prudence que safeGet ci-dessus : sur une origine restreinte
+  // (Safari en navigation privée, origine opaque, iframe sandboxée),
+  // l'accès à localStorage/sessionStorage lève une exception au moment
+  // même de LIRE la propriété — pas seulement à l'appel de getItem/
+  // setItem. Le moteur météo sait déjà gérer une valeur absente
+  // (mood-engine.js), donc on se contente ici de ne jamais planter le
+  // rendu de toute la page pour un widget additif.
+  const safeStorageRef = getter => { try { return getter(); } catch { return null; } };
+
   const engine = createMoodSolicitationEngine({
     window: win,
     document: doc,
-    storage: win.localStorage,
-    sessionStorage: win.sessionStorage,
+    storage: safeStorageRef(() => win.localStorage),
+    sessionStorage: safeStorageRef(() => win.sessionStorage),
     storageKeyPrefix: 'storm_mood',
     hasAnswered: hasAnsweredToday,
     isBusy: () => !panel.hidden,
