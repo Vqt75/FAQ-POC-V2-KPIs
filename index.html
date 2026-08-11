@@ -5284,6 +5284,26 @@
     body.storm-admin-open .studio-context-save-dock, body.storm-admin-open .studio-context-save-btn { transition:none !important; }
   }
 
+
+
+  /* ── Studio V2 8A — semantic inline rich text ── */
+  body.storm-admin-open .studio-inline-rich {border:1px solid rgba(17,17,17,.12);border-radius:18px;background:rgba(255,255,255,.78);overflow:hidden;transition:border-color 140ms ease,box-shadow 140ms ease,background 140ms ease;}
+  body.storm-admin-open .studio-inline-rich:focus-within {border-color:rgba(17,17,17,.28);box-shadow:0 0 0 3px rgba(17,17,17,.035);background:#fff;}
+  body.storm-admin-open .studio-inline-rich-toolbar {display:flex;align-items:center;gap:4px;min-height:42px;padding:6px 8px;border-bottom:1px solid rgba(17,17,17,.08);background:rgba(247,247,245,.72);}
+  body.storm-admin-open .studio-inline-rich-toolbar button {width:31px;height:29px;border:0;border-radius:8px;background:transparent;color:var(--ink);font:600 .69rem/1 var(--font-core,Arial,sans-serif);cursor:pointer;transition:background 120ms ease,transform 120ms ease;}
+  body.storm-admin-open .studio-inline-rich-toolbar button:hover {background:rgba(17,17,17,.065);}
+  body.storm-admin-open .studio-inline-rich-toolbar button:active {transform:scale(.96);}
+  body.storm-admin-open .studio-inline-rich-toolbar button[data-rich-command="italic"] {font-style:italic;font-family:Georgia,serif;}
+  body.storm-admin-open .studio-inline-rich-toolbar button[data-rich-command="underline"] {text-decoration:underline;text-underline-offset:3px;}
+  body.storm-admin-open .studio-inline-rich-hint {margin-left:auto;padding:0 6px 0 10px;color:var(--ink-35);font-size:.54rem;line-height:1.25;white-space:nowrap;}
+  body.storm-admin-open .studio-inline-rich-editor {min-height:112px;padding:15px 16px 16px;outline:none;font:400 .72rem/1.62 var(--font-core,Arial,sans-serif);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;}
+  body.storm-admin-open .studio-inline-rich-editor[data-size="large"] {min-height:150px;}
+  body.storm-admin-open .studio-inline-rich-editor:empty::before {content:attr(data-placeholder);color:rgba(17,17,17,.30);pointer-events:none;}
+  body.storm-admin-open .studio-inline-rich-editor strong {font-weight:700;}
+  body.storm-admin-open .studio-inline-rich-editor em {font-style:italic;}
+  body.storm-admin-open .studio-inline-rich-editor u {text-decoration-thickness:1px;text-underline-offset:3px;}
+  @media (max-width:760px){body.storm-admin-open .studio-inline-rich-hint{display:none;}}
+
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
   <link rel="stylesheet" href="./themes/midnight-frost.css">
@@ -6270,9 +6290,87 @@
     observeNewReveals(listEl);
   }
 
-  function richTextToHtml(text) {
-    const escaped = escapeHtml(text || '');
-    return escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  function semanticInlineMarkupToHtml(text) {
+    let safe = escapeHtml(text || '');
+    // Legacy content can still contain **bold**. Studio 8A hides these
+    // markers and migrates edited values to semantic inline markers.
+    safe = safe.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
+    safe = safe
+      .replace(/\[\[b\]\]/g, '<strong>').replace(/\[\[\/b\]\]/g, '</strong>')
+      .replace(/\[\[i\]\]/g, '<em>').replace(/\[\[\/i\]\]/g, '</em>')
+      .replace(/\[\[u\]\]/g, '<u>').replace(/\[\[\/u\]\]/g, '</u>');
+    return safe.replace(/\n/g, '<br>');
+  }
+
+  function richTextToHtml(text) { return semanticInlineMarkupToHtml(text); }
+  function studioRichValueToHtml(value) { return semanticInlineMarkupToHtml(String(value || '')); }
+
+  function studioRichNodeToMarkup(node) {
+    if (!node) return '';
+    if (node.nodeType === Node.TEXT_NODE) return node.nodeValue || '';
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+    const tag = node.tagName.toLowerCase();
+    const inner = [...node.childNodes].map(studioRichNodeToMarkup).join('');
+    if (tag === 'strong' || tag === 'b') return `[[b]]${inner}[[/b]]`;
+    if (tag === 'em' || tag === 'i') return `[[i]]${inner}[[/i]]`;
+    if (tag === 'u') return `[[u]]${inner}[[/u]]`;
+    if (tag === 'br') return '\n';
+    if (tag === 'div' || tag === 'p') return `${inner}\n`;
+    return inner;
+  }
+
+  function studioRichEditorValue(editor) {
+    return [...(editor?.childNodes || [])].map(studioRichNodeToMarkup).join('')
+      .replace(/\u00a0/g, ' ').replace(/\n{3,}/g, '\n\n').replace(/\n+$/g, '');
+  }
+
+  function studioRichFieldHtml(id, value, options = {}) {
+    const placeholder = escapeHtml(options.placeholder || 'Écrivez quelques lignes…');
+    const size = escapeHtml(options.size || 'default');
+    return `<div class="studio-inline-rich" data-studio-rich-field="${escapeHtml(id)}">
+      <div class="studio-inline-rich-toolbar" role="toolbar" aria-label="Mise en forme du texte">
+        <button type="button" data-rich-command="bold" title="Gras — Ctrl+B" aria-label="Gras"><strong>B</strong></button>
+        <button type="button" data-rich-command="italic" title="Italique — Ctrl+I" aria-label="Italique">I</button>
+        <button type="button" data-rich-command="underline" title="Souligner — Ctrl+U" aria-label="Souligner">U</button>
+        <span class="studio-inline-rich-hint">Sélectionnez un passage</span>
+      </div>
+      <div class="studio-inline-rich-editor" data-studio-rich-editor="${escapeHtml(id)}" data-size="${size}" contenteditable="true" spellcheck="true" data-placeholder="${placeholder}">${studioRichValueToHtml(value)}</div>
+    </div>`;
+  }
+
+  function bindStudioRichField(root, id, onChange) {
+    const shell = root?.querySelector(`[data-studio-rich-field="${CSS.escape(id)}"]`);
+    const editor = shell?.querySelector(`[data-studio-rich-editor="${CSS.escape(id)}"]`);
+    if (!shell || !editor) return;
+    const persist = () => onChange(studioRichEditorValue(editor));
+    const apply = command => {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0 || sel.isCollapsed || !editor.contains(sel.anchorNode) || !editor.contains(sel.focusNode)) {
+        showToast('Sélectionnez d’abord le passage à mettre en forme.');
+        editor.focus();
+        return;
+      }
+      document.execCommand(command, false, null);
+      persist();
+    };
+    shell.querySelectorAll('[data-rich-command]').forEach(button => {
+      button.addEventListener('mousedown', event => event.preventDefault());
+      button.addEventListener('click', () => apply(button.dataset.richCommand));
+    });
+    editor.addEventListener('input', persist);
+    editor.addEventListener('paste', event => {
+      event.preventDefault();
+      document.execCommand('insertText', false, event.clipboardData?.getData('text/plain') || '');
+      persist();
+    });
+    editor.addEventListener('keydown', event => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+      const key = event.key.toLowerCase();
+      const command = key === 'b' ? 'bold' : key === 'i' ? 'italic' : key === 'u' ? 'underline' : '';
+      if (!command) return;
+      event.preventDefault();
+      apply(command);
+    });
   }
 
   function initialsFromName(name) {
@@ -8625,7 +8723,7 @@ CALENDRIER
               <input type="text" class="form-input" id="projectIntroTitle" value="${escapeHtml(content.project.intro.title || '')}" placeholder="Ce que les collaborateurs doivent comprendre d’abord">
               <p class="studio-project-help">Cette ouverture reste toujours en premier. Storm décide ensuite de sa composition selon l’édition utilisée.</p>
               <label class="admin-editor-label">En quelques lignes</label>
-              <textarea class="form-input" id="projectIntroBody" style="min-height:150px;" placeholder="Donnez le contexte sans entrer encore dans tous les détails.">${escapeHtml(content.project.intro.body || '')}</textarea>
+              ${studioRichFieldHtml('projectIntroBody', content.project.intro.body || '', { size:'large', placeholder:'Donnez le contexte sans entrer encore dans tous les détails.' })}
             </div>
           </section>`;
       }
@@ -8644,7 +8742,7 @@ CALENDRIER
           <label class="admin-editor-label">Titre</label>
           <input type="text" class="form-input" data-project-field="title" value="${escapeHtml(section.title || '')}">
           <label class="admin-editor-label">Texte</label>
-          <textarea class="form-input" data-project-field="body" style="min-height:180px;">${escapeHtml(section.body || '')}</textarea>`;
+          ${studioRichFieldHtml('projectSectionBody', section.body || '', { size:'large', placeholder:'Rédigez le texte de cette section.' })}`;
       } else if (section.type === 'quote') {
         fields = `
           <label class="admin-editor-label">Citation</label>
@@ -8860,9 +8958,8 @@ CALENDRIER
       });
 
       const introTitle = document.getElementById('projectIntroTitle');
-      const introBody = document.getElementById('projectIntroBody');
       introTitle?.addEventListener('input', () => { content.project.intro.title = introTitle.value; markDirty(); refreshActiveRow(); });
-      introBody?.addEventListener('input', () => { content.project.intro.body = introBody.value; markDirty(); });
+      bindStudioRichField(container, 'projectIntroBody', value => { content.project.intro.body = value; markDirty(); });
 
       const section = activeSection();
       if (section) {
@@ -8876,6 +8973,7 @@ CALENDRIER
         container.querySelectorAll('[data-project-field]').forEach(field => {
           field.addEventListener('input', () => { section[field.dataset.projectField] = field.value; markDirty(); refreshActiveRow(); });
         });
+        if (section.type === 'focus' || section.type === 'text') bindStudioRichField(container, 'projectSectionBody', value => { section.body = value; markDirty(); refreshActiveRow(); });
 
         if (section.type === 'keyFigures' || section.type === 'choices') {
           section.items = Array.isArray(section.items) ? section.items : [];
@@ -10018,7 +10116,7 @@ CALENDRIER
         <div class="studio-amb-detail-kicker">Réseau d’ambassadeurs</div><h2 class="studio-amb-network-title">Des relais au plus près du terrain.</h2>
         <div class="studio-amb-fields">
           <div><label class="admin-editor-label">Comment présenter leur rôle ?</label><input class="form-input" id="ambIntroTitleInput" value="${escapeHtml(c.introTitle || '')}" placeholder="Ex. Quel est leur rôle exactement ?"></div>
-          <div><label class="admin-editor-label">En quelques lignes</label><textarea class="form-input admin-editor-textarea" id="ambIntroBodyInput" style="min-height:150px;">${escapeHtml(c.introBody || '')}</textarea></div>
+          <div><label class="admin-editor-label">En quelques lignes</label>${studioRichFieldHtml('ambIntroBodyInput', c.introBody || '', { size:'large', placeholder:'Expliquez simplement le rôle des ambassadeurs.' })}</div>
           <div><label class="admin-editor-label">Précision sous le nombre d’ambassadeurs <span style="font-weight:400;text-transform:none;letter-spacing:0;">(facultatif)</span></label><input class="form-input" id="ambRosterLabelInput" value="${escapeHtml(c.rosterLabel || '')}" placeholder="Ex. toutes directions"></div>
 
           <div class="studio-amb-section">
@@ -10030,7 +10128,7 @@ CALENDRIER
             <div class="studio-amb-section-head"><div><strong>Recrutement</strong><p>Afficher un appel à rejoindre le réseau uniquement lorsqu’il est réellement ouvert.</p></div><button type="button" class="studio-amb-switch ${c.joinEnabled?'is-on':''}" id="ambJoinToggle" aria-pressed="${c.joinEnabled?'true':'false'}"></button></div>
             ${c.joinEnabled ? `<div class="studio-amb-fields">
               <div><label class="admin-editor-label">Titre</label><input class="form-input" id="ambJoinTitle" value="${escapeHtml(c.joinTitle || '')}"></div>
-              <div><label class="admin-editor-label">Message</label><textarea class="form-input admin-editor-textarea" id="ambJoinBody">${escapeHtml(c.joinBody || '')}</textarea></div>
+              <div><label class="admin-editor-label">Message</label>${studioRichFieldHtml('ambJoinBody', c.joinBody || '', { placeholder:'Expliquez pourquoi et comment rejoindre le réseau.' })}</div>
               <div><label class="admin-editor-label">Comment manifester son intérêt ?</label><div class="studio-amb-choice"><button type="button" class="${c.joinMode==='inline'?'is-active':''}" data-amb-join-mode="inline">Directement dans Storm</button><button type="button" class="${c.joinMode==='link'?'is-active':''}" data-amb-join-mode="link">Via un lien</button></div></div>
               <div class="studio-amb-two"><div><label class="admin-editor-label">Libellé de l’action</label><input class="form-input" id="ambJoinLabel" value="${escapeHtml(c.joinLabel || 'Devenir ambassadeur')}"></div>${c.joinMode==='link'?`<div><label class="admin-editor-label">Lien</label><input class="form-input" id="ambJoinHref" value="${escapeHtml(c.joinHref || '')}" placeholder="https://…"></div>`:'<div></div>'}</div>
             </div>` : ''}
@@ -10088,7 +10186,9 @@ CALENDRIER
 
       if(activeId==='network'){
         const wire=(id,key,event='input')=>document.getElementById(id)?.addEventListener(event,e=>{c[key]=e.target.value; if(key==='joinTitle')c.ctaTitle=e.target.value; if(key==='joinBody')c.ctaBody=e.target.value; mark();});
-        wire('ambIntroTitleInput','introTitle'); wire('ambIntroBodyInput','introBody'); wire('ambRosterLabelInput','rosterLabel'); wire('ambJoinTitle','joinTitle'); wire('ambJoinBody','joinBody'); wire('ambJoinLabel','joinLabel'); wire('ambJoinHref','joinHref');
+        wire('ambIntroTitleInput','introTitle'); wire('ambRosterLabelInput','rosterLabel'); wire('ambJoinTitle','joinTitle'); wire('ambJoinLabel','joinLabel'); wire('ambJoinHref','joinHref');
+        bindStudioRichField(container, 'ambIntroBodyInput', value => { c.introBody = value; mark(); });
+        bindStudioRichField(container, 'ambJoinBody', value => { c.joinBody = value; c.ctaBody = value; mark(); });
         document.getElementById('ambContactToggle')?.addEventListener('click',()=>{c.contactEnabled=!c.contactEnabled;mark();render();});
         document.getElementById('ambJoinToggle')?.addEventListener('click',()=>{c.joinEnabled=!c.joinEnabled;c.ctaTitle=c.joinEnabled?c.joinTitle:'';c.ctaBody=c.joinEnabled?c.joinBody:'';mark();render();});
         container.querySelectorAll('[data-amb-join-mode]').forEach(btn=>btn.addEventListener('click',()=>{c.joinMode=btn.dataset.ambJoinMode;mark();render();}));
@@ -10361,7 +10461,7 @@ CALENDRIER
             <div><label>Nom de l’espace</label><input type="text" class="form-input" id="studioSpaceName" value="${escapeHtml(space.name)}" placeholder="Ex. Work-café"></div>
             <div><label>Où se trouve-t-il ? <span>(facultatif)</span></label><input type="text" class="form-input" id="studioSpaceLocation" value="${escapeHtml(space.location)}" placeholder="Ex. Niveau 5"></div>
           </div>
-          <div class="studio-space-field-full"><label>À quoi ressemble-t-il, ou quelle est son intention ?</label><textarea class="form-input" id="studioSpaceDescription" rows="4" placeholder="Expliquez simplement ce que les collaborateurs doivent retenir.">${escapeHtml(space.description)}</textarea></div>
+          <div class="studio-space-field-full"><label>À quoi ressemble-t-il, ou quelle est son intention ?</label>${studioRichFieldHtml('studioSpaceDescription', space.description, { placeholder:'Expliquez simplement ce que les collaborateurs doivent retenir.' })}</div>
         </section>
 
         <section class="studio-space-section">
@@ -10385,10 +10485,9 @@ CALENDRIER
 
       const name = document.getElementById('studioSpaceName');
       const location = document.getElementById('studioSpaceLocation');
-      const description = document.getElementById('studioSpaceDescription');
       name?.addEventListener('input', event => { space.name = event.target.value; markDirty(); renderList(); document.querySelector('.studio-space-detail-head h2').textContent = safeName(space.name); });
       location?.addEventListener('input', event => { space.location = event.target.value; markDirty(); renderList(); });
-      description?.addEventListener('input', event => { space.description = event.target.value; markDirty(); });
+      bindStudioRichField(detail, 'studioSpaceDescription', value => { space.description = value; markDirty(); });
       document.querySelectorAll('[data-space-status]').forEach(button => button.addEventListener('click', () => {
         space.status = button.dataset.spaceStatus;
         markDirty();

@@ -21,6 +21,15 @@ function esc(str) {
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+\nfunction inlineRichHtml(value = '') {
+  let safe = esc(value);
+  safe = safe.replace(/\*\*(.+?)\*\*/gs, '<strong>$1</strong>');
+  safe = safe
+    .replace(/\[\[b\]\]/g, '<strong>').replace(/\[\[\/b\]\]/g, '</strong>')
+    .replace(/\[\[i\]\]/g, '<em>').replace(/\[\[\/i\]\]/g, '</em>')
+    .replace(/\[\[u\]\]/g, '<u>').replace(/\[\[\/u\]\]/g, '</u>');
+  return safe.replace(/\n/g, '<br>');
+}
 
 function isPdfUrl(url) {
   return /\.pdf($|\?)/i.test(url || '');
@@ -562,7 +571,7 @@ function renderProjectSection(section, context = {}) {
       <section class="tct-project-section tct-project-text tct-reveal" data-tct-reveal>
         <div class="tct-project-reading">
           ${section.title ? `<h2>${esc(section.title)}</h2>` : ''}
-          ${section.body ? `<p>${esc(section.body)}</p>` : ''}
+          ${section.body ? `<p>${inlineRichHtml(section.body)}</p>` : ''}
         </div>
       </section>`;
   }
@@ -574,7 +583,7 @@ function renderProjectSection(section, context = {}) {
           <span>Focus</span>
           <div>
             ${section.title ? `<h2>${esc(section.title)}</h2>` : ''}
-            ${section.body ? `<p>${esc(section.body)}</p>` : ''}
+            ${section.body ? `<p>${inlineRichHtml(section.body)}</p>` : ''}
           </div>
         </div>
       </section>`;
@@ -664,7 +673,7 @@ function renderProject(project, context = {}) {
       <header class="tct-project-opening tct-reveal" data-tct-reveal>
         <div class="tct-project-opening-eyebrow">Le projet</div>
         <h1>${esc(intro.title || fallback.intro.title)}</h1>
-        <p>${esc(intro.body || intro.description || fallback.intro.body)}</p>
+        <p>${inlineRichHtml(intro.body || intro.description || fallback.intro.body)}</p>
       </header>
 
       <div class="tct-project-flow">
@@ -816,7 +825,7 @@ function renderSpaceDetail(item, items, index) {
       <header class="tct-space-detail-opening tct-reveal" data-tct-reveal>
         <div class="tct-space-detail-eyebrow">${esc(item.location ? `Espace · ${item.location}` : (item.type || 'Espace'))}</div>
         <h1>${esc(item.title || 'Un espace du projet')}</h1>
-        <p>${esc(item.comment || 'Découvrez l’orientation actuellement imaginée pour cet espace et la manière dont elle accompagne les usages de la journée.')}</p>
+        <p>${inlineRichHtml(item.comment || 'Découvrez l’orientation actuellement imaginée pour cet espace et la manière dont elle accompagne les usages de la journée.')}</p>
       </header>
 
       ${primary ? `
@@ -1303,11 +1312,7 @@ function ambassadorBodyToHtml(value) {
     .split(/\n\s*\n/)
     .map(block => block.trim())
     .filter(Boolean)
-    .map(block => {
-      const safe = esc(block);
-      const withStrong = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-      return `<p>${withStrong.replace(/\n/g, '<br>')}</p>`;
-    })
+    .map(block => `<p>${inlineRichHtml(block)}</p>`)
     .join('');
 }
 
@@ -5899,7 +5904,12 @@ export function render(manifest, root, actions) {
     .join('');
 
   root.innerHTML = `
-    <style>${fontAssetsCss}${STYLE}</style>
+    <style>${fontAssetsCss}${STYLE}
+  /* Tectonic 8A — semantic emphasis. Authors choose meaning; Ivory chooses appearance. */
+  .tct-project-opening p strong,.tct-project-reading p strong,.tct-project-focus p strong,.tct-space-detail-opening p strong,.tct-ambassadors-role-body strong{font-weight:650;color:var(--tct-ink);}
+  .tct-project-opening p em,.tct-project-reading p em,.tct-project-focus p em,.tct-space-detail-opening p em,.tct-ambassadors-role-body em{font-style:italic;}
+  .tct-project-opening p u,.tct-project-reading p u,.tct-project-focus p u,.tct-space-detail-opening p u,.tct-ambassadors-role-body u{text-decoration-thickness:1px;text-underline-offset:.16em;text-decoration-color:color-mix(in srgb,var(--tct-ink) 55%,transparent);}
+</style>
     <div class="tct-site" style="--tct-primary:${primary};--tct-secondary:${secondary};--tct-expression-accent:${expressionAccent};--tct-font-primary:'${fontPrimary}';--tct-font-secondary:'${fontSecondary}';">
       <header class="tct-header" id="tct-site-header">
         <div class="tct-header-inner">
