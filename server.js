@@ -246,7 +246,18 @@ L'engagement que nous prenons, c'est celui de la transparence progressive : vous
     introBody: "Les ambassadeurs ne sont pas des porte-paroles officiels du projet, ni des communicants. Ce sont des collaborateurs comme vous, issus de différentes équipes et niveaux hiérarchiques, qui ont choisi de s'impliquer activement dans la transition.\n\nConcrètement, ils font trois choses : ils **relaient les informations** du projet au plus près de leurs collègues, ils **remontent les questions et préoccupations** du terrain vers l'équipe projet via un canal dédié, et ils **participent à la co-construction** des usages et des règles de vie sur le nouveau site.\n\nSi vous avez une question que vous préférez poser à un collègue plutôt qu'à votre RH, si vous avez entendu une rumeur que vous voulez vérifier, ou si vous voulez simplement comprendre où en est le projet — votre ambassadeur est la bonne personne.",
     rosterLabel: "toutes directions",
     ctaTitle: "Vous souhaitez devenir ambassadeur ?",
-    ctaBody: "Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ."
+    ctaBody: "Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, parlez-en à votre manager ou contactez directement l'équipe projet via le formulaire de la FAQ.",
+    contactEnabled: false,
+    // Legacy collective contact fields kept for backward compatibility.
+    // Tectonic 6A.1 uses individual ambassador contact destinations instead.
+    contactDestination: "",
+    contactLabel: "Contacter",
+    joinEnabled: true,
+    joinMode: "inline",
+    joinTitle: "Vous souhaitez devenir ambassadeur ?",
+    joinBody: "Le réseau est ouvert à de nouveaux volontaires jusqu'à fin avril. Si vous êtes motivé(e) pour jouer ce rôle, faites simplement signe à l'équipe projet.",
+    joinLabel: "Devenir ambassadeur",
+    joinHref: ""
   },
   ambassadors: [
     { id: 'amb-1', initials: 'SL', name: 'Sophie Lecomte', role: 'Responsable comptabilité clients', tag: 'Finance', imageUrl: '' },
@@ -459,7 +470,16 @@ function normalizeAmbassadorsContent(raw) {
     introBody: typeof raw?.introBody === 'string' ? raw.introBody : fallback.introBody,
     rosterLabel: typeof raw?.rosterLabel === 'string' ? raw.rosterLabel : fallback.rosterLabel,
     ctaTitle: typeof raw?.ctaTitle === 'string' ? raw.ctaTitle : fallback.ctaTitle,
-    ctaBody: typeof raw?.ctaBody === 'string' ? raw.ctaBody : fallback.ctaBody
+    ctaBody: typeof raw?.ctaBody === 'string' ? raw.ctaBody : fallback.ctaBody,
+    contactEnabled: typeof raw?.contactEnabled === 'boolean' ? raw.contactEnabled : Boolean(fallback.contactEnabled),
+    contactDestination: typeof raw?.contactDestination === 'string' ? raw.contactDestination : (fallback.contactDestination || ''),
+    contactLabel: typeof raw?.contactLabel === 'string' ? raw.contactLabel : (fallback.contactLabel || 'Contacter'),
+    joinEnabled: typeof raw?.joinEnabled === 'boolean' ? raw.joinEnabled : (typeof fallback.joinEnabled === 'boolean' ? fallback.joinEnabled : Boolean(raw?.ctaTitle || raw?.ctaBody)),
+    joinMode: raw?.joinMode === 'link' ? 'link' : 'inline',
+    joinTitle: typeof raw?.joinTitle === 'string' ? raw.joinTitle : (raw?.ctaTitle || fallback.joinTitle || fallback.ctaTitle || ''),
+    joinBody: typeof raw?.joinBody === 'string' ? raw.joinBody : (raw?.ctaBody || fallback.joinBody || fallback.ctaBody || ''),
+    joinLabel: typeof raw?.joinLabel === 'string' ? raw.joinLabel : (fallback.joinLabel || 'Devenir ambassadeur'),
+    joinHref: typeof raw?.joinHref === 'string' ? raw.joinHref : (fallback.joinHref || '')
   };
 }
 
@@ -470,7 +490,10 @@ function normalizeAmbassador(raw, index) {
     name: typeof raw?.name === 'string' ? raw.name : '',
     role: typeof raw?.role === 'string' ? raw.role : '',
     tag: typeof raw?.tag === 'string' ? raw.tag : '',
-    imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : ''
+    imageUrl: typeof raw?.imageUrl === 'string' ? raw.imageUrl : '',
+    contactable: typeof raw?.contactable === 'boolean' ? raw.contactable : true,
+    contactChannel: ['email','teams','link'].includes(raw?.contactChannel) ? raw.contactChannel : 'email',
+    contactValue: typeof raw?.contactValue === 'string' ? raw.contactValue.slice(0, 1200) : ''
   };
 }
 

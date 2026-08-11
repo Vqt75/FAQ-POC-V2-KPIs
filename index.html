@@ -4613,7 +4613,22 @@
     flex:0 0 auto;
     align-self:flex-end;
     min-width:164px;
+    min-height:52px;
+    padding:0 28px;
+    border:0;
+    border-radius:26px;
+    background:var(--ink);
+    color:var(--white);
+    font-size:.72rem;
+    font-weight:600;
+    letter-spacing:0;
+    text-transform:none;
+    cursor:pointer;
+    transition:transform .24s var(--ease-soft),background .24s var(--ease-soft),opacity .24s ease;
   }
+  body.storm-admin-open .studio-domain-save:hover:not(:disabled) { transform:scale(1.02); background:#000; }
+  body.storm-admin-open .studio-domain-save:active:not(:disabled) { transform:scale(.985); }
+  body.storm-admin-open .studio-domain-save:disabled { opacity:.38; cursor:default; transform:none; }
   @media (max-width:680px) {
     body.storm-admin-open .studio-domain-head {
       flex-direction:column;
@@ -4733,6 +4748,65 @@
     }
     body.storm-admin-open .studio-product-note-kicker { padding-top:0; }
   }
+
+
+
+  /* ═══════════════════════════════════════════════════════════════
+     STUDIO V2 — AMBASSADEURS 6A
+     A community editor, not an HR directory.
+     ═══════════════════════════════════════════════════════════════ */
+  body.storm-admin-open .studio-amb-layout{display:grid;grid-template-columns:minmax(300px,390px) minmax(0,1fr);gap:24px;align-items:start;}
+  body.storm-admin-open .studio-amb-list,
+  body.storm-admin-open .studio-amb-detail{background:rgba(255,255,255,.58);border:1px solid rgba(24,22,20,.08);border-radius:28px;overflow:hidden;}
+  body.storm-admin-open .studio-amb-list-head{padding:24px 26px 18px;border-bottom:1px solid rgba(24,22,20,.06);}
+  body.storm-admin-open .studio-amb-list-head strong{display:block;font-size:.92rem;margin-bottom:5px;}
+  body.storm-admin-open .studio-amb-list-head span{display:block;color:var(--ink-45);font-size:.76rem;line-height:1.5;}
+  body.storm-admin-open .studio-amb-network-row,
+  body.storm-admin-open .studio-amb-person-row{width:100%;border:0;background:transparent;text-align:left;color:var(--ink);cursor:pointer;}
+  body.storm-admin-open .studio-amb-network-row{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid rgba(24,22,20,.06);}
+  body.storm-admin-open .studio-amb-network-row strong{font-size:.82rem;}
+  body.storm-admin-open .studio-amb-network-row span{font-size:.66rem;color:var(--ink-40);text-transform:uppercase;letter-spacing:.09em;}
+  body.storm-admin-open .studio-amb-network-row.is-active,
+  body.storm-admin-open .studio-amb-person-row.is-active{background:rgba(255,255,255,.88);}
+  body.storm-admin-open .studio-amb-roster{padding:10px;display:grid;gap:4px;}
+  body.storm-admin-open .studio-amb-person-row{display:grid;grid-template-columns:22px 38px minmax(0,1fr);gap:10px;align-items:center;padding:11px 12px;border-radius:16px;}
+  body.storm-admin-open .studio-amb-handle{font-size:14px;color:var(--ink-25);cursor:grab;user-select:none;letter-spacing:-2px;}
+  body.storm-admin-open .studio-amb-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;background:#eeece6;display:grid;place-items:center;font-size:.68rem;font-weight:700;color:var(--ink-55);}
+  body.storm-admin-open .studio-amb-avatar img{width:100%;height:100%;object-fit:cover;}
+  body.storm-admin-open .studio-amb-person-row strong{display:block;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  body.storm-admin-open .studio-amb-person-row small{display:block;margin-top:3px;color:var(--ink-40);font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  body.storm-admin-open .studio-amb-add{display:block;width:calc(100% - 24px);margin:4px 12px 14px;padding:13px 14px;border:0;border-top:1px solid rgba(24,22,20,.06);background:transparent;text-align:left;color:var(--ink-55);cursor:pointer;font-size:.76rem;}
+  body.storm-admin-open .studio-amb-detail{padding:34px 38px 40px;min-height:560px;}
+  body.storm-admin-open .studio-amb-detail-kicker{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-35);margin-bottom:10px;}
+  body.storm-admin-open .studio-amb-detail h2{font-family:var(--font-display,Georgia,serif);font-size:clamp(2rem,3.2vw,3.2rem);font-weight:400;line-height:.98;margin:0 0 28px;}
+  body.storm-admin-open .studio-amb-detail h2.studio-amb-network-title{font-family:'Italiana',serif;}
+  body.storm-admin-open .studio-amb-contact-preview{margin-top:12px;padding:13px 15px;border-radius:14px;background:rgba(30,29,30,.045);color:var(--ink-55);font-size:.69rem;line-height:1.5;}
+  body.storm-admin-open .studio-amb-contact-preview strong{color:var(--ink);font-weight:600;}
+  body.storm-admin-open .studio-amb-contact-warning{margin:9px 0 0;color:#8a5c25;font-size:.66rem;line-height:1.45;}
+  body.storm-admin-open .studio-amb-fields{display:grid;gap:22px;}
+  body.storm-admin-open .studio-amb-fields .admin-editor-label{margin-bottom:8px;}
+  body.storm-admin-open .studio-amb-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  body.storm-admin-open .studio-amb-section{padding-top:26px;margin-top:4px;border-top:1px solid rgba(24,22,20,.07);}
+  body.storm-admin-open .studio-amb-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px;}
+  body.storm-admin-open .studio-amb-section-head strong{font-size:.82rem;}
+  body.storm-admin-open .studio-amb-section-head p{margin:4px 0 0;color:var(--ink-40);font-size:.72rem;line-height:1.5;max-width:56ch;}
+  body.storm-admin-open .studio-amb-switch{position:relative;width:46px;height:28px;border:0;border-radius:999px;background:#d8d5ce;cursor:pointer;flex:none;transition:background .18s ease;}
+  body.storm-admin-open .studio-amb-switch::after{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:white;box-shadow:0 1px 5px rgba(0,0,0,.16);transition:transform .18s ease;}
+  body.storm-admin-open .studio-amb-switch.is-on{background:#1e1d1e;}
+  body.storm-admin-open .studio-amb-switch.is-on::after{transform:translateX(18px);}
+  body.storm-admin-open .studio-amb-choice{display:flex;gap:8px;flex-wrap:wrap;}
+  body.storm-admin-open .studio-amb-choice button{border:1px solid rgba(24,22,20,.12);background:rgba(255,255,255,.6);border-radius:999px;padding:9px 13px;font-size:.72rem;color:var(--ink-60);cursor:pointer;}
+  body.storm-admin-open .studio-amb-choice button.is-active{background:#1e1d1e;color:white;border-color:#1e1d1e;}
+  body.storm-admin-open .studio-amb-photo{display:grid;grid-template-columns:96px minmax(0,1fr);gap:18px;align-items:center;padding:16px;border:1px dashed rgba(24,22,20,.18);border-radius:20px;background:rgba(255,255,255,.42);cursor:pointer;transition:border-color .18s ease,background .18s ease;}
+  body.storm-admin-open .studio-amb-photo.drag-over{border-color:rgba(24,22,20,.55);background:rgba(255,255,255,.82);}
+  body.storm-admin-open .studio-amb-photo-preview{width:96px;height:96px;border-radius:50%;overflow:hidden;background:#ebe8e1;display:grid;place-items:center;font-size:.72rem;font-weight:700;color:var(--ink-45);}
+  body.storm-admin-open .studio-amb-photo-preview img{width:100%;height:100%;object-fit:cover;}
+  body.storm-admin-open .studio-amb-photo-copy strong{font-size:.8rem;display:block;margin-bottom:5px;}
+  body.storm-admin-open .studio-amb-photo-copy p{font-size:.71rem;color:var(--ink-40);line-height:1.45;margin:0 0 10px;}
+  body.storm-admin-open .studio-amb-photo-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  body.storm-admin-open .studio-amb-photo-actions button{border:1px solid rgba(24,22,20,.12);background:white;border-radius:999px;padding:8px 12px;font-size:.69rem;cursor:pointer;}
+  body.storm-admin-open .studio-amb-danger{margin-top:28px;border:0;background:transparent;color:#9a3c33;padding:0;font-size:.72rem;cursor:pointer;}
+  @media(max-width:980px){body.storm-admin-open .studio-amb-layout{grid-template-columns:1fr;}body.storm-admin-open .studio-amb-detail{min-height:0;}body.storm-admin-open .studio-amb-two{grid-template-columns:1fr;}}
 
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
@@ -9189,271 +9263,169 @@ CALENDRIER
     renderArticlesAdminList();
   }
 
+
   function renderTeamEditor(content) {
     const container = document.getElementById('adminTeamEditor');
     if (!container) return;
 
-    content.ambassadorsContent = content.ambassadorsContent || {};
-    content.ambassadors = content.ambassadors || [];
-    content.teamContent = content.teamContent || {};
-    content.team = content.team || [];
+    content.ambassadorsContent = content.ambassadorsContent && typeof content.ambassadorsContent === 'object' ? content.ambassadorsContent : {};
+    content.ambassadors = Array.isArray(content.ambassadors) ? content.ambassadors : [];
 
-    const openAmbassadorIds = new Set();
-    const openTeamIds = new Set();
+    const c = content.ambassadorsContent;
+    if (typeof c.contactEnabled !== 'boolean') c.contactEnabled = false;
+    // Legacy collective contact fields are preserved in saved state for migration,
+    // but Tectonic 6A.1 no longer exposes them in the Studio.
+    if (typeof c.contactDestination !== 'string') c.contactDestination = '';
+    if (typeof c.contactLabel !== 'string') c.contactLabel = 'Contacter';
+    if (typeof c.joinEnabled !== 'boolean') c.joinEnabled = Boolean(c.ctaTitle || c.ctaBody);
+    if (!['inline','link'].includes(c.joinMode)) c.joinMode = 'inline';
+    if (typeof c.joinTitle !== 'string') c.joinTitle = c.ctaTitle || 'Vous souhaitez devenir ambassadeur ?';
+    if (typeof c.joinBody !== 'string') c.joinBody = c.ctaBody || '';
+    if (typeof c.joinLabel !== 'string') c.joinLabel = 'Devenir ambassadeur';
+    if (typeof c.joinHref !== 'string') c.joinHref = '';
 
-    function ambassadorCardHtml(a, index, total) {
-      const isOpen = openAmbassadorIds.has(a.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-ambassador-card="${a.id}">
-          <button type="button" class="faq-card-header" data-ambassador-toggle="${a.id}">
-            <span class="tag-pill">${escapeHtml(a.tag || '')}</span>
-            <span class="faq-card-title">${escapeHtml(a.name || '(sans nom)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              <label class="admin-editor-label">Photo</label>
-              ${uploaderHtml('amb' + a.id, a.imageUrl, { shape: 'circle', label: 'Photo' })}
-              <label class="admin-editor-label">Nom</label>
-              <input type="text" class="form-input" data-ambassador-field="name" value="${escapeHtml(a.name || '')}">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                <div>
-                  <label class="admin-editor-label">Rôle</label>
-                  <input type="text" class="form-input" data-ambassador-field="role" value="${escapeHtml(a.role || '')}">
-                </div>
-                <div>
-                  <label class="admin-editor-label">Direction</label>
-                  <input type="text" class="form-input" data-ambassador-field="tag" value="${escapeHtml(a.tag || '')}">
-                </div>
-              </div>
-              <label class="admin-editor-label">Initiales (utilisées si aucune photo)</label>
-              <input type="text" class="form-input" data-ambassador-field="initials" value="${escapeHtml(a.initials || '')}" maxlength="2" style="max-width:100px;">
-              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="admin-modal-cancel" data-ambassador-up="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
-                <button type="button" class="admin-modal-cancel" data-ambassador-down="${a.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
-                <button type="button" class="admin-delete-btn" data-ambassador-delete="${a.id}" style="margin-top:0;">Supprimer</button>
-              </div>
-            </div>
+    content.ambassadors.forEach((person,index) => {
+      if (!person.id) person.id = `amb-${Date.now()}-${index}`;
+      if (typeof person.contactable !== 'boolean') person.contactable = true;
+      if (!['email','teams','link'].includes(person.contactChannel)) person.contactChannel = 'email';
+      if (typeof person.contactValue !== 'string') person.contactValue = '';
+    });
+
+    let activeId = container.dataset.ambassadorActiveId || 'network';
+    if (activeId !== 'network' && !content.ambassadors.some(a => String(a.id) === String(activeId))) activeId = 'network';
+
+    const initials = name => String(name || '').split(/\s+/).filter(Boolean).slice(0,2).map(x => x[0]).join('').toUpperCase() || '—';
+    const activePerson = () => content.ambassadors.find(a => String(a.id) === String(activeId)) || null;
+    const mark = () => { if (typeof markDirty === 'function') markDirty(); };
+
+    function rosterRow(person) {
+      return `<button type="button" draggable="true" class="studio-amb-person-row ${String(person.id)===String(activeId)?'is-active':''}" data-amb-select="${escapeHtml(person.id)}" data-amb-drag="${escapeHtml(person.id)}">
+        <span class="studio-amb-handle" aria-hidden="true">⋮⋮</span>
+        <span class="studio-amb-avatar">${person.imageUrl ? `<img src="${escapeHtml(person.imageUrl)}" alt="">` : escapeHtml(initials(person.name))}</span>
+        <span><strong>${escapeHtml(person.name || 'Ambassadeur sans nom')}</strong><small>${escapeHtml(person.tag || person.role || 'Équipe à préciser')}</small></span>
+      </button>`;
+    }
+
+    function listHtml() {
+      return `<aside class="studio-amb-list">
+        <div class="studio-amb-list-head"><strong>Le réseau</strong><span>${content.ambassadors.length} ambassadeur${content.ambassadors.length>1?'s':''} · faites glisser pour changer l’ordre</span></div>
+        <button type="button" class="studio-amb-network-row ${activeId==='network'?'is-active':''}" data-amb-select="network"><strong>Fonctionnement du réseau</strong><span>Configurer</span></button>
+        <div class="studio-amb-roster">${content.ambassadors.map(rosterRow).join('')}</div>
+        <button type="button" class="studio-amb-add" id="studioAmbAdd">+ Ajouter un ambassadeur</button>
+      </aside>`;
+    }
+
+    function networkHtml() {
+      return `<section class="studio-amb-detail">
+        <div class="studio-amb-detail-kicker">Réseau d’ambassadeurs</div><h2 class="studio-amb-network-title">Des relais au plus près du terrain.</h2>
+        <div class="studio-amb-fields">
+          <div><label class="admin-editor-label">Comment présenter leur rôle ?</label><input class="form-input" id="ambIntroTitleInput" value="${escapeHtml(c.introTitle || '')}" placeholder="Ex. Quel est leur rôle exactement ?"></div>
+          <div><label class="admin-editor-label">En quelques lignes</label><textarea class="form-input admin-editor-textarea" id="ambIntroBodyInput" style="min-height:150px;">${escapeHtml(c.introBody || '')}</textarea></div>
+          <div><label class="admin-editor-label">Précision sous le nombre d’ambassadeurs <span style="font-weight:400;text-transform:none;letter-spacing:0;">(facultatif)</span></label><input class="form-input" id="ambRosterLabelInput" value="${escapeHtml(c.rosterLabel || '')}" placeholder="Ex. toutes directions"></div>
+
+          <div class="studio-amb-section">
+            <div class="studio-amb-section-head"><div><strong>Les ambassadeurs peuvent-ils être contactés directement ?</strong><p>Activez cette possibilité pour le réseau. Chaque ambassadeur pourra ensuite accepter ou non d’être contacté et disposer de sa propre coordonnée.</p></div><button type="button" class="studio-amb-switch ${c.contactEnabled?'is-on':''}" id="ambContactToggle" aria-pressed="${c.contactEnabled?'true':'false'}"></button></div>
+            ${c.contactEnabled ? `<div class="studio-amb-contact-preview"><strong>Contact individuel activé.</strong> Ouvrez chaque fiche pour renseigner son email, son lien Teams ou un autre lien. Aucun bouton n’est publié sans coordonnée valide.</div>` : ''}
           </div>
-        </div>`;
-    }
 
-    function bindAmbassadorCard(a) {
-      const card = container.querySelector(`[data-ambassador-card="${a.id}"]`);
-      if (!card) return;
-      card.querySelector('[data-ambassador-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openAmbassadorIds.add(a.id); else openAmbassadorIds.delete(a.id);
-      });
-      bindUploader('amb' + a.id, a, 'imageUrl', { resizeMaxDim: 640 });
-      card.querySelectorAll('[data-ambassador-field]').forEach(field => {
-        field.addEventListener('input', () => {
-          const key = field.dataset.ambassadorField;
-          a[key] = field.value;
-          if (key === 'name') { const t = card.querySelector('.faq-card-title'); if (t) t.textContent = field.value || '(sans nom)'; }
-          if (key === 'tag') { const tg = card.querySelector('.tag-pill'); if (tg) tg.textContent = field.value; }
-        });
-      });
-      card.querySelector('[data-ambassador-up]')?.addEventListener('click', () => {
-        const idx = content.ambassadors.findIndex(x => x.id === a.id);
-        moveItem(content.ambassadors, idx, -1);
-        renderAmbassadorsList();
-      });
-      card.querySelector('[data-ambassador-down]')?.addEventListener('click', () => {
-        const idx = content.ambassadors.findIndex(x => x.id === a.id);
-        moveItem(content.ambassadors, idx, 1);
-        renderAmbassadorsList();
-      });
-      card.querySelector('[data-ambassador-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement cet ambassadeur ?')) return;
-        content.ambassadors = content.ambassadors.filter(x => x.id !== a.id);
-        openAmbassadorIds.delete(a.id);
-        renderAmbassadorsList();
-      });
-    }
-
-    function renderAmbassadorsList() {
-      const listEl = document.getElementById('ambassadorsAdminList');
-      if (!listEl) return;
-      listEl.innerHTML = content.ambassadors.length
-        ? content.ambassadors.map((a, i) => ambassadorCardHtml(a, i, content.ambassadors.length)).join('')
-        : '<div class="kpi-empty">Aucun ambassadeur pour l\'instant.</div>';
-      content.ambassadors.forEach(bindAmbassadorCard);
-    }
-
-    function teamMemberCardHtml(t, index, total) {
-      const isOpen = openTeamIds.has(t.id);
-      return `
-        <div class="faq-card ${isOpen ? 'open' : ''}" data-team-card="${t.id}">
-          <button type="button" class="faq-card-header" data-team-toggle="${t.id}">
-            <span class="tag-pill" style="${t.badge==='Parella' ? 'background:var(--mint-soft); color:var(--teal);' : ''}">${escapeHtml(t.badge || 'XYZ')}</span>
-            <span class="faq-card-title">${escapeHtml(t.name || '(sans nom)')}</span>
-            <span class="faq-card-chevron"><svg viewBox="0 0 12 12"><polyline points="1,3 6,9 11,3"/></svg></span>
-          </button>
-          <div class="faq-card-body">
-            <div class="faq-card-body-inner">
-              <label class="admin-editor-label">Photo</label>
-              ${uploaderHtml('team' + t.id, t.imageUrl, { shape: 'square', label: 'Photo' })}
-              <label class="admin-editor-label">Nom</label>
-              <input type="text" class="form-input" data-team-field="name" value="${escapeHtml(t.name || '')}">
-              <label class="admin-editor-label">Titre / fonction</label>
-              <input type="text" class="form-input" data-team-field="title" value="${escapeHtml(t.title || '')}">
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                <div>
-                  <label class="admin-editor-label">Groupe</label>
-                  <select class="form-input" data-team-field="badge">
-                    <option value="XYZ" ${t.badge!=='Parella'?'selected':''}>XYZ</option>
-                    <option value="Parella" ${t.badge==='Parella'?'selected':''}>Parella</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="admin-editor-label">Initiales (si aucune photo)</label>
-                  <input type="text" class="form-input" data-team-field="initials" value="${escapeHtml(t.initials || '')}" maxlength="2">
-                </div>
-              </div>
-              <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
-                <button type="button" class="admin-modal-cancel" data-team-up="${t.id}" style="flex:none; padding:0 14px; height:34px;" ${index===0?'disabled':''}>↑ Monter</button>
-                <button type="button" class="admin-modal-cancel" data-team-down="${t.id}" style="flex:none; padding:0 14px; height:34px;" ${index===total-1?'disabled':''}>↓ Descendre</button>
-                <button type="button" class="admin-delete-btn" data-team-delete="${t.id}" style="margin-top:0;">Supprimer</button>
-              </div>
-            </div>
+          <div class="studio-amb-section">
+            <div class="studio-amb-section-head"><div><strong>Recrutement</strong><p>Afficher un appel à rejoindre le réseau uniquement lorsqu’il est réellement ouvert.</p></div><button type="button" class="studio-amb-switch ${c.joinEnabled?'is-on':''}" id="ambJoinToggle" aria-pressed="${c.joinEnabled?'true':'false'}"></button></div>
+            ${c.joinEnabled ? `<div class="studio-amb-fields">
+              <div><label class="admin-editor-label">Titre</label><input class="form-input" id="ambJoinTitle" value="${escapeHtml(c.joinTitle || '')}"></div>
+              <div><label class="admin-editor-label">Message</label><textarea class="form-input admin-editor-textarea" id="ambJoinBody">${escapeHtml(c.joinBody || '')}</textarea></div>
+              <div><label class="admin-editor-label">Comment manifester son intérêt ?</label><div class="studio-amb-choice"><button type="button" class="${c.joinMode==='inline'?'is-active':''}" data-amb-join-mode="inline">Directement dans Storm</button><button type="button" class="${c.joinMode==='link'?'is-active':''}" data-amb-join-mode="link">Via un lien</button></div></div>
+              <div class="studio-amb-two"><div><label class="admin-editor-label">Libellé de l’action</label><input class="form-input" id="ambJoinLabel" value="${escapeHtml(c.joinLabel || 'Devenir ambassadeur')}"></div>${c.joinMode==='link'?`<div><label class="admin-editor-label">Lien</label><input class="form-input" id="ambJoinHref" value="${escapeHtml(c.joinHref || '')}" placeholder="https://…"></div>`:'<div></div>'}</div>
+            </div>` : ''}
           </div>
-        </div>`;
-    }
-
-    function bindTeamCard(t) {
-      const card = container.querySelector(`[data-team-card="${t.id}"]`);
-      if (!card) return;
-      card.querySelector('[data-team-toggle]').addEventListener('click', () => {
-        const nowOpen = card.classList.toggle('open');
-        if (nowOpen) openTeamIds.add(t.id); else openTeamIds.delete(t.id);
-      });
-      bindUploader('team' + t.id, t, 'imageUrl', { resizeMaxDim: 640 });
-      card.querySelectorAll('[data-team-field]').forEach(field => {
-        const evt = field.tagName === 'SELECT' ? 'change' : 'input';
-        field.addEventListener(evt, () => {
-          const key = field.dataset.teamField;
-          t[key] = field.value;
-          if (key === 'name') { const el = card.querySelector('.faq-card-title'); if (el) el.textContent = field.value || '(sans nom)'; }
-          if (key === 'badge') {
-            const pill = card.querySelector('.tag-pill');
-            if (pill) { pill.textContent = field.value; pill.style.cssText = field.value === 'Parella' ? 'background:var(--mint-soft); color:var(--teal);' : ''; }
-          }
-        });
-      });
-      card.querySelector('[data-team-up]')?.addEventListener('click', () => {
-        const idx = content.team.findIndex(x => x.id === t.id);
-        moveItem(content.team, idx, -1);
-        renderTeamList();
-      });
-      card.querySelector('[data-team-down]')?.addEventListener('click', () => {
-        const idx = content.team.findIndex(x => x.id === t.id);
-        moveItem(content.team, idx, 1);
-        renderTeamList();
-      });
-      card.querySelector('[data-team-delete]').addEventListener('click', () => {
-        if (!confirm('Supprimer définitivement cette personne ?')) return;
-        content.team = content.team.filter(x => x.id !== t.id);
-        openTeamIds.delete(t.id);
-        renderTeamList();
-      });
-    }
-
-    function renderTeamList() {
-      const listEl = document.getElementById('teamAdminList');
-      if (!listEl) return;
-      listEl.innerHTML = content.team.length
-        ? content.team.map((t, i) => teamMemberCardHtml(t, i, content.team.length)).join('')
-        : '<div class="kpi-empty">Aucune personne pour l\'instant.</div>';
-      content.team.forEach(bindTeamCard);
-    }
-
-    container.innerHTML = `
-      <div class="admin-page-eyebrow">Contenus</div>
-      <div class="admin-page-title" id="studioPeopleTitle">Les personnes du projet.</div>
-      <div class="admin-page-sub" id="studioPeopleSub" style="margin-bottom:28px;">Présentez les ambassadeurs et les interlocuteurs que les collaborateurs peuvent identifier facilement.</div>
-      <div class="admin-editor-panel" style="margin-bottom:28px;">
-        <div class="kpi-section-title">Page Ambassadeurs</div>
-        <div class="kpi-section-sub">Personnalisez le texte d’introduction et l’appel à l’action de la page.</div>
-        <label class="admin-editor-label">Titre de l'intro</label>
-        <input type="text" class="form-input" id="ambIntroTitleInput" value="${escapeHtml(content.ambassadorsContent.introTitle || '')}">
-        <label class="admin-editor-label">Texte de l'intro</label>
-        <textarea class="form-input admin-editor-textarea" id="ambIntroBodyInput" style="min-height:120px;">${escapeHtml(content.ambassadorsContent.introBody || '')}</textarea>
-        <label class="admin-editor-label">Sous-titre du compteur (ex. "toutes directions")</label>
-        <input type="text" class="form-input" id="ambRosterLabelInput" value="${escapeHtml(content.ambassadorsContent.rosterLabel || '')}">
-        <label class="admin-editor-label">Titre de l'appel à l'action</label>
-        <input type="text" class="form-input" id="ambCtaTitleInput" value="${escapeHtml(content.ambassadorsContent.ctaTitle || '')}">
-        <label class="admin-editor-label">Texte de l'appel à l'action</label>
-        <textarea class="form-input admin-editor-textarea" id="ambCtaBodyInput">${escapeHtml(content.ambassadorsContent.ctaBody || '')}</textarea>
-      </div>
-
-      <div class="admin-editor-panel" style="margin-bottom:28px;">
-        <div class="kpi-section-title">Ambassadeurs</div>
-        <div class="kpi-section-sub">La photo est facultative — sans photo, les initiales sont affichées.</div>
-        <div class="faq-card-list" id="ambassadorsAdminList" style="margin-top:20px;"></div>
-        <button type="button" class="admin-modal-cancel" id="addAmbassadorBtn" style="flex:none; padding:0 20px; margin-top:16px;">+ Ajouter un ambassadeur</button>
-      </div>
-
-      <div class="admin-editor-panel studio-project-team-only" style="margin-bottom:28px;">
-        <div class="kpi-section-title">Page Équipe projet</div>
-        <label class="admin-editor-label">Texte d'intro Parella (mot en gras entre **...**)</label>
-        <textarea class="form-input admin-editor-textarea" id="teamParellaIntroInput">${escapeHtml(content.teamContent.parellaIntro || '')}</textarea>
-        <label class="admin-editor-label">Titre de l'appel à l'action</label>
-        <input type="text" class="form-input" id="teamCtaTitleInput" value="${escapeHtml(content.teamContent.ctaTitle || '')}">
-        <label class="admin-editor-label">Texte de l'appel à l'action</label>
-        <textarea class="form-input admin-editor-textarea" id="teamCtaBodyInput">${escapeHtml(content.teamContent.ctaBody || '')}</textarea>
-      </div>
-
-      <div class="admin-editor-panel studio-project-team-only">
-        <div class="kpi-section-title">Équipe projet</div>
-        <div class="kpi-section-sub">Choisissez le groupe de chaque personne pour déterminer où elle apparaît sur le site.</div>
-        <div class="faq-card-list" id="teamAdminList" style="margin-top:20px;"></div>
-        <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-          <button type="button" class="admin-modal-cancel" id="addTeamMemberBtn" style="flex:none; padding:0 20px;">+ Ajouter une personne</button>
-          <button type="button" class="search-btn" id="saveTeamBtn">Enregistrer</button>
         </div>
-      </div>`;
+      </section>`;
+    }
 
-    document.getElementById('ambIntroTitleInput').addEventListener('input', e => { content.ambassadorsContent.introTitle = e.target.value; });
-    document.getElementById('ambIntroBodyInput').addEventListener('input', e => { content.ambassadorsContent.introBody = e.target.value; });
-    document.getElementById('ambRosterLabelInput').addEventListener('input', e => { content.ambassadorsContent.rosterLabel = e.target.value; });
-    document.getElementById('ambCtaTitleInput').addEventListener('input', e => { content.ambassadorsContent.ctaTitle = e.target.value; });
-    document.getElementById('ambCtaBodyInput').addEventListener('input', e => { content.ambassadorsContent.ctaBody = e.target.value; });
-    document.getElementById('teamParellaIntroInput').addEventListener('input', e => { content.teamContent.parellaIntro = e.target.value; });
-    document.getElementById('teamCtaTitleInput').addEventListener('input', e => { content.teamContent.ctaTitle = e.target.value; });
-    document.getElementById('teamCtaBodyInput').addEventListener('input', e => { content.teamContent.ctaBody = e.target.value; });
+    function personHtml(person) {
+      const prefix = `studioAmbPhoto-${String(person.id).replace(/[^a-zA-Z0-9_-]/g,'')}`;
+      return `<section class="studio-amb-detail">
+        <div class="studio-amb-detail-kicker">Ambassadeur</div><h2>${escapeHtml(person.name || 'Nouvel ambassadeur')}</h2>
+        <div class="studio-amb-fields">
+          <div><label class="admin-editor-label">Photo <span style="font-weight:400;text-transform:none;letter-spacing:0;">(facultative)</span></label>
+            <div class="studio-amb-photo" id="${prefix}Zone" tabindex="0" role="button">
+              <div class="studio-amb-photo-preview" id="${prefix}Preview">${person.imageUrl?`<img src="${escapeHtml(person.imageUrl)}" alt="">`:escapeHtml(initials(person.name))}</div>
+              <div class="studio-amb-photo-copy"><strong>Déposez une photo ici</strong><p>ou choisissez un fichier depuis votre ordinateur.</p><div class="studio-amb-photo-actions"><button type="button" id="${prefix}Browse">Parcourir</button>${person.imageUrl?`<button type="button" id="${prefix}Remove">Retirer</button>`:''}</div></div>
+              <input type="file" id="${prefix}Input" accept="image/png,image/jpeg,image/webp" style="display:none;">
+            </div>
+          </div>
+          <div><label class="admin-editor-label">Nom</label><input class="form-input" data-amb-field="name" value="${escapeHtml(person.name || '')}"></div>
+          <div class="studio-amb-two"><div><label class="admin-editor-label">Rôle ou fonction</label><input class="form-input" data-amb-field="role" value="${escapeHtml(person.role || '')}" placeholder="Ex. Responsable comptabilité clients"></div><div><label class="admin-editor-label">Équipe ou direction</label><input class="form-input" data-amb-field="tag" value="${escapeHtml(person.tag || '')}" placeholder="Ex. Finance"></div></div>
+          ${c.contactEnabled ? `<div class="studio-amb-section">
+            <div class="studio-amb-section-head"><div><strong>Autoriser le contact direct</strong><p>Si cette option est activée et qu’une coordonnée est renseignée, un bouton « Contacter ${escapeHtml(String(person.name || '').trim().split(/\s+/)[0] || 'cet ambassadeur')} » apparaîtra sous sa carte.</p></div><button type="button" class="studio-amb-switch ${person.contactable!==false?'is-on':''}" id="ambPersonContactToggle" aria-pressed="${person.contactable!==false?'true':'false'}"></button></div>
+            ${person.contactable!==false ? `<div class="studio-amb-fields">
+              <div><label class="admin-editor-label">Canal de contact</label><div class="studio-amb-choice"><button type="button" class="${person.contactChannel==='email'?'is-active':''}" data-amb-contact-channel="email">Email</button><button type="button" class="${person.contactChannel==='teams'?'is-active':''}" data-amb-contact-channel="teams">Teams</button><button type="button" class="${person.contactChannel==='link'?'is-active':''}" data-amb-contact-channel="link">Autre lien</button></div></div>
+              <div><label class="admin-editor-label">${person.contactChannel==='email'?'Adresse email':person.contactChannel==='teams'?'Lien Teams':'Lien de contact'}</label><input class="form-input" id="ambPersonContactValue" value="${escapeHtml(person.contactValue || '')}" placeholder="${person.contactChannel==='email'?'prenom.nom@entreprise.fr':'https://…'}"></div>
+              <div class="studio-amb-contact-preview">Aperçu public : <strong>Contacter ${escapeHtml(String(person.name || '').trim().split(/\s+/)[0] || 'cet ambassadeur')} →</strong></div>
+              ${!person.contactValue ? `<p class="studio-amb-contact-warning">Renseignez une coordonnée pour afficher ce bouton côté collaborateurs.</p>` : ''}
+            </div>` : ''}
+          </div>` : ''}
+        </div>
+        <button type="button" class="studio-amb-danger" id="studioAmbDelete">Supprimer cet ambassadeur</button>
+      </section>`;
+    }
 
-    document.getElementById('addAmbassadorBtn').addEventListener('click', () => {
-      const id = `amb-${Date.now()}`;
-      const newAmbassador = { id, initials: '', name: 'Nouvel ambassadeur', role: '', tag: '', imageUrl: '' };
-      content.ambassadors = [newAmbassador, ...content.ambassadors];
-      openAmbassadorIds.add(id);
-      renderAmbassadorsList();
-      document.querySelector(`[data-ambassador-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.querySelector(`[data-ambassador-card="${id}"] input[data-ambassador-field="name"]`)?.focus();
-    });
+    function detailHtml(){ const p=activePerson(); return activeId==='network'||!p ? networkHtml() : personHtml(p); }
 
-    document.getElementById('addTeamMemberBtn').addEventListener('click', () => {
-      const id = `team-${Date.now()}`;
-      const newMember = { id, initials: '', name: 'Nouvelle personne', title: '', badge: 'XYZ', imageUrl: '' };
-      content.team = [newMember, ...content.team];
-      openTeamIds.add(id);
-      renderTeamList();
-      document.querySelector(`[data-team-card="${id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.querySelector(`[data-team-card="${id}"] input[data-team-field="name"]`)?.focus();
-    });
+    function render(){
+      container.dataset.ambassadorActiveId=activeId;
+      container.innerHTML=`<div class="studio-domain-head"><div class="studio-domain-head-copy"><div class="admin-page-eyebrow">Contenus</div><h1>Ambassadeurs.</h1><p>Présentez les collègues qui relaient le projet, répondent aux questions de proximité et font remonter les besoins du terrain.</p></div><button type="button" class="studio-domain-save" id="studioAmbSave">Enregistrer les ambassadeurs</button></div><div class="studio-amb-layout">${listHtml()}${detailHtml()}</div>`;
+      bind();
+    }
 
-    document.getElementById('saveTeamBtn').addEventListener('click', async () => {
-      const result = await saveContent(buildSavePayload(content));
-      if (handleSaveResult(result, 'Ambassadeurs & Équipe enregistrés.')) {
-        renderAmbassadorsFront(content);
-        renderTeamFront(content);
+    function bind(){
+      container.querySelectorAll('[data-amb-select]').forEach(btn=>btn.addEventListener('click',e=>{ if(e.target.closest('.studio-amb-handle')) return; activeId=btn.dataset.ambSelect; render(); }));
+      document.getElementById('studioAmbAdd')?.addEventListener('click',()=>{ const id=`amb-${Date.now()}`; content.ambassadors.push({id,name:'Nouvel ambassadeur',role:'',tag:'',imageUrl:'',initials:'',contactable:true,contactChannel:'email',contactValue:''}); activeId=id; mark(); render(); setTimeout(()=>container.querySelector('[data-amb-field="name"]')?.focus(),0); });
+
+      let dragged='';
+      container.querySelectorAll('[data-amb-drag]').forEach(row=>{
+        row.addEventListener('dragstart',e=>{dragged=row.dataset.ambDrag; e.dataTransfer.effectAllowed='move';});
+        row.addEventListener('dragover',e=>{e.preventDefault();});
+        row.addEventListener('drop',e=>{e.preventDefault(); const target=row.dataset.ambDrag; if(!dragged||dragged===target)return; const from=content.ambassadors.findIndex(x=>String(x.id)===String(dragged)); const to=content.ambassadors.findIndex(x=>String(x.id)===String(target)); if(from<0||to<0)return; const [item]=content.ambassadors.splice(from,1); content.ambassadors.splice(to,0,item); mark(); render();});
+      });
+
+      if(activeId==='network'){
+        const wire=(id,key,event='input')=>document.getElementById(id)?.addEventListener(event,e=>{c[key]=e.target.value; if(key==='joinTitle')c.ctaTitle=e.target.value; if(key==='joinBody')c.ctaBody=e.target.value; mark();});
+        wire('ambIntroTitleInput','introTitle'); wire('ambIntroBodyInput','introBody'); wire('ambRosterLabelInput','rosterLabel'); wire('ambJoinTitle','joinTitle'); wire('ambJoinBody','joinBody'); wire('ambJoinLabel','joinLabel'); wire('ambJoinHref','joinHref');
+        document.getElementById('ambContactToggle')?.addEventListener('click',()=>{c.contactEnabled=!c.contactEnabled;mark();render();});
+        document.getElementById('ambJoinToggle')?.addEventListener('click',()=>{c.joinEnabled=!c.joinEnabled;c.ctaTitle=c.joinEnabled?c.joinTitle:'';c.ctaBody=c.joinEnabled?c.joinBody:'';mark();render();});
+        container.querySelectorAll('[data-amb-join-mode]').forEach(btn=>btn.addEventListener('click',()=>{c.joinMode=btn.dataset.ambJoinMode;mark();render();}));
+      } else {
+        const person=activePerson(); if(person){
+          container.querySelectorAll('[data-amb-field]').forEach(input=>input.addEventListener('input',()=>{person[input.dataset.ambField]=input.value;mark(); if(input.dataset.ambField==='name'){const h=container.querySelector('.studio-amb-detail h2'); if(h)h.textContent=input.value||'Nouvel ambassadeur';}}));
+          document.getElementById('ambPersonContactToggle')?.addEventListener('click',()=>{person.contactable=person.contactable===false;mark();render();});
+          container.querySelectorAll('[data-amb-contact-channel]').forEach(btn=>btn.addEventListener('click',()=>{person.contactChannel=btn.dataset.ambContactChannel;mark();render();}));
+          document.getElementById('ambPersonContactValue')?.addEventListener('input',e=>{person.contactValue=e.target.value;mark();});
+          document.getElementById('studioAmbDelete')?.addEventListener('click',()=>{if(!confirm('Supprimer définitivement cet ambassadeur ?'))return;content.ambassadors=content.ambassadors.filter(x=>String(x.id)!==String(person.id));activeId='network';mark();render();});
+
+          const safe=String(person.id).replace(/[^a-zA-Z0-9_-]/g,''); const prefix=`studioAmbPhoto-${safe}`;
+          const zone=document.getElementById(prefix+'Zone'), input=document.getElementById(prefix+'Input');
+          async function handleFile(file){ if(!file)return; showToast('Envoi en cours...'); const result=await uploadFile(file,640); if(result.unauthorized){clearAdminToken();openAdminModal();return;} if(!result.ok){showToast(result.error||"Échec de l'envoi.");return;} person.imageUrl=result.url; mark(); showToast('Photo envoyée.'); render(); }
+          zone?.addEventListener('click',e=>{if(e.target.closest('button'))return;input?.click();});
+          zone?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input?.click();}});
+          document.getElementById(prefix+'Browse')?.addEventListener('click',e=>{e.stopPropagation();input?.click();});
+          input?.addEventListener('change',()=>{const f=input.files?.[0];input.value='';handleFile(f);});
+          ['dragenter','dragover'].forEach(evt=>zone?.addEventListener(evt,e=>{e.preventDefault();zone.classList.add('drag-over');}));
+          ['dragleave','drop'].forEach(evt=>zone?.addEventListener(evt,e=>{e.preventDefault();zone.classList.remove('drag-over');}));
+          zone?.addEventListener('drop',e=>handleFile(e.dataTransfer?.files?.[0]));
+          document.getElementById(prefix+'Remove')?.addEventListener('click',e=>{e.stopPropagation();person.imageUrl='';mark();render();});
+        }
       }
-    });
 
-    renderAmbassadorsList();
-    renderTeamList();
+      document.getElementById('studioAmbSave')?.addEventListener('click',async()=>{
+        c.ctaTitle=c.joinEnabled?c.joinTitle:''; c.ctaBody=c.joinEnabled?c.joinBody:'';
+        const result=await saveContent(buildSavePayload(content));
+        if(handleSaveResult(result,'Ambassadeurs enregistrés.')){renderAmbassadorsFront(content);}
+      });
+    }
+
+    render();
   }
+
 
   function renderVisualsEditor(content) {
     const container = document.getElementById('adminVisualsEditor');

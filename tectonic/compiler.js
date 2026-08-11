@@ -376,24 +376,65 @@ function compileQuestions(candidate) {
 // ─────────────────────────────────────────────────────────────────
 // content.ambassadors
 // ─────────────────────────────────────────────────────────────────
+function ambassadorContactHref(person) {
+  const channel = ['email','teams','link'].includes(person?.contactChannel) ? person.contactChannel : 'email';
+  const raw = String(person?.contactValue || '').trim();
+  if (!raw) return '';
+
+  if (channel === 'email') {
+    const email = raw.replace(/^mailto:/i, '').trim();
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? `mailto:${email}` : '';
+  }
+
+  if (channel === 'teams') {
+    return /^(https?:\/\/|msteams:)/i.test(raw) ? raw : '';
+  }
+
+  return /^https?:\/\//i.test(raw) ? raw : '';
+}
+
+function ambassadorContactLabel(name) {
+  const firstName = String(name || '').trim().split(/\s+/).filter(Boolean)[0] || '';
+  return firstName ? `Contacter ${firstName}` : 'Contacter';
+}
+
 function compileAmbassadors(candidate) {
   const c = candidate?.ambassadorsContent || {};
   const roster = Array.isArray(candidate?.ambassadors) ? candidate.ambassadors : [];
+  const joinEnabled = c.joinEnabled === true;
   return {
     intro: {
       title: c.introTitle || '',
       body: c.introBody || '',
       rosterLabel: c.rosterLabel || ''
     },
+    contact: {
+      // The network switch gates contact globally. Destinations remain individual.
+      enabled: c.contactEnabled === true,
+      defaultHref: '',
+      label: 'Contacter'
+    },
+    join: {
+      enabled: joinEnabled,
+      mode: c.joinMode === 'link' ? 'link' : 'inline',
+      title: c.joinTitle || c.ctaTitle || '',
+      body: c.joinBody || c.ctaBody || '',
+      label: c.joinLabel || 'Devenir ambassadeur',
+      href: c.joinMode === 'link' ? (c.joinHref || '') : ''
+    },
     cta: {
-      title: c.ctaTitle || '',
-      body: c.ctaBody || ''
+      enabled: joinEnabled,
+      title: c.joinTitle || c.ctaTitle || '',
+      body: c.joinBody || c.ctaBody || ''
     },
     roster: roster.map(p => ({
       id: p.id,
       name: p.name || '',
       role: p.role || '',
       tag: p.tag || '',
+      contactable: p.contactable !== false,
+      contactHref: p.contactable === false ? '' : ambassadorContactHref(p),
+      contactLabel: ambassadorContactLabel(p.name),
       photo: wrapAsset(p.imageUrl, personAltDefault(p.name, p.role))
     }))
   };

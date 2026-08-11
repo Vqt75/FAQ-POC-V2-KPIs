@@ -11,6 +11,7 @@
     "test:studio-project": "node tectonic/studio-v2/test_project_2a.js",
     "test:studio-news": "node tectonic/studio-v2/test_news_3a2.js",
     "test:studio-spaces": "node tectonic/studio-v2/test_spaces_4a.js",
-    "test:studio-questions": "node tectonic/studio-v2/test_questions_5a.js"
+    "test:studio-questions": "node tectonic/studio-v2/test_questions_5a.js",
+    "test:studio-ambassadors": "node tectonic/studio-v2/test_ambassadors_6a.js"
   }
 }
