@@ -49,6 +49,16 @@ const defaultState = {
 };
 
 const defaultContent = {
+  // STUDIO V2 — 8C / SITE STRUCTURE
+  siteStructure: {
+    home: true,
+    timeline: true,
+    news: true,
+    spaces: true,
+    questions: true,
+    ambassadors: true,
+    team: true
+  },
   branding: {
     projectName: 'Projet XYZ',
     logoUrl: '', // vide = losange géométrique par défaut
@@ -663,12 +673,28 @@ function writeKpiState(state) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(state, null, 2), 'utf8');
 }
 
+// STUDIO V2 — 8C / SITE STRUCTURE
+function normalizeSiteStructure(raw, team) {
+  const configured = raw && typeof raw === 'object' && !Array.isArray(raw);
+  const teamDefault = Array.isArray(team) && team.length > 0;
+  return {
+    home: true,
+    timeline: configured ? raw.timeline !== false : true,
+    news: configured ? raw.news !== false : true,
+    spaces: configured ? raw.spaces !== false : true,
+    questions: configured ? raw.questions !== false : true,
+    ambassadors: configured ? raw.ambassadors !== false : true,
+    team: configured ? raw.team !== false : teamDefault
+  };
+}
+
 function readContentState() {
   ensureDataStore();
   try {
     const raw = fs.readFileSync(CONTENT_FILE, 'utf8');
     const parsed = JSON.parse(raw);
     return {
+      siteStructure: normalizeSiteStructure(parsed.siteStructure, parsed.team),
       branding: normalizeBranding(parsed.branding),
       project: normalizeProject(parsed.project),
       publicContent: normalizePublicContent(parsed.publicContent),
@@ -697,6 +723,7 @@ function readContentState() {
 function writeContentState(contentState) {
   ensureDataStore();
   const safe = {
+    siteStructure: normalizeSiteStructure(contentState.siteStructure, contentState.team),
     branding: normalizeBranding(contentState.branding),
     project: normalizeProject(contentState.project),
     publicContent: normalizePublicContent(contentState.publicContent),
@@ -1007,6 +1034,7 @@ const server = http.createServer(async (req, res) => {
     try {
       const parsed = await readBody(req);
       const saved = writeContentState({
+        siteStructure: parsed.siteStructure,
         branding: parsed.branding,
         project: parsed.project,
         publicContent: parsed.publicContent,

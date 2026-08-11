@@ -44,10 +44,24 @@ const NAV_LABELS = {
 };
 const NAV_ORDER = ['questions', 'news', 'spaces', 'ambassadors', 'team'];
 
-// Règle transitoire d'activation des modules (§3 du document gelé).
-// Aucune configuration `modules` réelle n'existe encore côté Studio —
-// cette fonction la calcule à la place, jusqu'à ce qu'elle existe.
+// STUDIO V2 — 8C / SITE STRUCTURE
+// Le Studio persiste désormais l'intention de visibilité. Le fallback historique
+// reste uniquement pour les snapshots créés avant 8C, afin qu'une migration ne
+// modifie jamais silencieusement le site public existant.
 function computeModules(snapshot) {
+  const configured = snapshot && snapshot.siteStructure;
+  if (configured && typeof configured === 'object' && !Array.isArray(configured)) {
+    return {
+      home: true,
+      timeline: configured.timeline !== false,
+      spaces: configured.spaces !== false,
+      news: configured.news !== false,
+      questions: configured.questions !== false,
+      ambassadors: configured.ambassadors !== false,
+      team: configured.team !== false
+    };
+  }
+
   const teamCount = Array.isArray(snapshot && snapshot.team) ? snapshot.team.length : 0;
   const modules = { team: teamCount > 0 };
   ALWAYS_ENABLED_MODULES.forEach(key => { modules[key] = true; });

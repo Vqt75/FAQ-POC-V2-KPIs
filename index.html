@@ -5362,6 +5362,234 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
   body.storm-admin-open .studio-inline-toolbar button { transition:none !important; }
 }
 
+/* ============================================================
+   STUDIO V2 — 8C / SITE STRUCTURE
+   Structure du site = décision de publication, jamais page builder.
+============================================================ */
+.studio-structure-shell { max-width:980px; margin:0 auto; padding:8px 0 88px; }
+.studio-structure-head { display:flex; align-items:flex-start; justify-content:space-between; gap:28px; margin-bottom:28px; }
+.studio-structure-head-copy { max-width:650px; }
+.studio-structure-kicker { font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-40); margin-bottom:8px; }
+.studio-structure-title { margin:0; font-family:var(--font-expression); font-size:clamp(2rem,4vw,3.45rem); line-height:.98; font-weight:400; letter-spacing:-.035em; }
+.studio-structure-sub { margin:14px 0 0; max-width:620px; color:var(--ink-60); font-size:.94rem; line-height:1.65; }
+.studio-structure-save { flex:0 0 auto; }
+.studio-structure-surface { background:var(--white); border:1px solid var(--ink-08); border-radius:22px; overflow:hidden; }
+.studio-structure-row { min-height:86px; display:grid; grid-template-columns:minmax(0,1fr) 132px; align-items:center; gap:24px; padding:18px 22px; border-bottom:1px solid var(--ink-08); }
+.studio-structure-row:last-child { border-bottom:0; }
+.studio-structure-row-main { min-width:0; }
+.studio-structure-row-main strong { display:block; color:var(--ink); font-size:.94rem; font-weight:650; line-height:1.25; }
+.studio-structure-row-main span { display:block; margin-top:5px; color:var(--ink-50); font-size:.78rem; line-height:1.45; }
+.studio-structure-row-control { display:flex; align-items:center; justify-content:flex-end; gap:10px; min-width:132px; }
+.studio-structure-state { min-width:54px; text-align:right; font-size:.72rem; color:var(--ink-45); }
+.studio-structure-fixed { display:inline-flex; align-items:center; justify-content:center; min-width:112px; height:30px; padding:0 12px; border-radius:999px; background:var(--offwhite); border:1px solid var(--ink-08); color:var(--ink-55); font-size:.71rem; font-weight:600; white-space:nowrap; }
+.studio-structure-switch { position:relative; width:48px; height:28px; padding:0; border:0; border-radius:999px; background:var(--ink-14); cursor:pointer; transition:background .2s var(--ease-soft), box-shadow .2s var(--ease-soft); }
+.studio-structure-switch::after { content:''; position:absolute; width:22px; height:22px; left:3px; top:3px; border-radius:50%; background:#fff; box-shadow:0 1px 5px rgba(20,20,20,.18); transition:transform .22s var(--ease); }
+.studio-structure-switch[aria-checked="true"] { background:var(--ink); }
+.studio-structure-switch[aria-checked="true"]::after { transform:translateX(20px); }
+.studio-structure-switch:focus-visible { outline:3px solid color-mix(in srgb,var(--ink) 20%,transparent); outline-offset:3px; }
+.studio-structure-note { margin-top:16px; padding:14px 16px; border-radius:14px; background:var(--offwhite); color:var(--ink-55); font-size:.76rem; line-height:1.5; }
+@media (max-width:760px) {
+  .studio-structure-head { display:block; }
+  .studio-structure-save { margin-top:20px; width:100%; }
+  .studio-structure-row { grid-template-columns:minmax(0,1fr) auto; gap:14px; padding:16px; }
+  .studio-structure-row-control { min-width:0; }
+  .studio-structure-state { display:none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-structure-switch, .studio-structure-switch::after { transition:none; }
+}
+
+/* ============================================================
+   STUDIO V2 — 8C.1 / STRUCTURE VISUAL CONVERGENCE
+   Reprend la grammaire visuelle du Studio : respiration,
+   titrage éditorial Italiana, surfaces calmes et généreuses.
+============================================================ */
+.studio-structure-shell {
+  padding-top:42px;
+  padding-bottom:96px;
+}
+.studio-structure-head {
+  margin-bottom:38px;
+  gap:40px;
+}
+.studio-structure-head-copy {
+  max-width:780px;
+}
+.studio-structure-kicker {
+  display:block;
+  margin:0 0 17px;
+  font-size:.72rem;
+  font-weight:500;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-50);
+}
+.studio-structure-title {
+  font-family:'Italiana', Georgia, 'Times New Roman', serif;
+  font-size:clamp(3.45rem,5.6vw,5.15rem);
+  line-height:.94;
+  font-weight:400;
+  letter-spacing:-.018em;
+}
+.studio-structure-sub {
+  margin-top:22px;
+  max-width:760px;
+  color:var(--ink-55);
+  font-size:1rem;
+  line-height:1.72;
+}
+.studio-structure-save {
+  margin-top:51px;
+}
+.studio-structure-surface {
+  border-radius:28px;
+  background:rgba(255,255,255,.62);
+}
+.studio-structure-row {
+  min-height:104px;
+  grid-template-columns:minmax(0,1fr) 156px;
+  padding:24px 32px;
+}
+.studio-structure-row-main strong {
+  font-size:1rem;
+  font-weight:650;
+}
+.studio-structure-row-main span {
+  margin-top:7px;
+  font-size:.84rem;
+  line-height:1.5;
+}
+.studio-structure-row-control {
+  min-width:156px;
+  gap:12px;
+}
+.studio-structure-state {
+  min-width:62px;
+  font-size:.76rem;
+}
+.studio-structure-fixed {
+  min-width:120px;
+  height:34px;
+  padding:0 14px;
+  font-size:.73rem;
+}
+.studio-structure-switch {
+  width:52px;
+  height:30px;
+}
+.studio-structure-switch::after {
+  width:24px;
+  height:24px;
+  left:3px;
+  top:3px;
+}
+.studio-structure-switch[aria-checked="true"]::after {
+  transform:translateX(22px);
+}
+.studio-structure-note {
+  margin-top:18px;
+  padding:15px 18px;
+  font-size:.78rem;
+}
+@media (max-width:760px) {
+  .studio-structure-shell {
+    padding-top:28px;
+    padding-bottom:72px;
+  }
+  .studio-structure-head {
+    margin-bottom:26px;
+  }
+  .studio-structure-title {
+    font-size:clamp(2.85rem,13vw,4rem);
+  }
+  .studio-structure-sub {
+    margin-top:16px;
+    font-size:.94rem;
+  }
+  .studio-structure-save {
+    margin-top:22px;
+  }
+  .studio-structure-row {
+    min-height:92px;
+    padding:18px;
+  }
+}
+
+/* ============================================================
+   STUDIO V2 — 8C.2 / SHARED DOMAIN SHELL
+   Structure du site consomme désormais le shell commun des
+   domaines Studio V2 au lieu de maintenir son propre hero.
+============================================================ */
+body.storm-admin-open .studio-structure-shell {
+  max-width:none;
+  margin:0;
+  padding:0 0 88px;
+}
+body.storm-admin-open .studio-structure-head {
+  /* Le layout / titre / intro / save viennent de .studio-domain-head. */
+  margin-bottom:34px;
+}
+body.storm-admin-open .studio-structure-head-copy {
+  max-width:720px;
+}
+body.storm-admin-open .studio-structure-head .studio-structure-title {
+  /* L'échelle et Italiana sont celles du hero commun, pas une variante locale. */
+  margin:4px 0 10px;
+  font-family:'Italiana',serif;
+  font-size:clamp(2.6rem,4.3vw,4.4rem);
+  font-weight:400;
+  letter-spacing:-.045em;
+  line-height:.98;
+}
+body.storm-admin-open .studio-structure-head p {
+  margin:0;
+  max-width:680px;
+  color:var(--ink-50);
+  font-size:.72rem;
+  font-weight:400;
+  line-height:1.65;
+}
+body.storm-admin-open .studio-structure-save {
+  margin-top:0;
+}
+body.storm-admin-open .studio-structure-surface {
+  border:0;
+  border-radius:20px;
+  background:rgba(255,255,255,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.74);
+}
+body.storm-admin-open .studio-structure-row {
+  min-height:88px;
+  padding:18px 26px;
+  border-bottom:1px solid rgba(30,29,30,.07);
+}
+body.storm-admin-open .studio-structure-row-main strong {
+  font-size:.88rem;
+  font-weight:600;
+  letter-spacing:-.01em;
+}
+body.storm-admin-open .studio-structure-row-main span {
+  margin-top:6px;
+  color:var(--ink-50);
+  font-size:.68rem;
+  line-height:1.6;
+}
+body.storm-admin-open .studio-structure-note {
+  margin-top:14px;
+  padding:0 2px;
+  border-radius:0;
+  background:transparent;
+  color:var(--ink-40);
+  font-size:.62rem;
+  line-height:1.55;
+}
+@media (max-width:680px) {
+  body.storm-admin-open .studio-structure-shell { padding-bottom:72px; }
+  body.storm-admin-open .studio-structure-head { margin-bottom:26px; }
+  body.storm-admin-open .studio-structure-save { width:auto; margin-top:0; }
+  body.storm-admin-open .studio-structure-row { padding:17px 18px; }
+}
+
 </style>
   <link rel="stylesheet" href="./themes/rainbow-glass.css">
   <link rel="stylesheet" href="./themes/midnight-frost.css">
@@ -5662,6 +5890,9 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
         <button type="button" class="admin-nav-item" data-admin-panel="content" data-studio-route="identity" data-studio-label="Identité &amp; apparence">
           Identité &amp; apparence
         </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="structure" data-studio-route="structure" data-studio-label="Structure du site">
+          Structure du site
+        </button>
 
         <div class="admin-nav-group-label">Analyse</div>
         <button type="button" class="admin-nav-item" data-admin-panel="dashboard" data-studio-route="pilotage" data-studio-label="Pilotage">
@@ -5828,6 +6059,7 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
       </div>
 
       <div class="admin-panel hidden" id="adminPanelContent"><div id="adminContentEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelStructure"><div id="adminStructureEditor"></div></div>
       <div class="admin-panel hidden" id="adminPanelNews"><div id="adminNewsEditor"></div></div>
       <div class="admin-panel hidden" id="adminPanelTeam"><div id="adminTeamEditor"></div></div>
       <div class="admin-panel hidden" id="adminPanelVisuals"><div id="adminVisualsEditor"></div></div>
@@ -5945,6 +6177,21 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
   // ═══════════════════════════════════════════════════
   // CONTENU PUBLIC + FAQ + PLANNING/ACTUS + AMBASSADEURS/ÉQUIPE/PLANS
   // ═══════════════════════════════════════════════════
+  // STUDIO V2 — 8C / SITE STRUCTURE
+  function studioNormalizeSiteStructure(raw, team) {
+    const configured = raw && typeof raw === 'object' && !Array.isArray(raw);
+    const teamDefault = Array.isArray(team) && team.length > 0;
+    return {
+      home: true,
+      timeline: configured ? raw.timeline !== false : true,
+      news: configured ? raw.news !== false : true,
+      spaces: configured ? raw.spaces !== false : true,
+      questions: configured ? raw.questions !== false : true,
+      ambassadors: configured ? raw.ambassadors !== false : true,
+      team: configured ? raw.team !== false : teamDefault
+    };
+  }
+
   async function loadContent() {
     try {
       const res = await fetch('/api/content', { headers: { 'x-admin-token': getAdminToken() } });
@@ -5952,6 +6199,7 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
       const data = await res.json();
       return {
         branding: data.branding && typeof data.branding === 'object' ? data.branding : { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' },
+        siteStructure: studioNormalizeSiteStructure(data.siteStructure, data.team),
         project: data.project && typeof data.project === 'object' ? data.project : studioDefaultProjectSeed(),
         publicContent: data.publicContent && typeof data.publicContent === 'object' ? data.publicContent : {},
         faqEntries: Array.isArray(data.faqEntries) ? data.faqEntries : [],
@@ -5970,7 +6218,7 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
     } catch (e) {
       console.warn('Impossible de charger le contenu serveur :', e);
       return {
-        branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, project: studioDefaultProjectSeed(), publicContent: {}, faqEntries: [], faqDrafts: [],
+        branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, siteStructure: studioNormalizeSiteStructure(null, []), project: studioDefaultProjectSeed(), publicContent: {}, faqEntries: [], faqDrafts: [],
         progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [],
         ambassadorsContent: {}, ambassadors: [], teamContent: {}, team: [], spaces: [], spacesInitialized: false, plans: []
       };
@@ -5980,6 +6228,7 @@ body.storm-admin-open .studio-inline-editor.is-compact .studio-inline-surface { 
   function buildSavePayload(content) {
     return {
       branding: content.branding,
+      siteStructure: studioNormalizeSiteStructure(content.siteStructure, content.team),
       project: content.project,
       publicContent: content.publicContent,
       faqEntries: faqData,
@@ -7343,6 +7592,7 @@ CALENDRIER
 
   const STUDIO_SAVE_BUTTONS = {
     identity:'saveIdentityBtn',
+    structure:'studioStructureSave',
     project:'studioProjectSave',
     news:'studioNewsSave',
     spaces:'studioSpacesSave',
@@ -7535,6 +7785,7 @@ CALENDRIER
     if (adminProjectName) adminProjectName.textContent = content.branding?.projectName || 'Projet';
     renderKpiDashboard(kpi, content);
     renderContentEditor(content);
+    renderStructureEditor(content);
     renderProjectEditor(content);
     renderNewsEditor(content);
     renderTeamEditor(content);
@@ -8555,6 +8806,90 @@ CALENDRIER
     }
 
     render();
+  }
+
+  function renderStructureEditor(content) {
+    const container = document.getElementById('adminStructureEditor');
+    if (!container) return;
+
+    content.siteStructure = studioNormalizeSiteStructure(content.siteStructure, content.team);
+
+    const rows = [
+      { key:'home', label:'Accueil', help:'Le point d’entrée du site. Il se recompose automatiquement à partir des contenus publiés.', fixed:true },
+      { key:'timeline', label:'Le projet', help:'La présentation du projet et ses grandes étapes.' },
+      { key:'news', label:'Actualités', help:'Les informations publiées au fil du projet.' },
+      { key:'spaces', label:'Espaces', help:'Les espaces, plans et éléments qui permettent de se projeter.' },
+      { key:'questions', label:'Questions', help:'Les réponses officielles proposées par Storm Match.' },
+      { key:'ambassadors', label:'Ambassadeurs', help:'Le réseau de proximité et les relais du projet.' },
+      { key:'team', label:'Équipe projet', help:'Les personnes qui portent le projet, affichées dans « Le projet ».' }
+    ];
+
+    function rowHtml(item) {
+      const visible = item.fixed || content.siteStructure[item.key] !== false;
+      return `
+        <div class="studio-structure-row" data-structure-row="${escapeHtml(item.key)}">
+          <div class="studio-structure-row-main">
+            <strong>${escapeHtml(item.label)}</strong>
+            <span>${escapeHtml(item.help)}</span>
+          </div>
+          <div class="studio-structure-row-control">
+            ${item.fixed
+              ? '<span class="studio-structure-fixed">Toujours visible</span>'
+              : `<span class="studio-structure-state" data-structure-state="${escapeHtml(item.key)}">${visible ? 'Visible' : 'Masqué'}</span>
+                 <button type="button" class="studio-structure-switch" role="switch" aria-checked="${visible ? 'true' : 'false'}" aria-label="${visible ? 'Masquer' : 'Afficher'} ${escapeHtml(item.label)}" data-structure-toggle="${escapeHtml(item.key)}"></button>`}
+          </div>
+        </div>`;
+    }
+
+    container.innerHTML = `
+      <section class="studio-structure-shell">
+        <div class="studio-structure-head studio-domain-head">
+          <div class="studio-structure-head-copy studio-domain-head-copy">
+            <div class="admin-page-eyebrow">Administration</div>
+            <h1 class="studio-structure-title">Structure du site.</h1>
+            <p>Choisissez ce qui apparaît sur le site public. Masquer une rubrique ne supprime pas son contenu : vous pouvez continuer à la préparer dans le Studio.</p>
+          </div>
+          <button type="button" class="studio-structure-save studio-domain-save" id="studioStructureSave">Enregistrer la structure</button>
+        </div>
+        <div class="studio-structure-surface">
+          ${rows.map(rowHtml).join('')}
+        </div>
+        <div class="studio-structure-note">Enregistrer protège vos choix dans le Studio. Le site public ne change qu’au prochain « Publier ».</div>
+      </section>`;
+
+    function syncToggle(key) {
+      const button = container.querySelector(`[data-structure-toggle="${key}"]`);
+      const state = container.querySelector(`[data-structure-state="${key}"]`);
+      if (!button) return;
+      const visible = content.siteStructure[key] !== false;
+      button.setAttribute('aria-checked', visible ? 'true' : 'false');
+      const item = rows.find(row => row.key === key);
+      button.setAttribute('aria-label', `${visible ? 'Masquer' : 'Afficher'} ${item?.label || key}`);
+      if (state) state.textContent = visible ? 'Visible' : 'Masqué';
+    }
+
+    container.querySelectorAll('[data-structure-toggle]').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.structureToggle;
+        if (!key || key === 'home') return;
+        content.siteStructure[key] = content.siteStructure[key] === false;
+        syncToggle(key);
+        studioSetSaveState('dirty');
+      });
+    });
+
+    document.getElementById('studioStructureSave')?.addEventListener('click', async () => {
+      content.siteStructure = studioNormalizeSiteStructure(content.siteStructure, content.team);
+      const result = await saveContent(buildSavePayload(content));
+      if (handleSaveResult(result, 'Structure du site enregistrée.')) {
+        if (result.content?.siteStructure) {
+          content.siteStructure = studioNormalizeSiteStructure(result.content.siteStructure, result.content.team || content.team);
+        }
+        currentAdminContent = content;
+        if (result.saveSource !== 'auto') renderStructureEditor(content);
+        else studioQueueContextSaveDockBind();
+      }
+    });
   }
 
   function studioDefaultProjectSeed() {

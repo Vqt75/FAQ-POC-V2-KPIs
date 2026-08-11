@@ -18,6 +18,7 @@
     "test:studio-navigation": "node tectonic/studio-v2/test_navigation_7a2.js",
     "test:studio-save": "node tectonic/studio-v2/test_save_doctrine_7a3.js",
     "test:studio-richtext": "node tectonic/studio-v2/test_rich_text_8a.js",
-    "test:studio-mood": "node tectonic/studio-v2/test_mood_engine_8b.js && node tectonic/studio-v2/test_tectonic_mood_8b1.js && node tectonic/studio-v2/test_tectonic_mood_8b2.js"
+    "test:studio-mood": "node tectonic/studio-v2/test_mood_engine_8b.js && node tectonic/studio-v2/test_tectonic_mood_8b1.js && node tectonic/studio-v2/test_tectonic_mood_8b2.js",
+    "test:studio-structure": "node tectonic/studio-v2/test_structure_8c.js && node tectonic/studio-v2/test_structure_8c1.js && node tectonic/studio-v2/test_structure_8c2.js"
   }
 }
