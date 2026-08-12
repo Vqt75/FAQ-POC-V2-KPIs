@@ -792,7 +792,7 @@ function serveStaticFile(res, filePath) {
 // des usages réels (voir commentaire au point d'appel). Ajouter un
 // dossier ici est un choix délibéré, jamais une conséquence
 // accidentelle de la simple présence d'un fichier sur disque.
-const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads', 'public'];
+const PUBLIC_STATIC_DIRECTORIES = ['assets', 'demo', 'themes', 'uploads', 'public', 'legacy'];
 // Extensions réellement utilisées par ces dossiers aujourd'hui
 // (CSS/JS des thèmes et de la démo, images de marque, uploads
 // png/jpg/pdf + fichiers de police — cohérent avec ALLOWED_UPLOAD_TYPES).
@@ -1219,13 +1219,15 @@ const server = http.createServer(async (req, res) => {
   //
   // Whitelist construite depuis un audit des usages RÉELS (grep sur
   // index.html et les fichiers CSS/JS référencés), pas depuis une
-  // supposition — seuls ces 5 dossiers contiennent des ressources
+  // supposition — seuls ces 6 dossiers contiennent des ressources
   // effectivement chargées par le navigateur :
   //   /assets/...  logo et visuels de marque
   //   /demo/...    démo de présentation Storm (CSS + JS)
   //   /themes/...  Rainbow Glass et Midnight Frost (CSS + JS)
   //   /uploads/... fichiers uploadés par l'admin (png/jpg/pdf)
   //   /public/...  Runtime Tectonic et renderers (Phase 5)
+  //   /legacy/...  rendu public Pangea mis en quarantaine (frontière
+  //                d'extraction Studio, aucun changement de comportement)
   // Jamais /data/**, jamais server.js, jamais tectonic/**, jamais les
   // documents d'architecture, jamais .git*/.gitignore/package*.json —
   // une whitelist positive, pas une liste noire qu'il faudrait
