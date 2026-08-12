@@ -612,7 +612,7 @@
   });
   adminLogoutBtn.addEventListener('click', () => {
     clearAdminToken();
-    window.location.href = '/?pangea=1'; // adapté : plus de page locale à activer, vraie navigation
+    openAdminModal(); // même mécanisme que l'expiration de session ailleurs dans ce fichier — reste sur /admin, aucun passage par Pangea
     showToast('Déconnecté.');
   });
   adminResetBtn.addEventListener('click', async () => {
