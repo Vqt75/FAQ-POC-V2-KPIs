@@ -6,7 +6,7 @@ const assert = require('assert');
 const { buildPublicationCandidate } = require('../publication-candidate');
 
 const root = path.resolve(__dirname, '..', '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(root, 'tectonic', 'studio.js'), 'utf8');
 const server = fs.readFileSync(path.join(root, 'server.js'), 'utf8');
 
 let checks = 0;

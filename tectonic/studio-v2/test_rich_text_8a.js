@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const root = path.resolve(__dirname, '..', '..');
-const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(root, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(root, 'tectonic', 'studio.js'), 'utf8');
 const ivory = fs.readFileSync(path.join(root, 'public', 'renderers', 'ivory.js'), 'utf8');
 
 const checks = [];

@@ -4,7 +4,11 @@ const { buildPublicationCandidate } = require('../publication-candidate');
 const { compile } = require('../compiler');
 
 const ROOT = path.resolve(__dirname, '../..');
-const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const indexHtml = fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.js'), 'utf8');
+// Le moteur FAQ Pangea (scoreEntry, etc.) est gelé et vit toujours dans le
+// vrai index.html — jamais déplacé vers le Studio. Deux vérifications plus
+// bas en ont besoin spécifiquement (voir pangeaHtml).
+const pangeaHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const serverJs = fs.readFileSync(path.join(ROOT, 'server.js'), 'utf8');
 const compilerJs = fs.readFileSync(path.join(ROOT, 'tectonic/compiler.js'), 'utf8');
 const ivoryJs = fs.readFileSync(path.join(ROOT, 'public/renderers/ivory.js'), 'utf8');
@@ -91,8 +95,8 @@ ok(serverJs.includes('keywords: normalizeStringArray(raw?.keywords)'), 'les sign
 ok(serverJs.includes('phrases: normalizeStringArray(raw?.phrases)'), 'les formulations alternatives sont normalisées');
 ok(serverJs.includes('intentSignals: normalizeStringArray(raw?.intentSignals)'), 'les intentSignals du moteur restent préservés');
 ok(serverJs.includes('negativeSignals: normalizeStringArray(raw?.negativeSignals)'), 'les negativeSignals restent préservés');
-ok(indexHtml.includes('(entry.phrases || []).forEach(phrase =>'), 'le moteur Pangea continue de scorer phrases[] fortement');
-ok(indexHtml.includes('if (np && normQ.includes(np)) score += 10'), 'le poids historique des formulations alternatives est intact');
+ok(pangeaHtml.includes('(entry.phrases || []).forEach(phrase =>'), 'le moteur Pangea continue de scorer phrases[] fortement');
+ok(pangeaHtml.includes('if (np && normQ.includes(np)) score += 10'), 'le poids historique des formulations alternatives est intact');
 ok(compilerJs.includes('phrases: Array.isArray(e.phrases) ? e.phrases : []'), 'le Compiler transporte phrases[]');
 ok(compilerJs.includes('intentSignals: Array.isArray(e.intentSignals)'), 'le Compiler transporte toujours les signaux du moteur');
 

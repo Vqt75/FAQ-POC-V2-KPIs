@@ -3,7 +3,7 @@
 const fs = require('fs');
 const assert = require('assert');
 
-const index = fs.readFileSync('index.html', 'utf8');
+const index = fs.readFileSync('tectonic/studio.html', 'utf8') + fs.readFileSync('tectonic/studio.js', 'utf8');
 const server = fs.readFileSync('server.js', 'utf8');
 
 let checks = 0;

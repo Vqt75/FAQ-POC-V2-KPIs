@@ -51,7 +51,7 @@ ok(singleManifest.branding.colors.primary === '#451DC6', 'couleur unique : prima
 ok(singleManifest.branding.colors.secondary === '#451DC6', 'couleur unique : aucun beige secondaire n’est inventé');
 
 console.log('\n=== Contrats UI / serveur / renderer ===');
-const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const index = fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.js'), 'utf8');
 const server = fs.readFileSync(path.join(ROOT, 'server.js'), 'utf8');
 const ivory = fs.readFileSync(path.join(ROOT, 'public', 'renderers', 'ivory.js'), 'utf8');
 const tectonicHtml = fs.readFileSync(path.join(ROOT, 'public', 'tectonic.html'), 'utf8');

@@ -10,7 +10,7 @@ const {
 } = require('../news-content');
 
 const ROOT = path.resolve(__dirname, '../..');
-const indexHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const indexHtml = fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.js'), 'utf8');
 const serverJs = fs.readFileSync(path.join(ROOT, 'server.js'), 'utf8');
 const compilerJs = fs.readFileSync(path.join(ROOT, 'tectonic/compiler.js'), 'utf8');
 const ivoryJs = fs.readFileSync(path.join(ROOT, 'public/renderers/ivory.js'), 'utf8');

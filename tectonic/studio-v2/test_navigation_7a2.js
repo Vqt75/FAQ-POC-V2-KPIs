@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const html = fs.readFileSync(path.join(__dirname, '..', '..', 'index.html'), 'utf8');
+const html = fs.readFileSync(path.join(__dirname, '..', '..', 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(__dirname, '..', '..', 'tectonic', 'studio.js'), 'utf8');
 const checks = [
   ['7A.2 marker', 'STUDIO V2 — 7A.2 / NAVIGATION CONTINUITY'],
   ['admin body locked to viewport', 'height:100dvh;\n    overflow:hidden;'],

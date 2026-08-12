@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Projet XYZ — Espace collaborateurs</title>
+<title>Storm — Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Roboto:wght@300;400;500;700;900&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -5591,1457 +5591,251 @@ body.storm-admin-open .studio-structure-note {
 }
 
 </style>
-  <link rel="stylesheet" href="./themes/rainbow-glass.css">
-  <link rel="stylesheet" href="./themes/midnight-frost.css">
-  <link rel="stylesheet" href="./demo/storm-demo.css">
 </head>
-<body>
+<body class="storm-admin-open">
 
-<!-- ═══════════════════ NAVIGATION ═══════════════════ -->
-<nav class="nav">
-  <div class="nav-inner" id="navInner">
-    <div class="nav-brand">
-      <div class="nav-mark"></div>
-      <div class="nav-brand-text">
-        <span class="nav-brand-name">Projet XYZ</span>
-        <span class="nav-brand-sub">Espace collaborateurs</span>
-      </div>
-    </div>
-    <div class="nav-tabs" id="navTabs">
-      <button class="nav-tab active" data-page="faq">FAQ</button>
-      <button class="nav-tab" data-page="actu">Actualités</button>
-      <button class="nav-tab" data-page="plans">Plans &amp; 3D</button>
-      <button class="nav-tab" data-page="ambassadeurs">Ambassadeurs</button>
-      <button class="nav-tab" data-page="equipe">Équipe projet</button>
-    </div>
-    <button type="button" class="admin-nav-btn" id="adminLinkBtn" title="Administration" aria-label="Administration">
-      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="5" y="11" width="14" height="9" rx="2"></rect>
-        <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
-      </svg>
-      <span>Admin</span>
-    </button>
-    <div class="nav-indicator" id="navIndicator"></div>
-  </div>
-</nav>
+<!-- Stub structurel minimal, jamais visible : openAdminPage() référence
+     cet élément sans garde (navIndicator.style.width = '0px'), exactement
+     comme dans index.html où il appartient à la barre de navigation
+     publique. Ce fichier n'a pas cette barre — ce stub évite uniquement
+     une exception, sans aucun rôle visuel ni fonctionnel dans le Studio. -->
+<div id="navTabs" hidden><div id="navInner"><div id="navIndicator"></div></div></div>
 
-<!-- ═══════════════════ PAGE : FAQ ═══════════════════ -->
-<div class="page active" id="page-faq">
-
-  <section class="hero">
-    <div class="hero-inner">
-      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Base de connaissance</p>
-      <h1 class="hero-title reveal" style="--i:1" data-reveal>Une réponse,<br><span class="accent">chaque fois.</span></h1>
-      <p class="hero-desc reveal" style="--i:2" data-reveal>Posez votre question librement. Les réponses officielles s'affichent instantanément. Pour tout ce qui reste flou, faites-le remonter à l'équipe projet via le formulaire ci-dessous — c'est comme ça que cette base s'enrichit.</p>
-    </div>
-  </section>
-
-  <div class="search-panel">
-    <div class="search-card reveal" style="--i:3" data-reveal>
-      <div class="search-row">
-        <input type="text" class="search-input" id="questionInput" placeholder="Ex. : Où est-ce qu'on va manger ?">
-        <button type="button" id="askBtn" class="search-btn">Rechercher</button>
-      </div>
-      <div class="suggestions">
-        <button type="button" class="suggestion" data-question="Quand a lieu le déménagement ?">Date du déménagement</button>
-        <button type="button" class="suggestion" data-question="Où est-ce qu'on va manger ?">Restauration</button>
-        <button type="button" class="suggestion" data-question="Y aura-t-il des visites du site ?">Visites du site</button>
-        <button type="button" class="suggestion" data-question="Est-ce que le télétravail va changer ?">Télétravail</button>
-        <button type="button" class="suggestion" data-question="Comment venir à vélo ?">Mobilités douces</button>
-        <button type="button" class="suggestion" data-question="J'ai peur du changement, c'est normal ?">Appréhension</button>
-        <button type="button" class="suggestion" data-question="Qui pilote le projet ?">Pilotage</button>
-        <button type="button" class="suggestion" data-question="Que faire de mes archives ?">Archivage</button>
-      </div>
-    </div>
-  </div>
-
-  <section class="results-zone">
-    <div class="results-inner">
-
-      <div class="state-box loading-box" id="loadingBox">
-        <div class="loading-row">
-          <div class="loading-track"><div class="loading-fill"></div></div>
-          <span class="loading-label mono">Recherche en cours</span>
-        </div>
-      </div>
-
-      <div class="state-box result-box" id="resultBox">
-        <div class="result-anim" id="resultAnim">
-          <div class="result-eyebrow mono r-item r-1">Réponse</div>
-          <div class="result-question r-item r-1">Question : <span id="resultQuestion"></span></div>
-          <div id="resultStatus" class="status-pill r-item r-2"></div>
-          <div id="resultAnswer" class="result-answer r-item r-3"></div>
-          <div id="resultNote" class="result-note r-item r-4"></div>
-        </div>
-      </div>
-
-      <div class="state-box notfound-box" id="notFoundBox">
-        <div class="result-eyebrow mono">Réponse indisponible</div>
-        <p>Nous n'avons pas encore de réponse précise à cette question. Elle pourra être intégrée dans une prochaine mise à jour de la FAQ — n'hésitez pas à nous la transmettre via le formulaire ci-dessous.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="contact-section">
-    <div class="contact-grid reveal" data-reveal>
-      <div class="contact-intro">
-        <div class="contact-title">Vous n'avez pas trouvé votre réponse ?</div>
-        <p>Transmettez votre question à l'équipe projet. Toutes les demandes sont lues et traitées dans les meilleurs délais.</p>
-      </div>
-      <div>
-        <form class="form-grid" id="contactForm" action="" method="POST">
-          <input type="text" name="name" class="form-input" placeholder="Nom et prénom">
-          <input type="email" name="email" class="form-input" placeholder="Adresse email">
-          <textarea name="message" class="form-input" placeholder="Décrivez votre question ou le point qui reste flou."></textarea>
-          <button type="submit" class="btn-submit">Envoyer la demande</button>
-        </form>
-        <p class="form-note">Le formulaire n'est pas encore branché à une boîte mail. Votre demande est enregistrée et visible par l'équipe projet en attendant.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="footer">
-    <img src="/assets/storm-logo.png" alt="Storm by Parella" class="footer-storm-logo">
-    <p class="mono" id="footerBrandLine">Projet XYZ · Espace collaborateurs — Document interne, réservé aux équipes</p>
-    <button type="button" class="footer-legal-link mono" id="footerLegalLink">Mentions légales</button>
-  </div>
-
-</div>
-
-<!-- ═══════════════════ PAGE : ACTUALITÉS ═══════════════════ -->
-<div class="page" id="page-actu">
-
-  <section class="hero hero--compact">
-    <div class="hero-inner">
-      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Actualités</p>
-      <h1 class="hero-title reveal" style="--i:1" data-reveal>Le fil<br><span class="accent">du projet.</span></h1>
-      <p class="hero-desc reveal" style="--i:2" data-reveal>Retrouvez ici toutes les informations publiées par l'équipe projet, au fur et à mesure des décisions et des étapes franchies. Cette page remplace la newsletter envoyée par email.</p>
-    </div>
-  </section>
-
-  <div class="section-body">
-
-    <div class="timeline-block">
-      <div class="timeline-side reveal" data-reveal>
-        <div class="timeline-label mono">Avancement</div>
-        <div class="timeline-step" id="planningStep">Étape 3<br>sur 6</div>
-        <div class="progress-track"><div class="progress-fill" id="planningFill" style="width:0%"></div></div>
-        <div class="progress-pct mono" id="planningPct">0%</div>
-      </div>
-
-      <div class="milestones" id="milestonesList"></div>
-    </div>
-
-    <div class="articles-block">
-      <div class="articles-header mono reveal" data-reveal id="articlesHeader">Publications</div>
-      <div id="articlesList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ PAGE : PLANS & 3D ═══════════════════ -->
-<div class="page" id="page-plans">
-
-  <section class="hero hero--compact">
-    <div class="hero-inner">
-      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Documents visuels</p>
-      <h1 class="hero-title reveal" style="--i:1" data-reveal>Découvrez<br><span class="accent">le futur site.</span></h1>
-      <p class="hero-desc reveal" style="--i:2" data-reveal>Plans de macro et micro-zoning, vues 3D des espaces, ambiances : tous les documents visuels du projet sont ici, commentés pour vous aider à vous projeter avant les ateliers.</p>
-    </div>
-  </section>
-
-  <div class="section-body">
-    <div class="plans-toolbar reveal" data-reveal id="plansFilterBar"></div>
-    <div class="plans-grid" id="plansGrid"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════ PAGE : AMBASSADEURS ═══════════════════ -->
-<div class="page" id="page-ambassadeurs">
-
-  <section class="hero hero--compact">
-    <div class="hero-inner">
-      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Réseau de proximité</p>
-      <h1 class="hero-title reveal" style="--i:1" data-reveal>Vos<br><span class="accent">ambassadeurs.</span></h1>
-      <p class="hero-desc reveal" style="--i:2" data-reveal>Ce sont vos collègues. Ils ont accepté volontairement de jouer un rôle de relais entre les équipes et l'équipe projet. Interpellez-les sans hésiter.</p>
-    </div>
-  </section>
-
-  <div class="section-body">
-    <div class="intro-block reveal" data-reveal id="ambassadorsIntroBlock"></div>
-    <div class="people-label mono reveal" data-reveal id="ambassadorsRosterLabel"></div>
-    <div class="people-grid" id="ambassadorsGrid"></div>
-    <div class="info-block reveal" data-reveal id="ambassadorsCtaBlock"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════ PAGE : ÉQUIPE PROJET ═══════════════════ -->
-<div class="page" id="page-equipe">
-
-  <section class="hero hero--compact">
-    <div class="hero-inner">
-      <p class="eyebrow reveal" style="--i:0" data-reveal>Projet XYZ — Organisation</p>
-      <h1 class="hero-title reveal" style="--i:1" data-reveal>L'équipe<br><span class="accent">projet.</span></h1>
-      <p class="hero-desc reveal" style="--i:2" data-reveal>Retrouvez ici les personnes qui pilotent le projet côté entreprise et les interlocuteurs du cabinet Parella qui accompagne la démarche de transformation des espaces de travail.</p>
-    </div>
-  </section>
-
-  <div class="section-body">
-    <div class="section-separator mono reveal" data-reveal>Équipe XYZ — Pilotage interne</div>
-    <div class="team-grid" id="teamXyzGrid"></div>
-
-    <div class="section-separator mono reveal" data-reveal style="margin-top:16px;">Cabinet Parella — Conseil &amp; accompagnement</div>
-    <div class="parella-intro reveal" data-reveal id="parellaIntroBlock"></div>
-    <div class="team-grid" id="teamParellaGrid"></div>
-
-    <div class="info-block reveal" data-reveal style="margin-top:16px;" id="teamCtaBlock"></div>
-  </div>
-</div>
-
-
-<!-- ═══════════════════ LIGHTBOX ═══════════════════ -->
-<div class="lightbox" id="lightbox">
-  <div class="lightbox-toolbar">
-    <div class="lightbox-title" id="lightboxTitle"></div>
-    <div class="lightbox-controls">
-      <button class="lb-btn" id="lbZoomOut" title="Dézoomer">−</button>
-      <span class="lb-zoom-label" id="lbZoomLabel">100%</span>
-      <button class="lb-btn" id="lbZoomIn" title="Zoomer">+</button>
-      <button class="lb-btn" id="lbReset" title="Réinitialiser" style="font-size:0.7rem;">⟳</button>
-      <button class="lb-btn" id="lightboxClose" title="Fermer" style="margin-left:4px;">✕</button>
-    </div>
-  </div>
-  <div class="lightbox-stage" id="lightboxStage">
-    <div class="lightbox-media-wrap" id="lightboxWrap">
-      <div id="lightboxMedia"></div>
-    </div>
-  </div>
-  <div class="lightbox-caption">
-    <div id="lightboxCaption"></div>
-    <div class="lightbox-hint">Molette pour zoomer · Clic + glisser pour naviguer · Échap pour fermer</div>
-  </div>
-</div>
-
-<!-- ═══════════════════ MODAL ADMINISTRATION ═══════════════════ -->
-
-<div class="admin-modal" id="importReviewModal">
-  <div class="admin-modal-card import-review-card">
-    <div class="admin-modal-title">Questions à vérifier</div>
-    <div class="admin-modal-sub" id="importReviewSub"></div>
-    <div class="import-review-list" id="importReviewList"></div>
+<div class="admin-modal" id="adminModal">
+  <div class="admin-modal-card">
+    <div class="admin-modal-title">Accéder à Storm</div>
+    <div class="admin-modal-sub">Saisissez le mot de passe de votre espace projet.</div>
+    <input type="password" class="form-input" id="adminPasswordInput" placeholder="Mot de passe">
+    <div class="admin-modal-error" id="adminModalError">Mot de passe incorrect.</div>
     <div class="admin-modal-actions">
-      <button type="button" class="admin-modal-cancel" id="importReviewCancel">Annuler</button>
-      <button type="button" class="search-btn" id="importReviewConfirm">Ajouter aux brouillons</button>
+      <button type="button" class="admin-modal-cancel" id="adminModalCancel">Annuler</button>
+      <button type="button" class="search-btn" id="adminModalSubmit">Entrer</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════ PAGE : ADMINISTRATION ═══════════════════ -->
+<div class="page" id="page-admin">
+  <div class="admin-shell">
 
-<div class="toast" id="toast"></div>
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-header">
+        <img src="/assets/storm-logo.png" alt="Storm by Parella">
+      </div>
 
-<!-- ═══════════════════ BAROMÈTRE MÉTÉO — bouton flottant global ═══════════════════ -->
-<button type="button" class="mood-fab" id="moodFab" aria-label="Météo du projet" aria-expanded="false">
-  <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3.6"/><path d="M8 2.6v1.4M8 12v1.4M2.6 8h1.4M12 8h1.4M4.3 4.3l1 1M10.7 4.3l-1 1"/><path d="M13 19.5a3.7 3.7 0 0 1 .4-7.36A5 5 0 0 1 22.5 14a3.7 3.7 0 0 1-1 5.5"/></svg>
-  <span class="mood-fab-label" aria-hidden="true">Météo du projet</span>
-</button>
+      <div class="admin-project-card">
+        <small>Espace projet</small>
+        <strong id="adminProjectName">Projet XYZ</strong>
+        <span>Studio</span>
+      </div>
 
-<div class="mood-popover" id="moodPopover">
-  <div id="moodPopoverBody">
-    <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet aujourd’hui ?</div>
-    <div class="mood-popover-options" id="moodOptions">
-      <button type="button" class="mood-option" data-mood-value="1" aria-label="Orageux" title="Orageux">
-        <svg viewBox="0 0 24 24"><path d="M6 16.5a4 4 0 0 1 .5-7.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1 .3 7.98"/><path d="M13 12l-2.5 4h3L11 20"/></svg>
-      </button>
-      <button type="button" class="mood-option" data-mood-value="2" aria-label="Nuageux" title="Nuageux">
-        <svg viewBox="0 0 24 24"><path d="M5 17.5a4 4 0 0 1 .4-7.98A5.5 5.5 0 0 1 16 8.7a4.2 4.2 0 0 1 3.5 4.15 3.9 3.9 0 0 1-.4 4.65"/><path d="M8 17.5h10.5"/></svg>
-      </button>
-      <button type="button" class="mood-option" data-mood-value="3" aria-label="Couvert" title="Couvert">
-        <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.4"/><path d="M11 17.5a4 4 0 0 1 .4-7.9c.4-.05.8-.03 1.2.03A5.5 5.5 0 0 1 22.5 12a4 4 0 0 1-1 5.5"/></svg>
-      </button>
-      <button type="button" class="mood-option" data-mood-value="4" aria-label="Éclairci" title="Éclairci">
-        <svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3.6"/><path d="M8 2.6v1.4M8 12v1.4M2.6 8h1.4M12 8h1.4M4.3 4.3l1 1M10.7 4.3l-1 1"/><path d="M13 19.5a3.7 3.7 0 0 1 .4-7.36A5 5 0 0 1 22.5 14a3.7 3.7 0 0 1-1 5.5"/></svg>
-      </button>
-      <button type="button" class="mood-option" data-mood-value="5" aria-label="Ensoleillé" title="Ensoleillé">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></svg>
-      </button>
+      <nav class="admin-sidebar-nav" id="adminSidebarNav">
+        <button type="button" class="admin-nav-item active" data-admin-panel="overview" data-studio-route="overview" data-studio-label="Vue d’ensemble">
+          Vue d’ensemble
+        </button>
+
+        <div class="admin-nav-group-label">Contenu</div>
+        <button type="button" class="admin-nav-item" data-admin-panel="project" data-studio-route="project" data-studio-label="Le projet">
+          Le projet
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="news" data-studio-route="news" data-studio-label="Actualités">
+          Actualités
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="visuals" data-studio-route="spaces" data-studio-label="Espaces">
+          Espaces
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="faq" data-studio-route="questions" data-studio-label="Questions">
+          Questions
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="team" data-studio-route="ambassadors" data-studio-label="Ambassadeurs">
+          Ambassadeurs
+        </button>
+
+        <div class="admin-nav-group-label">Administration</div>
+        <button type="button" class="admin-nav-item" data-admin-panel="content" data-studio-route="identity" data-studio-label="Identité &amp; apparence">
+          Identité &amp; apparence
+        </button>
+        <button type="button" class="admin-nav-item" data-admin-panel="structure" data-studio-route="structure" data-studio-label="Structure du site">
+          Structure du site
+        </button>
+
+        <div class="admin-nav-group-label">Analyse</div>
+        <button type="button" class="admin-nav-item" data-admin-panel="dashboard" data-studio-route="pilotage" data-studio-label="Pilotage">
+          Pilotage
+        </button>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="studio-context-save-dock" id="studioContextSaveDock" aria-hidden="true">
+          <div class="studio-context-save-dock-inner">
+            <div class="studio-context-save-dock-card">
+              <span class="studio-context-save-dock-label" id="studioContextSaveLabel">Rubrique</span>
+              <button type="button" class="studio-context-save-btn" id="studioContextSaveBtn">Enregistrer</button>
+            </div>
+          </div>
+        </div>
+        <div class="studio-demo-dock" aria-label="Mode démo">
+          <span class="studio-demo-dock-label">Mode démo</span>
+          <button type="button" class="admin-sidebar-back" id="stormDemoLaunchBtn">
+            <span>Relancer la création</span><span class="studio-demo-dock-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+        <button type="button" class="admin-sidebar-logout" id="adminLogoutBtn">Déconnexion</button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div class="studio-topbar-context">
+          <strong class="studio-topbar-title" id="adminCurrentPanelLabel">Vue d’ensemble</strong>
+          <span class="studio-save-state is-saved" id="studioSaveState">Tout est enregistré</span>
+        </div>
+        <div class="studio-topbar-actions">
+          <span class="studio-publication-state" id="studioPublicationState">Vérification…</span>
+          <button type="button" class="studio-topbar-btn studio-preview-btn" id="studioPreviewBtn">Aperçu ↗</button>
+          <button type="button" class="studio-topbar-btn studio-publish-btn" id="studioPublishBtn" disabled>Publier</button>
+        </div>
+      </div>
+
+      <div class="admin-panel" id="adminPanelOverview">
+        <div class="studio-overview-head">
+          <div>
+            <div class="admin-page-eyebrow">Studio</div>
+            <h1 class="studio-overview-title">Reprenez là où le projet en est.</h1>
+          </div>
+          <p class="studio-overview-lead">Mettez à jour les informations utiles, préparez vos contenus et publiez lorsque tout est prêt. Storm s’occupe de leur mise en forme.</p>
+        </div>
+        <div class="studio-overview-grid">
+          <div>
+            <section class="studio-overview-block">
+              <div class="studio-overview-kicker">À reprendre</div>
+              <div class="studio-resume-list" id="studioResumeList"></div>
+            </section>
+            <section class="studio-overview-block">
+              <div class="studio-overview-kicker">État de publication</div>
+              <div id="studioOverviewPublication"></div>
+            </section>
+          </div>
+          <aside class="studio-overview-block">
+            <div class="studio-overview-kicker">Actions fréquentes</div>
+            <div class="studio-quick-actions">
+              <button type="button" class="studio-quick-action" data-studio-go="news"><span>Nouvelle actualité</span><span>→</span></button>
+              <button type="button" class="studio-quick-action" data-studio-go="spaces"><span>Ajouter un espace</span><span>→</span></button>
+              <button type="button" class="studio-quick-action" data-studio-go="questions"><span>Ajouter une question</span><span>→</span></button>
+              <button type="button" class="studio-quick-action" data-studio-go="ambassadors"><span>Ajouter un ambassadeur</span><span>→</span></button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div class="admin-panel hidden" id="adminPanelProject"><div id="adminProjectEditor"></div></div>
+
+      <div class="admin-panel hidden" id="adminPanelDashboard">
+        <div class="studio-domain-head studio-pilotage-head">
+          <div class="studio-domain-head-copy">
+            <div class="admin-page-eyebrow">Analyse</div>
+            <h1>Pilotage.</h1>
+            <p>Écoutez ce que le site vous apprend : ce qui est utilisé, ce qui manque et la manière dont le projet est vécu.</p>
+          </div>
+          <div class="studio-pilotage-actions">
+            <button type="button" class="admin-export-btn studio-pilotage-export" id="adminExportBtn">Exporter les données</button>
+            <button type="button" class="admin-reset" id="adminResetBtn">Réinitialiser</button>
+          </div>
+        </div>
+
+        <div class="studio-pilotage-context">
+          <span class="studio-pilotage-context-dot"></span>
+          <span>Données agrégées du site. Elles servent à repérer des signaux, pas à mesurer la performance individuelle.</span>
+        </div>
+
+        <section class="studio-pilotage-block" aria-labelledby="pilotageUsageTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">01 — Usage</div><h2 id="pilotageUsageTitle">Le site est-il utilisé ?</h2></div>
+            <p>Un aperçu de la fréquentation et des interactions avec les contenus.</p>
+          </div>
+          <div class="studio-signal-cards" id="kpiUsageCards"></div>
+        </section>
+
+        <section class="studio-pilotage-block" aria-labelledby="pilotageAnswersTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">02 — Information</div><h2 id="pilotageAnswersTitle">Les collaborateurs trouvent-ils ce dont ils ont besoin ?</h2></div>
+            <p>Storm Match fait remonter les questions comprises et les informations encore absentes.</p>
+          </div>
+          <div class="studio-signal-cards studio-signal-cards--answers" id="kpiAnswerCards"></div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>À traiter</strong><span>Recherches sans réponse</span></div><span class="studio-pilotage-product">Storm Match</span></div>
+              <div class="studio-signal-list" id="kpiGaps"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Sujets recherchés</strong><span>Réponses les plus sollicitées</span></div></div>
+              <div class="kpi-bar-list" id="kpiTopQuestions"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="studio-pilotage-block" aria-labelledby="pilotageAttentionTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">03 — Attention</div><h2 id="pilotageAttentionTitle">Qu’est-ce qui attire l’attention ?</h2></div>
+            <p>Les consultations indiquent les sujets qui occupent le terrain, sans transformer les contenus en compétition.</p>
+          </div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Rubriques consultées</strong><span>Répartition des consultations</span></div></div>
+              <div class="kpi-bar-list" id="kpiTabs"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Actualités ouvertes</strong><span>Les publications qui ont été consultées</span></div></div>
+              <div class="kpi-bar-list" id="kpiArticles"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="studio-pilotage-block" aria-labelledby="pilotageMoodTitle">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">04 — Climat</div><h2 id="pilotageMoodTitle">Comment le projet est-il vécu ?</h2></div>
+            <p>Le baromètre montre une distribution de ressentis. Storm n’en déduit pas une note moyenne du projet.</p>
+          </div>
+          <div class="studio-pilotage-subgrid">
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>Répartition des ressentis</strong><span id="kpiMoodCount"></span></div></div>
+              <div class="kpi-bar-list" id="kpiMood"></div>
+            </div>
+            <div class="studio-pilotage-surface">
+              <div class="studio-pilotage-surface-head"><div><strong>7 derniers jours</strong><span id="kpiMoodRecentCount"></span></div></div>
+              <div class="kpi-bar-list" id="kpiMoodRecent"></div>
+              <p class="studio-pilotage-privacy" id="kpiMoodPrivacy"></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="studio-pilotage-block studio-pilotage-block--secondary" id="kpiContactsSection">
+          <div class="studio-pilotage-section-head">
+            <div><div class="studio-pilotage-kicker">Messages</div><h2>Demandes reçues dans Storm</h2></div>
+            <p>Les messages issus des formulaires Storm apparaissent ici lorsqu’il y en a.</p>
+          </div>
+          <div class="studio-pilotage-surface"><div class="kpi-list" id="kpiContacts"></div></div>
+        </section>
+
+        <details class="studio-pilotage-about">
+          <summary>À propos des données de ce POC</summary>
+          <p>Les données de démonstration sont stockées localement sur le serveur. Un stockage adapté, une politique de conservation et les contrôles de confidentialité devront être définis avant un déploiement à grande échelle.</p>
+        </details>
+      </div>
+
+      <div class="admin-panel hidden" id="adminPanelContent"><div id="adminContentEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelStructure"><div id="adminStructureEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelNews"><div id="adminNewsEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelTeam"><div id="adminTeamEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelVisuals"><div id="adminVisualsEditor"></div></div>
+      <div class="admin-panel hidden" id="adminPanelFaq"><div id="adminFaqEditor"></div></div>
     </div>
-    <div class="mood-popover-note">Anonyme, agrégé uniquement — jamais individuel.</div>
   </div>
 </div>
 
-
-<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
 <script src="./storm/rainbow-engine.js"></script>
 <script src="./public/brand-engine.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-<script src="/legacy/pangea-public-render.js"></script>
-<script>
-
-  // ═══════════════════════════════════════════════════
-  // NAVIGATION + INDICATEUR GLISSANT
-  // ═══════════════════════════════════════════════════
-  const navTabsEl   = document.getElementById('navTabs');
-  const navInnerEl  = document.getElementById('navInner');
-  const navIndicator = document.getElementById('navIndicator');
-
-  const CLIENT_SESSION_KEY = 'xyz_client_session_id';
-  function getClientSessionId() {
-    let sessionId = localStorage.getItem(CLIENT_SESSION_KEY);
-    if (!sessionId) {
-      sessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-      localStorage.setItem(CLIENT_SESSION_KEY, sessionId);
-    }
-    return sessionId;
-  }
-
-  const ADMIN_TOKEN_KEY = 'xyz_admin_token';
-  function getAdminToken() { return sessionStorage.getItem(ADMIN_TOKEN_KEY) || ''; }
-  function setAdminToken(token) { sessionStorage.setItem(ADMIN_TOKEN_KEY, token); }
-  function clearAdminToken() { sessionStorage.removeItem(ADMIN_TOKEN_KEY); }
-
-
-
-  async function apiKpiTrack(payload) {
-    try {
-      await fetch('/api/kpi/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-    } catch (e) { console.warn('Enregistrement KPI impossible :', e); }
-  }
-
-  async function trackVisit()                              { await apiKpiTrack({ type: 'visit', sessionId: getClientSessionId() }); }
-  async function trackTabView(pageId)                       { await apiKpiTrack({ type: 'tab', pageId }); }
-  async function trackFaqQuestion(question, matched, entryId) { await apiKpiTrack({ type: 'faq', question, matched, entryId, ts: Date.now() }); }
-  async function trackArticleOpen(articleId)                { await apiKpiTrack({ type: 'article', articleId }); }
-  async function trackContactSubmission(name, email, message) { await apiKpiTrack({ type: 'contact', name, email, message, ts: Date.now() }); }
-  async function trackMood(value) { await apiKpiTrack({ type: 'mood', value, ts: Date.now() }); }
-
-
-  // ═══════════════════════════════════════════════════
-  // CONTENU PUBLIC + FAQ + PLANNING/ACTUS + AMBASSADEURS/ÉQUIPE/PLANS
-  // ═══════════════════════════════════════════════════
-  // STUDIO V2 — 8C / SITE STRUCTURE
-  function studioNormalizeSiteStructure(raw, team) {
-    const configured = raw && typeof raw === 'object' && !Array.isArray(raw);
-    const teamDefault = Array.isArray(team) && team.length > 0;
-    return {
-      home: true,
-      timeline: configured ? raw.timeline !== false : true,
-      news: configured ? raw.news !== false : true,
-      spaces: configured ? raw.spaces !== false : true,
-      questions: configured ? raw.questions !== false : true,
-      ambassadors: configured ? raw.ambassadors !== false : true,
-      team: configured ? raw.team !== false : teamDefault
-    };
-  }
-
-  async function loadContent() {
-    try {
-      const res = await fetch('/api/content', { headers: { 'x-admin-token': getAdminToken() } });
-      if (!res.ok) throw new Error('API contenu indisponible');
-      const data = await res.json();
-      return {
-        branding: data.branding && typeof data.branding === 'object' ? data.branding : { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' },
-        siteStructure: studioNormalizeSiteStructure(data.siteStructure, data.team),
-        project: data.project && typeof data.project === 'object' ? data.project : studioDefaultProjectSeed(),
-        publicContent: data.publicContent && typeof data.publicContent === 'object' ? data.publicContent : {},
-        faqEntries: Array.isArray(data.faqEntries) ? data.faqEntries : [],
-        faqDrafts: Array.isArray(data.faqDrafts) ? data.faqDrafts : [],
-        progress: data.progress && typeof data.progress === 'object' ? data.progress : { stepLine1: '', stepLine2: '', percent: 0 },
-        milestones: Array.isArray(data.milestones) ? data.milestones : [],
-        articles: Array.isArray(data.articles) ? data.articles : [],
-        ambassadorsContent: data.ambassadorsContent && typeof data.ambassadorsContent === 'object' ? data.ambassadorsContent : {},
-        ambassadors: Array.isArray(data.ambassadors) ? data.ambassadors : [],
-        teamContent: data.teamContent && typeof data.teamContent === 'object' ? data.teamContent : {},
-        team: Array.isArray(data.team) ? data.team : [],
-        spaces: Array.isArray(data.spaces) ? data.spaces : [],
-        spacesInitialized: data.spacesInitialized === true,
-        plans: Array.isArray(data.plans) ? data.plans : []
-      };
-    } catch (e) {
-      console.warn('Impossible de charger le contenu serveur :', e);
-      return {
-        branding: { projectName: 'Projet XYZ', logoUrl: '', theme: 'default' }, siteStructure: studioNormalizeSiteStructure(null, []), project: studioDefaultProjectSeed(), publicContent: {}, faqEntries: [], faqDrafts: [],
-        progress: { stepLine1: '', stepLine2: '', percent: 0 }, milestones: [], articles: [],
-        ambassadorsContent: {}, ambassadors: [], teamContent: {}, team: [], spaces: [], spacesInitialized: false, plans: []
-      };
-    }
-  }
-
-
-
-  // Redimensionne une image trop grande avant l'envoi, avec un lissage de
-  // qualité (canvas) — évite l'effet de moiré/pointillé que produit le
-  // navigateur quand il écrase lui-même une très grande photo dans un
-  // petit avatar (52px). Les PDF et les petites images ne sont pas touchés.
-  function resizeImageIfNeeded(file, maxDim = 640) {
-    return new Promise(resolve => {
-      if (!file.type || !file.type.startsWith('image/')) { resolve(file); return; }
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        const { naturalWidth: width, naturalHeight: height } = img;
-        if (!width || !height || Math.max(width, height) <= maxDim) { resolve(file); return; }
-        const scale = maxDim / Math.max(width, height);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(width * scale);
-        canvas.height = Math.round(height * scale);
-        const ctx = canvas.getContext('2d');
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const outType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-        canvas.toBlob(blob => {
-          if (!blob) { resolve(file); return; }
-          resolve(new File([blob], file.name, { type: outType }));
-        }, outType, 0.9);
-      };
-      img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
-      img.src = url;
-    });
-  }
-
-  function uploadFile(file, resizeMaxDim) {
-    return new Promise(async resolve => {
-      const resized = resizeMaxDim ? await resizeImageIfNeeded(file, resizeMaxDim) : file;
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const dataBase64 = String(reader.result).split(',')[1] || '';
-          const ext = String(resized.name || '').split('.').pop().toLowerCase();
-          const inferredMime = ({ woff2:'font/woff2', woff:'font/woff', ttf:'font/ttf', otf:'font/otf' })[ext] || '';
-          const mimeType = resized.type || inferredMime;
-          const res = await fetch('/api/admin/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-token': getAdminToken() },
-            body: JSON.stringify({ filename: resized.name, mimeType, dataBase64 })
-          });
-          if (res.status === 401) { resolve({ ok: false, unauthorized: true }); return; }
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) { resolve({ ok: false, error: data.error }); return; }
-          resolve({ ok: true, url: data.url });
-        } catch (e) {
-          console.warn('Upload impossible :', e);
-          resolve({ ok: false });
-        }
-      };
-      reader.onerror = () => resolve({ ok: false });
-      reader.readAsDataURL(resized);
-    });
-  }
-
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-
-  function isPdfUrl(url) { return /\.pdf($|\?)/i.test(url || ''); }
-
-  function applyPublicContent(publicContent) {
-    const scopes = {
-      faq:          { root: '#page-faq' },
-      actu:         { root: '#page-actu' },
-      plans:        { root: '#page-plans' },
-      ambassadeurs: { root: '#page-ambassadeurs' },
-      equipe:       { root: '#page-equipe' }
-    };
-    Object.entries(scopes).forEach(([scope, { root }]) => {
-      const payload = publicContent?.[scope];
-      if (!payload) return;
-      const page = document.querySelector(root);
-      if (!page) return;
-      const eyebrowEl = page.querySelector('.hero .eyebrow');
-      const titleEl   = page.querySelector('.hero .hero-title');
-      const descEl    = page.querySelector('.hero .hero-desc');
-      if (eyebrowEl && typeof payload.eyebrow === 'string') eyebrowEl.textContent = payload.eyebrow;
-      if (descEl && typeof payload.desc === 'string') descEl.textContent = payload.desc;
-      if (titleEl && (typeof payload.titleLine1 === 'string' || typeof payload.titleAccent === 'string')) {
-        titleEl.innerHTML = `${escapeHtml(payload.titleLine1 || '')}<br><span class="accent">${escapeHtml(payload.titleAccent || '')}</span>`;
-      }
-    });
-  }
-
-  // Applique le thème public sans toucher à l'administration.
-  // Le thème actuel reste la valeur par défaut.
-  function applyTheme(theme) {
-    const normalizedTheme = theme === 'rainbow-glass'
-      ? 'rainbow-glass'
-      : (theme === 'midnight-frost' ? 'midnight-frost' : 'default');
-    document.body.classList.toggle('theme-rainbow-glass', normalizedTheme === 'rainbow-glass');
-    document.body.classList.toggle('theme-midnight-frost', normalizedTheme === 'midnight-frost');
-    document.body.dataset.publicTheme = normalizedTheme;
-    document.dispatchEvent(new CustomEvent('storm-theme-change', {
-      detail: { theme: normalizedTheme }
-    }));
-
-    requestAnimationFrame(() => {
-      const activeTab = document.querySelector('.nav-tab.active');
-      if (activeTab) positionIndicator(activeTab);
-    });
-  }
-
-  // Applique le nom de projet, le logo et le thème personnalisés.
-  function applyBranding(branding) {
-    if (!branding) return;
-    applyTheme(branding.theme);
-    const nameEl = document.querySelector('.nav-brand-name');
-    if (nameEl && branding.projectName) nameEl.textContent = branding.projectName;
-    if (branding.projectName) document.title = `${branding.projectName} — Espace collaborateurs`;
-
-    const footerBrand = document.getElementById('footerBrandLine');
-    if (footerBrand && branding.projectName) {
-      footerBrand.textContent = `${branding.projectName} · Espace collaborateurs — Document interne, réservé aux équipes`;
-    }
-
-    const markEl = document.querySelector('.nav-mark');
-    if (markEl) {
-      if (branding.logoUrl) {
-        markEl.classList.add('has-logo');
-        markEl.innerHTML = `<img src="${escapeHtml(branding.logoUrl)}" alt="Logo">`;
-      } else {
-        markEl.classList.remove('has-logo');
-        markEl.innerHTML = '';
-      }
-    }
-  }
-
-  // Mentions légales — placeholder honnête : aucun contenu juridique n'est
-  // encore rédigé à ce stade du POC (voir le chapitre RGPD/industrialisation).
-  document.getElementById('footerLegalLink')?.addEventListener('click', () => {
-    showToast('Mentions légales — à rédiger avant la mise en production.');
-  });
-
-  let toastTimer = null;
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
-  }
-
-  function positionIndicator(tab) {
-    const navRect = navInnerEl.getBoundingClientRect();
-    const tabRect = tab.getBoundingClientRect();
-    navIndicator.style.left  = (tabRect.left - navRect.left) + 'px';
-    navIndicator.style.width = tabRect.width + 'px';
-  }
-
-  document.querySelectorAll(".nav-tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-      document.body.classList.remove('storm-admin-open');
-      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      tab.classList.add("active");
-      const page = document.getElementById("page-" + tab.dataset.page);
-      page.classList.add("active");
-      positionIndicator(tab);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      requestAnimationFrame(() => requestAnimationFrame(() => revealVisibleNow(page)));
-      trackTabView(tab.dataset.page);
-    });
-  });
-
-  window.addEventListener('resize', () => {
-    const active = document.querySelector('.nav-tab.active');
-    if (active) positionIndicator(active);
-  });
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      const active = document.querySelector('.nav-tab.active');
-      if (active) positionIndicator(active);
-    });
-  }
-
-  if (window.ResizeObserver) {
-    const navResizeObserver = new ResizeObserver(() => {
-      const active = document.querySelector('.nav-tab.active');
-      if (active) positionIndicator(active);
-    });
-    document.querySelectorAll('.nav-tab').forEach(t => navResizeObserver.observe(t));
-  }
-
-  let revealObserver = null;
-  function initReveal() {
-    revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        entry.target.classList.toggle('is-visible', entry.isIntersecting);
-      });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-  }
-
-  function observeNewReveals(container) {
-    if (!revealObserver || !container) return;
-    container.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-  }
-
-  function revealVisibleNow(container) {
-    container.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => {
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight && rect.bottom > 0) {
-        el.classList.add('is-visible');
-      }
-    });
-  }
-
-  window.addEventListener('DOMContentLoaded', async () => {
-    initReveal();
-    const activeTab = document.querySelector('.nav-tab.active');
-    if (activeTab) positionIndicator(activeTab);
-    const content = await loadContent();
-    if (content.faqEntries.length) faqData = content.faqEntries;
-    applyPublicContent(content.publicContent);
-    applyBranding(content.branding);
-    renderMilestonesFront(content.milestones, content.progress);
-    renderArticlesFront(content.articles);
-    renderPlansFront(content.plans);
-    renderAmbassadorsFront(content);
-    renderTeamFront(content);
-    window.__stormPublicContent = content;
-    document.dispatchEvent(new CustomEvent('storm-public-content-ready', {
-      detail: { content }
-    }));
-    trackVisit();
-    trackTabView('faq');
-  });
-
-  const MILESTONE_STATUS_MAP = {
-    done:    { cls: 'status-confirmed', label: 'Terminé' },
-    current: { cls: 'status-pending',   label: 'En cours' },
-    future:  { cls: 'status-neutral',   label: 'À venir' }
-  };
-
-  function computeProgressFromMilestones(milestones) {
-    const items = milestones || [];
-    const total = items.length;
-    if (!total) return { stepLine1: 'Étape 0', stepLine2: 'sur 0', percent: 0 };
-    const doneCount = items.filter(m => m.status === 'done').length;
-    const currentIndex = items.findIndex(m => m.status === 'current');
-    const stepNumber = currentIndex >= 0 ? currentIndex + 1 : Math.min(doneCount + 1, total);
-    const percent = Math.round(((doneCount + (currentIndex >= 0 ? 0.5 : 0)) / total) * 100);
-    return {
-      stepLine1: `Étape ${stepNumber}`,
-      stepLine2: `sur ${total}`,
-      percent: Math.max(0, Math.min(100, percent))
-    };
-  }
-
-  // Rendu public Pangea (Actualités, Plans & 3D, Ambassadeurs, Équipe,
-  // lightbox) — mis en quarantaine dans legacy/pangea-public-render.js.
-  // Voir ce fichier pour le détail ; rien n'a été modifié, seulement déplacé.
-
-  const ENABLE_GEMINI  = false;
-  const GEMINI_API_KEY = "COLLEZ-VOTRE-CLÉ";
-
-  const PROJECT_CONTEXT = `
-Tu es l'assistant d'information du projet de déménagement d'entreprise XYZ.
-Tu réponds aux questions des collaborateurs en t'appuyant UNIQUEMENT sur les informations ci-dessous.
-Ton ton est empathique, clair, et humain. Tu reconnais les émotions quand elles sont présentes dans la question.
-Si une information n'est pas disponible dans la base ci-dessous, tu réponds honnêtement que ce point n'est pas encore arrêté, et tu invites à utiliser le formulaire de contact en bas de page.
-Tu ne dois jamais inventer de dates, de décisions ou d'engagements qui ne figurent pas dans la base.
-Tu réponds toujours en français, en 3 à 6 phrases maximum, de façon directe et utile.
-
---- BASE DE CONNAISSANCES ---
-CALENDRIER
-- Le déménagement est prévu la semaine du 14 octobre.
-- Le phasage par équipe est en cours de finalisation. Toutes les équipes ne basculeront pas au même moment.
-- Les grandes étapes : information/cadrage, préparation logistique, tri/archivage, déménagement physique, installation, accompagnement post-arrivée.
-- Le jour J, une fiche pratique sera remise avec heure d'arrivée, point d'accueil, contacts sur place.
-`;
-
-  let faqData = [
-{ id:"date-demenagement", category:"calendrier", title:"Date du déménagement", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le déménagement est actuellement prévu la semaine du 14 octobre.\n\nLa date précise de bascule par équipe sera confirmée dès que le planning logistique sera totalement sécurisé.",
-      note:"Nous préférons partager une date confirmée plutôt qu'un calendrier prématuré qui devrait ensuite être corrigé.",
-      keywords:["date","quand","demenagement","demenager","transfert","installation","semaine","arrivee","jour j","calendrier","planning"] },
-    { id:"phasage", category:"calendrier", title:"Phasage par équipe", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Le phasage précis par équipe est en cours de finalisation.\n\nToutes les entités ne basculeront pas nécessairement au même moment. L'objectif est de garantir une installation fluide, sans mettre les équipes en difficulté opérationnelle.",
-      note:"Une communication spécifique précisera l'ordre de passage, les dates et les équipes concernées dès que le phasage sera stabilisé.",
-      keywords:["phasage","ordre","ordre passage","equipe","equipes","service","qui demenage quand","quand mon equipe"] },
-    { id:"etapes", category:"calendrier", title:"Grandes étapes", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Le déménagement se prépare en plusieurs temps :\n\n1. Information et cadrage du projet\n2. Préparation logistique et consignes pratiques\n3. Tri, archivage et préparation des postes\n4. Déménagement physique des équipes\n5. Installation sur le nouveau site\n6. Ajustements et accompagnement post-arrivée",
-      note:"L'enjeu n'est pas seulement de changer de lieu, mais de permettre une appropriation progressive du nouveau cadre de travail.",
-      keywords:["etapes","etape","process","processus","deroulement","phases","phase","organisation"] },
-    { id:"jour-j", category:"calendrier", title:"Que faire le jour J", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le jour du déménagement, les équipes concernées recevront une fiche pratique détaillant les actions attendues : heure d'arrivée recommandée, point d'accueil dédié, contacts sur place et déroulé de la journée.\n\nUn accompagnement physique sera assuré sur le site.",
-      note:"Ce type de moment peut générer une certaine appréhension. Nous y sommes attentifs.",
-      keywords:["jour j","jour demenagement","que faire","comment ca va se passer","le grand jour","premier jour"] },
-    { id:"affaires-personnelles", category:"logistique", title:"Affaires personnelles", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Un guide de préparation sera transmis avant le déménagement, précisant quoi emballer, quoi trier, et ce qui relève de la responsabilité des équipes de déménagement.\n\nLes objets personnels — photos, plantes — pourront être apportés le jour J ou dans les jours suivants.",
-      note:"S'approprier un nouveau lieu prend du temps. Il n'y a pas de bonne ou de mauvaise façon de le faire.",
-      keywords:["affaires","affaires personnelles","objets","plante","photo","decoration","mes affaires","emballer","carton","cartons"] },
-    { id:"trajet", category:"mobilite", title:"Temps de trajet", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Nous sommes conscients que le changement de site peut modifier les trajets quotidiens de certains collaborateurs.\n\nUne analyse des temps de trajet a été réalisée pour identifier les situations les plus impactantes. Des solutions d'accompagnement sont à l'étude pour les personnes les plus éloignées.",
-      note:"Le trajet, ça compte. Ce n'est pas un détail.",
-      keywords:["trajet","transport","navette","temps trajet","loin","proche","distance","chemin","route","rer","metro","bus","train","comment venir","acces transports"] },
-    { id:"teletravail", category:"rh", title:"Télétravail", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le déménagement n'entraîne pas de remise en cause des accords de télétravail en vigueur.\n\nLes règles applicables restent celles définies dans votre accord ou votre charte d'équipe.",
-      note:"Le télétravail est devenu une composante importante de l'équilibre de nombreux collaborateurs. Nous en sommes conscients.",
-      keywords:["teletravail","remote","travail distance","jours sur site","hybride","presentiel","jours bureau","travail maison","chez moi","home office"] },
-    { id:"horaires", category:"rh", title:"Flexibilité des horaires", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Les politiques d'horaires flexibles ne sont pas remises en cause par le déménagement.\n\nSi vous bénéficiez d'aménagements d'horaires dans votre équipe, ceux-ci continuent à s'appliquer.",
-      note:"Nous savons que la rigidité des horaires peut peser lourd quand le trajet change.",
-      keywords:["horaires","horaires flexibles","flexibilite","arriver plus tot","partir plus tard","amenagement horaires","souplesse"] },
-    { id:"flex-office", category:"espaces", title:"Postes attribués ou flex office", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Les principes d'occupation des espaces seront précisés en fonction de l'organisation retenue sur le nouveau site.\n\nLe flex office intégral n'est pas le modèle retenu par défaut. Le sujet sera co-construit dans les ateliers d'avril.",
-      note:"Une communication spécifique expliquera les règles de fonctionnement des espaces de travail.",
-      keywords:["flex office","flexoffice","poste","bureau","place","attribution","desk","placement","poste attribue","mon bureau"] },
-    { id:"concentration", category:"espaces", title:"Espaces de concentration", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le nouveau site intègre des espaces dédiés à la concentration individuelle — bulles de travail, zones silencieuses, cabines phoniques.",
-      note:"Travailler dans un espace trop bruyant n'est pas une fatalité.",
-      keywords:["concentration","calme","bruit","silence","open space","cabine","bulle","focus","isolement","travailler sereinement","phonique"] },
-    { id:"salles-reunion", category:"espaces", title:"Salles de réunion", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Les salles de réunion seront intégrées dans un dispositif de réservation adapté aux usages du site.\n\nL'objectif est de permettre une utilisation lisible et cohérente de ces espaces.",
-      note:"Les modalités pratiques de réservation seront précisées avant la mise en service.",
-      keywords:["salle","salles","reunion","reserver","booking","meeting room","salle de reunion"] },
-    { id:"convivialite", category:"espaces", title:"Espaces de convivialité", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Oui. Le nouveau site intégrera plusieurs espaces pensés pour les temps informels, les pauses et les échanges du quotidien.",
-      note:"Le déménagement peut être une occasion de recréer du lien. Nous voulons qu'elle soit réelle.",
-      keywords:["convivialite","pause","cafe","espace informel","detente","pause cafe","conviviaux","communs","terrasse","lounge"] },
-    { id:"casier", category:"espaces", title:"Casiers et rangements", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Des solutions de rangement personnel sont prévues dans le cadre du projet.\n\nL'idée est que chacun puisse avoir un espace bien à soi, même dans un environnement partagé.",
-      note:"Une information complémentaire sera communiquée au moment opportun.",
-      keywords:["casier","casiers","rangement","locker","affaires personnelles","affaires","stockage","placard","espace personnel"] },
-    { id:"restauration", category:"services", title:"Offre de restauration", status:"waiting", statusLabel:"En attente de décision",
-      answer:"Les modalités exactes de restauration ne sont pas encore arrêtées à ce stade.\n\nPlusieurs options sont actuellement à l'étude. Nous savons que le déjeuner, c'est aussi un moment de décompression — pas juste un ravitaillement.",
-      note:"Nous reviendrons vers vous dès que des arbitrages plus précis auront été rendus.",
-      keywords:["restauration","manger","repas","dejeuner","cantine","food","restaurant","pause dejeuner","titres restaurant","ticket restaurant","tr","lunch"] },
-    { id:"transport-remboursement", category:"mobilite", title:"Remboursement des transports", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"La prise en charge des abonnements de transport en commun reste applicable dans les mêmes conditions qu'aujourd'hui.\n\nSi le changement de site entraîne un surcoût, rapprochez-vous de votre RH.",
-      note:"Le coût du trajet ne doit pas devenir une charge supplémentaire.",
-      keywords:["transport","navigo","abonnement transport","remboursement transport","prise en charge transport","frais transport","pass navigo"] },
-    { id:"parking", category:"mobilite", title:"Parking voiture", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Des solutions de stationnement sont prévues, mais leur périmètre exact et leurs modalités d'accès restent encore à préciser.",
-      note:"Une information détaillée sera communiquée dès que les règles d'accès seront stabilisées.",
-      keywords:["parking","voiture","stationnement","se garer","garage","place voiture","place parking"] },
-    { id:"velo", category:"mobilite", title:"Parking vélo et mobilités douces", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Le projet prévoit d'intégrer des solutions adaptées aux mobilités douces, notamment pour les collaborateurs venant à vélo.\n\nCela inclut un espace de stationnement sécurisé, et potentiellement des vestiaires ou des douches.",
-      note:"Des précisions seront apportées dès que le dispositif final sera stabilisé.",
-      keywords:["velo","parking velo","mobilite","mobilite douce","trottinette","deux roues","cycliste","bicyclette","douche","vestiaire"] },
-    { id:"visites", category:"decouverte", title:"Visites du site", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Oui, le projet prévoit des temps de découverte du nouveau site avant l'installation définitive.\n\nVoir un lieu avant d'y travailler aide à se projeter, à poser des questions, à se rassurer.",
-      note:"Le calendrier de ces temps sera communiqué dans une prochaine étape.",
-      keywords:["visite","visites","voir","decouverte","venir voir","visiter","decouvrir le site","avant d arriver"] },
-    { id:"badge", category:"acces", title:"Badge et accès", status:"waiting", statusLabel:"En attente de décision",
-      answer:"Les modalités d'accès au nouveau site sont en cours de stabilisation.\n\nUn accueil sera organisé pour les premières arrivées afin que personne ne se retrouve bloqué le premier matin.",
-      note:"Une communication dédiée précisera les conditions d'accès avant l'arrivée sur site.",
-      keywords:["badge","acces","entrer","entree","controle acces","droits acces","ouverture","acces site"] },
-    { id:"it", category:"it", title:"Informatique et équipements", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Tout est mis en œuvre pour que les accès, la connexion et les outils de travail soient opérationnels à l'arrivée.\n\nUne équipe IT sera présente les premiers jours pour traiter les problèmes en temps réel.",
-      note:"Si certains ajustements devaient intervenir au démarrage, ils seraient signalés clairement et traités en priorité.",
-      keywords:["wifi","connexion","reseau","outlook","teams","outils","informatique","it","equipements","equipement","materiel","ordinateur","telephone","poste informatique"] },
-    {
-      id: "apprehension",
-      category: "accompagnement", priority: 9,
-      title: "Appréhension face au changement",
-      status: "confirmed", statusLabel: "Réponse confirmée",
-      shortAnswer: "Ce que vous ressentez est normal ; la transition est conçue pour être accompagnée.",
-      answer: "Ce que vous ressentez est normal. Un déménagement d'entreprise, ce n'est pas juste une adresse qui change — c'est un quotidien qui se recompose.\n\nCe projet a justement été conçu pour que la transition soit accompagnée et progressive.",
-      note: "Si vous traversez une période difficile en lien avec ce projet, parlez-en à votre manager ou à votre RH.",
-      related: ["ambassadeurs", "ateliers", "pilotage"],
-      keywords: ["peur","angoisse","stress","anxieux","anxiete","inquiet","apprehension","perturbe","bouleverse","destabilise","mal a l aise"],
-      phrases: ["j ai peur du changement","c est normal d etre stresse","je suis inquiet pour le demenagement","je vis mal ce projet","je suis anxieux par rapport au changement"],
-      intentSignals: ["peur","angoisse","stress","inquiet","anxieux"],
-      negativeSignals: ["parking","restauration","badge"],
-      emotionSignals: ["peur","angoisse","stress","inquiet","anxieux","mal"]
-    },
-    { id:"ambassadeurs", category:"accompagnement", title:"Ambassadeurs du projet", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Un réseau d'ambassadeurs volontaires est mis en place. Ce sont des collaborateurs issus de différentes équipes qui jouent un rôle de relais de proximité.\n\nPour rejoindre ce réseau ou identifier votre ambassadeur, rapprochez-vous de votre RH.",
-      note:"Les ambassadeurs ne sont pas des communicants. Ce sont des collègues qui ont accepté de jouer un rôle actif dans la transition.",
-      keywords:["ambassadeur","ambassadeurs","relais","referent projet","reseau ambassadeurs","volontaire","correspondant"] },
-    { id:"ateliers", category:"accompagnement", title:"Ateliers de personnalisation", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Des ateliers de personnalisation sont prévus pour permettre aux équipes de s'approprier leur futur espace avant l'installation.\n\nCe n'est pas de la consultation cosmétique — les résultats sont intégrés dans l'aménagement final.",
-      note:"Les dates et formats seront communiqués dès que le calendrier sera stabilisé.",
-      keywords:["atelier","ateliers","personnalisation","personnaliser","co construction","workshop","participation","choisir","s exprimer","amenagement"] },
-    { id:"regles-vie", category:"espaces", title:"Règles de vie", status:"partial", statusLabel:"Réponse partielle",
-      answer:"Les règles de vie dans les espaces partagés ne seront pas imposées d'en haut. Elles seront co-construites avec les équipes lors des ateliers d'avril.",
-      note:"Des règles de vie ne fonctionnent que si les personnes concernées se les sont appropriées.",
-      keywords:["regles de vie","regles","charte","charte usage","comportement","vivre ensemble","collectif","normes","bonnes pratiques","respect","espaces partages"] },
-    { id:"pilotage", category:"communication", title:"Pilotage du projet", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le projet est piloté par une équipe dédiée composée de représentants des Ressources Humaines, de la Direction Immobilière et des Services Généraux, avec le soutien de la Direction Générale.",
-      note:"Si vous ne savez pas à qui vous adresser, le formulaire ci-dessous est le bon point d'entrée.",
-      keywords:["qui pilote","qui gere","responsable projet","interlocuteur","chef projet","equipe projet","contact projet","pilotage"] },
-    { id:"archivage", category:"logistique", title:"Archivage et documents", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Un plan d'archivage sera communiqué avant le déménagement, avec des consignes précises sur ce qui doit être trié, numérisé ou détruit.\n\nLes archives physiques à conserver seront prises en charge par les équipes de déménagement.",
-      note:"Prenez le temps de passer vos documents en revue avant le déménagement. C'est souvent l'occasion de désencombrer.",
-      keywords:["archives","archivage","documents","papiers","dossiers","classeur","scanner","numerisation","destruction","tri"] },
-    { id:"pmr", category:"acces", title:"Accessibilité (PMR)", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Le nouveau site est conforme aux normes d'accessibilité en vigueur pour les personnes à mobilité réduite.\n\nCela comprend l'accès aux entrées, aux espaces de travail, aux sanitaires et aux salles de réunion.",
-      note:"L'accessibilité ne se résume pas à la conformité réglementaire. Nous souhaitons que chacun puisse circuler dans des conditions dignes.",
-      keywords:["pmr","accessibilite","fauteuil roulant","handicap moteur","rampe","ascenseur","mobilite reduite","acces handicape"] },
-    { id:"rumeurs", category:"communication", title:"Rumeurs et informations", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Dans tout projet de cette nature, des rumeurs circulent. Si vous avez entendu quelque chose qui vous préoccupe, posez-le ici ou via le formulaire. Nous nous engageons à répondre factuellement.",
-      note:"L'incertitude génère des récits. Nous préférons les récits fondés sur des faits.",
-      keywords:["rumeur","rumeurs","ouie dire","on dit que","bruit de couloir","entendu dire","vrai ou faux","intox","fake","pas vrai","faux","dementi"] },
-    { id:"communication", category:"communication", title:"Communications à venir", status:"confirmed", statusLabel:"Réponse confirmée",
-      answer:"Toutes les réponses ne peuvent pas être données immédiatement. L'engagement est clair : partager une information fiable et progressive, plutôt que multiplier des messages incomplets.",
-      note:"Cet espace a justement vocation à évoluer à mesure que le projet avance.",
-      keywords:["plus d infos","prochaines communications","quand saura t on","infos a venir","communication","informations"] },
-    {
-      id: "parking-attribution",
-      category: "mobilite", priority: 8,
-      title: "Attribution des places de parking",
-      status: "partial", statusLabel: "Réponse partielle",
-      shortAnswer: "Le parking dispose de 180 places, attribuées selon un système de priorité défini avec les RH.",
-      answer: "Le nouveau site dispose d'un parking souterrain de 180 places.\n\nL'attribution se fait selon un système de priorité co-défini avec les RH : collaborateurs sans alternative de transport en commun raisonnable, personnes à mobilité réduite, managers de direction. Un système de réservation à la semaine est prévu pour les places non attribuées à titre permanent, accessible via l'intranet.\n\nLes modalités précises et la procédure de demande seront communiquées avant le déménagement.",
-      note: "Si votre situation rend le transport en commun difficile, signalez-le à votre RH avant la date limite de demande.",
-      related: ["parking", "trajet", "velo"],
-      keywords: ["place parking","attribution parking","parking attribue","badge parking","reservation parking","nombre places","places voiture","parking souterrain"],
-      phrases: ["comment obtenir une place de parking","y a t il assez de places de parking pour tout le monde","comment sont attribuees les places de parking","puis je avoir une place de parking fixe","comment reserver une place de parking"],
-      intentSignals: ["attribution","place","parking","reserver","priorite"],
-      negativeSignals: ["restauration","badge","teletravail","it"],
-      emotionSignals: ["inquiet","pratique"]
-    },
-    {
-      id: "bulles-definition",
-      category: "espaces", priority: 8,
-      title: "C'est quoi une bulle ? Combien y en a-t-il ?",
-      status: "confirmed", statusLabel: "Réponse confirmée",
-      shortAnswer: "Une bulle est un espace individuel fermé et insonorisé pour travailler seul au calme. Le site en compte 18.",
-      answer: "Une bulle, c'est un espace individuel fermé, insonorisé, conçu pour travailler seul au calme — passer un appel, se concentrer sur un dossier complexe, tenir une visioconférence sans déranger ses collègues.\n\nLe site dispose de 18 bulles réparties sur deux niveaux : 10 au R+1 et 8 au R+2. Chaque bulle est équipée d'un siège ergonomique, d'un écran externe (connexion USB-C), d'une ventilation silencieuse et d'un éclairage à intensité variable. Isolation acoustique : Rw 38 dB.\n\nAccès libre, sans réservation. Un voyant vert/rouge signale la disponibilité depuis le couloir. Durée recommandée : 2 heures maximum par session pour permettre une rotation.",
-      note: "Les bulles ne sont pas des bureaux permanents. Elles sont là pour les moments où vous avez besoin d'un calme absolu.",
-      related: ["concentration", "salles-reunion"],
-      keywords: ["bulle","bulles","bulle phonique","cabine","cabine phonique","espace individuel","espace ferme","insonorise","combien de bulles","bulle de travail"],
-      phrases: ["c est quoi une bulle","qu est ce qu une bulle phonique","combien y a t il de bulles","comment fonctionne une bulle","peut on reserver une bulle","les bulles sont elles insonorisees"],
-      intentSignals: ["bulle","cabine","insonorise","individuel","phonique"],
-      negativeSignals: ["parking","restauration","badge","teletravail"],
-      emotionSignals: ["calme","concentration","stress","bruit"]
-    },
-    {
-      id: "adresse-site",
-      category: "decouverte", priority: 9,
-      title: "Adresse du nouveau site",
-      status: "confirmed", statusLabel: "Réponse confirmée",
-      shortAnswer: "Le nouveau site est situé au 12 avenue du Général Leclerc, 92130 Issy-les-Moulineaux.",
-      answer: "Le nouveau site est situé au :\n\n12 avenue du Général Leclerc\n92130 Issy-les-Moulineaux\n\nAccès transports en commun :\n— Métro ligne 12, station Mairie d'Issy (4 min à pied)\n— Tram T2, station Issy-Val de Seine (6 min à pied)\n— RER C, gare d'Issy (8 min à pied)\n— Bus 39, 126, 189 — arrêt Leclerc-Préfecture\n\nAccès voiture : rocade A86 sortie Issy-les-Moulineaux, parking souterrain accessible depuis le 10 avenue du Général Leclerc.\n\nUn livret d'accueil complet vous sera remis quelques jours avant l'emménagement.",
-      note: "Pensez à mettre à jour votre adresse professionnelle auprès de vos contacts, partenaires et abonnements dès que la date est confirmée.",
-      related: ["trajet", "parking", "velo"],
-      keywords: ["adresse","adresse site","ou est","nouveau site","localisation","issy","issy les moulineaux","leclerc","situe","comment y aller","acces","plan acces"],
-      phrases: ["quelle est l adresse du nouveau site","ou se trouve le nouveau site","c est ou le nouveau bureau","quel est le quartier","comment trouver le nouveau site","l adresse du futur site"],
-      intentSignals: ["adresse","localisation","ou","site","quartier"],
-      negativeSignals: ["restauration","it","badge","teletravail"],
-      emotionSignals: []
-    },
-    {
-      id: "securite-site",
-      category: "acces", priority: 7,
-      title: "Sécurité et incidents sur le site",
-      status: "confirmed", statusLabel: "Réponse confirmée",
-      shortAnswer: "Le site dispose d'un dispositif de sécurité complet ; tout incident se signale à l'accueil ou au numéro d'urgence du site.",
-      answer: "Le nouveau site dispose d'un dispositif de sécurité adapté : contrôle d'accès par badge sur toutes les entrées, présence d'un accueil sécurisé aux heures ouvrées, système de vidéosurveillance dans les zones communes, extincteurs et issues de secours conformes aux normes.\n\nEn cas d'incident (intrusion, malaise, départ de feu, comportement suspect), contactez immédiatement l'accueil ou le numéro de sécurité du site affiché à l'entrée. Les consignes d'évacuation seront communiquées dans le livret d'accueil et lors d'un exercice prévu dans les premières semaines.",
-      note: "Un exercice d'évacuation sera organisé dans les semaines suivant l'installation. La participation est obligatoire.",
-      related: ["badge"],
-      keywords: ["securite","incident","intrusion","incendie","evacuation","urgence","badge perdu","acces non autorise","alarme"],
-      phrases: ["que faire en cas d incendie","comment signaler un incident de securite","j ai perdu mon badge","y a t il un exercice d evacuation","comment fonctionne la securite du site"],
-      intentSignals: ["securite","incident","urgence","evacuation","alarme"],
-      negativeSignals: ["restauration","teletravail","it"],
-      emotionSignals: ["securite","peur","urgence"]
-    },
-    {
-      id: "badge-perdu",
-      category: "acces", priority: 7,
-      title: "Badge perdu ou oublié",
-      status: "confirmed", statusLabel: "Réponse confirmée",
-      shortAnswer: "En cas de badge perdu ou oublié, l'accueil peut délivrer un badge temporaire ; le remplacement définitif se fait via les services généraux.",
-      answer: "Si vous perdez votre badge ou si vous l'oubliez, présentez-vous à l'accueil principal. L'équipe d'accueil peut vous délivrer un badge temporaire pour la journée après vérification de votre identité.\n\nPour un remplacement définitif en cas de perte, contactez les services généraux. La procédure et le délai de remplacement seront précisés dans le livret d'accueil. En cas de vol, signalez-le également pour désactiver le badge perdu.",
-      note: "Ne prêtez jamais votre badge à un tiers — chaque badge est nominatif et traçable.",
-      related: ["badge", "securite-site"],
-      keywords: ["badge perdu","badge oublie","badge vole","remplacement badge","acces sans badge","badge temporaire"],
-      phrases: ["j ai perdu mon badge","j ai oublie mon badge","comment entrer si je n ai pas mon badge","que faire si on m a vole mon badge","comment remplacer un badge perdu"],
-      intentSignals: ["badge","perdu","oublie","vole","remplacement","temporaire"],
-      negativeSignals: ["restauration","teletravail","it","parking"],
-      emotionSignals: ["stress","urgence"]
-    },
-  ];
-
-  const FAQ_BUILTIN_BACKUP = JSON.parse(JSON.stringify(faqData));
-
-  const stopWords = new Set([
-    "ou","où","est","ce","que","qu","on","va","je","tu","il","elle","nous","vous",
-    "ils","elles","le","la","les","un","une","des","du","de","d","a","au","aux",
-    "en","dans","sur","pour","avec","et","mon","ma","mes","notre","nos","votre",
-    "vos","y","aura","t","sera","seront","sont","avoir","etre","quels","quelle",
-    "quelles","comment","quel","quoi","qui","si"
-  ]);
-
-  const synonymMap = {
-    cantine:"restauration", manger:"restauration", repas:"restauration",
-    dejeuner:"restauration", restaurant:"restauration", lunch:"restauration", tr:"restauration",
-    demenager:"demenagement", transfert:"demenagement", bascule:"demenagement",
-    visite:"visites", visiter:"visites", decouverte:"visites",
-    acces:"acces", entrer:"acces", entree:"acces",
-    wifi:"informatique", reseau:"informatique", teams:"informatique",
-    outlook:"informatique", it:"informatique", ordinateur:"informatique",
-    telephone:"informatique", materiel:"informatique", outils:"informatique",
-    parking:"stationnement", voiture:"stationnement", garage:"stationnement",
-    velo:"mobilite", bicyclette:"mobilite", cycliste:"mobilite",
-    trottinette:"mobilite", douche:"mobilite", vestiaire:"mobilite",
-    navigo:"transport", metro:"transport", rer:"transport", bus:"transport",
-    train:"transport", abonnement:"transport", navette:"transport", covoiturage:"transport",
-    remote:"teletravail", maison:"teletravail", presentiel:"teletravail", hybride:"teletravail",
-    horaire:"horaires", flexible:"horaires", souplesse:"horaires",
-    bureau:"poste", place:"poste", desk:"poste",
-    attitree:"attribue", attribuee:"attribue",
-    salle:"reunion", salles:"reunion", booking:"reservation",
-    casier:"rangement", casiers:"rangement", locker:"rangement",
-    placard:"rangement", stockage:"rangement",
-    bruit:"concentration", silence:"concentration", cabine:"concentration",
-    bulle:"concentration", focus:"concentration", phonique:"concentration",
-    ambassadeur:"ambassadeurs", relais:"ambassadeurs",
-    referent:"ambassadeurs", volontaire:"ambassadeurs",
-    atelier:"ateliers", workshop:"ateliers",
-    charte:"regles", comportement:"regles", normes:"regles",
-    rumeur:"rumeurs", fake:"rumeurs", intox:"rumeurs",
-    archives:"archivage", documents:"archivage", papiers:"archivage",
-    dossiers:"archivage", scanner:"archivage", destruction:"archivage",
-    pmr:"accessibilite", fauteuil:"accessibilite",
-    handicap:"accessibilite", ascenseur:"accessibilite"
-  };
-
-  function normalize(text = "") {
-    return text.toLowerCase().normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-  }
-
-  function tokenize(text = "") {
-    return normalize(text).split(" ")
-      .filter(w => w && !stopWords.has(w))
-      .map(w => synonymMap[w] || w);
-  }
-
-  function scoreEntry(question, entry) {
-    const normQ  = normalize(question);
-    const tokens = tokenize(question);
-    let score = 0;
-
-    (entry.keywords || []).forEach(kw => {
-      tokenize(kw).forEach(t => { if (tokens.includes(t)) score += 3; });
-      const nk = normalize(kw);
-      if (nk.length > 3 && normQ.includes(nk)) score += 5;
-    });
-
-    (entry.phrases || []).forEach(phrase => {
-      const np = normalize(phrase);
-      if (np && normQ.includes(np)) score += 10;
-    });
-
-    (entry.intentSignals || []).forEach(sig => {
-      const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score += 4;
-    });
-
-    (entry.emotionSignals || []).forEach(sig => {
-      const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score += 2;
-    });
-
-    (entry.negativeSignals || []).forEach(sig => {
-      const ns = normalize(sig);
-      if (tokens.includes(ns) || (ns.length > 3 && normQ.includes(ns))) score -= 3;
-    });
-
-    score += (entry.priority || 0);
-    return score;
-  }
-
-  function matchFaq(question) {
-    const scored = faqData
-      .map(entry => ({ entry, score: scoreEntry(question, entry) }))
-      .sort((a, b) => b.score - a.score);
-
-    const best   = scored[0];
-    const second = scored[1];
-
-    if (!best || best.score < 12) return null;
-
-    const strongCandidates = scored.filter(s => s.score >= 28);
-    const distinctCategories = new Set(strongCandidates.map(s => s.entry.category));
-    if (distinctCategories.size >= 3) return null;
-
-    if (second && second.score >= 18) {
-      const gap = best.score - second.score;
-      if (gap < 5 && best.entry.category !== second.entry.category) {
-        if ((second.entry.priority || 0) > (best.entry.priority || 0)) return second.entry;
-        if ((best.entry.priority || 0) === (second.entry.priority || 0)) return null;
-      }
-    }
-
-    if (second && Math.abs(best.score - second.score) <= 3) {
-      if ((second.entry.priority || 0) > (best.entry.priority || 0)) {
-        return second.entry;
-      }
-    }
-
-    return best.entry;
-  }
-
-  async function askGemini(question) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const body = {
-      contents:[{parts:[{text: PROJECT_CONTEXT+"\n\n--- QUESTION DU COLLABORATEUR ---\n"+question}]}],
-      generationConfig:{temperature:0.3,maxOutputTokens:400}
-    };
-    const res = await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if (!res.ok) throw new Error("Erreur Gemini : "+res.status);
-    const data = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
-  }
-
-  const questionInput = document.getElementById("questionInput");
-  const askBtn        = document.getElementById("askBtn");
-  const resultBox     = document.getElementById("resultBox");
-  const notFoundBox   = document.getElementById("notFoundBox");
-  const loadingBox    = document.getElementById("loadingBox");
-  const resultAnim    = document.getElementById("resultAnim");
-  const resultQ       = document.getElementById("resultQuestion");
-  const resultStatus  = document.getElementById("resultStatus");
-  const resultAnswer  = document.getElementById("resultAnswer");
-  const resultNote    = document.getElementById("resultNote");
-
-  function setBoxVisible(el, visible) {
-    if (visible) {
-      el.style.display = "block";
-      requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-visible")));
-    } else {
-      el.classList.remove("is-visible");
-      setTimeout(() => { if (!el.classList.contains("is-visible")) el.style.display = "none"; }, 420);
-    }
-  }
-
-  function hideAll() {
-    setBoxVisible(resultBox, false);
-    setBoxVisible(notFoundBox, false);
-    setBoxVisible(loadingBox, false);
-  }
-
-  function showLoading(on) {
-    hideAll();
-    if (on) setBoxVisible(loadingBox, true);
-    askBtn.disabled = on;
-  }
-
-  function playResultAnim() {
-    resultAnim.classList.remove("play");
-    void resultAnim.offsetWidth;
-    resultAnim.classList.add("play");
-  }
-
-  function showResult(question, entry) {
-    hideAll();
-    resultQ.textContent = question;
-    resultStatus.className   = "status-pill r-item r-2 " + (entry.status === "confirmed" ? "status-confirmed" : "status-pending");
-    resultStatus.textContent = entry.statusLabel;
-    resultAnswer.innerHTML = richTextToHtml(entry.answer);
-    resultNote.textContent   = entry.note || "";
-    resultNote.style.display = entry.note ? "block" : "none";
-    setTimeout(() => {
-      setBoxVisible(resultBox, true);
-      playResultAnim();
-    }, 90);
-  }
-
-  function showAiResult(question, answerText) {
-    hideAll();
-    resultQ.textContent = question;
-    resultStatus.className   = "status-pill r-item r-2 status-pending";
-    resultStatus.textContent = "Réponse générée par IA";
-    resultAnswer.textContent = answerText;
-    resultNote.textContent   = "Cette réponse est produite à partir des informations disponibles sur le projet. Si elle ne répond pas précisément à votre situation, utilisez le formulaire ci-dessous.";
-    resultNote.style.display = "block";
-    setTimeout(() => {
-      setBoxVisible(resultBox, true);
-      playResultAnim();
-    }, 90);
-  }
-
-  function showNotFound() {
-    hideAll();
-    setTimeout(() => setBoxVisible(notFoundBox, true), 90);
-  }
-
-  async function handleQuestion(question) {
-    if (!question.trim()) return;
-    const match = matchFaq(question);
-    if (match) {
-      trackFaqQuestion(question, true, match.id);
-      showResult(question, match);
-      return;
-    }
-    trackFaqQuestion(question, false, null);
-    if (ENABLE_GEMINI) {
-      showLoading(true);
-      try {
-        const ai = await askGemini(question);
-        showLoading(false);
-        ai ? showAiResult(question, ai) : showNotFound();
-      } catch(e) { showLoading(false); showNotFound(); console.error(e); }
-      return;
-    }
-    showNotFound();
-  }
-
-  askBtn.addEventListener("click", () => handleQuestion(questionInput.value.trim()));
-  questionInput.addEventListener("keydown", e => { if (e.key==="Enter") { e.preventDefault(); askBtn.click(); } });
-
-  document.querySelectorAll(".suggestion").forEach(btn => {
-    btn.addEventListener("click", () => { questionInput.value = btn.dataset.question; handleQuestion(btn.dataset.question); });
-  });
-
-  // ═══════════════════════════════════════════════════
-  // MOOD SOLICITATION ENGINE — sollicitation comportementale calme.
-  // La météo reste accessible manuellement à tout moment, mais Storm ne
-  // la signale qu'après une vraie période d'attention et à un moment calme.
-  // Jamais d'ouverture automatique ; un seul nudge par jour et par navigateur.
-  // ═══════════════════════════════════════════════════
-  const MOOD_LAST_KEY = 'storm_mood_last_answered';
-  const MOOD_LEGACY_LAST_KEY = 'xyz_mood_last_answered';
-  const MOOD_NUDGE_KEY = 'storm_mood_nudge_shown';
-  const MOOD_LEGACY_NUDGE_KEY = 'xyz_mood_intro_shown';
-  const MOOD_SESSION_THRESHOLD_KEY = 'storm_mood_attention_threshold';
-  const MOOD_LABELS = { 1: 'Orageux', 2: 'Nuageux', 3: 'Couvert', 4: 'Éclairci', 5: 'Ensoleillé' };
-  const MOOD_ENGINE = Object.freeze({
-    minActiveMs: 25000,
-    maxActiveMs: 40000,
-    quietMs: 1500,
-    fallbackExposureMs: 35000,
-    minScrollExposure: 0.55,
-    introMs: 3200
-  });
-
-  function todayStamp() {
-    return new Date().toISOString().slice(0, 10);
-  }
-
-  function hasAnsweredMoodToday() {
-    const today = todayStamp();
-    return localStorage.getItem(MOOD_LAST_KEY) === today || localStorage.getItem(MOOD_LEGACY_LAST_KEY) === today;
-  }
-
-  function hasNudgedMoodToday() {
-    const today = todayStamp();
-    return localStorage.getItem(MOOD_NUDGE_KEY) === today || localStorage.getItem(MOOD_LEGACY_NUDGE_KEY) === today;
-  }
-
-  function markMoodAnsweredToday() {
-    localStorage.setItem(MOOD_LAST_KEY, todayStamp());
-  }
-
-  function markMoodNudgedToday() {
-    localStorage.setItem(MOOD_NUDGE_KEY, todayStamp());
-  }
-
-  function moodAttentionThreshold() {
-    const stored = Number(sessionStorage.getItem(MOOD_SESSION_THRESHOLD_KEY));
-    if (stored >= MOOD_ENGINE.minActiveMs && stored <= MOOD_ENGINE.maxActiveMs) return stored;
-    const threshold = Math.round(MOOD_ENGINE.minActiveMs + Math.random() * (MOOD_ENGINE.maxActiveMs - MOOD_ENGINE.minActiveMs));
-    sessionStorage.setItem(MOOD_SESSION_THRESHOLD_KEY, String(threshold));
-    return threshold;
-  }
-
-  function renderMoodPopoverBody() {
-    const body = document.getElementById('moodPopoverBody');
-    if (!body) return;
-    if (hasAnsweredMoodToday()) {
-      body.innerHTML = `<div class="mood-popover-thanks">Merci pour votre retour aujourd’hui.</div>`;
-      return;
-    }
-    body.innerHTML = `
-      <div class="mood-popover-title">Comment vous sentez-vous par rapport au projet aujourd’hui ?</div>
-      <div class="mood-popover-options" id="moodOptions">
-        ${[1,2,3,4,5].map(v => `<button type="button" class="mood-option" data-mood-value="${v}" aria-label="${MOOD_LABELS[v]}" title="${MOOD_LABELS[v]}">${MOOD_ICONS[v]}</button>`).join('')}
-      </div>
-      <div class="mood-popover-note">Anonyme, agrégé uniquement — jamais individuel.</div>`;
-    body.querySelectorAll('.mood-option').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const value = Number(btn.dataset.moodValue);
-        if (!value) return;
-        trackMood(value);
-        markMoodAnsweredToday();
-        document.getElementById('moodFab')?.classList.add('answered-today');
-        body.innerHTML = `<div class="mood-popover-thanks">Merci — votre ressenti a bien été pris en compte.</div>`;
-        setTimeout(closeMoodPopover, 1000);
-      });
-    });
-  }
-
-  function openMoodPopover() {
-    renderMoodPopoverBody();
-    document.getElementById('moodPopover')?.classList.add('open');
-    document.getElementById('moodFab')?.setAttribute('aria-expanded', 'true');
-  }
-
-  function closeMoodPopover() {
-    document.getElementById('moodPopover')?.classList.remove('open');
-    document.getElementById('moodFab')?.setAttribute('aria-expanded', 'false');
-  }
-
-  function initMoodWidget() {
-    const fab = document.getElementById('moodFab');
-    const popover = document.getElementById('moodPopover');
-    if (!fab || !popover) return;
-
-    if (hasAnsweredMoodToday()) fab.classList.add('answered-today');
-
-    // L'ouverture est toujours un geste explicite de l'utilisateur.
-    fab.addEventListener('click', () => {
-      popover.classList.contains('open') ? closeMoodPopover() : openMoodPopover();
-    });
-
-    document.addEventListener('click', e => {
-      if (!popover.classList.contains('open')) return;
-      if (popover.contains(e.target) || fab.contains(e.target)) return;
-      closeMoodPopover();
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeMoodPopover();
-    });
-  }
-
-  const MOOD_ICONS = {
-    1: '<svg viewBox="0 0 24 24"><path d="M6 16.5a4 4 0 0 1 .5-7.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1 .3 7.98"/><path d="M13 12l-2.5 4h3L11 20"/></svg>',
-    2: '<svg viewBox="0 0 24 24"><path d="M5 17.5a4 4 0 0 1 .4-7.98A5.5 5.5 0 0 1 16 8.7a4.2 4.2 0 0 1 3.5 4.15 3.9 3.9 0 0 1-.4 4.65"/><path d="M8 17.5h10.5"/></svg>',
-    3: '<svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3.4"/><path d="M11 17.5a4 4 0 0 1 .4-7.9c.4-.05.8-.03 1.2.03A5.5 5.5 0 0 1 22.5 12a4 4 0 0 1-1 5.5"/></svg>',
-    4: '<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3.6"/><path d="M8 2.6v1.4M8 12v1.4M2.6 8h1.4M12 8h1.4M4.3 4.3l1 1M10.7 4.3l-1 1"/><path d="M13 19.5a3.7 3.7 0 0 1 .4-7.36A5 5 0 0 1 22.5 14a3.7 3.7 0 0 1-1 5.5"/></svg>',
-    5: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.6"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M5.6 18.4l1.7-1.7M16.7 7.3l1.7-1.7"/></svg>'
-  };
-
-  function initMoodSolicitationEngine() {
-    const fab = document.getElementById('moodFab');
-    const popover = document.getElementById('moodPopover');
-    if (!fab || !popover || hasAnsweredMoodToday() || hasNudgedMoodToday()) return;
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const thresholdMs = moodAttentionThreshold();
-    let activeMs = 0;
-    let lastTick = performance.now();
-    let lastInteractionAt = Date.now();
-    let lastScrollY = window.scrollY || 0;
-    let scrollExposurePx = 0;
-    let meaningfulInteractions = 0;
-    let nudged = false;
-
-    const noteInteraction = () => { lastInteractionAt = Date.now(); };
-    const onScroll = () => {
-      const y = window.scrollY || 0;
-      scrollExposurePx += Math.min(Math.abs(y - lastScrollY), window.innerHeight * 0.75);
-      lastScrollY = y;
-      noteInteraction();
-    };
-    const onMeaningfulClick = event => {
-      if (event.target.closest('#moodFab, #moodPopover')) return;
-      if (event.target.closest('a, button, [role="button"], .tab-btn, [data-tab]')) meaningfulInteractions += 1;
-      noteInteraction();
-    };
-
-    window.addEventListener('scroll', onScroll, { passive:true });
-    window.addEventListener('wheel', noteInteraction, { passive:true });
-    window.addEventListener('touchmove', noteInteraction, { passive:true });
-    document.addEventListener('click', onMeaningfulClick, { passive:true });
-    document.addEventListener('keydown', noteInteraction, { passive:true });
-
-    const cleanup = () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('wheel', noteInteraction);
-      window.removeEventListener('touchmove', noteInteraction);
-      document.removeEventListener('click', onMeaningfulClick);
-      document.removeEventListener('keydown', noteInteraction);
-      clearInterval(ticker);
-    };
-
-    const isActivelyAttending = () => document.visibilityState === 'visible' && document.hasFocus() && !document.body.classList.contains('storm-admin-open');
-    const hasMeaningfulExposure = () => {
-      const viewport = Math.max(window.innerHeight || 1, 1);
-      return scrollExposurePx >= viewport * MOOD_ENGINE.minScrollExposure || meaningfulInteractions >= 1 || activeMs >= MOOD_ENGINE.fallbackExposureMs;
-    };
-    const isCalmMoment = () => {
-      const active = document.activeElement;
-      const typing = active && (active.matches?.('input, textarea, select') || active.isContentEditable);
-      const modalOpen = Boolean(document.querySelector('.modal.open, .studio-modal.open, [aria-modal="true"]:not([hidden])'));
-      return !typing && !modalOpen && !popover.classList.contains('open') && (Date.now() - lastInteractionAt) >= MOOD_ENGINE.quietMs;
-    };
-
-    const nudgeOnce = () => {
-      if (nudged || hasAnsweredMoodToday() || hasNudgedMoodToday()) return;
-      nudged = true;
-      markMoodNudgedToday();
-      if (!reducedMotion) fab.classList.add('pulse');
-      fab.classList.add('intro');
-      window.setTimeout(() => {
-        fab.classList.remove('pulse', 'intro');
-      }, MOOD_ENGINE.introMs);
-      cleanup();
-    };
-
-    const ticker = window.setInterval(() => {
-      const now = performance.now();
-      const delta = Math.min(now - lastTick, 1000);
-      lastTick = now;
-      if (isActivelyAttending()) activeMs += Math.max(0, delta);
-      if (activeMs < thresholdMs) return;
-      if (!hasMeaningfulExposure()) return;
-      if (!isCalmMoment()) return;
-      nudgeOnce();
-    }, 500);
-  }
-
-  initMoodWidget();
-  initMoodSolicitationEngine();
-
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const name    = contactForm.querySelector('[name="name"]').value.trim();
-      const email   = contactForm.querySelector('[name="email"]').value.trim();
-      const message = contactForm.querySelector('[name="message"]').value.trim();
-      if (!name || !email || !message) {
-        showToast('Merci de remplir tous les champs avant d\'envoyer.');
-        return;
-      }
-      trackContactSubmission(name, email, message);
-      contactForm.reset();
-      showToast('Votre demande a bien été enregistrée.');
-    });
-  }
-
-  const adminLinkBtn       = document.getElementById('adminLinkBtn');
-
-  // Studio déplacé vers /admin (shell Tectonic dédié, tectonic/studio.html).
-  // index.html ne contient plus le markup ni le JS du Studio — adminLinkBtn
-  // navigue désormais simplement vers la nouvelle route.
-  adminLinkBtn.addEventListener('click', () => { window.location.href = '/admin'; });
-
-  // POC bridge depuis Ivory : /?pangea=1&admin=1 continue de fonctionner,
-  // en naviguant vers /admin au lieu d'ouvrir un panneau local (qui n'existe
-  // plus dans ce fichier). Comportement observable inchangé pour qui utilise
-  // ce paramètre : il finit toujours sur l'admin.
-  window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('admin') !== '1') return;
-    window.location.href = '/admin';
-  });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  function goToFaqPage() {
-    document.body.classList.remove('storm-admin-open');
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    const faqTab = document.querySelector('.nav-tab[data-page="faq"]');
-    document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
-    faqTab.classList.add('active');
-    document.getElementById('page-faq').classList.add('active');
-    positionIndicator(faqTab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-
-
-
-
-
-
-
-
-  // Internal design QA only. Nothing is exposed in the Storm UI.
-  // Example: StormRainbowEngine.derive(['#451DC6', '#04EF6A'])
-  //          -> prismatic
-  //          StormRainbowEngine.derive(['#1E1D1E', '#C2AF7E'])
-  //          -> pearl
-  //          StormRainbowEngine.derive(['#111111', '#E30613'])
-  //          -> tinted
-
-
-
-  function studioDefaultProjectSeed() {
-    return {
-      intro: {
-        title: 'Un nouveau lieu de travail, pensé pour nos usages.',
-        body: "Le projet accompagne le regroupement des équipes dans un environnement en flex office. Les futurs espaces sont conçus pour offrir davantage de choix au fil de la journée : se concentrer, échanger, collaborer, se réunir ou faire une pause, selon l’activité du moment."
-      },
-      sections: [
-        { id:'project-focus-usages', type:'focus', enabled:true, title:'Pourquoi faire évoluer nos espaces ?', body:"Nos façons de travailler ont changé : davantage de travail hybride, plus de projets transverses et des besoins très différents au cours d’une même journée. Le projet vise à mieux faire correspondre les espaces à ces usages, plutôt qu’à reproduire partout le même poste de travail." },
-        { id:'project-key-figures', type:'keyFigures', enabled:true, title:'Quelques repères', items:[
-          { value:'8/10', label:'postes de travail pour 10 collaborateurs' },
-          { value:'6', label:'grandes typologies d’espaces' },
-          { value:'1', label:'casier individuel par collaborateur' },
-          { value:'2026', label:'année d’installation cible' }
-        ] },
-        { id:'project-text-daily-life', type:'text', enabled:true, title:'Ce qui changera au quotidien.', body:"Dans les zones en flex office, les postes ne seront plus attribués individuellement. Chacun pourra choisir son environnement en fonction de son activité : poste standard, espace calme, cabine pour un appel, salle de réunion ou zone collaborative. Des casiers personnels et des repères simples accompagneront cette nouvelle organisation." },
-        { id:'project-image', type:'image', enabled:false, asset:null, caption:'' },
-        { id:'project-gallery', type:'gallery', enabled:false, title:'Se projeter dans les futurs espaces', items:[] },
-        { id:'project-timeline', type:'timeline', enabled:true },
-        { id:'project-quote', type:'quote', enabled:true, quote:"Le flex office n’est pas une fin en soi : l’enjeu est que chacun trouve plus facilement l’espace adapté à ce qu’il a besoin de faire.", attribution:'Équipe projet' },
-        { id:'project-choices', type:'choices', enabled:true, title:'Ce qui guide les choix', items:[
-          { title:'Donner du choix', body:'Proposer plusieurs environnements plutôt qu’un poste unique pour toutes les activités.' },
-          { title:'Préserver la concentration', body:'Identifier clairement les zones calmes et multiplier les solutions pour les appels et les tâches de focus.' },
-          { title:'Faciliter les échanges', body:'Créer davantage de lieux pour collaborer, se réunir et partager de manière informelle.' },
-          { title:'Rester ajustable', body:'Observer les usages après l’installation et faire évoluer les espaces lorsque cela est utile.' }
-        ] },
-        { id:'project-team', type:'team', enabled:true }
-      ]
-    };
-  }
-
-
-
-
-  // Studio V2 — Hardening 8A: small semantic inline editor for descriptions.
-  // The author chooses emphasis, never typography, colour or size.
-  // Storage remains a portable lightweight string so every edition can decide presentation.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
-  <script src="./themes/rainbow-glass.js"></script>
-  <script src="./themes/midnight-frost.js"></script>
-  <script src="./demo/storm-demo.js"></script>
+<script src="/tectonic/studio.js"></script>
 </body>
 </html>

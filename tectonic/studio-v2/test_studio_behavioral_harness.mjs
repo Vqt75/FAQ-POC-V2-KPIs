@@ -41,7 +41,7 @@ function waitForServer(url, timeoutMs) {
 }
 
 async function loadAdminDom(token) {
-  const dom = await JSDOM.fromURL(`${BASE}/?pangea=1`, {
+  const dom = await JSDOM.fromURL(`${BASE}/admin`, {
     runScripts: 'dangerously', resources: 'usable',
     beforeParse(window) {
       window.matchMedia = () => ({ matches: false, addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){} });
@@ -53,9 +53,14 @@ async function loadAdminDom(token) {
       window.scrollTo = () => {};
       window.Element.prototype.scrollTo = function () {};
       window.fetch = (u, o) => realFetch(new URL(u, BASE).toString(), o);
+      // Posé AVANT l'exécution des scripts (donc avant le boot de
+      // studio.js qui vérifie getAdminToken() sur DOMContentLoaded) —
+      // /admin ouvre directement le Studio, il n'y a plus de clic sur
+      // adminLinkBtn à simuler puisque ce clic déclenche maintenant une
+      // vraie navigation cross-page que jsdom ne sait pas suivre.
+      if (token) window.sessionStorage.setItem('xyz_admin_token', token);
     }
   });
-  if (token) dom.window.sessionStorage.setItem('xyz_admin_token', token);
   await new Promise(r => setTimeout(r, 900));
   return dom;
 }
@@ -86,12 +91,10 @@ async function main() {
     });
     const { token } = await loginRes.json();
 
-    console.log('--- 1) Chargement : ouverture réelle de l\'admin, exécution JS confirmée ---');
+    console.log('--- 1) Chargement : /admin ouvre directement le Studio, exécution JS confirmée ---');
     let dom = await loadAdminDom(token);
     let doc = dom.window.document;
-    doc.getElementById('adminLinkBtn').click();
-    await new Promise(r => setTimeout(r, 900));
-    check('page-admin devient active après clic (JS réellement exécuté, pas un texte statique)',
+    check('page-admin devient active au chargement de /admin (JS réellement exécuté, pas un texte statique)',
       doc.getElementById('page-admin').classList.contains('active'));
     check('le panneau Overview est visible par défaut',
       !doc.getElementById('adminPanelOverview').classList.contains('hidden'));
@@ -161,8 +164,6 @@ async function main() {
     console.log('\n--- 6) Persistance : un rechargement complet retrouve la même valeur ---');
     const dom2 = await loadAdminDom(token);
     const doc2 = dom2.window.document;
-    doc2.getElementById('adminLinkBtn').click();
-    await new Promise(r => setTimeout(r, 900));
     doc2.querySelector('[data-studio-route="identity"]').click();
     await new Promise(r => setTimeout(r, 400));
     const nameInputAfterReload = doc2.getElementById('brandingNameInput');

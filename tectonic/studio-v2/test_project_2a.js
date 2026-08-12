@@ -80,7 +80,7 @@ check('les sections actives conservent leur ordre sémantique', manifest.content
 check('timeline publique reste alimentée par milestones', manifest.content.timeline.milestones.length === 1);
 
 console.log('\n=== Contrats Studio / serveur ===');
-const index = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const index = fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.html'), 'utf8') + fs.readFileSync(path.join(ROOT, 'tectonic', 'studio.js'), 'utf8');
 const server = fs.readFileSync(path.join(ROOT, 'server.js'), 'utf8');
 const renderer = fs.readFileSync(path.join(ROOT, 'public', 'renderers', 'ivory.js'), 'utf8');
 check('Le projet a son propre panel Studio V2', index.includes('id="adminPanelProject"') && index.includes('function renderProjectEditor(content)'));

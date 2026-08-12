@@ -1209,6 +1209,20 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ── Studio (shell Tectonic dédié) ──────────────────────────────
+  // Route dédiée, pas une extension de la whitelist statique : le
+  // dossier tectonic/ contient aussi le Compiler, le Candidate, etc.,
+  // qui ne doivent jamais devenir servables. Seuls ces deux chemins
+  // précis le sont, explicitement.
+  if (req.method === 'GET' && url.pathname === '/admin') {
+    serveStaticFile(res, path.join(ROOT, 'tectonic', 'studio.html'));
+    return;
+  }
+  if (req.method === 'GET' && url.pathname === '/tectonic/studio.js') {
+    serveStaticFile(res, path.join(ROOT, 'tectonic', 'studio.js'));
+    return;
+  }
+
   // ── Fichiers statiques publics — WHITELIST explicite ──────────
   // Corrige une faille de sécurité réelle : l'ancien comportement
   // servait N'IMPORTE QUEL fichier existant sous ROOT (server.js, les

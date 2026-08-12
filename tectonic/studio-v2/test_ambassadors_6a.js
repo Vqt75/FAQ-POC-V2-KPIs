@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 function read(p){return fs.readFileSync(path.join(__dirname,'../..',p),'utf8');}
 function ok(cond,msg){if(!cond){console.error('FAIL — '+msg);process.exit(1);}}
-const html=read('index.html');
+const html=read('tectonic/studio.html')+read('tectonic/studio.js');
 const server=read('server.js');
 const compiler=read('tectonic/compiler.js');
 const ivory=read('public/renderers/ivory.js');

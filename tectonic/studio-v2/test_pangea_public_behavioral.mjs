@@ -128,8 +128,13 @@ async function main() {
     check('les contrôles de zoom lightbox existent', !!doc.getElementById('lbZoomIn') && !!doc.getElementById('lbZoomOut'));
 
     console.log('\n--- 6) Aucun état admin déclenché par une simple navigation publique ---');
-    check('page-admin reste inactive après toute cette navigation publique',
-      !doc.getElementById('page-admin').classList.contains('active'));
+    // Depuis l'extraction du Studio vers tectonic/studio.html, #page-admin
+    // n'existe plus du tout dans ce document — la garantie n'est plus "reste
+    // inactif" mais "n'existe structurellement pas", ce qui est plus fort.
+    check('#page-admin n\'existe plus du tout dans index.html (Studio réellement séparé)',
+      !doc.getElementById('page-admin'));
+    check('body ne porte jamais la classe storm-admin-open suite à une navigation publique',
+      !doc.body.classList.contains('storm-admin-open'));
 
     console.log(`\n${passed} vérifications passées, ${failed} échouées.`);
     process.exitCode = failed > 0 ? 1 : 0;

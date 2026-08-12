@@ -2,7 +2,7 @@
 const fs = require('fs');
 const assert = require('assert');
 
-const html = fs.readFileSync('index.html', 'utf8');
+const html = fs.readFileSync('tectonic/studio.html', 'utf8') + fs.readFileSync('tectonic/studio.js', 'utf8');
 let checks = 0;
 function check(condition, label) { assert.ok(condition, label); checks += 1; }
 
