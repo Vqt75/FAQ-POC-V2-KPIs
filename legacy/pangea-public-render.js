@@ -109,8 +109,6 @@
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
-  function isPdfUrl(url) { return /\.pdf($|\?)/i.test(url || ''); }
-
   const PDF_ICON_SVG = '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
 
   function planCardHtml(plan, index) {

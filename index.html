@@ -6343,6 +6343,8 @@ body.storm-admin-open .studio-structure-note {
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  function isPdfUrl(url) { return /\.pdf($|\?)/i.test(url || ''); }
+
   function applyPublicContent(publicContent) {
     const scopes = {
       faq:          { root: '#page-faq' },
