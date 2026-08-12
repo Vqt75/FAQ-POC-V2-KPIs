@@ -612,7 +612,7 @@
   });
   adminLogoutBtn.addEventListener('click', () => {
     clearAdminToken();
-    openAdminModal(); // même mécanisme que l'expiration de session ailleurs dans ce fichier — reste sur /admin, aucun passage par Pangea
+    window.location.href = '/'; // accueil public Ivory — jamais Pangea, jamais un login resté affiché dans Studio
     showToast('Déconnecté.');
   });
   adminResetBtn.addEventListener('click', async () => {

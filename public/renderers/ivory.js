@@ -23,6 +23,21 @@ function esc(str) {
     .replace(/"/g, '&quot;');
 }
 
+// Auth admin — dupliqué à l'identique depuis tectonic/studio.js (même clé
+// sessionStorage, même mécanisme). Ivory n'a besoin que de savoir si un
+// token existe pour décider entre navigation directe et overlay de
+// connexion ; la validité du token reste entièrement de la responsabilité
+// de /admin, jamais vérifiée ici.
+const ADMIN_TOKEN_KEY = 'xyz_admin_token';
+function getAdminToken(win) {
+  const w = win || (typeof window !== 'undefined' ? window : null);
+  try { return (w && w.sessionStorage.getItem(ADMIN_TOKEN_KEY)) || ''; } catch { return ''; }
+}
+function setAdminToken(token, win) {
+  const w = win || (typeof window !== 'undefined' ? window : null);
+  try { w && w.sessionStorage.setItem(ADMIN_TOKEN_KEY, token); } catch {}
+}
+
 
 
 // Studio Hardening 8A — semantic inline emphasis shared by descriptive copy.
@@ -5012,6 +5027,63 @@ const TCT_MOOD_STYLE = `
   @media(prefers-reduced-motion:reduce){.tct-mood-fab,.tct-mood-fab-label,.tct-mood-panel,.tct-mood-option{transition:none!important}.tct-mood-fab.is-wave{animation:none!important}}
 `;
 
+// Overlay d'authentification admin — markup et wording identiques à
+// #adminModal (tectonic/studio.html), valeurs de couleur RÉSOLUES plutôt
+// que les variables Studio (--ink, --white, --bordeaux…), qui n'existent
+// pas dans les variables --tct-* d'Ivory. Même apparence, pas de nouvelle
+// charte. z-index au-dessus de tout, y compris la lightbox (999).
+const TCT_ADMIN_AUTH_STYLE = `
+  .tct-admin-auth-overlay {
+    position:fixed; inset:0; z-index:1000;
+    display:none; align-items:center; justify-content:center; padding:24px;
+    background:rgba(30,29,30,.55);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    opacity:0;
+    transition:opacity .2s cubic-bezier(.4,0,.2,1);
+  }
+  .tct-admin-auth-overlay.is-open { display:flex; }
+  .tct-admin-auth-overlay.is-visible { opacity:1; }
+  .tct-admin-auth-card {
+    width:100%; max-width:360px;
+    background:#FFFFFF; border-radius:20px;
+    padding:36px 32px 32px;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.35);
+    opacity:0; transform:translateY(7px) scale(.985);
+    transition:opacity .2s cubic-bezier(.4,0,.2,1), transform .2s cubic-bezier(.4,0,.2,1);
+  }
+  .tct-admin-auth-overlay.is-visible .tct-admin-auth-card { opacity:1; transform:translateY(0) scale(1); }
+  .tct-admin-auth-title { font-family:'Italiana', Georgia, serif; font-size:1.5rem; margin-bottom:8px; color:#1E1D1E; }
+  .tct-admin-auth-sub { font-size:.82rem; color:rgba(30,29,30,.5); line-height:1.6; margin-bottom:22px; }
+  .tct-admin-auth-input {
+    width:100%; padding:16px 2px; border:none; border-bottom:1px solid rgba(30,29,30,.12);
+    background:none; font-size:.92rem; color:#1E1D1E; outline:none;
+    transition:border-color .3s cubic-bezier(.4,0,.2,1);
+  }
+  .tct-admin-auth-input:focus { border-color:#1E1D1E; }
+  .tct-admin-auth-error { display:none; font-size:.78rem; color:#6E0B13; margin-top:10px; }
+  .tct-admin-auth-error.is-visible { display:block; }
+  .tct-admin-auth-actions { display:flex; gap:10px; margin-top:22px; }
+  .tct-admin-auth-cancel {
+    flex:1; height:46px; border-radius:23px; border:1px solid rgba(30,29,30,.12);
+    color:rgba(30,29,30,.7); font-size:.76rem; font-weight:500; letter-spacing:.08em;
+    text-transform:uppercase; background:none; cursor:pointer;
+    transition:border-color .3s cubic-bezier(.4,0,.2,1), color .3s cubic-bezier(.4,0,.2,1);
+  }
+  .tct-admin-auth-cancel:hover { border-color:rgba(30,29,30,.35); color:#1E1D1E; }
+  .tct-admin-auth-submit {
+    flex:1; height:46px; padding:0 30px; background:#1E1D1E; color:#FFFFFF;
+    border:none; border-radius:23px; font-size:.76rem; font-weight:500;
+    letter-spacing:.08em; text-transform:uppercase; cursor:pointer;
+    transition:transform .3s cubic-bezier(.4,0,.2,1), background .3s cubic-bezier(.4,0,.2,1);
+  }
+  .tct-admin-auth-submit:hover { transform:scale(1.035); background:#000; }
+  .tct-admin-auth-submit:active { transform:scale(.98); }
+  body.tct-admin-auth-open { overflow:hidden; }
+  @media(prefers-reduced-motion:reduce) {
+    .tct-admin-auth-overlay, .tct-admin-auth-card { transition:opacity .01ms linear !important; transform:none !important; }
+  }
+`;
+
 function renderMoodExperience(manifest) {
   const config = manifest && manifest.experience && manifest.experience.mood ? manifest.experience.mood : {};
   if (config.enabled === false || config.status === 'suspended') return '';
@@ -5126,6 +5198,129 @@ function wireMoodExperience(root, actions) {
     }
   });
   engine.start();
+}
+
+// Overlay d'authentification admin sur Ivory. Idempotent : si l'overlay
+// existe déjà dans le document, ne recrée rien et ne recâble rien — sûr
+// à appeler à chaque render() sans jamais dupliquer l'instance ni les
+// écouteurs, même si Ivory venait un jour à re-rendre certaines parties.
+// Le clic sur .tct-admin-entry est délégué au niveau document (bulles),
+// donc reste fonctionnel même si ce lien précis est recréé ailleurs.
+function ensureAdminAuthOverlay(root) {
+  const doc = (root && root.ownerDocument) || (typeof document !== 'undefined' ? document : null);
+  const win = (doc && doc.defaultView) || (typeof window !== 'undefined' ? window : null);
+  if (!doc || !win) return;
+  if (doc.getElementById('tct-admin-auth-overlay')) return;
+
+  const overlay = doc.createElement('div');
+  overlay.id = 'tct-admin-auth-overlay';
+  overlay.className = 'tct-admin-auth-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-labelledby', 'tct-admin-auth-title');
+  overlay.innerHTML = `
+    <div class="tct-admin-auth-card">
+      <div class="tct-admin-auth-title" id="tct-admin-auth-title">Accéder à Storm</div>
+      <div class="tct-admin-auth-sub">Saisissez le mot de passe de votre espace projet.</div>
+      <input type="password" class="tct-admin-auth-input" id="tct-admin-auth-input" placeholder="Mot de passe">
+      <div class="tct-admin-auth-error" id="tct-admin-auth-error">Mot de passe incorrect.</div>
+      <div class="tct-admin-auth-actions">
+        <button type="button" class="tct-admin-auth-cancel" id="tct-admin-auth-cancel">Annuler</button>
+        <button type="button" class="tct-admin-auth-submit" id="tct-admin-auth-submit">Entrer</button>
+      </div>
+    </div>`;
+  doc.body.appendChild(overlay);
+
+  const input = overlay.querySelector('#tct-admin-auth-input');
+  const errorEl = overlay.querySelector('#tct-admin-auth-error');
+  const cancelBtn = overlay.querySelector('#tct-admin-auth-cancel');
+  const submitBtn = overlay.querySelector('#tct-admin-auth-submit');
+
+  let lastFocusedEl = null;
+  let lastTriggerEl = null;
+
+  function focusableElements() {
+    return Array.from(overlay.querySelectorAll('button, input, [href], [tabindex]:not([tabindex="-1"])'));
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') { e.preventDefault(); closeOverlay(); return; }
+    if (e.key === 'Tab') {
+      const items = focusableElements();
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && doc.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  function openOverlay(triggerEl) {
+    lastFocusedEl = doc.activeElement;
+    lastTriggerEl = triggerEl || null;
+    errorEl.classList.remove('is-visible');
+    input.value = '';
+    overlay.classList.add('is-open');
+    doc.body.classList.add('tct-admin-auth-open');
+    // Double rAF : garantit que le navigateur peint l'état initial
+    // (opacity 0, translaté/réduit) avant d'activer la transition vers
+    // l'état visible — sinon la carte apparaît sans transition perceptible.
+    win.requestAnimationFrame(() => {
+      win.requestAnimationFrame(() => overlay.classList.add('is-visible'));
+    });
+    win.setTimeout(() => input.focus(), 60);
+    doc.addEventListener('keydown', onKeydown, true);
+  }
+
+  function closeOverlay() {
+    overlay.classList.remove('is-visible');
+    doc.body.classList.remove('tct-admin-auth-open');
+    doc.removeEventListener('keydown', onKeydown, true);
+    win.setTimeout(() => overlay.classList.remove('is-open'), 200);
+    // document.body (et plus généralement tout élément non focusable par
+    // nature) ignore .focus() sans bouger doc.activeElement — repli sur le
+    // lien Administration, garanti focusable, plutôt que de laisser le
+    // focus perdu dans une overlay désormais masquée.
+    if (lastFocusedEl && typeof lastFocusedEl.focus === 'function') lastFocusedEl.focus();
+    if (doc.activeElement !== lastFocusedEl && lastTriggerEl && typeof lastTriggerEl.focus === 'function') {
+      lastTriggerEl.focus();
+    }
+  }
+
+  async function submit() {
+    errorEl.classList.remove('is-visible');
+    try {
+      const res = await win.fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: input.value })
+      });
+      const data = await res.json();
+      if (res.ok && data.ok && data.token) {
+        setAdminToken(data.token, win);
+        closeOverlay();
+        win.location.href = '/admin';
+      } else {
+        errorEl.classList.add('is-visible');
+      }
+    } catch (e) {
+      errorEl.classList.add('is-visible');
+    }
+  }
+
+  submitBtn.addEventListener('click', submit);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+  cancelBtn.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
+
+  // Délégation au niveau document : reste correcte même si .tct-admin-entry
+  // est recréé par un futur re-rendu — pas de dépendance à l'élément précis.
+  doc.addEventListener('click', e => {
+    const link = e.target.closest && e.target.closest('.tct-admin-entry');
+    if (!link) return;
+    if (getAdminToken(win)) return; // présence du token -> navigation native normale vers /admin, /admin reste seul juge de sa validité
+    e.preventDefault();
+    openOverlay(link);
+  });
 }
 
 function wireInteractions(root, manifest, actions) {
@@ -6071,7 +6266,7 @@ export function render(manifest, root, actions) {
     .join('');
 
   root.innerHTML = `
-    <style>${fontAssetsCss}${STYLE}${TCT_MOOD_STYLE}</style>
+    <style>${fontAssetsCss}${STYLE}${TCT_MOOD_STYLE}${TCT_ADMIN_AUTH_STYLE}</style>
     <div class="tct-site" style="--tct-primary:${primary};--tct-secondary:${secondary};--tct-expression-accent:${expressionAccent};--tct-font-primary:'${fontPrimary}';--tct-font-secondary:'${fontSecondary}';">
       <header class="tct-header" id="tct-site-header">
         <div class="tct-header-inner">
@@ -6097,5 +6292,6 @@ export function render(manifest, root, actions) {
     submitContact: async () => ({ ok: false, error: 'Indisponible.' }),
     submitMood: async () => ({ ok: false, error: 'Indisponible.' })
   });
+  ensureAdminAuthOverlay(root);
   wireFoundation(root, manifest);
 }
