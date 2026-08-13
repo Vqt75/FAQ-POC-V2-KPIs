@@ -76,6 +76,8 @@ function compileBranding(candidate) {
     return { family, asset: null };
   }
 
+  const primaryFont = compileFont(fontsArr[0], 'Roboto', 'primary');
+
   return {
     logo: wrapAsset(branding.logoUrl, logoAlt),
     colors: {
@@ -87,8 +89,12 @@ function compileBranding(candidate) {
         : (colorsArr.length === 1 ? colorsArr[0] : '#C2AF7E')
     },
     fonts: {
-      primary: compileFont(fontsArr[0], 'Roboto', 'primary'),
-      secondary: compileFont(fontsArr[1], 'Italiana', 'secondary')
+      primary: primaryFont,
+      // La police secondaire est facultative (décision produit) : si elle
+      // est absente ou supprimée, tout ce qui l'aurait utilisée retombe
+      // sur la police primaire réellement sélectionnée — jamais sur une
+      // police codée en dur qui n'appartiendrait pas à ce projet précis.
+      secondary: compileFont(fontsArr[1], primaryFont.family, 'secondary')
     }
   };
 }

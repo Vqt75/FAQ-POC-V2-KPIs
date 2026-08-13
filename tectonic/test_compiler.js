@@ -307,6 +307,56 @@ expectBlockingErrorOnManifest(
   c => { c.navigation = null; }
 );
 
+console.log('\n=== 11) Police secondaire facultative : repli sur la primaire réelle, jamais Italiana codé en dur ===\n');
+
+// Cas 1 : la seconde police est absente (retirée dans le Studio, décision
+// produit confirmée : ne jamais bloquer cette suppression). Tout ce qui
+// aurait utilisé la secondaire doit retomber sur la primaire RÉELLEMENT
+// sélectionnée pour ce projet — jamais sur une police codée en dur qui
+// n'appartiendrait pas à ce projet précis.
+{
+  const oneFont = JSON.parse(JSON.stringify(realPangeaData));
+  oneFont.branding.fonts = [{ name: 'Merriweather', fileName: '', source: 'system' }];
+  const candidate = buildPublicationCandidate(oneFont);
+  const manifest = compile(candidate, baseContext);
+  check('sans seconde police, secondary.family retombe sur la primaire réelle (Merriweather)',
+    manifest.branding.fonts.secondary.family, 'Merriweather');
+  check('la primaire elle-même reste bien Merriweather',
+    manifest.branding.fonts.primary.family, 'Merriweather');
+  checkTrue('secondary.family n\'est jamais "Italiana" codé en dur dans ce cas',
+    manifest.branding.fonts.secondary.family !== 'Italiana');
+}
+
+// Cas 2 : ni primaire ni secondaire configurées — la primaire retombe sur
+// Roboto (son propre repli, inchangé), et la secondaire suit alors cette
+// même primaire par repli, jamais un repli indépendant.
+{
+  const noFonts = JSON.parse(JSON.stringify(realPangeaData));
+  noFonts.branding.fonts = [];
+  const candidate = buildPublicationCandidate(noFonts);
+  const manifest = compile(candidate, baseContext);
+  check('sans aucune police configurée, la primaire retombe sur Roboto',
+    manifest.branding.fonts.primary.family, 'Roboto');
+  check('et la secondaire suit alors cette même primaire (Roboto), jamais Italiana',
+    manifest.branding.fonts.secondary.family, 'Roboto');
+}
+
+// Cas 3 : une vraie seconde police configurée continue de fonctionner
+// normalement — ce correctif ne doit rien changer quand la secondaire
+// est réellement définie (confirmé aussi par le manifest de référence
+// plus haut, qui a "Italiana" comme vrai choix de contenu, pas un repli).
+{
+  const twoFonts = JSON.parse(JSON.stringify(realPangeaData));
+  twoFonts.branding.fonts = [
+    { name: 'Roboto', fileName: '', source: 'system' },
+    { name: 'Playfair Display', fileName: '', source: 'system' }
+  ];
+  const candidate = buildPublicationCandidate(twoFonts);
+  const manifest = compile(candidate, baseContext);
+  check('une vraie seconde police explicitement choisie reste inchangée',
+    manifest.branding.fonts.secondary.family, 'Playfair Display');
+}
+
 console.log(`\n${passed} vérifications passées.`);
 if (process.exitCode) {
   console.log('DES TESTS ONT ECHOUE.');

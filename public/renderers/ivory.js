@@ -318,7 +318,7 @@ function renderAsset(asset, cssClass, enableLightbox = false) {
   // — c'est ce que l'audit de parité établit, pas les portraits
   // d'ambassadeurs/équipe. Activation explicite, jamais par défaut,
   // pour ne pas l'étendre silencieusement à un usage non demandé.
-  return `<img class="${cssClass}${enableLightbox ? ' tct-lightbox-trigger' : ''}" src="${esc(asset.url)}" alt="${esc(asset.alt)}" loading="lazy"${enableLightbox ? ` data-lightbox-src="${esc(asset.url)}" data-lightbox-title="${esc(asset.alt)}"` : ''}>`;
+  return `<img class="${cssClass}${enableLightbox ? ' tct-lightbox-trigger' : ''}" src="${esc(asset.url)}" alt="${esc(asset.alt)}" loading="lazy"${enableLightbox ? ` data-lightbox-src="${esc(asset.url)}" data-lightbox-title="${esc(asset.alt)}" tabindex="0" role="button" aria-label="Agrandir : ${esc(asset.alt || 'visuel')}"` : ''}>`;
 }
 
 function renderIntro(intro) {
@@ -5136,10 +5136,14 @@ function wireMoodExperience(root, actions) {
     if (typeof win.requestAnimationFrame === 'function') win.requestAnimationFrame(() => panel.classList.add('is-open'));
     else panel.classList.add('is-open');
   };
-  const close = () => {
+  const close = ({ restoreFocus = false } = {}) => {
     panel.classList.remove('is-open');
     fab.setAttribute('aria-expanded', 'false');
     win.setTimeout(() => { if (!panel.classList.contains('is-open')) panel.hidden = true; }, 160);
+    // Restitution volontairement absente lors d'un clic extérieur : ce
+    // clic a déjà légitimement déplacé le focus ailleurs sur la page,
+    // le lui reprendre serait un vol de focus inattendu.
+    if (restoreFocus) fab.focus();
   };
 
   fab.addEventListener('click', () => { panel.hidden ? open() : close(); });
@@ -5147,7 +5151,7 @@ function wireMoodExperience(root, actions) {
     if (panel.hidden || panel.contains(event.target) || fab.contains(event.target)) return;
     close();
   });
-  doc.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  doc.addEventListener('keydown', event => { if (event.key === 'Escape' && !panel.hidden) close({ restoreFocus: true }); });
 
   body.querySelectorAll('[data-tct-mood-value]').forEach(button => {
     button.addEventListener('click', async () => {
@@ -5594,16 +5598,18 @@ function wireInteractions(root, manifest, actions) {
   // port du comportement utile de Pangea (zoom + pan), pas une simple
   // image agrandie. Les PDF s'ouvrent déjà dans un nouvel onglet via
   // leur lien direct, pas besoin de lightbox pour eux.
+  const lightboxDoc = root.ownerDocument;
+  const lightboxWin = lightboxDoc && lightboxDoc.defaultView;
   root.querySelectorAll('.tct-lightbox-trigger').forEach(img => {
-    img.addEventListener('click', () => {
-      const overlay = document.createElement('div');
+    function openFromTrigger() {
+      const overlay = lightboxDoc.createElement('div');
       overlay.className = 'tct-lightbox-overlay';
       overlay.innerHTML = `
         <div class="tct-lightbox-stage">
           <img class="tct-lightbox-img" src="${esc(img.dataset.lightboxSrc)}" alt="${esc(img.dataset.lightboxTitle)}">
         </div>
         <button type="button" class="tct-lightbox-close" aria-label="Fermer">✕</button>`;
-      document.body.appendChild(overlay);
+      lightboxDoc.body.appendChild(overlay);
 
       const stage = overlay.querySelector('.tct-lightbox-stage');
       const lbImg = overlay.querySelector('.tct-lightbox-img');
@@ -5633,22 +5639,42 @@ function wireInteractions(root, manifest, actions) {
         startTx = tx; startTy = ty;
         stage.classList.add('is-dragging');
       });
-      window.addEventListener('mousemove', e => {
+      function onMouseMove(e) {
         if (!dragging) return;
         tx = startTx + (e.clientX - startX);
         ty = startTy + (e.clientY - startY);
         applyTransform();
-      });
-      window.addEventListener('mouseup', () => {
+      }
+      function onMouseUp() {
         dragging = false;
         stage.classList.remove('is-dragging');
-      });
+      }
+      lightboxWin.addEventListener('mousemove', onMouseMove);
+      lightboxWin.addEventListener('mouseup', onMouseUp);
 
-      function close() { overlay.remove(); }
+      function onKeydown(e) {
+        if (e.key === 'Escape') { e.preventDefault(); close(); }
+      }
+      lightboxDoc.addEventListener('keydown', onKeydown, true);
+
+      function close() {
+        lightboxWin.removeEventListener('mousemove', onMouseMove);
+        lightboxWin.removeEventListener('mouseup', onMouseUp);
+        lightboxDoc.removeEventListener('keydown', onKeydown, true);
+        overlay.remove();
+        img.focus();
+      }
       overlay.querySelector('.tct-lightbox-close').addEventListener('click', close);
       // Un clic sur le fond (pas sur l'image elle-même, pour ne pas
       // fermer accidentellement pendant un glisser-déposer) ferme la lightbox.
       overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    }
+
+    img.addEventListener('click', openFromTrigger);
+    // tabindex ajouté sur ce déclencheur (voir renderAsset) : l'activation
+    // clavier doit donc aussi fonctionner, pas seulement le clic souris.
+    img.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFromTrigger(); }
     });
   });
 
