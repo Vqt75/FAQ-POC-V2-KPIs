@@ -1209,6 +1209,16 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // ── Storm (page de présentation Tectonic 2.1) ──────────────────
+  // Route dédiée, comme /admin : sert un fichier précis, jamais liée
+  // à une authentification. Les assets de cette page (public/storm/
+  // assets/*) sont déjà servables via la whitelist existante du
+  // dossier public/ — aucun autre changement nécessaire.
+  if (req.method === 'GET' && url.pathname === '/storm') {
+    serveStaticFile(res, path.join(ROOT, 'public', 'storm', 'index.html'));
+    return;
+  }
+
   // ── Studio (shell Tectonic dédié) ──────────────────────────────
   // Route dédiée, pas une extension de la whitelist statique : le
   // dossier tectonic/ contient aussi le Compiler, le Candidate, etc.,

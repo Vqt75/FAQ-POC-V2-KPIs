@@ -610,6 +610,9 @@
   studioPreviewBtn?.addEventListener('click', () => {
     window.open('/?tectonic=1', '_blank', 'noopener');
   });
+  document.getElementById('stormDiscoverTectonicBtn')?.addEventListener('click', () => {
+    window.open('/storm', '_blank', 'noopener');
+  });
   adminLogoutBtn.addEventListener('click', () => {
     clearAdminToken();
     window.location.href = '/'; // accueil public Ivory — jamais Pangea, jamais un login resté affiché dans Studio

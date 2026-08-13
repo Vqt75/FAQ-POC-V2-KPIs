@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Meet Storm. — Tectonic 2.1</title>
+<style>
+:root{
+  --white:#fff;
+  --soft:#f7f7f5;
+  --ink:#111;
+  --graphite:#0b0b0c;
+  --muted:#6e6e73;
+  --hair:rgba(0,0,0,.10);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1480px;
+}
+*{box-sizing:border-box}
+html{background:var(--white);color:var(--ink);font-family:Roboto,Arial,Helvetica,sans-serif;scroll-behavior:auto}
+body{margin:0;overflow-x:hidden;background:var(--white)}
+a{color:inherit}
+img{display:block;max-width:100%}
+button{font:inherit}
+.scene{position:relative}
+.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.inner{width:min(var(--max),92vw);margin:0 auto}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.display{font-size:clamp(72px,10vw,168px);line-height:.9;letter-spacing:-.055em;font-weight:500;margin:0}
+.h1{font-size:clamp(54px,7vw,112px);line-height:.94;letter-spacing:-.05em;font-weight:500;margin:0}
+.h2{font-size:clamp(38px,4.6vw,74px);line-height:.98;letter-spacing:-.04em;font-weight:500;margin:0}
+.body{font-size:clamp(18px,1.45vw,24px);line-height:1.45;color:var(--muted)}
+.aside{font-size:clamp(17px,1.25vw,22px);line-height:1.45;color:var(--ink)}
+
+/* 01 — Meet Storm / reveal */
+.intro{height:270vh;background:#fff}
+.intro .sticky{background:#fff}
+.meet,.tectonic-reveal{position:absolute;inset:0;display:grid;place-items:center}
+.meet{z-index:2;background:#fff;will-change:opacity,transform}
+.meet .display{font-size:clamp(84px,12vw,190px)}
+.tectonic-reveal{z-index:1;color:#fff;background:#111;opacity:0}
+.tectonic-bg{position:absolute;inset:-4%;background:url('/public/storm/assets/tectonic-matter.jpg') center/cover no-repeat;filter:saturate(.62) contrast(1.08) brightness(.62);transform:scale(1.015);will-change:transform}
+.tectonic-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.34))}
+.tectonic-copy{position:relative;text-align:center;z-index:2}
+.tectonic-copy .display{font-size:clamp(84px,11vw,176px);letter-spacing:-.06em}
+.tectonic-copy p{margin:28px 0 0;font-size:14px;letter-spacing:.08em;font-weight:500}
+
+/* 02 — Tectonic doctrine */
+.tectonic-principle{height:220vh;background:#fff}
+.tectonic-principle .sticky{display:grid;place-items:center;background:#fff}
+.tectonic-statement{width:min(1220px,90vw);text-align:center;position:relative}
+.tectonic-line{font-size:clamp(62px,8.5vw,144px);line-height:.92;letter-spacing:-.055em;font-weight:500;margin:0;will-change:opacity,transform}
+.tectonic-response{margin-top:2vh;opacity:0;transform:translateY(18px)}
+.tectonic-examples{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);width:min(1200px,90vw);display:grid;grid-template-columns:repeat(3,1fr);gap:24px;opacity:0}
+.tectonic-example{font-size:clamp(17px,1.35vw,22px);line-height:1.4;text-align:center;color:var(--muted)}
+.tectonic-example b{color:var(--ink);font-weight:500}
+
+/* generic white chapters */
+.chapter{padding:18vh 0 16vh;background:#fff}
+.chapter-header{max-width:1100px;margin-bottom:9vh}
+.chapter-header .body{max-width:880px;margin:34px 0 0}
+.words{display:flex;flex-wrap:wrap;gap:14px;margin-top:7vh}
+.word{border:1px solid var(--hair);border-radius:999px;padding:14px 20px;font-size:clamp(18px,1.4vw,23px);background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.03)}
+.punch{font-size:clamp(20px,1.55vw,26px);margin-top:8vh;font-weight:500}
+
+/* screenshots */
+.product-frame{width:min(90vw,1600px);margin:0 auto;border:1px solid rgba(0,0,0,.08);border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.04),0 26px 80px rgba(0,0,0,.11)}
+.product-frame img{width:100%;height:auto}
+
+/* Studio */
+.studio{height:230vh;background:#fff}
+.studio .sticky{display:grid;align-items:center}
+.studio-copy{position:absolute;left:6vw;top:8vh;width:min(700px,46vw);z-index:4}
+.studio-copy .aside{margin-top:22px}
+.studio-screen{position:absolute;left:50%;top:57%;width:min(86vw,1520px);transform:translate(-50%,-50%);will-change:transform,opacity}
+
+.write-build{padding:18vh 0;background:var(--soft)}
+.split-head{display:grid;grid-template-columns:1fr 1fr;gap:8vw;align-items:end;margin-bottom:8vh}
+.split-head .h1:last-child{text-align:right}
+.split-media{display:grid;grid-template-columns:1fr 1fr;gap:2vw;align-items:center}
+.split-media .product-frame{width:100%;border-radius:18px}
+
+/* Publish signature motion */
+.publish{height:340vh;background:#fff}
+.publish .sticky{background:#fff}
+.publish-stage{position:absolute;inset:0;overflow:hidden;background:#fff}
+.publish-camera{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.publish-layer{position:absolute;inset:0;border-radius:22px;overflow:hidden;border:1px solid rgba(0,0,0,.08);box-shadow:0 2px 6px rgba(0,0,0,.04),0 26px 80px rgba(0,0,0,.11);background:#fff}
+.publish-layer img{width:100%;height:100%;object-fit:cover;display:block}
+.publish-layer.published{opacity:0}
+.focus-ring{position:absolute;border:2px solid rgba(255,255,255,.88);border-radius:999px;box-shadow:0 0 0 4px rgba(17,17,17,.10),0 8px 30px rgba(0,0,0,.12);opacity:0;pointer-events:none;z-index:5}
+.focus-ring.save{left:84.15%;top:15.4%;width:14.8%;height:8.2%;border-radius:999px}
+.focus-ring.publish-btn{left:94.55%;top:2.15%;width:4.8%;height:5.7%;border-radius:18px}
+.publish-vignette{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;background:radial-gradient(circle at 86% 11%,transparent 0 15%,rgba(255,255,255,.10) 27%,rgba(255,255,255,.42) 66%,rgba(255,255,255,.62) 100%)}
+.publish-copy{position:absolute;left:6vw;bottom:7vh;z-index:10;width:min(760px,72vw);opacity:0;transform:translateY(14px)}
+.publish-copy .aside{max-width:690px;margin:24px 0 0}
+.publish-state{position:absolute;right:6vw;bottom:7vh;z-index:10;font-size:clamp(18px,1.3vw,22px);font-weight:500;opacity:0}
+
+/* Ivory */
+.ivory{height:250vh;background:#fff}
+.ivory .sticky{display:grid;place-items:center}
+.ivory-copy{position:absolute;left:6vw;top:8vh;z-index:5;width:min(950px,80vw)}
+.ivory-copy .h2{max-width:950px}
+.ivory-copy .body{max-width:760px;margin-top:24px}
+.ivory-screen{position:absolute;top:60%;left:50%;width:min(90vw,1600px);transform:translate(-50%,-50%)}
+.ivory-aside{position:absolute;right:6vw;bottom:5vh;font-size:20px;font-weight:500}
+
+/* Match */
+.match{height:390vh;background:var(--graphite);color:#fff}
+.match .sticky{background:var(--graphite)}
+.engine{position:absolute;left:50%;top:50%;width:min(560px,43vw);transform:translate(-50%,-50%);filter:drop-shadow(0 36px 90px rgba(255,103,42,.14));will-change:transform,opacity}
+.engine-label{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);opacity:0;white-space:nowrap}
+.match-copy{position:absolute;left:6vw;top:8vh;width:min(920px,84vw);z-index:8;opacity:0}
+.match-copy .eyebrow,.match-copy .body{color:rgba(255,255,255,.62)}
+.match-sub{margin-top:22px;font-size:clamp(18px,1.35vw,22px);color:rgba(255,255,255,.62)}
+.match-quotes{position:absolute;left:6vw;right:6vw;top:42%;z-index:8;opacity:0}
+.match-quote{font-size:clamp(30px,3.2vw,56px);line-height:1.05;letter-spacing:-.035em;max-width:1350px;margin:0}
+.match-quote.formal{color:rgba(255,255,255,.34);text-decoration:line-through;text-decoration-thickness:1px;text-decoration-color:rgba(255,255,255,.24)}
+.match-quote.human{margin-top:3vh;color:#fff;font-weight:500}
+.match-screen{position:absolute;left:50%;top:61%;width:min(88vw,1550px);transform:translate(-50%,-50%) scale(.94);border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.13);box-shadow:0 30px 100px rgba(0,0,0,.55);opacity:0;will-change:transform,opacity}
+.match-screen img{width:100%}
+.match-screen.answer{opacity:0}
+.match-reasons{position:absolute;left:6vw;bottom:7vh;width:min(900px,82vw);z-index:9;opacity:0;font-size:clamp(18px,1.35vw,23px);line-height:1.5;color:rgba(255,255,255,.72)}
+.match-reasons span{display:block}
+.match-final{position:absolute;right:6vw;bottom:7vh;width:min(650px,44vw);font-size:clamp(18px,1.35vw,23px);opacity:0;text-align:right;color:rgba(255,255,255,.72)}
+.match-final b{display:block;color:#fff;font-size:clamp(28px,2.45vw,46px);line-height:1.06;margin-bottom:10px;letter-spacing:-.03em}
+
+/* Pilotage */
+.pilotage{height:230vh;background:#fff}
+.pilotage .sticky{display:grid;place-items:center}
+.pilotage-copy{position:absolute;left:6vw;top:8vh;width:min(1050px,82vw);z-index:5}
+.pilotage-screen{position:absolute;top:60%;left:50%;width:min(90vw,1600px);transform:translate(-50%,-50%)}
+.pilotage-end{position:absolute;right:7vw;bottom:5vh;font-size:clamp(26px,2.5vw,46px);font-weight:500}
+
+.identity{padding:18vh 0;background:var(--soft)}
+.identity-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3vw;align-items:center;margin-top:8vh}
+.identity-grid .product-frame{width:100%;border-radius:18px}
+.identity-copy{padding:4vw}
+.identity-copy .aside{margin-top:26px;color:var(--muted)}
+
+.sides{padding:18vh 0;background:#fff}
+.sides-grid{display:grid;grid-template-columns:1fr 1fr;gap:8vw;margin-top:10vh}
+.side h3{font-size:clamp(28px,3vw,48px);margin:0 0 24px}
+.side p{font-size:clamp(22px,2vw,34px);line-height:1.35;margin:0;color:var(--muted)}
+.sides .punch{text-align:center;margin-top:12vh}
+
+.final{min-height:140vh;background:#fff;display:grid;align-items:center;padding:18vh 0}
+.final-wrap{text-align:center;width:min(1180px,90vw);margin:auto}
+.final .h1{margin-bottom:7vh}
+.final-lines{font-size:clamp(28px,3.2vw,52px);line-height:1.22;letter-spacing:-.03em}
+.final-lines span{display:block}
+.final-small{margin:8vh auto 0;max-width:900px;font-size:clamp(20px,1.7vw,28px);line-height:1.45;color:var(--muted)}
+.final-project{font-size:clamp(60px,8vw,132px);line-height:.94;letter-spacing:-.055em;margin:5vh 0 10vh;font-weight:500}
+.signature{font-size:18px;font-weight:500;margin-bottom:7vh}
+.cta{appearance:none;border:0;background:#111;color:#fff;border-radius:999px;padding:18px 28px;font-weight:500;font-size:18px;cursor:pointer;transition:transform .2s var(--ease),background .2s}
+.cta:hover{transform:scale(1.02);background:#222}
+.cta:focus-visible{outline:3px solid #777;outline-offset:4px}
+.fade-exit{position:fixed;inset:0;background:#fff;z-index:9999;opacity:0;pointer-events:none;transition:opacity .18s linear}
+.fade-exit.on{opacity:1}
+
+@media (max-width:900px){
+  .display{font-size:clamp(64px,17vw,104px)}
+  .h1{font-size:clamp(48px,13vw,82px)}
+  .h2{font-size:clamp(40px,11vw,68px)}
+  .intro{height:210vh}
+  .tectonic-principle,.studio,.publish,.ivory,.match,.pilotage{height:190vh}
+  .tectonic-examples{grid-template-columns:1fr;gap:12px}
+  .studio-copy,.ivory-copy,.match-copy,.pilotage-copy{left:5vw;top:6vh;width:90vw}
+  .studio-screen,.ivory-screen,.pilotage-screen{width:95vw;top:62%}
+  .split-head,.split-media,.identity-grid,.sides-grid{grid-template-columns:1fr}
+  .split-head .h1:last-child{text-align:left}
+  .engine{width:min(80vw,520px)}
+  .match-quotes{left:5vw;right:5vw;top:40%}
+  .match-screen{width:96vw;top:64%}
+  .match-reasons{left:5vw;width:90vw;bottom:9vh}
+  .match-final{display:none}
+  .identity-copy{padding:7vw 0}
+  .publish-copy{left:5vw;width:90vw}
+  .publish-state{right:5vw}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .intro,.tectonic-principle,.studio,.publish,.ivory,.match,.pilotage{height:auto;min-height:100vh}
+  .sticky{position:relative;height:auto;min-height:100vh;padding:10vh 0;overflow:visible}
+  .meet{position:relative;min-height:70vh}
+  .tectonic-reveal{position:relative;min-height:80vh;opacity:1}
+  .tectonic-response,.tectonic-examples{opacity:1!important;transform:none!important;position:relative;left:auto;bottom:auto;margin:4vh auto}
+  .studio-copy,.ivory-copy,.match-copy,.pilotage-copy,.publish-copy,.match-quotes,.match-reasons,.match-final{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:min(90vw,1000px);margin:0 auto 6vh;opacity:1!important;transform:none!important;text-align:left}
+  .studio-screen,.ivory-screen,.pilotage-screen,.match-screen,.engine{position:relative;left:auto;top:auto;transform:none!important;width:min(92vw,1500px);margin:5vh auto;opacity:1!important;filter:none!important}
+  .publish-stage{position:relative;height:auto;overflow:visible;padding:4vh 0}
+  .publish-camera{position:relative!important;left:auto!important;top:auto!important;transform:none!important;width:min(92vw,1500px)!important;height:auto!important;margin:auto}
+  .publish-layer{position:relative!important;inset:auto!important}
+  .publish-layer.published,.match-screen.answer,.focus-ring,.publish-vignette{display:none}
+  .pilotage-end,.ivory-aside{position:relative;left:auto;right:auto;bottom:auto;margin:4vh auto;width:min(90vw,1000px);opacity:1!important}
+}
+</style>
+</head>
+<body>
+<div class="fade-exit" id="fadeExit"></div>
+
+<section class="scene intro" id="intro">
+  <div class="sticky">
+    <div class="meet" id="meet"><h1 class="display">Meet Storm.</h1></div>
+    <div class="tectonic-reveal" id="tectonicReveal">
+      <div class="tectonic-bg" id="tectonicBg"></div>
+      <div class="tectonic-shade"></div>
+      <div class="tectonic-copy">
+        <h2 class="display">Tectonic 2.1</h2>
+        <p>A Parella product</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene tectonic-principle" id="tectonicPrinciple">
+  <div class="sticky">
+    <div class="tectonic-statement">
+      <p class="tectonic-line" id="tectonicLead">Le projet change.</p>
+      <p class="tectonic-line tectonic-response" id="tectonicResponse">Très bien.<br>Storm aussi.</p>
+    </div>
+    <div class="tectonic-examples" id="tectonicExamples">
+      <div class="tectonic-example">Une date bouge ?<br><b>Modifiez-la.</b></div>
+      <div class="tectonic-example">Une nouvelle étape commence ?<br><b>Ajoutez-la.</b></div>
+      <div class="tectonic-example">Une question revient ?<br><b>Répondez-y.</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="all-project">
+  <div class="inner">
+    <div class="chapter-header">
+      <h2 class="h1">Tout votre projet.<br>Au même endroit.</h2>
+      <p class="body">Vous les ajoutez. Storm les organise.</p>
+    </div>
+    <div class="words" aria-label="Contenus pris en charge">
+      <span class="word">Actualités</span><span class="word">Étapes</span><span class="word">Espaces</span><span class="word">Équipe</span><span class="word">FAQ</span><span class="word">Documents</span>
+    </div>
+    <p class="punch">Oui, même la FAQ de 47 pages.</p>
+  </div>
+</section>
+
+<section class="scene studio" id="studio">
+  <div class="sticky">
+    <div class="studio-copy">
+      <div class="eyebrow">Storm Studio</div>
+      <h2 class="h2">Construire un site projet ne devrait pas être un projet.</h2>
+      <p class="aside">Écrivez. Ajoutez. Réorganisez. Publiez.<br><br>Pas de code. Pas de page blanche.<br>Et pas besoin d’appeler quelqu’un « qui s’y connaît en sites ».</p>
+    </div>
+    <div class="studio-screen product-frame" id="studioScreen"><img src="/public/storm/assets/studio-overview.png" alt="Vue réelle de Storm Studio"></div>
+  </div>
+</section>
+
+<section class="write-build">
+  <div class="inner">
+    <div class="split-head"><h2 class="h1">Vous écrivez.</h2><h2 class="h1">Storm construit.</h2></div>
+    <div class="split-media">
+      <div class="product-frame"><img src="/public/storm/assets/studio-content-edit.png" alt="Contenu édité dans le vrai Studio"></div>
+      <div class="product-frame"><img src="/public/storm/assets/ivory-content.png" alt="Contenu rendu dans la vraie interface Ivory"></div>
+    </div>
+    <p class="punch">Une actualité. Une étape. Une question.<br>Vous vous occupez du contenu. Storm sait quoi en faire.</p>
+  </div>
+</section>
+
+<section class="scene publish" id="publish">
+  <div class="sticky">
+    <div class="publish-stage" id="publishStage">
+      <div class="publish-camera" id="publishCamera">
+        <div class="publish-layer unpublished" id="publishBefore"><img src="/public/storm/assets/studio-unpublished.png" alt="Studio avant publication"></div>
+        <div class="publish-layer published" id="publishAfter"><img src="/public/storm/assets/studio-published.png" alt="Studio après publication"></div>
+        <div class="focus-ring save" id="saveRing" aria-hidden="true"></div>
+        <div class="focus-ring publish-btn" id="publishRing" aria-hidden="true"></div>
+        <div class="publish-vignette" id="publishVignette" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="publish-copy" id="publishCopy">
+      <h2 class="h2">Modifier n’est pas publier.</h2>
+      <p class="aside">Vous pouvez travailler. Enregistrer. Changer d’avis. Revenir plus tard.<br><br>Pendant ce temps, ce que voient les collaborateurs ne bouge pas.<br><br>Et quand tout est prêt : <b>Publier.</b></p>
+    </div>
+    <div class="publish-state" id="publishState">Un bouton. Parce que parfois, ça vaut le coup de savoir exactement quand quelque chose devient public.</div>
+  </div>
+</section>
+
+<section class="scene ivory" id="ivory">
+  <div class="sticky">
+    <div class="ivory-copy">
+      <div class="eyebrow">Ivory</div>
+      <h2 class="h2">Les collaborateurs n’ont pas besoin de savoir où vous avez rangé l’information.</h2>
+      <p class="body"><b style="color:#111">Ils ont juste besoin de la trouver.</b></p>
+    </div>
+    <div class="ivory-screen product-frame" id="ivoryScreen"><img src="/public/storm/assets/ivory-home.png" alt="Homepage réelle Ivory"></div>
+    <div class="ivory-aside">Tout est là. C’est un peu le principe.</div>
+  </div>
+</section>
+
+<section class="scene match" id="match">
+  <div class="sticky">
+    <img class="engine" id="engine" src="/public/storm/assets/storm-match-engine.png" alt="Storm Match Engine">
+    <div class="engine-label" id="engineLabel">Storm Match Engine</div>
+
+    <div class="match-copy" id="matchCopy">
+      <div class="eyebrow">Storm Match Engine</div>
+      <h2 class="h2">Posez la question comme elle vous vient.</h2>
+      <div class="match-sub">Les gens ne parlent pas comme une FAQ. Heureusement.</div>
+    </div>
+
+    <div class="match-quotes" id="matchQuotes">
+      <p class="match-quote formal">« Quelles sont les modalités d’attribution des places de stationnement ? »</p>
+      <p class="match-quote human">« Est-ce que j’aurai une place de parking ? »</p>
+    </div>
+
+    <div class="match-screen question" id="matchQuestion"><img src="/public/storm/assets/match-question.png" alt="Question posée dans Storm Match"></div>
+    <div class="match-screen answer" id="matchAnswer"><img src="/public/storm/assets/match-answer.png" alt="Réponse réelle de Storm Match"></div>
+
+    <div class="match-reasons" id="matchReasons">
+      <span>Pas besoin de connaître le bon intitulé.</span>
+      <span>Pas besoin de retrouver le bon onglet.</span>
+      <span>Pas besoin non plus de poser la question comme celui qui a écrit la réponse.</span>
+    </div>
+
+    <div class="match-final" id="matchFinal"><b>Et s’il ne trouve pas ?<br>Il ne vous invente pas une réponse.</b>On préfère.</div>
+  </div>
+</section>
+
+<section class="scene pilotage" id="pilotage">
+  <div class="sticky">
+    <div class="pilotage-copy">
+      <div class="eyebrow">Pilotage</div>
+      <h2 class="h2">Ce que les collaborateurs cherchent vous apprend quelque chose.</h2>
+    </div>
+    <div class="pilotage-screen product-frame" id="pilotageScreen"><img src="/public/storm/assets/pilotage.png" alt="Vue réelle de Storm Pilotage"></div>
+    <div class="pilotage-end">Écouter sans surveiller.</div>
+  </div>
+</section>
+
+<section class="identity">
+  <div class="inner">
+    <div class="chapter-header"><h2 class="h1">Un site projet qui ressemble au projet.</h2></div>
+    <div class="identity-grid">
+      <div class="product-frame"><img src="/public/storm/assets/ivory-team.png" alt="Autre vue réelle d'un site projet Ivory"></div>
+      <div class="identity-copy">
+        <h3 class="h2">Changez l’apparence.<br>Pas le contenu.</h3>
+        <p class="aside">Nom. Logo. Couleurs. Typographies. Rubriques.<br><br>Vous choisissez ce qui lui appartient. Storm s’occupe du reste.<br><br><b style="color:#111">On trouvait ça plus logique dans cet ordre-là.</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sides">
+  <div class="inner">
+    <h2 class="h1">Chacun son côté de Storm.</h2>
+    <div class="sides-grid">
+      <div class="side"><h3>Pour l’équipe projet.</h3><p>Construire.<br>Mettre à jour.<br>Publier.<br>Comprendre.</p></div>
+      <div class="side"><h3>Pour les collaborateurs.</h3><p>Lire.<br>Chercher.<br>Trouver.</p></div>
+    </div>
+    <p class="punch">C’est déjà largement suffisant.</p>
+  </div>
+</section>
+
+<section class="final">
+  <div class="final-wrap">
+    <h2 class="h1">Storm Tectonic</h2>
+    <div class="final-lines"><span>Studio pour construire.</span><span>Ivory pour publier.</span><span>Storm Match pour trouver.</span><span>Pilotage pour écouter.</span></div>
+    <p class="final-small">Tout fonctionne ensemble.<br><br>Comme ça, vous pouvez vous concentrer sur le seul truc qui n’est pas fourni avec Storm :</p>
+    <div class="final-project">le projet lui-même.</div>
+    <div class="signature">Built for projects in motion.</div>
+    <button class="cta" id="enterStorm">Entrer dans Storm →</button>
+  </div>
+</section>
+
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
+  const range=(p,a,b)=>clamp((p-a)/(b-a));
+  const ease=t=>1-Math.pow(1-t,3);
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  const progress=el=>{
+    const r=el.getBoundingClientRect();
+    const total=el.offsetHeight-innerHeight;
+    return total<=0?0:clamp(-r.top/total);
+  };
+  const q=id=>document.getElementById(id);
+
+  const intro=q('intro'), meet=q('meet'), tect=q('tectonicReveal'), tectBg=q('tectonicBg');
+  const tectonicPrinciple=q('tectonicPrinciple'), tectonicLead=q('tectonicLead'), tectonicResponse=q('tectonicResponse'), tectonicExamples=q('tectonicExamples');
+  const studio=q('studio'), studioScreen=q('studioScreen');
+  const publish=q('publish'), publishStage=q('publishStage'), publishCamera=q('publishCamera'), before=q('publishBefore'), after=q('publishAfter'), saveRing=q('saveRing'), publishRing=q('publishRing'), publishVignette=q('publishVignette'), publishCopy=q('publishCopy'), publishState=q('publishState');
+  const ivory=q('ivory'), ivoryScreen=q('ivoryScreen');
+  const match=q('match'), engine=q('engine'), engineLabel=q('engineLabel'), matchCopy=q('matchCopy'), matchQuotes=q('matchQuotes'), matchQuestion=q('matchQuestion'), matchAnswer=q('matchAnswer'), matchReasons=q('matchReasons'), matchFinal=q('matchFinal');
+  const pilotage=q('pilotage'), pilotageScreen=q('pilotageScreen');
+
+  function setPublishCamera(p){
+    const stage=publishStage.getBoundingClientRect();
+    const vw=stage.width, vh=stage.height;
+    const aspect=1899/979;
+    const baseW=Math.min(vw*.90,1600);
+    const baseH=baseW/aspect;
+    publishCamera.style.width=baseW+'px';
+    publishCamera.style.height=baseH+'px';
+
+    const x0=(vw-baseW)/2;
+    const y0=(vh-baseH)/2;
+
+    // Centre volontairement la zone statut / Enregistrer / Publier issue du vrai screenshot.
+    const focusX=.875, focusY=.105;
+    const zoom=ease(range(p,.10,.50));
+    const scale=lerp(.88,2.42,zoom);
+    const x1=vw*.5-scale*focusX*baseW;
+    const y1=vh*.46-scale*focusY*baseH;
+    const x=lerp(x0,x1,zoom);
+    const y=lerp(y0,y1,zoom);
+    publishCamera.style.transform=`translate3d(${x}px,${y}px,0) scale(${scale})`;
+
+    const focus=ease(range(p,.46,.60));
+    publishVignette.style.opacity=String(.56*focus);
+    saveRing.style.opacity=String(ease(range(p,.49,.58))*(1-range(p,.63,.69)));
+    publishRing.style.opacity=String(ease(range(p,.60,.67))*(1-range(p,.75,.81)));
+
+    const swap=ease(range(p,.70,.79));
+    before.style.opacity=String(1-swap);
+    after.style.opacity=String(swap);
+
+    const cp=ease(range(p,.48,.61));
+    publishCopy.style.opacity=String(cp);
+    publishCopy.style.transform=`translateY(${14*(1-cp)}px)`;
+    publishState.style.opacity=String(ease(range(p,.81,.90)));
+  }
+
+  function render(){
+    if(reduced) return;
+
+    let p=progress(intro);
+    const m=range(p,.14,.46), t=range(p,.28,.64);
+    meet.style.opacity=String(1-ease(m));
+    meet.style.transform=`scale(${1+0.022*ease(m)})`;
+    tect.style.opacity=String(ease(t));
+    tectBg.style.transform=`scale(${1.015+0.035*ease(range(p,.34,1))})`;
+
+    p=progress(tectonicPrinciple);
+    const leadOut=ease(range(p,.24,.48));
+    tectonicLead.style.opacity=String(1-.82*leadOut);
+    tectonicLead.style.transform=`translateY(${-26*leadOut}px)`;
+    const resp=ease(range(p,.35,.58));
+    tectonicResponse.style.opacity=String(resp);
+    tectonicResponse.style.transform=`translateY(${18*(1-resp)}px)`;
+    tectonicExamples.style.opacity=String(ease(range(p,.62,.82)));
+
+    p=progress(studio);
+    const ss=ease(range(p,.06,.72));
+    studioScreen.style.transform=`translate(-50%,-50%) scale(${.88+.12*ss}) translateY(${22*(1-ss)}px)`;
+    studioScreen.style.opacity=String(.35+.65*ss);
+
+    p=progress(publish);
+    setPublishCamera(p);
+
+    p=progress(ivory);
+    const iv=ease(range(p,.08,.70));
+    ivoryScreen.style.transform=`translate(-50%,-50%) scale(${.90+.10*iv})`;
+    ivoryScreen.style.opacity=String(.4+.6*iv);
+
+    p=progress(match);
+    const engineIn=ease(range(p,.02,.12));
+    engine.style.opacity=String(engineIn*(1-range(p,.18,.32)));
+    const engOut=ease(range(p,.16,.32));
+    engine.style.transform=`translate(-50%,-50%) scale(${.92+.12*engineIn+.16*engOut})`;
+    engineLabel.style.opacity=String(ease(range(p,.06,.14))*(1-range(p,.18,.30)));
+
+    const mc=ease(range(p,.22,.36));
+    matchCopy.style.opacity=String(mc*(1-range(p,.48,.58)));
+    const qt=ease(range(p,.34,.48));
+    matchQuotes.style.opacity=String(qt*(1-range(p,.54,.62)));
+
+    const mq=ease(range(p,.52,.63));
+    matchQuestion.style.opacity=String(mq*(1-range(p,.70,.77)));
+    matchQuestion.style.transform=`translate(-50%,-50%) scale(${.94+.06*mq})`;
+
+    const ma=ease(range(p,.72,.79));
+    matchAnswer.style.opacity=String(ma);
+    matchAnswer.style.transform=`translate(-50%,-50%) scale(${.96+.04*ma})`;
+
+    matchReasons.style.opacity=String(ease(range(p,.80,.87))*(1-range(p,.94,.99)));
+    matchFinal.style.opacity=String(ease(range(p,.89,.95)));
+
+    p=progress(pilotage);
+    const ps=ease(range(p,.08,.72));
+    pilotageScreen.style.transform=`translate(-50%,-50%) scale(${.90+.10*ps})`;
+    pilotageScreen.style.opacity=String(.4+.6*ps);
+  }
+
+  addEventListener('scroll',render,{passive:true});
+  addEventListener('resize',render);
+  render();
+
+  q('enterStorm').addEventListener('click',()=>{
+    try{sessionStorage.removeItem('xyz_admin_token')}catch(e){}
+    q('fadeExit').classList.add('on');
+    setTimeout(()=>{ location.href='/'; },180);
+  });
+})();
+</script>
+</body>
+</html>
