@@ -1025,8 +1025,17 @@ const server = http.createServer(async (req, res) => {
     }
     try {
       const raw = fs.readFileSync(manifestPath, 'utf8');
+      // Storm Match — repli générique cantonné à un mode démo/dev
+      // explicite (STORM_MATCH_DEMO_FALLBACK=1), jamais activé par
+      // défaut. Injecté ici, au moment de servir — jamais dans le
+      // Compiler : ce n'est pas une propriété du contenu du projet,
+      // c'est une caractéristique de déploiement, décidée une fois par
+      // variable d'environnement, jamais togglable par un visiteur.
+      const manifest = JSON.parse(raw);
+      manifest.meta = manifest.meta || {};
+      manifest.meta.demoMode = process.env.STORM_MATCH_DEMO_FALLBACK === '1';
       res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-      res.end(raw);
+      res.end(JSON.stringify(manifest));
     } catch (error) {
       sendJson(res, 500, { ok: false, error: 'Lecture du Manifest impossible.' });
     }

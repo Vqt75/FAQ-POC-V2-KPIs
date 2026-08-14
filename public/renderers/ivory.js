@@ -1195,9 +1195,19 @@ function fallbackFaqItems() {
   ];
 }
 
-function faqItemsForQuestions(questions) {
+// Storm Match — repli générique cantonné à un mode démo/dev explicite.
+// Jamais activé par défaut : en fonctionnement normal, aucune
+// connaissance projet publiée = Storm Match s'abstient proprement
+// (voir showUnknown() dans wireInteractions, déjà existant, déjà
+// product-compatible — pas besoin d'un nouvel état).
+// Le droit d'utiliser le repli est transmis explicitement par chaque
+// appelant (manifest.meta.demoMode), jamais lu depuis un état global —
+// une fonction de rendu ne doit pas dépendre silencieusement du
+// dernier render() exécuté ailleurs dans le runtime.
+function faqItemsForQuestions(questions, allowDemoFallback) {
   const published = Array.isArray(questions && questions.items) ? questions.items : [];
-  return published.length ? published : fallbackFaqItems();
+  if (published.length) return published;
+  return allowDemoFallback ? fallbackFaqItems() : [];
 }
 
 function faqStatusLabel(entry) {
@@ -1234,10 +1244,10 @@ function questionRelatedLink(entry) {
   return null;
 }
 
-function renderQuestions(questions) {
+function renderQuestions(questions, allowDemoFallback) {
   if (!questions) return '';
   const intro = questions.intro || {};
-  const items = faqItemsForQuestions(questions);
+  const items = faqItemsForQuestions(questions, allowDemoFallback);
   const rawTitle = String(intro.title || '').trim();
   const openingTitle = !rawTitle || /^Une réponse,?\s*chaque fois\.?$/i.test(rawTitle)
     ? 'Une question sur le projet ?'
@@ -5767,7 +5777,7 @@ function wireInteractions(root, manifest, actions) {
   const contactStatus = root.querySelector('#tct-contact-status');
 
   if (input && askBtn && resultBox && manifest.content.questions) {
-    const items = faqItemsForQuestions(manifest.content.questions);
+    const items = faqItemsForQuestions(manifest.content.questions, manifest.meta?.demoMode === true);
     const win = root.ownerDocument && root.ownerDocument.defaultView;
     let debounceTimer = 0;
     let lastQuestion = '';
@@ -6292,6 +6302,9 @@ export function render(manifest, root, actions) {
           timeline: manifest.content.timeline,
           team: manifest.content.team
         });
+      }
+      if (key === 'questions') {
+        return renderQuestions(manifest.content.questions, manifest.meta?.demoMode === true);
       }
       return SECTION_RENDERERS[key](manifest.content[key]);
     })
