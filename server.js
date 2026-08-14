@@ -7,6 +7,7 @@ const { getPublicationStatus } = require('./tectonic/studio-v2/publication-statu
 const { createDefaultProject, normalizeProject } = require('./tectonic/studio-v2/project-schema');
 const { normalizeNewsBlocks, newsBlocksToPlainText, newsBlocksToLegacyBody } = require('./tectonic/news-content');
 const { createDefaultSpaces, normalizeSpaces, bootstrapSpaces, spacesToLegacyPlans } = require('./tectonic/spaces-content');
+const telemetry = require('./tectonic/telemetry');
 
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'parella2026'; // ⚠️ à changer via la variable d'environnement avant tout partage
@@ -14,6 +15,12 @@ const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'kpis.json');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
+// Télémétrie Pilotage V1 — voir tectonic/telemetry.js pour le contrat
+// complet. Fuseau du projet fixé en dur pour ce lot (pas encore de
+// paramètre projet dédié) ; documenté comme simplification V1 assumée.
+const TELEMETRY_DIR = path.join(DATA_DIR, 'telemetry');
+const TELEMETRY_AGGREGATES_FILE = path.join(DATA_DIR, 'telemetry-aggregates.json');
+const PROJECT_TIMEZONE = 'Europe/Paris';
 const UPLOADS_DIR = path.join(ROOT, 'uploads');
 const ALLOWED_UPLOAD_TYPES = {
   'image/png': '.png',
@@ -673,6 +680,106 @@ function writeKpiState(state) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(state, null, 2), 'utf8');
 }
 
+// ── Télémétrie Pilotage V1 ──────────────────────────────────────────
+// Le serveur est la seule autorité sur la date : le client ne peut
+// jamais fournir sa propre date, ce qui garantirait une seconde source
+// de vérité temporelle et casserait la reconstruction fiable par
+// semaine ISO à la lecture.
+function currentProjectDateString() {
+  // Intl.DateTimeFormat en fuseau projet, formaté en YYYY-MM-DD — précis
+  // au jour près uniquement (aucune heure conservée), cohérent avec la
+  // minimisation actée : Pilotage n'a besoin que du jour pour dériver la
+  // semaine ISO, jamais de l'heure exacte.
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: PROJECT_TIMEZONE, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const get = type => parts.find(p => p.type === type).value;
+  return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+function ensureTelemetryDir() {
+  if (!fs.existsSync(TELEMETRY_DIR)) fs.mkdirSync(TELEMETRY_DIR, { recursive: true });
+}
+
+function telemetryFilePath(dateStr) {
+  return path.join(TELEMETRY_DIR, `${dateStr}.jsonl`);
+}
+
+function appendTelemetryEvent(rawEvent, dateStr) {
+  ensureTelemetryDir();
+  fs.appendFileSync(telemetryFilePath(dateStr), JSON.stringify(rawEvent) + '\n', 'utf8');
+}
+
+function listTelemetryDateFiles() {
+  ensureTelemetryDir();
+  return fs.readdirSync(TELEMETRY_DIR)
+    .filter(name => /^\d{4}-\d{2}-\d{2}\.jsonl$/.test(name))
+    .map(name => name.replace('.jsonl', ''))
+    .sort();
+}
+
+function readTelemetryEvents(dateStr) {
+  const file = telemetryFilePath(dateStr);
+  if (!fs.existsSync(file)) return [];
+  return fs.readFileSync(file, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map(line => { try { return JSON.parse(line); } catch (e) { return null; } })
+    .filter(Boolean);
+}
+
+function readAllRawTelemetryEvents() {
+  return listTelemetryDateFiles().flatMap(readTelemetryEvents);
+}
+
+function readTelemetryAggregates() {
+  try {
+    const raw = fs.readFileSync(TELEMETRY_AGGREGATES_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    return { weeklyMood: parsed.weeklyMood && typeof parsed.weeklyMood === 'object' ? parsed.weeklyMood : {} };
+  } catch (error) {
+    return { weeklyMood: {} };
+  }
+}
+
+function writeTelemetryAggregates(aggregates) {
+  ensureDataStore();
+  fs.writeFileSync(TELEMETRY_AGGREGATES_FILE, JSON.stringify(aggregates, null, 2), 'utf8');
+}
+
+// Ordre strict imposé par la doctrine : matérialiser et persister avec
+// succès ce qui doit survivre AVANT de supprimer le brut qui l'a produit.
+// Jamais l'inverse — un échec d'écriture de l'agrégat ne doit jamais
+// pouvoir coexister avec un brut déjà supprimé.
+function materializeAndPurgeExpiredRaw(nowDateStr) {
+  const dateFiles = listTelemetryDateFiles();
+  const expired = dateFiles.filter(d => telemetry.isRawFileExpired(d, nowDateStr));
+  if (expired.length === 0) return;
+
+  // Matérialise l'agrégat météo de toute semaine ISO couverte par au
+  // moins un fichier expirant, à partir de l'ENSEMBLE du brut encore
+  // présent (pas seulement les fichiers expirants) — une semaine peut
+  // être partiellement couverte par des fichiers encore dans la fenêtre
+  // de 30 jours si elle est à cheval sur la frontière.
+  const allEvents = dateFiles.flatMap(readTelemetryEvents);
+  const freshAgg = telemetry.aggregateEvents(allEvents, nowDateStr);
+  const existing = readTelemetryAggregates();
+  const merged = { weeklyMood: Object.assign({}, existing.weeklyMood) };
+  for (const [week, counts] of Object.entries(freshAgg.weeklyMood)) {
+    if (telemetry.isWeekClosed(week, freshAgg.currentWeek)) {
+      merged.weeklyMood[week] = counts;
+    }
+  }
+
+  // Persistance de l'agrégat AVANT toute suppression — si cette écriture
+  // échoue, l'exception remonte et aucun fichier brut n'est supprimé.
+  writeTelemetryAggregates(merged);
+
+  for (const dateStr of expired) {
+    fs.unlinkSync(telemetryFilePath(dateStr));
+  }
+}
+
 // STUDIO V2 — 8C / SITE STRUCTURE
 function normalizeSiteStructure(raw, team) {
   const configured = raw && typeof raw === 'object' && !Array.isArray(raw);
@@ -1146,6 +1253,58 @@ const server = http.createServer(async (req, res) => {
       }
     } catch (error) {
       sendJson(res, 400, { ok: false, error: 'Payload invalide' });
+    }
+    return;
+  }
+
+  // ── Télémétrie Pilotage V1 — voie canonique pour Ivory ───────────
+  // Distincte de /api/kpi/track (préservé tel quel pour Pangea, jamais
+  // touché par ce lot). Validation stricte : un payload qui ne
+  // correspond pas exactement à l'un des 3 événements connus est
+  // rejeté avec un 400 générique — jamais accepté silencieusement, pour
+  // qu'un bug d'instrumentation ne devienne jamais invisible. Le rejet
+  // reste silencieux côté utilisateur final (Ivory n'affiche rien),
+  // mais explicite côté protocole.
+  if (req.method === 'POST' && url.pathname === '/api/telemetry') {
+    try {
+      const parsed = await readBody(req);
+      if (!telemetry.isValidEvent(parsed)) {
+        sendJson(res, 400, { ok: false, error: 'Événement invalide.' });
+        return;
+      }
+      const dateStr = currentProjectDateString(); // jamais une date fournie par le client
+      const rawEvent = telemetry.buildRawEvent(parsed, dateStr);
+      appendTelemetryEvent(rawEvent, dateStr);
+      try { materializeAndPurgeExpiredRaw(dateStr); } catch (purgeError) { /* la télémétrie reste utile même si la purge échoue ponctuellement */ }
+      sendJson(res, 200, { ok: true });
+    } catch (error) {
+      sendJson(res, 400, { ok: false, error: 'Payload invalide.' });
+    }
+    return;
+  }
+
+  // ── Lecture agrégée pour Pilotage — protégée comme le reste de l'admin.
+  if (req.method === 'GET' && url.pathname === '/api/telemetry/summary') {
+    if (!isAuthorized(req)) { sendJson(res, 401, { ok: false, error: 'Non autorisé' }); return; }
+    try {
+      const nowDateStr = currentProjectDateString();
+      const rawEvents = readAllRawTelemetryEvents();
+      const fresh = telemetry.aggregateEvents(rawEvents, nowDateStr);
+      const persisted = readTelemetryAggregates();
+      // Les semaines closes déjà purgées du brut ne vivent plus que dans
+      // l'agrégat persisté ; celles encore couvertes par du brut viennent
+      // du calcul frais, qui reste la source la plus à jour tant qu'il
+      // existe. Les deux ne se recouvrent jamais après une purge propre.
+      const weeklyMood = Object.assign({}, persisted.weeklyMood, fresh.weeklyMood);
+      sendJson(res, 200, {
+        ok: true,
+        pageViews: fresh.pageViews,
+        match: fresh.match,
+        weeklyMood,
+        currentWeek: fresh.currentWeek
+      });
+    } catch (error) {
+      sendJson(res, 500, { ok: false, error: 'Lecture impossible.' });
     }
     return;
   }

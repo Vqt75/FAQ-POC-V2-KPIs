@@ -5891,6 +5891,7 @@ function wireInteractions(root, manifest, actions) {
 
       const direct = matchFaq(question, items);
       if (direct) {
+        if (explicit) actions.trackMatchResult?.('matched');
         showAnswer(direct, explicit);
         return;
       }
@@ -5911,14 +5912,17 @@ function wireInteractions(root, manifest, actions) {
       });
 
       if (candidates.length >= 2) {
+        if (explicit) actions.trackMatchResult?.('disambiguated');
         showAmbiguity(candidates, explicit);
         return;
       }
 
       // During quiet type-ahead, silence is better than a premature failure.
       // The unknown state appears only after an explicit Enter/click.
-      if (explicit) showUnknown(true);
-      else resultBox.hidden = true;
+      if (explicit) {
+        actions.trackMatchResult?.('abstained');
+        showUnknown(true);
+      } else resultBox.hidden = true;
     };
 
     askBtn.addEventListener('click', () => ask({ explicit:true }));
@@ -6022,7 +6026,7 @@ function wireInteractions(root, manifest, actions) {
 }
 
 
-function wireFoundation(root, manifest) {
+function wireFoundation(root, manifest, actions) {
   const doc = root.ownerDocument;
   const win = doc && doc.defaultView;
   if (!doc || !win) return;
@@ -6133,6 +6137,8 @@ function wireFoundation(root, manifest) {
       : (requested.startsWith('space-') ? 'spaces' : requested);
     const target = root.querySelector(`#${baseRequested}`) || root.querySelector('#home') || pages[0];
     if (!target) return;
+
+    actions?.trackPageView?.();
 
     pages.forEach(page => page.classList.toggle('is-active', page === target));
     root.querySelectorAll('.tct-nav a').forEach(link => {
@@ -6319,5 +6325,5 @@ export function render(manifest, root, actions) {
     submitMood: async () => ({ ok: false, error: 'Indisponible.' })
   });
   ensureAdminAuthOverlay(root);
-  wireFoundation(root, manifest);
+  wireFoundation(root, manifest, actions);
 }

@@ -110,11 +110,14 @@ function buildPublicCoreActions() {
         return { ok: false, error: 'Ressenti invalide.' };
       }
       try {
-        const res = await fetch('/api/kpi/track', {
+        const res = await fetch('/api/telemetry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          // Le serveur horodate si ts est absent. Aucune identité ni session.
-          body: JSON.stringify({ type: 'mood', value: numericValue })
+          // Le serveur horodate et regroupe (positif/neutre/négatif) —
+          // aucune identité ni session envoyée. Voie canonique unique :
+          // /api/kpi/track (type:'mood') reste réservé à Pangea, jamais
+          // appelé depuis Ivory.
+          body: JSON.stringify({ event: 'mood_feedback', value: numericValue })
         });
         const data = await res.json().catch(() => ({}));
         if (res.ok && data.ok) return { ok: true };
@@ -122,6 +125,28 @@ function buildPublicCoreActions() {
       } catch (e) {
         return { ok: false, error: 'Connexion au serveur impossible.' };
       }
+    },
+
+    // Télémétrie silencieuse — jamais un échec visible pour le visiteur,
+    // jamais une valeur de retour attendue par l'appelant (le renderer
+    // ne doit pas avoir à gérer un état d'erreur pour un simple signal
+    // d'usage). Un échec réseau ici ne doit strictement rien changer à
+    // l'expérience du site public.
+    trackPageView() {
+      fetch('/api/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event: 'page_view' })
+      }).catch(() => {});
+    },
+
+    trackMatchResult(outcome) {
+      if (outcome !== 'matched' && outcome !== 'disambiguated' && outcome !== 'abstained') return;
+      fetch('/api/telemetry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event: 'match_result', outcome })
+      }).catch(() => {});
     }
   };
 }

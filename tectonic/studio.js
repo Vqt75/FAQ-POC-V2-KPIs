@@ -306,6 +306,30 @@
       return JSON.parse(JSON.stringify(KPI_DEFAULT_STATE));
     }
   }
+  // Télémétrie Pilotage V1 — voie canonique unique pour Ivory (page_view,
+  // match_result, mood_feedback). Distincte de /api/kpi, jamais fusionnée.
+  async function loadTelemetrySummary() {
+    try {
+      const res = await fetch('/api/telemetry/summary', { headers: { 'x-admin-token': getAdminToken() } });
+      if (res.status === 401) return { unauthorized: true };
+      if (!res.ok) throw new Error('API télémétrie indisponible');
+      const data = await res.json();
+      return {
+        pageViews: Number(data.pageViews) || 0,
+        match: {
+          matched: Number(data.match?.matched) || 0,
+          disambiguated: Number(data.match?.disambiguated) || 0,
+          abstained: Number(data.match?.abstained) || 0,
+          total: Number(data.match?.total) || 0
+        },
+        weeklyMood: data.weeklyMood && typeof data.weeklyMood === 'object' ? data.weeklyMood : {},
+        currentWeek: typeof data.currentWeek === 'string' ? data.currentWeek : null
+      };
+    } catch (e) {
+      console.warn('Impossible de charger la télémétrie côté serveur :', e);
+      return { pageViews: 0, match: { matched: 0, disambiguated: 0, abstained: 0, total: 0 }, weeklyMood: {}, currentWeek: null };
+    }
+  }
   async function resetKpi() {
     const res = await fetch('/api/kpi/reset', { method: 'POST', headers: { 'x-admin-token': getAdminToken() } });
     return res.ok;
@@ -371,6 +395,7 @@
   let currentAdminContent = { publicContent: {}, faqEntries: [] };
   let currentStudioKpi = null;
   let currentPublicationStatus = null;
+  let currentTelemetrySummary = null;
   const STUDIO_SAVE_BUTTONS = {
     identity:'saveIdentityBtn',
     structure:'studioStructureSave',
@@ -501,10 +526,16 @@
         </div>`;
     }
   }
-  function renderStudioOverview(kpi, content, status) {
+  function renderStudioOverview(kpi, content, status, telemetrySummary) {
     const target = document.getElementById('studioResumeList');
     if (!target) return;
-    const gaps = (kpi?.faqAsked || []).filter(entry => !entry.matched);
+    // "Recherches sans réponse" = match_result:abstained du nouveau
+    // pipeline de télémétrie — même définition partout dans Tectonic,
+    // jamais kpi.faqAsked (alimenté uniquement par le fallback Pangea
+    // gelé, jamais par Ivory). Un simple compte, pas une répartition
+    // interprétée : pas de seuil k=5 ici, cohérent avec le traitement
+    // de match.total ailleurs dans Pilotage.
+    const abstainedCount = telemetrySummary?.match?.abstained || 0;
     const drafts = content?.faqDrafts || [];
     const articles = content?.articles || [];
     const plans = content?.plans || [];
@@ -512,7 +543,7 @@
     const rows = [];
 
     if (drafts.length) rows.push({ route:'questions', title:`${drafts.length} question${drafts.length>1?'s':''} à vérifier`, meta:'Des questions importées attendent d’être vérifiées avant d’être ajoutées.', action:'Questions →' });
-    if (gaps.length) rows.push({ route:'questions', title:`${gaps.length} recherche${gaps.length>1?'s':''} sans réponse`, meta:'Des collaborateurs ont cherché une information qui n’est pas encore couverte.', action:'Voir →' });
+    if (abstainedCount > 0) rows.push({ route:'questions', title:`${abstainedCount} recherche${abstainedCount>1?'s':''} sans réponse`, meta:'Des collaborateurs ont cherché une information qui n’est pas encore couverte.', action:'Voir →' });
     if (!articles.length) rows.push({ route:'news', title:'Aucune actualité publiée', meta:'Ajoutez une première publication lorsque le projet a quelque chose à raconter.', action:'Actualités →' });
     if (!plans.length) rows.push({ route:'spaces', title:'Aucun espace documenté', meta:'Ajoutez les premiers visuels lorsque les éléments de conception sont disponibles.', action:'Espaces →' });
     if (!ambassadors.length) rows.push({ route:'ambassadors', title:'Aucun ambassadeur renseigné', meta:'La communauté peut rester vide tant qu’elle n’est pas constituée.', action:'Ambassadeurs →' });
@@ -539,7 +570,7 @@
     return status;
   }
   async function refreshAdminPage() {
-    const [kpi, content, publicationStatus] = await Promise.all([loadKpi(), loadContent(), loadPublicationStatus()]);
+    const [kpi, content, publicationStatus, telemetrySummary] = await Promise.all([loadKpi(), loadContent(), loadPublicationStatus(), loadTelemetrySummary()]);
     if (kpi?.unauthorized || publicationStatus?.unauthorized) {
       showToast('Votre session a expiré. Reconnectez-vous.');
       clearAdminToken();
@@ -553,6 +584,7 @@
     const adminProjectName = document.getElementById('adminProjectName');
     if (adminProjectName) adminProjectName.textContent = content.branding?.projectName || 'Projet';
     renderKpiDashboard(kpi, content);
+    renderTelemetryPilotage(telemetrySummary);
     renderContentEditor(content);
     renderStructureEditor(content);
     renderProjectEditor(content);
@@ -560,8 +592,9 @@
     renderTeamEditor(content);
     renderVisualsEditor(content);
     renderFaqEditor(content);
+    currentTelemetrySummary = telemetrySummary;
     studioSetSaveState('saved');
-    renderStudioOverview(kpi, content, publicationStatus);
+    renderStudioOverview(kpi, content, publicationStatus, telemetrySummary);
     applyStudioRoute(document.body.dataset.studioRoute || 'overview', { scroll:false });
     studioQueueContextSaveDockBind();
   }
@@ -748,7 +781,7 @@
       }
       showToast('Les modifications sont publiées.');
       await refreshStudioPublicationStatus();
-      renderStudioOverview(currentStudioKpi, currentAdminContent, currentPublicationStatus);
+      renderStudioOverview(currentStudioKpi, currentAdminContent, currentPublicationStatus, currentTelemetrySummary);
     } catch (error) {
       console.warn('Publication impossible :', error);
       showToast('La publication a échoué. Réessayez.');
@@ -780,17 +813,15 @@
     `).join('');
   }
   function renderKpiDashboard(kpi, content) {
-    const faqAsked = Array.isArray(kpi?.faqAsked) ? kpi.faqAsked : [];
-    const moodEntries = Array.isArray(kpi?.moodEntries) ? kpi.moodEntries : [];
     const contacts = Array.isArray(kpi?.contactSubmissions) ? kpi.contactSubmissions : [];
-    const tabViews = kpi?.tabViews && typeof kpi.tabViews === 'object' ? kpi.tabViews : {};
-    const articleOpens = kpi?.articleOpens && typeof kpi.articleOpens === 'object' ? kpi.articleOpens : {};
-    const totalAsked = faqAsked.length;
-    const totalFound = faqAsked.filter(item => item.matched).length;
-    const foundRate = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
-    const totalArticleOpens = Object.values(articleOpens).reduce((sum, value) => sum + (Number(value) || 0), 0);
-    const totalTabViews = Object.values(tabViews).reduce((sum, value) => sum + (Number(value) || 0), 0);
-    const totalVisits = new Set(kpi?.visitSessions || []).size;
+    // faqAsked/tabViews/articleOpens/visitSessions/moodEntries ne sont
+    // alimentés que par /api/kpi/track — jamais appelé par Ivory, réservé
+    // au fallback Pangea gelé. Pilotage Tectonic ne doit jamais présenter
+    // ces données comme des métriques actuelles (voir renderTelemetryPilotage,
+    // seule source pour l'usage, Storm Match et le climat). En particulier,
+    // faqAsked peut contenir du texte de question en clair — jamais affiché
+    // ni exporté ici, quelle que soit la quantité de données présentes.
+    const topQuestions = [];
 
     const card = (value, label, meta='') => `
       <div class="studio-signal-card">
@@ -799,105 +830,25 @@
         ${meta ? `<em>${escapeHtml(meta)}</em>` : '<span></span>'}
       </div>`;
 
-    const usageCards = document.getElementById('kpiUsageCards');
-    if (usageCards) usageCards.innerHTML = [
-      card(totalVisits, 'Consultations uniques', 'depuis le début'),
-      card(totalTabViews, 'Consultations de rubriques', 'navigation cumulée'),
-      card(totalArticleOpens, "Ouvertures d’actualités", 'lecture de contenus')
-    ].join('');
-
-    const normalizedGapKey = value => String(value || '').trim().toLocaleLowerCase('fr-FR').replace(/[’']/g,"'").replace(/\s+/g,' ');
-    const gapMap = new Map();
-    faqAsked.filter(item => !item.matched && String(item.q || '').trim()).forEach(item => {
-      const key = normalizedGapKey(item.q);
-      const existing = gapMap.get(key) || { label:String(item.q).trim(), value:0, lastTs:0 };
-      existing.value += 1;
-      existing.lastTs = Math.max(existing.lastTs, Number(item.ts) || 0);
-      gapMap.set(key, existing);
-    });
-    const groupedGaps = [...gapMap.values()].sort((a,b) => (b.value-a.value) || (b.lastTs-a.lastTs));
-
-    const answerCards = document.getElementById('kpiAnswerCards');
-    if (answerCards) answerCards.innerHTML = [
-      card(totalAsked, 'Questions posées à Storm Match', 'signal de besoin'),
-      card(`${foundRate}%`, 'Ont trouvé une réponse', totalAsked ? `${totalFound} sur ${totalAsked}` : 'pas encore de données'),
-      card(groupedGaps.length, 'Informations à compléter', groupedGaps.length ? 'action éditoriale' : 'rien à traiter')
-    ].join('');
-
     const faqLabels = {};
     (content?.faqEntries || []).forEach(entry => { if (entry?.id) faqLabels[entry.id] = entry.title || entry.question || entry.id; });
-    const matchedCounts = {};
-    faqAsked.filter(item => item.matched && item.entryId).forEach(item => {
-      const id = String(item.entryId);
-      matchedCounts[id] = (matchedCounts[id] || 0) + 1;
-    });
-    const topQuestions = Object.entries(matchedCounts)
-      .map(([id,value]) => ({ label:faqLabels[id] || 'Réponse supprimée', value }))
-      .sort((a,b) => b.value-a.value)
-      .slice(0,8);
     renderBarList(document.getElementById('kpiTopQuestions'), topQuestions, { emptyText:'Aucun sujet suffisamment sollicité pour le moment.' });
 
     const gapsContainer = document.getElementById('kpiGaps');
     if (gapsContainer) {
-      if (!groupedGaps.length) {
-        gapsContainer.innerHTML = `<div class="kpi-empty">Storm Match n’a détecté aucune information manquante pour le moment.</div>`;
-      } else {
-        gapsContainer.innerHTML = groupedGaps.slice(0,10).map((gap,index) => `
-          <div class="studio-signal-row">
-            <div class="studio-signal-row-copy">
-              <strong>« ${escapeHtml(gap.label)} »</strong>
-              <span>${gap.value} recherche${gap.value>1?'s':''}${gap.lastTs ? ` · dernière ${escapeHtml(fmtDate(gap.lastTs))}` : ''}</span>
-            </div>
-            <button type="button" class="studio-signal-action" data-pilotage-create-answer="${index}">Créer une réponse →</button>
-          </div>`).join('');
-        gapsContainer.querySelectorAll('[data-pilotage-create-answer]').forEach(button => {
-          button.addEventListener('click', () => {
-            const gap = groupedGaps[Number(button.dataset.pilotageCreateAnswer)];
-            if (!gap) return;
-            applyStudioRoute('questions');
-            requestAnimationFrame(() => {
-              document.getElementById('studioQuestionAdd')?.click();
-              setTimeout(() => {
-                const input = document.getElementById('studioQuestionTitle');
-                if (!input) return;
-                input.value = gap.label;
-                input.dispatchEvent(new Event('input', { bubbles:true }));
-                input.focus();
-                input.select();
-              }, 30);
-            });
-          });
-        });
-      }
+      gapsContainer.innerHTML = `<div class="kpi-empty">Storm Match n’a détecté aucune information manquante pour le moment.</div>`;
     }
 
-    const tabEntries = Object.keys(TAB_LABELS).map(id => ({ label:TAB_LABELS[id], value:Number(tabViews[id]) || 0 }));
-    renderBarList(document.getElementById('kpiTabs'), tabEntries.some(item => item.value>0) ? tabEntries : [], { emptyText:'Aucune navigation enregistrée pour le moment.' });
+    // kpiTabs / kpiArticles : même principe que groupedGaps ci-dessus —
+    // tabViews/articleOpens ne sont alimentés que par le fallback Pangea
+    // gelé, jamais par Ivory. Gelés à vide plutôt que de laisser
+    // d'anciennes données de navigation apparaître comme un signal
+    // Tectonic actuel.
+    renderBarList(document.getElementById('kpiTabs'), [], { emptyText:'Aucune navigation enregistrée pour le moment.' });
+    renderBarList(document.getElementById('kpiArticles'), [], { emptyText:'Aucune actualité ouverte pour le moment.' });
 
-    const articleLabels = {};
-    (content?.articles || []).forEach(article => { if (article?.id) articleLabels[article.id] = article.title || '(sans titre)'; });
-    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(articleOpens)]);
-    const articleEntries = [...articleIds].map(id => ({ label:articleLabels[id] || 'Actualité supprimée', value:Number(articleOpens[id]) || 0 })).sort((a,b)=>b.value-a.value).slice(0,8);
-    renderBarList(document.getElementById('kpiArticles'), articleEntries.some(item => item.value>0) ? articleEntries : [], { emptyText:'Aucune actualité ouverte pour le moment.' });
-
-    const moodBars = entries => [1,2,3,4,5].map(value => ({ label:MOOD_LABELS[value], value:entries.filter(item => Number(item.value)===value).length }));
-    renderBarList(document.getElementById('kpiMood'), moodEntries.length ? moodBars(moodEntries) : [], { emptyText:'Aucune contribution au baromètre pour le moment.' });
-    const moodCount = document.getElementById('kpiMoodCount');
-    if (moodCount) moodCount.textContent = `${moodEntries.length} contribution${moodEntries.length>1?'s':''}`;
-
-    const sevenDaysAgo = Date.now() - 7*24*60*60*1000;
-    const recentMood = moodEntries.filter(item => (Number(item.ts)||0) >= sevenDaysAgo);
-    const recentCount = document.getElementById('kpiMoodRecentCount');
-    if (recentCount) recentCount.textContent = `${recentMood.length} contribution${recentMood.length>1?'s':''}`;
-    const moodRecent = document.getElementById('kpiMoodRecent');
-    const moodPrivacy = document.getElementById('kpiMoodPrivacy');
-    if (recentMood.length >= 5) {
-      renderBarList(moodRecent, moodBars(recentMood), { emptyText:'' });
-      if (moodPrivacy) moodPrivacy.textContent = 'Agrégation sur 7 jours. Aucun commentaire ni identifiant individuel n’est collecté.';
-    } else {
-      if (moodRecent) moodRecent.innerHTML = `<div class="kpi-empty">Pas assez de réponses récentes pour afficher une tendance.</div>`;
-      if (moodPrivacy) moodPrivacy.textContent = 'Storm attend au moins 5 contributions avant d’afficher une distribution récente.';
-    }
+    // Climat du projet : entièrement repris par renderTelemetryPilotage
+    // (semaines ISO, k=5, semaine en cours distincte) — voir plus bas.
 
     const contactsSection = document.getElementById('kpiContactsSection');
     const contactsContainer = document.getElementById('kpiContacts');
@@ -908,15 +859,89 @@
           <div class="kpi-contact-head"><span class="kpi-contact-name">${escapeHtml(contact.name || 'Anonyme')}</span><span class="kpi-contact-date">${escapeHtml(fmtDate(contact.ts))}</span></div>
           <div class="kpi-contact-email">${escapeHtml(contact.email || '')}</div>
           <div class="kpi-contact-msg">${escapeHtml(contact.message || '')}</div>
+
         </div>`).join('');
     }
   }
+
+  // Télémétrie Pilotage V1 — voie canonique unique. Remplace uniquement
+  // les cartes numériques qui affichaient jusqu'ici un zéro trompeur
+  // (usage, réponses Match, climat) : kpiGaps/kpiTopQuestions/kpiTabs/
+  // kpiArticles restent hors périmètre, ils dégradent déjà honnêtement
+  // et dépendent de données (contentId, verbatim) volontairement non
+  // collectées dans ce contrat minimal.
+  function renderTelemetryPilotage(summary) {
+    const K = 5; // garde-fou d'affichage — voir tectonic/telemetry.js DEFAULT_THRESHOLD
+
+    const usageCards = document.getElementById('kpiUsageCards');
+    if (usageCards) {
+      usageCards.innerHTML = summary.pageViews > 0
+        ? `<div class="studio-signal-card"><strong>${summary.pageViews}</strong><span>Pages vues</span><em>30 derniers jours</em></div>`
+        : `<div class="kpi-empty">Aucune donnée pour l'instant.</div>`;
+    }
+
+    const answerCards = document.getElementById('kpiAnswerCards');
+    if (answerCards) {
+      const m = summary.match;
+      if (m.total === 0) {
+        answerCards.innerHTML = `<div class="kpi-empty">Aucune donnée pour l'instant.</div>`;
+      } else {
+        const rateCard = m.total >= K
+          ? `<div class="studio-signal-card"><strong>${Math.round((m.matched / m.total) * 100)}%</strong><span>Ont trouvé une réponse</span><em>${m.matched} sur ${m.total}</em></div>`
+          : `<div class="studio-signal-card"><strong>—</strong><span>Ont trouvé une réponse</span><em>Données insuffisantes</em></div>`;
+        answerCards.innerHTML = [
+          `<div class="studio-signal-card"><strong>${m.total}</strong><span>Requêtes Storm Match</span><em>30 derniers jours</em></div>`,
+          rateCard
+        ].join('');
+      }
+    }
+
+    // Climat : les semaines closes seules alimentent la courbe historique.
+    // La semaine en cours est un signal provisoire, jamais mélangé —
+    // sinam un mercredi à 3 réponses se lirait comme une chute par
+    // rapport à une semaine complète précédente.
+    const weeks = Object.keys(summary.weeklyMood).sort();
+    const closedWeeks = summary.currentWeek ? weeks.filter(w => w < summary.currentWeek) : weeks;
+    const currentWeekData = summary.currentWeek ? summary.weeklyMood[summary.currentWeek] : null;
+
+    const moodRow = (label, counts) => {
+      if (!counts || counts.total < K) return null;
+      const pct = v => Math.round((v / counts.total) * 100);
+      return `<div class="studio-signal-row">
+        <div class="studio-signal-row-copy">
+          <strong>${escapeHtml(label)}</strong>
+          <span>${pct(counts.positive)}% positif · ${pct(counts.neutral)}% neutre · ${pct(counts.negative)}% négatif · ${counts.total} réponses</span>
+        </div>
+      </div>`;
+    };
+
+    const moodContainer = document.getElementById('kpiMood');
+    if (moodContainer) {
+      const rows = closedWeeks.map(w => moodRow(w, summary.weeklyMood[w])).filter(Boolean);
+      moodContainer.innerHTML = rows.length ? rows.join('') : `<div class="kpi-empty">Pas encore de semaine complète avec suffisamment de contributions.</div>`;
+    }
+    const moodCount = document.getElementById('kpiMoodCount');
+    if (moodCount) moodCount.textContent = closedWeeks.length ? `${closedWeeks.length} semaine${closedWeeks.length > 1 ? 's' : ''} close${closedWeeks.length > 1 ? 's' : ''}` : '';
+
+    const recentContainer = document.getElementById('kpiMoodRecent');
+    if (recentContainer) {
+      const row = moodRow('Cette semaine — en cours', currentWeekData);
+      recentContainer.innerHTML = row || `<div class="kpi-empty">Données insuffisantes.</div>`;
+    }
+    const recentCount = document.getElementById('kpiMoodRecentCount');
+    if (recentCount) recentCount.textContent = currentWeekData && currentWeekData.total
+      ? `${currentWeekData.total} réponse${currentWeekData.total > 1 ? 's' : ''}` : '';
+
+    const privacyEl = document.getElementById('kpiMoodPrivacy');
+    if (privacyEl) privacyEl.textContent = 'Répartition affichée uniquement à partir de 5 contributions — jamais de détail individuel.';
+  }
+
   function handleSaveResult(result, successMessage) {
     const isAuto = result?.saveSource === 'auto';
     if (result.ok) {
       studioSetSaveState('saved');
       refreshStudioPublicationStatus().then(status => {
-        renderStudioOverview(currentStudioKpi, currentAdminContent, status);
+        renderStudioOverview(currentStudioKpi, currentAdminContent, status, currentTelemetrySummary);
       });
       if (!isAuto) showToast(successMessage);
       return true;
@@ -4210,63 +4235,46 @@
       openAdminModal();
       return;
     }
-    const wb = XLSX.utils.book_new();
+    // Télémétrie Pilotage V1 — voie canonique unique. L'export ne doit
+    // jamais présenter les anciennes données kpis.json (alimentées
+    // uniquement par le fallback Pangea gelé, jamais par Ivory) comme
+    // des métriques Tectonic actuelles — notamment les questions posées
+    // en texte brut, qui ne devraient plus jamais quitter Studio sous
+    // aucune forme, fichier téléchargeable compris.
+    const telemetrySummary = await loadTelemetrySummary();
+    const totalContacts = kpi.contactSubmissions.length;
+    const matchRate = telemetrySummary.match.total
+      ? Math.round((telemetrySummary.match.matched / telemetrySummary.match.total) * 100) : null;
+    const totalMoodContributions = Object.values(telemetrySummary.weeklyMood)
+      .reduce((sum, w) => sum + (w.total || 0), 0);
 
-    const totalAsked        = kpi.faqAsked.length;
-    const totalFound        = kpi.faqAsked.filter(a => a.matched).length;
-    const foundRate         = totalAsked ? Math.round((totalFound / totalAsked) * 100) : 0;
-    const totalArticleOpens = Object.values(kpi.articleOpens).reduce((a,b) => a+b, 0);
-    const totalTabViews     = Object.values(kpi.tabViews).reduce((a,b) => a+b, 0);
-    const totalVisits       = new Set(kpi.visitSessions || []).size;
-    const totalContacts     = kpi.contactSubmissions.length;
+    const wb = XLSX.utils.book_new();
 
     const summaryData = [
       [`${currentAdminContent?.branding?.projectName || 'Projet'} — Export Pilotage`, ''],
       ['Généré le', new Date().toLocaleString('fr-FR')],
       ['', ''],
       ['Indicateur', 'Valeur'],
-      ['Questions posées', totalAsked],
-      ['Taux de réponse trouvée', foundRate + ' %'],
-      ['Consultations uniques', totalVisits],
-      ['Consultations totales (tous onglets)', totalTabViews],
-      ["Ouvertures d'articles", totalArticleOpens],
+      ['Pages vues (30 derniers jours)', telemetrySummary.pageViews],
+      ['Requêtes Storm Match (30 derniers jours)', telemetrySummary.match.total],
+      ['Taux de réponse trouvée', matchRate === null ? 'Données insuffisantes' : matchRate + ' %'],
       ['Messages reçus dans Storm', totalContacts],
-      ['Contributions au baromètre', (kpi.moodEntries || []).length],
+      ['Contributions au baromètre (toutes semaines)', totalMoodContributions],
     ];
     const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
-    wsSummary['!cols'] = [{ wch: 38 }, { wch: 24 }];
+    wsSummary['!cols'] = [{ wch: 42 }, { wch: 24 }];
     XLSX.utils.book_append_sheet(wb, wsSummary, 'Synthèse');
 
-    const qRows = [['Question', 'Réponse trouvée', 'Sujet correspondant', 'Date']];
-    kpi.faqAsked.slice().sort((a,b) => b.ts - a.ts).forEach(a => {
-      qRows.push([a.q, a.matched ? 'Oui' : 'Non', a.entryId || '', new Date(a.ts).toLocaleString('fr-FR')]);
-    });
-    const wsQ = XLSX.utils.aoa_to_sheet(qRows);
-    wsQ['!cols'] = [{ wch: 50 }, { wch: 16 }, { wch: 24 }, { wch: 20 }];
-    XLSX.utils.book_append_sheet(wb, wsQ, 'Questions posées');
-
-    const gapRows = [['Question sans réponse trouvée', 'Date']];
-    kpi.faqAsked.filter(a => !a.matched).sort((a,b) => b.ts - a.ts).forEach(a => {
-      gapRows.push([a.q, new Date(a.ts).toLocaleString('fr-FR')]);
-    });
-    const wsGaps = XLSX.utils.aoa_to_sheet(gapRows);
-    wsGaps['!cols'] = [{ wch: 55 }, { wch: 20 }];
-    XLSX.utils.book_append_sheet(wb, wsGaps, 'Trous FAQ');
-
-    const tabRows = [['Onglet', 'Consultations']];
-    Object.keys(TAB_LABELS).forEach(id => tabRows.push([TAB_LABELS[id], kpi.tabViews[id] || 0]));
-    const wsTabs = XLSX.utils.aoa_to_sheet(tabRows);
-    wsTabs['!cols'] = [{ wch: 24 }, { wch: 16 }];
-    XLSX.utils.book_append_sheet(wb, wsTabs, 'Consultations onglets');
-
-    const articleLabels = {};
-    (currentAdminContent?.articles || []).forEach(a => { articleLabels[a.id] = a.title || '(sans titre)'; });
-    const articleIds = new Set([...Object.keys(articleLabels), ...Object.keys(kpi.articleOpens)]);
-    const artRows = [['Article', 'Ouvertures']];
-    [...articleIds].forEach(id => artRows.push([articleLabels[id] || `Article supprimé (${id})`, kpi.articleOpens[id] || 0]));
-    const wsArt = XLSX.utils.aoa_to_sheet(artRows);
-    wsArt['!cols'] = [{ wch: 50 }, { wch: 14 }];
-    XLSX.utils.book_append_sheet(wb, wsArt, 'Articles');
+    // Aucune feuille "Questions posées" / "Trous FAQ" en texte brut :
+    // ce contrat de télémétrie V1 ne collecte ni verbatim ni contentId.
+    // Une évolution future du contrat pourra rouvrir cette ventilation
+    // explicitement — pas en la laissant fuiter depuis un ancien système.
+    const wsNote = XLSX.utils.aoa_to_sheet([
+      ['Détail des questions Storm Match'],
+      ["Non disponible dans cette version — le contrat de télémétrie actuel ne collecte ni le texte des questions, ni leur contenu associé, afin de ne jamais exposer une formulation individuelle."]
+    ]);
+    wsNote['!cols'] = [{ wch: 90 }];
+    XLSX.utils.book_append_sheet(wb, wsNote, 'Storm Match — détail');
 
     const contactRows = [['Nom', 'Email', 'Message', 'Date']];
     kpi.contactSubmissions.slice().reverse().forEach(c => {
@@ -4276,12 +4284,22 @@
     wsContacts['!cols'] = [{ wch: 24 }, { wch: 28 }, { wch: 60 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, wsContacts, 'Demandes de contact');
 
-    const moodRows = [['Ressenti', 'Date']];
-    (kpi.moodEntries || []).slice().sort((a,b) => b.ts-a.ts).forEach(entry => {
-      moodRows.push([MOOD_LABELS[Number(entry.value)] || String(entry.value || ''), new Date(entry.ts).toLocaleString('fr-FR')]);
+    // Climat : agrégats hebdomadaires uniquement, jamais une entrée par
+    // réponse individuelle — cohérent avec l'affichage web (k=5, semaine
+    // en cours distincte des semaines closes).
+    const moodWeeks = Object.keys(telemetrySummary.weeklyMood).sort();
+    const moodRows = [['Semaine ISO', 'Statut', 'Positif', 'Neutre', 'Négatif', 'Total']];
+    moodWeeks.forEach(week => {
+      const counts = telemetrySummary.weeklyMood[week];
+      const status = telemetrySummary.currentWeek && week === telemetrySummary.currentWeek ? 'En cours' : 'Close';
+      if (counts.total < 5) {
+        moodRows.push([week, status, '—', '—', '—', 'Données insuffisantes']);
+      } else {
+        moodRows.push([week, status, counts.positive, counts.neutral, counts.negative, counts.total]);
+      }
     });
     const wsMood = XLSX.utils.aoa_to_sheet(moodRows);
-    wsMood['!cols'] = [{ wch:24 }, { wch:20 }];
+    wsMood['!cols'] = [{ wch: 14 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 10 }, { wch: 20 }];
     XLSX.utils.book_append_sheet(wb, wsMood, 'Climat du projet');
 
     const safeProjectName = String(currentAdminContent?.branding?.projectName || 'Projet').replace(/[^a-z0-9_-]+/gi,'-').replace(/^-+|-+$/g,'') || 'Projet';
