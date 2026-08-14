@@ -2253,6 +2253,7 @@
               button.addEventListener('click', () => { moveItem(content.milestones, content.milestones.indexOf(milestone), Number(button.dataset.projectMilestoneMove)); markDirty(); rerender(); });
             });
             card.querySelector('[data-project-milestone-remove]')?.addEventListener('click', () => {
+              if (!confirm('Supprimer définitivement ce jalon ?')) return;
               content.milestones = content.milestones.filter(item => item.id !== id); markDirty(); rerender();
             });
           });
@@ -2275,6 +2276,8 @@
               button.addEventListener('click', () => { moveItem(content.team, content.team.indexOf(member), Number(button.dataset.projectPersonMove)); markDirty(); rerender(); });
             });
             card.querySelector('[data-project-person-remove]')?.addEventListener('click', () => {
+              const label = member.name ? `« ${member.name} »` : 'cette personne';
+              if (!confirm(`Retirer définitivement ${label} de l'équipe projet ?`)) return;
               content.team = content.team.filter(item => item.id !== id); markDirty(); rerender();
             });
           });

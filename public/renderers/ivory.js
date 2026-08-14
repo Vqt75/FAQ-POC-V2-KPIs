@@ -5025,7 +5025,7 @@ const TCT_MOOD_STYLE = `
   .tct-mood-panel{position:fixed;right:24px;bottom:84px;z-index:85;width:min(360px,calc(100vw - 32px));padding:22px;border:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);border-radius:22px;background:color-mix(in srgb,var(--tct-canvas) 94%,white 6%);box-shadow:0 24px 64px rgba(24,22,20,.15);opacity:0;transform:translateY(5px) scale(.99);transition:opacity .15s ease,transform .15s ease;}
   .tct-mood-panel.is-open{opacity:1;transform:none;}
   .tct-mood-question{margin:0 0 17px;font:600 15px/1.45 var(--tct-font-primary);letter-spacing:-.01em;color:var(--tct-ink);}
-  .tct-mood-options{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  .tct-mood-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr));gap:10px;}
   .tct-mood-option{min-width:0;padding:10px 4px 8px;display:grid;place-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--tct-ink) 10%,transparent);border-radius:14px;background:transparent;color:color-mix(in srgb,var(--tct-ink) 72%,transparent);cursor:pointer;transition:background .14s ease,border-color .14s ease,transform .14s ease,color .14s ease;}
   .tct-mood-option:hover{background:color-mix(in srgb,var(--tct-expression-accent) 8%,transparent);border-color:color-mix(in srgb,var(--tct-expression-accent) 38%,transparent);color:var(--tct-ink);transform:translateY(-1px);}
   .tct-mood-option:disabled{cursor:wait;opacity:.55;}
